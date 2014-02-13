@@ -10,4 +10,11 @@ public class ThreadListActivityUITest extends
 		super(ThreadListActivity.class);
 	}
 
+	public void testDummyFail() {
+		fail("LOL");
+	}
+	
+	public void testDummyPass() {
+		assertEquals("1 equals 1", 1, 1);
+	}
 }
