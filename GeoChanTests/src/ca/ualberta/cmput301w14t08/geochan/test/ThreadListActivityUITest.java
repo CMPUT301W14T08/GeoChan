@@ -9,13 +9,5 @@ public class ThreadListActivityUITest extends
 	public ThreadListActivityUITest() {
 		super(ThreadListActivity.class);
 	}
-	
-	public void testDummyPass() {
-		//
-	}
-	
-	public void testDummyFail() {
-		fail("Fail");
-	}
 
 }
