@@ -1,11 +1,4 @@
 /*
- * PostCommentFragment.java
- * ========================
- * 
- * This class is responsible for the UI fragment
- * that allows a user to post a comment in
- * in an existing thread.
- * 
  * Copyright 2014 Artem Chikin
  * Copyright 2014 Artem Herasymchuk
  * Copyright 2014 Tom Krywitsky
@@ -33,11 +26,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Responsible for the UI fragment that allows a user to post a comment in in an
+ * existing thread.
+ */
+
 public class PostCommentFragment extends Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_post_comment, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
 }
