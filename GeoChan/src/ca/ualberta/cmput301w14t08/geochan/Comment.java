@@ -36,6 +36,18 @@ public class Comment {
     //child is a reply to this comment
     private ArrayList<Comment> children;
     
+    
+    //a comment without an image and without a parent
+    public Comment(String textPost,
+            Location location) {
+        super();
+        this.setTextPost(textPost);
+        this.setCommentDate(new Date());
+        this.setImage(null);
+        this.setLocation(location);
+        this.setParent(null);
+        this.setChildren(new ArrayList<Comment>());
+    }
     //a comment with an image and without a parent
     public Comment(String textPost, Picture image,
 			Location location) {
@@ -47,17 +59,7 @@ public class Comment {
 		this.setParent(null);
 		this.setChildren(new ArrayList<Comment>());
 	}
-    //a comment without an image and without a parent
-    public Comment(String textPost,
-			Location location) {
-		super();
-		this.setTextPost(textPost);
-		this.setCommentDate(new Date());
-		this.setImage(null);
-		this.setLocation(location);
-		this.setParent(null);
-        this.setChildren(new ArrayList<Comment>());
-	}
+    
     //a comment with an image, with a parent
     public Comment(String textPost, Picture image,
             Location location, Comment parent) {
@@ -90,6 +92,7 @@ public class Comment {
 	public void addChild(Comment comment) {
 	    children.add(comment);
 	}
+	
 	/**
 	 * Getters and setters
 	 */
