@@ -30,10 +30,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * This is a custom adapter, used to display Thread objects in a list in the ThreadListActivity
+ * This is a custom adapter, used to display Thread objects in a list in the
+ * ThreadListActivity
  */
 public class ThreadListAdapter extends BaseAdapter {
-    
+
     private Context context;
     private static ArrayList<Thread> displayList;
 
@@ -41,19 +42,22 @@ public class ThreadListAdapter extends BaseAdapter {
         this.context = context;
         ThreadListAdapter.displayList = list;
     }
-    
+
     @Override
     public int getCount() {
         return displayList.size();
     }
+
     @Override
     public Thread getItem(int position) {
         return displayList.get(position);
     }
+
     @Override
     public long getItemId(int position) {
         return position;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Thread thread = getItem(position);

@@ -35,20 +35,20 @@ public class ThreadListActivity extends Activity {
         setContentView(R.layout.activity_thread_list);
         threadListView = (ListView) findViewById(R.id.thread_list);
     }
-    
+
     @Override
     protected void onStart() {
         super.onStart();
-        //Test code, remember to delete:
+        // Test code, remember to delete:
         Comment comment = new Comment("Testing testing testing testing", null);
         ThreadList.addThread(comment, "First Thread");
-        //End of test code
+        // End of test code
         adapter = new ThreadListAdapter(this, ThreadList.getThreads());
-        //Assign custom adapter to the list
+        // Assign custom adapter to the list
         threadListView.setEmptyView(findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -24,42 +24,50 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Thread {
-	private ArrayList<Comment> comments;
-	private Comment topComment;
-	private Date threadDate;
-	private String title;
-	
-	public Thread(Comment topComment, String title) {
+    private ArrayList<Comment> comments;
+    private Comment topComment;
+    private Date threadDate;
+    private String title;
+
+    public Thread(Comment topComment, String title) {
         super();
         this.comments = new ArrayList<Comment>();
         this.topComment = topComment;
         this.threadDate = new Date();
         this.setTitle(title);
     }
+
     /**
-	 * Getters and setters
-	 */
-	public Date getThreadDate() {
-		return threadDate;
-	}
-	public void setThreadDate(Date threadDate) {
-		this.threadDate = threadDate;
-	}
-	public Comment getTopComment() {
-		return topComment;
-	}
-	public void setTopComment(Comment topComment) {
-		this.topComment = topComment;
-	}
-	public ArrayList<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
-	}
+     * Getters and setters
+     */
+    public Date getThreadDate() {
+        return threadDate;
+    }
+
+    public void setThreadDate(Date threadDate) {
+        this.threadDate = threadDate;
+    }
+
+    public Comment getTopComment() {
+        return topComment;
+    }
+
+    public void setTopComment(Comment topComment) {
+        this.topComment = topComment;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
