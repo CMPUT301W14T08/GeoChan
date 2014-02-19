@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/threadTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -13,12 +13,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/commentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignBaseline="@+id/commentBy"
+        android:layout_alignBottom="@+id/commentBy"
+        android:layout_toRightOf="@+id/commentBy"
         android:text="@string/placeholder_date"
         android:textColor="#f00" />
 
@@ -28,10 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1" >
+        android:layout_below="@+id/threadTitle" >
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/commentBody"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
@@ -41,7 +41,7 @@
             android:textColor="#65000000" />
         
         <ImageView
-        android:id="@+id/humbnail"
+        android:id="@+id/thumbnail"
         android:contentDescription="@string/desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -50,14 +50,12 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout1"
         android:text="@string/placeholder_postby"
         android:textColor="#f00" />
-
-    
 
 </RelativeLayout>

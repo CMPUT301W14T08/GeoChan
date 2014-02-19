@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/threadTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -13,32 +13,32 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/commentBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/threadTitle"
         android:ellipsize="marquee"
         android:maxLines="4"
         android:text="@string/lorem_ipsum"
         android:textColor="#65000000" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/commentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignBaseline="@+id/commentBy"
+        android:layout_alignBottom="@+id/commentBy"
+        android:layout_toRightOf="@+id/commentBy"
         android:text="@string/placeholder_date"
         android:textColor="#f00" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/commentBody"
         android:text="@string/placeholder_postby"
         android:textColor="#f00" />
 

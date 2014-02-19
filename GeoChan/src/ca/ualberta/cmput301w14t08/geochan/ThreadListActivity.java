@@ -20,18 +20,35 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import android.widget.ListView;
 
 public class ThreadListActivity extends Activity {
+    private ListView threadListView;
+    private ThreadListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thread_list);
+        threadListView = (ListView) findViewById(R.id.thread_list);
     }
-
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Test code, remember to delete:
+        Comment comment = new Comment("Testing testing testing testing", null);
+        ThreadList.addThread(comment, "First Thread");
+        //End of test code
+        adapter = new ThreadListAdapter(this, ThreadList.getThreads());
+        //Assign custom adapter to the list
+        threadListView.setEmptyView(findViewById(R.id.empty_list_view));
+        threadListView.setAdapter(adapter);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

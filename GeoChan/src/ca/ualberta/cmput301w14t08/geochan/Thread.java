@@ -27,9 +27,16 @@ public class Thread {
 	private ArrayList<Comment> comments;
 	private Comment topComment;
 	private Date threadDate;
+	private String title;
 	
-	
-	/**
+	public Thread(Comment topComment, String title) {
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.topComment = topComment;
+        this.threadDate = new Date();
+        this.setTitle(title);
+    }
+    /**
 	 * Getters and setters
 	 */
 	public Date getThreadDate() {
@@ -50,4 +57,10 @@ public class Thread {
 	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

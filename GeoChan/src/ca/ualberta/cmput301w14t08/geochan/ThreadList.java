@@ -23,16 +23,24 @@ package ca.ualberta.cmput301w14t08.geochan;
 import java.util.ArrayList;
 
 public class ThreadList {
-	private ArrayList<Thread> threads;
+	private static ArrayList<Thread> threads = null;
 
-	
 	/**
 	 * Getters and setters
 	 */
-	public ArrayList<Thread> getThreads() {
+	public static ArrayList<Thread> getThreads() {
+	    if(threads == null) {
+	        threads = new ArrayList<Thread>();
+	    }
 		return threads;
 	}
-	public void setThreads(ArrayList<Thread> threads) {
-		this.threads = threads;
+	public static void setThreads(ArrayList<Thread> listOfThreads) {
+		threads = listOfThreads;
+	}
+	public static void addThread(Comment comment, String title) {
+	    if(threads == null) {
+            threads = new ArrayList<Thread>();
+        }
+	    threads.add(new Thread(comment,title));
 	}
 }
