@@ -12,12 +12,12 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Th
         super(ThreadListActivity.class);
     }
 
-   /** @Override
+   @Override
     public void setUp() {
         super.setUp();
         activity = (ThreadListActivity) getActivity();
         fragment = activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.fragment_post_comment);
-    }**/
+    }
     
     public void testPreconditions() {
         assertNotNull(activity);
