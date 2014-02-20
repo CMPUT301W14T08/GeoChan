@@ -6,12 +6,12 @@ import android.test.ViewAsserts;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import ca.ualberta.cmput301w14t08.geochan.ThreadListActivity;
+import ca.ualberta.cmput301w14t08.geochan.MainActivity;
 
-public class ThreadListActivityUITest extends ActivityInstrumentationTestCase2<ThreadListActivity> {
+public class ThreadListActivityUITest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     public ThreadListActivityUITest() {
-        super(ThreadListActivity.class);
+        super(MainActivity.class);
     }
 
     public void testDummyFail() {
@@ -25,7 +25,7 @@ public class ThreadListActivityUITest extends ActivityInstrumentationTestCase2<T
     public void testListViewVisibility() {
         Intent intent = new Intent();
         setActivityIntent(intent);
-        ThreadListActivity activity = getActivity();
+        MainActivity activity = getActivity();
         ListView listView = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_list);
         View rootView = activity.getWindow().getDecorView();
         ViewAsserts.assertOnScreen(rootView, listView);

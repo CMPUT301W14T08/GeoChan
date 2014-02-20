@@ -20,40 +20,44 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class ThreadListActivity extends Activity {
+public class ThreadListFragment extends Fragment {
     private ListView threadListView;
     private ThreadListAdapter adapter;
-
+    
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_thread_list);
-        threadListView = (ListView) findViewById(R.id.thread_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_thread_list, container, false);
     }
-
+    
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         // Test code, remember to delete:
         Comment comment = new Comment("Testing testing testing testing", null);
         ThreadList.addThread(comment, "First Thread");
         // End of test code
-        adapter = new ThreadListAdapter(this, ThreadList.getThreads());
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         // Assign custom adapter to the list
-        threadListView.setEmptyView(findViewById(R.id.empty_list_view));
+        threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.thread_list, menu);
-        return true;
+        inflater.inflate(R.menu.thread_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
-
 }
