@@ -74,6 +74,10 @@ public class Thread {
         this.title = title;
     }
     
+    public void addComment(Comment c){
+        this.getComments().add(c);
+    }
+    
     public void sortByDate(){
         Collections.sort(this.getComments(), new Comparator<Comment>(){
             public int compare(Comment c1, Comment c2){
