@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.graphics.Picture;
+import android.location.Location;
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.Comment;
 
@@ -17,5 +18,11 @@ public class CommentTest extends TestCase {
         Comment reply = new Comment("test_reply", null, parent);
         assertNotNull("comment has a reply", parent.getChildren());
     }
-
+    
+    public void testConstruct() {
+        Comment comment = new Comment("Hola", null);
+        assertNull(comment.getParent());
+    }
+    
+    
 }
