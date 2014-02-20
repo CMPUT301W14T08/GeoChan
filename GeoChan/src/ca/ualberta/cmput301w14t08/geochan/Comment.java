@@ -81,6 +81,17 @@ public class Comment {
         parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
     }
+    
+    //a comment initialized with no data. Only used for testing.
+    public Comment(){
+        super();
+        this.textPost = "This is a test comment.";
+        this.commentDate = null;
+        this.image = null;
+        this.location = null;
+        this.parent = null;
+        this.children = null;
+    }
 
     public boolean hasImage() {
         return !(image == null);

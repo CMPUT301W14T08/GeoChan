@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Thread {
@@ -70,5 +72,20 @@ public class Thread {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public void sortByDate(){
+        Collections.sort(this.getComments(), new Comparator<Comment>(){
+            public int compare(Comment c1, Comment c2){
+                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
+                if(comp < 0){
+                    return -1;
+                } else if (comp > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }   
+            }
+        });
     }
 }
