@@ -2,6 +2,8 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
+import android.util.Log;
+
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.Comment;
 import ca.ualberta.cmput301w14t08.geochan.Thread;
@@ -9,6 +11,9 @@ import ca.ualberta.cmput301w14t08.geochan.Thread;
 public class ThreadTest extends TestCase {
     
     public void testSortByDate(){
+        /*
+         * Tests the implementation of Thread.sortByDate();
+         */
         long extraTime = 1320000;
         Comment c1 = new Comment();
         Comment c2 = new Comment();
@@ -21,17 +26,22 @@ public class ThreadTest extends TestCase {
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c1.setTextPost("c1");
+        c2.setTextPost("c2");
+        c3.setTextPost("c3");
+        c4.setTextPost("c4");
+        c5.setTextPost("c5");
         Thread thread = new Thread(c1, "This thread is for testing!");
         thread.addComment(c4);
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
         thread.sortByDate();
-        assertTrue("c1 is at index 0", (thread.getComments().get(0)) == c1);
-        assertTrue("c2 is at index 1", (thread.getComments().get(1)) == c2);
-        assertTrue("c3 is at index 2", (thread.getComments().get(2)) == c3);
-        assertTrue("c4 is at index 3", (thread.getComments().get(3)) == c4);
-        assertTrue("c5 is at index 4", (thread.getComments().get(4)) == c5);
+
+        assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
+        assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);
+        assertTrue("c4 is at index 2", (thread.getComments().get(2)) == c4);
+        assertTrue("c5 is at index 3", (thread.getComments().get(3)) == c5);
     }
 
 }
