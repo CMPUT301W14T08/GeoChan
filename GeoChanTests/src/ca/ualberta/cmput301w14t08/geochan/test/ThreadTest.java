@@ -2,8 +2,6 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
-import android.util.Log;
-
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.Comment;
 import ca.ualberta.cmput301w14t08.geochan.Thread;
@@ -38,10 +36,10 @@ public class ThreadTest extends TestCase {
         thread.addComment(c2);
         thread.sortByDate();
 
-        assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
-        assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);
-        assertTrue("c4 is at index 2", (thread.getComments().get(2)) == c4);
-        assertTrue("c5 is at index 3", (thread.getComments().get(3)) == c5);
+        assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
+        assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
+        assertTrue("c3 is at index 2", (thread.getComments().get(2)) == c3);
+        assertTrue("c2 is at index 3", (thread.getComments().get(3)) == c2);
     }
 
 }

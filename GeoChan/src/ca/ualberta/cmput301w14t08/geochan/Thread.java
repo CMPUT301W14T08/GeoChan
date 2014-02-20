@@ -79,13 +79,18 @@ public class Thread {
     }
     
     public void sortByDate(){
+        /*
+         * Sorts comments in the thread according to date.
+         * Older comments are moved to the top, newer comments
+         * to the bottom.
+         */
         Collections.sort(this.getComments(), new Comparator<Comment>(){
             public int compare(Comment c1, Comment c2){
                 int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
                 if(comp < 0){
-                    return -1;
-                } else if (comp > 0) {
                     return 1;
+                } else if (comp > 0) {
+                    return -1;
                 } else {
                     return 0;
                 }   
