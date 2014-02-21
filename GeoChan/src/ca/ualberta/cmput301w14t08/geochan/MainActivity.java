@@ -21,12 +21,9 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
     @Override
@@ -54,7 +51,8 @@ public class MainActivity extends Activity {
         switch(item.getItemId())
         {
         case 0:
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PreferencesFragment())
+            getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
                 .addToBackStack(null).commit();
             return true;
         default:
