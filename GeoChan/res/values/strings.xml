@@ -10,5 +10,6 @@
     <string name="desc">desc</string>
     <string name="placeholder_postby">posted by Geoff#cat  </string>
     <string name="placeholder_date"> | on Feb.13,2014 at 6:52pm</string>
+    <string name="username">Anon</string>
 
 </resources>

@@ -21,11 +21,15 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
 
 
 public class PreferencesFragment extends PreferenceFragment {
 
+    private String username;
+    private EditTextPreference changeUsername;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -4,15 +4,20 @@
     android:layout_height="match_parent"
     android:key="first_preferencescreen"
     android:orientation="vertical" >
-
-    <CheckBoxPreference
-            android:key="wifi enabled"
-            android:title="WiFi" />
     
-    <EditTextPreference
-        android:dialogTitle="Username:"
-        android:key="edittext_preference"
-        android:summary="Change Username"
-        android:title="Change Username" />
+    <PreferenceCategory 
+        android:title="Settings" >
+        <CheckBoxPreference
+            android:key="test_checkbox"
+            android:title="Check" />
+        <EditTextPreference
+            android:defaultValue="@string/username"
+            android:dialogTitle="Username:"
+            android:key="username"
+            android:summary="Current: @string/username"
+            android:title="Change Username" />
+        
+    </PreferenceCategory>
+    
 
 </PreferenceScreen>

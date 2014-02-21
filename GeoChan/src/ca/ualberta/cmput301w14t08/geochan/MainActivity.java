@@ -21,7 +21,12 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
     @Override
@@ -34,6 +39,26 @@ public class MainActivity extends Activity {
             }
             ThreadListFragment fragment = new ThreadListFragment();
             getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Settings");
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+        case 0:
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PreferencesFragment())
+                .addToBackStack(null).commit();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 }
