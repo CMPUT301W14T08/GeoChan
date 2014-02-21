@@ -97,4 +97,25 @@ public class Thread {
             }
         });
     }
+    
+    public void sortByDefault(){
+        /*
+         * The default comment sorting method.
+         * As per project description, "freshest" (i.e. newest)
+         * comments are pushed to the top while old ones are pushed
+         * to the bottom.
+         */
+        Collections.sort(this.getComments(), new Comparator<Comment>(){
+            public int compare(Comment c1, Comment c2){
+                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
+                if(comp < 0){
+                    return -1;
+                } else if (comp > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }   
+            }
+        });
+    }
 }
