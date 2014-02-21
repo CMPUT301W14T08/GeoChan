@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import android.graphics.Picture;
@@ -90,7 +92,7 @@ public class Comment {
         this.image = null;
         this.location = null;
         this.parent = null;
-        this.children = null;
+        this.children = new ArrayList<Comment>();
     }
 
     public boolean hasImage() {
@@ -150,5 +152,25 @@ public class Comment {
 
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;
+    }
+    
+    public void sortChildrenByDate(){
+        /*
+         * Sorts child comments according to date.
+         * Older comments are moved to the top, newer
+         * comments to the bottom.
+         */
+        Collections.sort(this.getChildren(), new Comparator<Comment>(){
+            public int compare(Comment c1, Comment c2){
+                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
+                if(comp < 0){
+                    return 1;
+                } else if (comp > 0) {
+                    return -1;
+                } else {
+                    return 0;
+                }   
+            }
+        });
     }
 }
