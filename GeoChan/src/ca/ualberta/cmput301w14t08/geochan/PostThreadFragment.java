@@ -21,6 +21,10 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Responsible for the UI fragment that allows a user to post
@@ -28,5 +32,8 @@ import android.app.Fragment;
  */
 
 public class PostThreadFragment extends Fragment {
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_post_thread, container, false);
+    }
 }

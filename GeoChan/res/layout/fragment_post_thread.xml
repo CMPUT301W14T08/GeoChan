@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/titlePrompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/titleHint" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/titlePrompt"
+        android:ems="10"
+        android:hint="@string/commentHint" />
+
+    <Button
+        android:id="@+id/location_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="Location: Current" />
+
+    <Button
+        android:id="@+id/attach_image_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="148dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/location_button"
+        android:layout_alignParentLeft="true"
+        android:text="Attach Image" />
+
+    <Button
+        android:id="@+id/post_thread_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/attach_image_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/attach_image_button"
+        android:layout_toRightOf="@+id/attach_image_button"
+        android:text="Post" />
+
+</RelativeLayout>

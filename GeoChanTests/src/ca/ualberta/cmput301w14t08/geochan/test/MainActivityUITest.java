@@ -2,7 +2,6 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
@@ -22,9 +21,7 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
      */
     public void testInflateSettings() throws Throwable {
         final MainActivity activity = getActivity();
-        
-        Instrumentation.ActivityMonitor am = getInstrumentation()
-                .addMonitor(MainActivity.class.getName(), null, true);
+         
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(activity, 0, 0);
         FragmentManager m = activity.getFragmentManager();
