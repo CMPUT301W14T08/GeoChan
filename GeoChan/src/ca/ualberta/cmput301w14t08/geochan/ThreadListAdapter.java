@@ -30,8 +30,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * This is a custom adapter, used to display Thread objects in a list in the
- * ThreadListActivity
+ * This is a custom adapter, used to display Thread objects in a list
  */
 public class ThreadListAdapter extends BaseAdapter {
 

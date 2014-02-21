@@ -33,12 +33,18 @@ public class Comment {
     private Date commentDate;
     private Picture image;
     private Location location;
-    // parent is the comment this comment is replying to
+    /**
+     * parent is the comment this comment is replying to
+     */
     private Comment parent;
-    // child is a reply to this comment
+    /**
+     * child is a reply to this comment
+     */
     private ArrayList<Comment> children;
 
-    // a comment without an image and without a parent
+    /**
+     * a comment without an image and without a parent
+     */
     public Comment(String textPost, Location location) {
         super();
         this.setTextPost(textPost);
@@ -49,7 +55,9 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
     }
 
-    // a comment with an image and without a parent
+    /**
+     * a comment with an image and without a parent
+     */
     public Comment(String textPost, Picture image, Location location) {
         super();
         this.setTextPost(textPost);
@@ -60,7 +68,9 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
     }
 
-    // a comment with an image, with a parent
+    /**
+     * a comment with an image, with a parent
+     */
     public Comment(String textPost, Picture image, Location location, Comment parent) {
         super();
         this.setTextPost(textPost);
@@ -72,7 +82,9 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
     }
 
-    // a comment without an image and with a parent
+    /**
+     * a comment without an image and with a parent
+     */
     public Comment(String textPost, Location location, Comment parent) {
         super();
         this.setTextPost(textPost);
@@ -84,7 +96,9 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
     }
     
-    //a comment initialized with no data. Only used for testing.
+    /**
+     * a comment initialized with no data. Only used for testing.
+     */
     public Comment(){
         super();
         this.textPost = "This is a test comment.";
