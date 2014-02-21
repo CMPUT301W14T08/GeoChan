@@ -1,5 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <!-- Add thread, should apper as a + sign -->
+    <item android:id="@+id/action_add_thread"
+          android:icon="@drawable/ic_action_new"
+          android:title="@string/action_add_thread"
+          android:showAsAction="ifRoom" />
+    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

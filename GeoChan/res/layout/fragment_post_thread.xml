@@ -30,7 +30,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="Location: Current" />
+        android:text="Location:" />
 
     <Button
         android:id="@+id/attach_image_button"
@@ -39,6 +39,7 @@
         android:layout_height="30dp"
         android:layout_above="@+id/location_button"
         android:layout_alignParentLeft="true"
+        android:textSize="12sp"
         android:text="Attach Image" />
 
     <Button
@@ -50,6 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/attach_image_button"
         android:layout_toRightOf="@+id/attach_image_button"
+        android:textSize="12sp"
         android:text="Post" />
 
 </RelativeLayout>

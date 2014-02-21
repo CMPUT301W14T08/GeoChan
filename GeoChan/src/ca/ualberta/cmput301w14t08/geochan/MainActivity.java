@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MainActivity extends Activity {
@@ -41,7 +42,8 @@ public class MainActivity extends Activity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Settings");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.thread_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -50,9 +52,14 @@ public class MainActivity extends Activity {
     {
         switch(item.getItemId())
         {
-        case 0:
+        case R.id.action_settings:
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
+                .addToBackStack(null).commit();
+            return true;
+        case R.id.action_add_thread:
+            getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
                 .addToBackStack(null).commit();
             return true;
         default:

@@ -13,5 +13,6 @@
     <string name="username">Anon</string>
     <string name="titleHint">Title</string>
     <string name="commentHint">What would you like to say?</string>
+    <string name="action_add_thread">Add Thread</string>
 
 </resources>

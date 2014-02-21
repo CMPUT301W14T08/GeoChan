@@ -21,11 +21,24 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
      */
     public void testInflateSettings() throws Throwable {
         final MainActivity activity = getActivity();
-         
+
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
-        getInstrumentation().invokeMenuActionSync(activity, 0, 0);
+        getInstrumentation().invokeMenuActionSync(activity, ca.ualberta.cmput301w14t08.geochan.R.id.action_settings, 0);
         FragmentManager m = activity.getFragmentManager();
         Fragment fragment = m.findFragmentByTag("prefFrag");
+        assertNotNull(fragment);
+    }
+    
+    /**
+     * Click the Add Thread action bar item and check if the correct fragment is inflated
+     */
+    public void testInflateAddThread() throws Throwable {
+        final MainActivity activity = getActivity();
+
+        getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        getInstrumentation().invokeMenuActionSync(activity, ca.ualberta.cmput301w14t08.geochan.R.id.action_add_thread, 0);
+        FragmentManager m = activity.getFragmentManager();
+        Fragment fragment = m.findFragmentByTag("postThreadFrag");
         assertNotNull(fragment);
     }
     
