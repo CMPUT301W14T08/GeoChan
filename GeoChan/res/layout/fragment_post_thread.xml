@@ -8,6 +8,7 @@
         android:id="@+id/titlePrompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:ems="10"
         android:hint="@string/titleHint" >
 
@@ -17,7 +18,9 @@
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300sp"
+        android:background="@android:drawable/editbox_background"
+        android:layout_above="@+id/attach_image_button"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/titlePrompt"
         android:ems="10"
