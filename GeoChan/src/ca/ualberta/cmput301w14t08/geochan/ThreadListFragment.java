@@ -54,6 +54,7 @@ public class ThreadListFragment extends Fragment {
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

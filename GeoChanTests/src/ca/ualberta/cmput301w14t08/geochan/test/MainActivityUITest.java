@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301w14t08.geochan.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.ThreadList;
 
 public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     PostThreadFragment fragment;
@@ -32,6 +33,7 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
         runTestOnUiThread(new Runnable() {
             @Override 
             public void run() {
+                int size = ThreadList.getThreads().size();
                 View view = fragment.getView();
                 Button button = (Button) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_thread_button);
                 EditText title = (EditText) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.titlePrompt);
@@ -40,6 +42,7 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
                 comment.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit,"
                         + " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
                 button.performClick();
+                assertTrue("There needs to be a thread", ThreadList.getThreads().size()==(size+1));
                 //fail("Test");
             }
         });

@@ -17,9 +17,10 @@
     </EditText>
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/commentBody"
         android:layout_width="match_parent"
         android:layout_height="300sp"
+        android:scrollbars="vertical"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/titlePrompt"

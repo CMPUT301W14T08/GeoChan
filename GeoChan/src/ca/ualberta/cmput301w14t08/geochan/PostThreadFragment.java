@@ -20,11 +20,16 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Responsible for the UI fragment that allows a user to post
@@ -36,9 +41,37 @@ public class PostThreadFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_post_thread, container, false);
     }
+
+
+    public void postNewThread(View v) {
+        if(v.getId() == R.id.post_thread_button) {
+            EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
+            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+            String title = editTitle.getText().toString();
+            String comment = editComment.getText().toString();
+            if(title.equals("")) {
+                showInputError();
+            } else {
+                /**
+                 * For now, the location is set to null
+                 */
+                ThreadList.addThread(new Comment(comment,null),title);
+                InputMethodManager inputManager = (InputMethodManager)getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE); 
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                        .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                this.getFragmentManager().popBackStackImmediate();
+            }
+        }
+    }
     
-    
-    public void postNewThread() {
-        
+    public void showInputError() {
+        AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
+        error.setTitle("Error:");
+        error.setMessage("Title field is mandatory.");
+        // Set an EditText view to get user input 
+        final TextView dialog = new TextView(getActivity());
+        error.setView(dialog);
+        error.show();
     }
 }
