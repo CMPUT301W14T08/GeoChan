@@ -11,5 +11,4 @@ public class ThreadListTest extends TestCase {
         ThreadList.addThread(comment, "Test title");
         assertTrue(ThreadList.getThreads().size() == 1);
     }
-
 }

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
+        android:maxLength="50"
         android:ems="10"
         android:hint="@string/titleHint" >
 
@@ -19,10 +20,10 @@
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="300sp"
-        android:background="@android:drawable/editbox_background"
-        android:layout_above="@+id/attach_image_button"
+        android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/titlePrompt"
+        android:background="@android:drawable/editbox_background"
         android:ems="10"
         android:hint="@string/commentHint" />
 
@@ -33,28 +34,34 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="Location:" />
+        android:text="Location: Current Location" />
 
-    <Button
-        android:id="@+id/attach_image_button"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="148dp"
-        android:layout_height="30dp"
-        android:layout_above="@+id/location_button"
-        android:layout_alignParentLeft="true"
-        android:textSize="12sp"
-        android:text="Attach Image" />
-
-    <Button
-        android:id="@+id/post_thread_button"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/attach_image_button"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/attach_image_button"
-        android:layout_toRightOf="@+id/attach_image_button"
-        android:textSize="12sp"
-        android:text="Post" />
+        android:layout_above="@+id/location_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/attach_image_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="Attach Image"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/post_thread_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:onClick="postNewThread"
+            android:text="Post"
+            android:textSize="12sp" />
+    </LinearLayout>
 
 </RelativeLayout>

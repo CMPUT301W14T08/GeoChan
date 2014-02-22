@@ -55,12 +55,20 @@ public class MainActivity extends Activity {
         case R.id.action_settings:
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
-                .addToBackStack(null).commit();
+                .addToBackStack(null).commit(); 
+            /**
+             * This next line is necessary for JUnit to see fragments
+             */
+            getFragmentManager().executePendingTransactions();
             return true;
         case R.id.action_add_thread:
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
                 .addToBackStack(null).commit();
+            /**
+             * This next line is necessary for JUnit to see fragments
+             */
+            getFragmentManager().executePendingTransactions();
             return true;
         default:
             return super.onOptionsItemSelected(item);
