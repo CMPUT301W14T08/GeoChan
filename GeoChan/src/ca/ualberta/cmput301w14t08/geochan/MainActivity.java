@@ -22,6 +22,8 @@ package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,6 +39,13 @@ public class MainActivity extends Activity {
             ThreadListFragment fragment = new ThreadListFragment();
             getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
     
     @Override
