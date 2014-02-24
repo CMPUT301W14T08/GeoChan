@@ -41,6 +41,12 @@ public class ThreadListFragment extends Fragment {
     }
     
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    
+    @Override
     public void onStart() {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);

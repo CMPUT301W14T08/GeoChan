@@ -47,13 +47,6 @@ public class MainActivity extends Activity {
     }
     
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.thread_list, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch(item.getItemId())
