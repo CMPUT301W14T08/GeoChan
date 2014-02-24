@@ -32,12 +32,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (findViewById(R.id.fragment_container) != null) {
+        if (findViewById(R.id.fragment_container_left) == null) {
             if (savedInstanceState != null) {
                 return;
             }
             ThreadListFragment fragment = new ThreadListFragment();
             getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        } else {
+            if (savedInstanceState != null) {
+                return;
+            }
+            ThreadListFragment fragment = new ThreadListFragment();
+            getFragmentManager().beginTransaction().add(R.id.fragment_container_left, fragment).commit();
         }
     }
     
