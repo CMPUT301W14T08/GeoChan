@@ -23,13 +23,13 @@ package ca.ualberta.cmput301w14t08.geochan;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
  * Responsible for the UI fragment that allows a user to post
@@ -69,9 +69,11 @@ public class PostThreadFragment extends Fragment {
         AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
         error.setTitle("Error:");
         error.setMessage("Title field is mandatory.");
-        // Set an EditText view to get user input 
-        final TextView dialog = new TextView(getActivity());
-        error.setView(dialog);
+        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
         error.show();
     }
 }
