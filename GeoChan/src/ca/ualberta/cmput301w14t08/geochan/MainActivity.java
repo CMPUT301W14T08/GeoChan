@@ -21,16 +21,9 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
     @Override
