@@ -21,13 +21,16 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class ThreadListFragment extends Fragment {
     private ListView threadListView;
@@ -60,6 +63,17 @@ public class ThreadListFragment extends Fragment {
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
+        threadListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = new ThreadViewFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("id", id);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null).commit();
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 
