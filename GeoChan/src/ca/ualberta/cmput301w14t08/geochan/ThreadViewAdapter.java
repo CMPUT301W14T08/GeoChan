@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -37,14 +38,9 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_SEPARATOR = 2;
     private static final int TYPE_MAX_COUNT = 3;
     
-    private String[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-    
-    
     private Context context;
     private Thread thread;
     private ArrayList<Comment> comments;
-    
     
     public ThreadViewAdapter(Context context, Thread thread) {
         super();
@@ -140,8 +136,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         
-        String ret = " | on " + months[cal.get(Calendar.MONTH)] + "." + cal.get(Calendar.DATE)
-                + "," + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR_OF_DAY)
+        String ret = " | on " 
+                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
+                + "." + cal.get(Calendar.DATE)
+                + "," + cal.get(Calendar.YEAR) 
+                + " at " + cal.get(Calendar.HOUR_OF_DAY)
                 + ":" + cal.get(Calendar.MINUTE);
         return ret;
     }
