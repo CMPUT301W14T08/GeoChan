@@ -15,5 +15,7 @@
     <string name="commentHint">What would you like to say?</string>
     <string name="action_add_thread">Add Thread</string>
     <string name="comments">Comments:</string>
+    <string name="device_id"/>
+    <string name="device_hash"/>
 
 </resources>

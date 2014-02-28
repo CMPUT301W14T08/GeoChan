@@ -7,17 +7,26 @@
     
     <PreferenceCategory 
         android:title="Settings" >
-        <CheckBoxPreference
-            android:key="test_checkbox"
-            android:title="Check" />
+        
         <EditTextPreference
-            android:defaultValue="@string/username"
+            android:defaultValue="Anon"
             android:dialogTitle="Username:"
             android:key="username"
-            android:summary="Current: @string/username"
+            android:summary="@string/username"
             android:title="Change Username" />
         
+        <Preference
+            android:key="device_id_tag"
+            android:selectable="false"
+            android:summary="@string/device_id"
+            android:title="Device ID:" />
+        
+        <Preference
+            android:key="device_hash"
+            android:selectable="false"
+            android:summary="@string/device_hash"
+            android:title="Device Hash:" />
+        
     </PreferenceCategory>
-    
 
 </PreferenceScreen>

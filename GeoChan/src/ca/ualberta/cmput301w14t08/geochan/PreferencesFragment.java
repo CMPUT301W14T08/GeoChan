@@ -21,20 +21,39 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.os.Bundle;
-import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.provider.Settings.Secure;
 
 
 public class PreferencesFragment extends PreferenceFragment {
 
-    private String username;
-    private EditTextPreference changeUsername;
+    //private String username;
+    //private EditTextPreference username;
+    private static String android_id;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        setAndroid_id(Secure.getString(this.getActivity().getContentResolver(),
+                Secure.ANDROID_ID));         
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
+        
+        Preference id = findPreference("device_id_tag");
+        id.setDefaultValue(getAndroid_id());
+        id.setSummary(getAndroid_id());
+        
+        Preference hash = findPreference("device_hash");
+        hash.setSummary("There will be hash");
+    }
+
+    public static String getAndroid_id() {
+        return android_id;
+    }
+
+    private static void setAndroid_id(String android_id) {
+        PreferencesFragment.android_id = android_id;
     }
 }
