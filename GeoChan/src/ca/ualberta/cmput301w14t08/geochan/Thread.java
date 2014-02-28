@@ -22,7 +22,6 @@ package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 public class Thread {
@@ -78,44 +77,45 @@ public class Thread {
         this.getComments().add(c);
     }
     
-    public void sortByDate(){
+    public void sortComments(String tag){
         /*
-         * Sorts comments in the thread according to date.
-         * Older comments are moved to the top, newer comments
-         * to the bottom.
+         * Sorts the thread's comments based
+         * on the tag passed in.
+         * "DATE_NEWEST" pushes the most recent comments to the top.
+         * "DATE_OLDEST" pushes the oldest comments to the top.
+         * "LOCATION_OP" pushes the closest comments to the OP to the top.
+         * "SCORE_HIGHEST" pushes the highest scored comments to the top.
+         * "SCORE_LOWEST" pushes the lowest scored comments to the top.
          */
-        Collections.sort(this.getComments(), new Comparator<Comment>(){
-            public int compare(Comment c1, Comment c2){
-                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
-                if(comp < 0){
-                    return 1;
-                } else if (comp > 0) {
-                    return -1;
-                } else {
-                    return 0;
-                }   
-            }
-        });
+        
+        /*
+         * Can't use switch statements and strings. GG Android.
+         */
+        
+        if(tag == "DATE_NEWEST"){
+            Collections.sort(this.getComments(), SortComparators.sortCommentsByDateNewest());
+            
+        } else if(tag == "DATE_OLDEST"){
+            Collections.sort(this.getComments(), SortComparators.sortCommentsByDateOldest());
+            
+        } else if(tag == "LOCATION_OP"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        } else if(tag == "SCORE_HIGHEST"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        } else if(tag == "SCORE_LOWEST"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        }
+        
+        return;
     }
     
-    public void sortByDefault(){
-        /*
-         * The default comment sorting method.
-         * As per project description, "freshest" (i.e. newest)
-         * comments are pushed to the top while old ones are pushed
-         * to the bottom.
-         */
-        Collections.sort(this.getComments(), new Comparator<Comment>(){
-            public int compare(Comment c1, Comment c2){
-                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
-                if(comp < 0){
-                    return -1;
-                } else if (comp > 0) {
-                    return 1;
-                } else {
-                    return 0;
-                }   
-            }
-        });
-    }
 }

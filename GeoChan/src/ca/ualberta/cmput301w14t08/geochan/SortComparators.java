@@ -24,8 +24,28 @@ import java.util.Comparator;
 
 public class SortComparators {
 
-        //sort by earliest date
-        static Comparator<Comment> sortByDate() {
+        /*
+         * Comparator for pushing old comments to the top.
+         */
+        static Comparator<Comment> sortCommentsByDateOldest() {
+            return new Comparator<Comment>() {
+                public int compare(Comment c1, Comment c2) {
+                    int val = c1.getCommentDate().compareTo(c2.getCommentDate());
+                    if (val < 0) {
+                        return -1;
+                    } else if (val > 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+           };
+        }
+        
+        /*
+         * Comparator for pushing new comments to the top.
+         */
+        static Comparator<Comment> sortCommentsByDateNewest() {
             return new Comparator<Comment>() {
                 public int compare(Comment c1, Comment c2) {
                     int val = c1.getCommentDate().compareTo(c2.getCommentDate());

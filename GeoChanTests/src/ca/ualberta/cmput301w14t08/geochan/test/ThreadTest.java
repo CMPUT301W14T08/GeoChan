@@ -8,9 +8,9 @@ import ca.ualberta.cmput301w14t08.geochan.Thread;
 
 public class ThreadTest extends TestCase {
     
-    public void testSortByDate(){
+    public void testSortByDateNewest(){
         /*
-         * Tests the implementation of Thread.sortByDate();
+         * Tests the implementation of Thread.sortComments("DATE_NEWEST");
          */
         long extraTime = 1320000;
         Comment c1 = new Comment();
@@ -34,7 +34,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortByDate();
+        thread.sortComments("DATE_NEWEST");
 
         assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
         assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
@@ -42,9 +42,9 @@ public class ThreadTest extends TestCase {
         assertTrue("c2 is at index 3", (thread.getComments().get(3)) == c2);
     }
     
-    public void testSortByDefault(){
+    public void testSortByDateOldest(){
         /*
-         * Tests the implementation of Thread.sortByDefault();
+         * Tests the implementation of Thread.sortComments("DATE_OLDEST");
          */
         long extraTime = 1320000;
         Comment c1 = new Comment();
@@ -68,7 +68,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortByDefault();
+        thread.sortComments("DATE_OLDEST");
 
         assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
         assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);
