@@ -33,6 +33,7 @@
         android:layout_alignBottom="@+id/thread_view_op_commentBy"
         android:layout_toRightOf="@+id/thread_view_op_commentBy"
         android:text="@string/placeholder_date"
+        android:paddingRight="5dp"
         android:alpha="0.7"
         android:textColor="#f00" />
 
@@ -43,6 +44,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/thread_view_op_commentBody"
         android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
         android:alpha="0.7"
         android:textColor="#f00" />
 

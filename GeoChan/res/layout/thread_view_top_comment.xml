@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
         android:text="@string/lorem_ipsum" />
 
     <TextView
@@ -18,6 +20,7 @@
         android:layout_alignBottom="@+id/thread_view_top_comment_commentBy"
         android:layout_toRightOf="@+id/thread_view_top_comment_commentBy"
         android:text="@string/placeholder_date"
+        android:paddingRight="5dp"
         android:alpha="0.7"
         android:textColor="#00f" />
 
@@ -28,6 +31,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/thread_view_top_comment_commentBody"
         android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
         android:alpha="0.7"
         android:textColor="#00f" />
 
