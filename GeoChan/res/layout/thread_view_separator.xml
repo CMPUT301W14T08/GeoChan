@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" 
+    android:layout_width="fill_parent">
+    
+    <TextView android:id="@+id/textSeparator" 
+        android:layout_height="wrap_content" 
+        android:gravity="center" 
+        android:text="@string/comments" 
+        android:visibility="visible" 
+        android:layout_width="fill_parent" 
+        android:textColor="#FFFFFFFF" 
+        android:background="#FF000000"/>
+    
+</LinearLayout>

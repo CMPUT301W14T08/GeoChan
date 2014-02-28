@@ -26,14 +26,14 @@ import java.util.Date;
 
 public class Thread {
     private ArrayList<Comment> comments;
-    private Comment topComment;
+    private Comment bodyComment;
     private Date threadDate;
     private String title;
 
-    public Thread(Comment topComment, String title) {
+    public Thread(Comment bodyComment, String title) {
         super();
         this.comments = new ArrayList<Comment>();
-        this.topComment = topComment;
+        this.bodyComment = bodyComment;
         this.threadDate = new Date();
         this.setTitle(title);
     }
@@ -49,12 +49,12 @@ public class Thread {
         this.threadDate = threadDate;
     }
 
-    public Comment getTopComment() {
-        return topComment;
+    public Comment getBodyComment() {
+        return bodyComment;
     }
 
     public void setTopComment(Comment topComment) {
-        this.topComment = topComment;
+        this.bodyComment = topComment;
     }
 
     public ArrayList<Comment> getComments() {
@@ -74,7 +74,7 @@ public class Thread {
     }
     
     public void addComment(Comment c){
-        this.getComments().add(c);
+        this.comments.add(c);
     }
     
     public void sortComments(String tag){

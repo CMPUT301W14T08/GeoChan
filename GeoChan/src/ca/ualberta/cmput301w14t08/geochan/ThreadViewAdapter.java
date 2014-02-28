@@ -20,45 +20,135 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
     private static final int TYPE_OP = 1;
-    private static final int TYPE_MAX_COUNT = 2;
+    private static final int TYPE_SEPARATOR = 2;
+    private static final int TYPE_MAX_COUNT = 3;
+    
+    private String[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    
     
     private Context context;
     private Thread thread;
+    private ArrayList<Comment> comments;
+    
+    
+    public ThreadViewAdapter(Context context, Thread thread) {
+        super();
+        this.context = context;
+        this.thread = thread;
+        this.comments = thread.getComments();
+    }
 
     @Override
     public int getCount() {
         /**
          * +1 is for the OP
          */
-        return thread.getComments().size()+1;
+        return thread.getComments().size()+2;
     }
 
     @Override
-    public Object getItem(int arg0) {
-        if(arg0 == 0) {
-            return thread.getTopComment();
-        } else {
-            return thread.getComments().get(arg0-1);
+    public Object getItem(int position) {
+        if (position == 0) {
+            return thread.getBodyComment();
+        }
+        if (position == 1) {
+            return null;
+        } 
+        else {
+            return comments.get(position-2);
         }
     }
 
     @Override
-    public long getItemId(int arg0) {
-        return arg0;
+    public int getItemViewType(int position) {
+        int type = 0;
+        if (position== 0){
+            type = TYPE_OP;
+        }
+        
+        else if (position == 1){
+            type = TYPE_SEPARATOR;
+        } 
+        
+        else if (position > 1) {
+            type = TYPE_COMMENT;
+        }
+        return type;
     }
 
     @Override
-    public View getView(int arg0, View arg1, ViewGroup arg2) {
-        // TODO Auto-generated method stub
-        return null;
+    public long getItemId(int position) {
+        return position;
+    }
+    
+    @Override 
+    public int getViewTypeCount() {
+        return TYPE_MAX_COUNT;
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        int type = getItemViewType(position);
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            switch(type) {
+                case TYPE_OP:
+                    convertView = inflater.inflate(R.layout.thread_view_op, null);
+                    // Thread title
+                    TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
+                    title.setText(thread.getTitle()); 
+                    // Thread body comment
+                    TextView body = (TextView) convertView.findViewById(R.id.thread_view_op_commentBody);
+                    body.setText(thread.getBodyComment().getTextPost());
+                    // Thread timestamp
+                    TextView time = (TextView) convertView.findViewById(R.id.thread_view_op_commentDate);
+                    time.setText(makeCommentTimeString(thread.getBodyComment()));
+                    break;
+                case TYPE_COMMENT:
+                    Comment comment = (Comment) getItem(position);
+                    convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                    TextView commentBody = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBody);
+                    commentBody.setText(comment.getTextPost());
+                    break;
+                case TYPE_SEPARATOR:
+                    convertView = inflater.inflate(R.layout.thread_view_separator, null);
+                    break;
+            }
+        }
+        return convertView;
+    }
+    
+    public String makeCommentTimeString(Comment comment) {
+        Date date = comment.getCommentDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        
+        String ret = " | on " + months[cal.get(Calendar.MONTH)] + "." + cal.get(Calendar.DATE)
+                + "," + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR_OF_DAY)
+                + ":" + cal.get(Calendar.MINUTE);
+        return ret;
+    }
+    
+    // TODO 
+    public void addTopComment() {
+        
+        notifyDataSetChanged();
+    }
 }

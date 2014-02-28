@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -36,6 +38,9 @@ public class ThreadListAdapter extends BaseAdapter {
 
     private Context context;
     private static ArrayList<Thread> displayList;
+    
+    private String[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
     public ThreadListAdapter(Context context, ArrayList<Thread> list) {
         this.context = context;
@@ -66,13 +71,26 @@ public class ThreadListAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.thread_list_item_no_image, null);
         }
-
+        // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
-
+        // Thread bodyComment snippet 
         TextView body = (TextView) convertView.findViewById(R.id.commentBody);
-        body.setText(thread.getTopComment().getTextPost());
-
+        body.setText(thread.getBodyComment().getTextPost());
+        // Thread timestamp 
+        TextView time = (TextView) convertView.findViewById(R.id.commentDate);
+        time.setText(makeCommentTimeString(thread.getBodyComment()));
         return convertView;
+    }
+    
+    public String makeCommentTimeString(Comment comment) {
+        Date date = comment.getCommentDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        
+        String ret = " | on " + months[cal.get(Calendar.MONTH)] + "." + cal.get(Calendar.DATE)
+                + "," + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR_OF_DAY)
+                + ":" + cal.get(Calendar.MINUTE);
+        return ret;
     }
 }

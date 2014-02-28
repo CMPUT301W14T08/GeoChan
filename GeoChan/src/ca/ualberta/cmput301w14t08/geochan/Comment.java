@@ -22,7 +22,6 @@ package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import android.graphics.Picture;

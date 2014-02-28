@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/thread_view_top_comment_commentBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/thread_view_top_comment_commentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/thread_view_top_comment_commentBy"
+        android:layout_alignBottom="@+id/thread_view_top_comment_commentBy"
+        android:layout_toRightOf="@+id/thread_view_top_comment_commentBy"
+        android:text="@string/placeholder_date"
+        android:alpha="0.7"
+        android:textColor="#00f" />
+
+    <TextView
+        android:id="@+id/thread_view_top_comment_commentBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_top_comment_commentBody"
+        android:text="@string/placeholder_postby"
+        android:alpha="0.7"
+        android:textColor="#00f" />
+
+</RelativeLayout>

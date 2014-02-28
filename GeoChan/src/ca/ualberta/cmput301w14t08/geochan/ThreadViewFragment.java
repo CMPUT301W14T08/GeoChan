@@ -25,12 +25,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class ThreadViewFragment extends Fragment {
+    private ListView threadView;
+    private ThreadViewAdapter adapter;
+    
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
     }
@@ -41,9 +47,13 @@ public class ThreadViewFragment extends Fragment {
         Bundle bundle = getArguments();
         int id = (int) bundle.getLong("id");
         Thread thread = ThreadList.getThreads().get(id);
-        TextView title = (TextView) getActivity().findViewById(R.id.thread_view_title);
-        TextView body = (TextView) getActivity().findViewById(R.id.thread_view_body);
-        title.setText(thread.getTitle());
-        body.setText(thread.getTopComment().getTextPost());
+        thread.addComment(new Comment("Test comment. If you'd like to remove it, see ThreadViewFragment 50.", null));
+        thread.addComment(new Comment("OP sucks.", null));
+
+        threadView = (ListView) getActivity().findViewById(R.id.thread_view_list);
+        adapter = new ThreadViewAdapter(getActivity(), thread);
+        // Assign custom adapter to the thread listView.
+        threadView.setAdapter(adapter);        
+        adapter.notifyDataSetChanged();
     }
 }
