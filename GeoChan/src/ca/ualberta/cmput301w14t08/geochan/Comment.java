@@ -168,23 +168,39 @@ public class Comment {
         this.children = children;
     }
     
-    public void sortChildrenByDate(){
+    public void sortChildren(String tag){
         /*
-         * Sorts child comments according to date.
-         * Older comments are moved to the top, newer
-         * comments to the bottom.
+         * Sorts child comments according to the tag passed.
+         * "DATE_NEWEST" pushes the most recent children to the top.
+         * "DATE_OLDEST" pushes the oldest children to the top.
+         * "LOCATION_OP" pushes the closest children to the parent to the top.
+         * "SCORE_HIGHEST" pushes the highest scored children to the top.
+         * "SCORE_LOWEST" pushes the lowest scored children to the top.
          */
-        Collections.sort(this.getChildren(), new Comparator<Comment>(){
-            public int compare(Comment c1, Comment c2){
-                int comp = (c1.getCommentDate().compareTo(c2.getCommentDate()));
-                if(comp < 0){
-                    return 1;
-                } else if (comp > 0) {
-                    return -1;
-                } else {
-                    return 0;
-                }   
-            }
-        });
+         
+        if(tag == "DATE_NEWEST"){
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByDateNewest());
+            
+        } else if(tag == "DATE_OLDEST"){
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByDateOldest());
+            
+        } else if(tag == "LOCATION_OP"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        } else if(tag == "SCORE_HIGHEST"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        } else if(tag == "SCORE_LOWEST"){
+            /*
+             * To be implemented once location work is finished.
+             */
+            
+        }
+        
+        return;
     }
 }
