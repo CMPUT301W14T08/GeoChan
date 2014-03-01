@@ -64,6 +64,9 @@ public class ThreadListFragment extends Fragment {
         threadListView.setAdapter(adapter);
         threadListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
+            /*
+             * On click, launch the fragment responsible for thread viewing
+             */
             public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();

@@ -35,7 +35,6 @@ import android.widget.EditText;
  * Responsible for the UI fragment that allows a user to post
  * a new thread.
  */
-
 public class PostThreadFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -52,7 +52,7 @@ public class ThreadViewAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         /**
-         * +1 is for the OP
+         * +2 is for the OP
          */
         return thread.getComments().size()+2;
     }
@@ -106,7 +106,11 @@ public class ThreadViewAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             switch(type) {
                 case TYPE_OP:
-                    convertView = inflater.inflate(R.layout.thread_view_op, null);
+                    if(!thread.getBodyComment().hasImage()) {
+                        convertView = inflater.inflate(R.layout.thread_view_op, null);
+                    } else {
+                        convertView = inflater.inflate(R.layout.thread_view_op_img, null);
+                    }
                     // Thread title
                     TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
                     title.setText(thread.getTitle()); 
