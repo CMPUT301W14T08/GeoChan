@@ -125,6 +125,8 @@ public class ThreadViewAdapter extends BaseAdapter {
                     break;
                 case TYPE_SEPARATOR:
                     convertView = inflater.inflate(R.layout.thread_view_separator, null);
+                    TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
+                    numComments.setText(Integer.toString(comments.size()) + " Comments:");
                     break;
             }
         }
