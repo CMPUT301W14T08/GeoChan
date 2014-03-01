@@ -17,5 +17,8 @@
     <string name="comments">Comments:</string>
     <string name="device_id"/>
     <string name="device_hash"/>
+    <string name="attach_image">Attach Image</string>
+    <string name="post">Post</string>
+    <string name="location">Location: Current Location</string>
 
 </resources>

@@ -19,7 +19,6 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
         super(MainActivity.class);
     }
 
-    //Needs work
     public void testAddThread() throws Throwable {
         activity = getActivity();
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
@@ -48,8 +47,7 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
         });
         
     }  
-    
-    
+
     /**
      * http://stackoverflow.com/a/17789933
      */
