@@ -79,5 +79,42 @@ public class SortComparators {
             };
         }
         
-        //sort by combination of date and location
+        /*
+         * Comparator for pushing higher scored comments to the top.
+         */
+        static Comparator<Comment> sortCommentsByScoreHighest(){
+            return new Comparator<Comment>(){
+                public int compare(Comment c1, Comment c2){
+                    double val1 = c1.getScore();
+                    double val2 = c2.getScore();
+                    if(val1 > val2){
+                        return -1;
+                    } else if(val1 < val2){
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
+        }
+        
+        /*
+         * Comparator for pushing lower scored comments to the top.
+         */
+        static Comparator<Comment> sortCommentsByScoreLowest(){
+            return new Comparator<Comment>(){
+                public int compare(Comment c1, Comment c2){
+                    double val1 = c1.getScore();
+                    double val2 = c2.getScore();
+                    if(val1 > val2){
+                        return 1;
+                    } else if(val1 < val2){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
+        }
+        
 }

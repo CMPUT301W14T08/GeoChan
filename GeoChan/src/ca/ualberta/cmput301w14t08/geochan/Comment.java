@@ -189,14 +189,10 @@ public class Comment {
             Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentDistance());
             
         } else if(tag == "SCORE_HIGHEST"){
-            /*
-             * To be implemented once location work is finished.
-             */
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByScoreHighest());
             
         } else if(tag == "SCORE_LOWEST"){
-            /*
-             * To be implemented once location work is finished.
-             */
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByScoreLowest());
             
         }
         
