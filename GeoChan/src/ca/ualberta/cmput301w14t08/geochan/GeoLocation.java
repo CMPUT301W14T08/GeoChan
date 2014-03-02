@@ -23,20 +23,65 @@ package ca.ualberta.cmput301w14t08.geochan;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
+
+/**
+ * Responsible for GeoLocation services for Comment objects
+ */
 
 public class GeoLocation {
 
-    Location location;
-    LocationManager locationManager;
+    private Location location;
 
     public GeoLocation(Activity activity) {
+   
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+
+        /**
+         * Set up a listener so that the device can get the most current location.
+         * Without the listener, new GeoLocation objects only will be set to the
+         * cached location.
+         */
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location newLocation) {
+                //location = newLocation;
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        
+        /** 
+         * I'm not totally sure why this is required yet, but it crashes without.
+         * I believe this is the cached location. The listener above is required to 
+         * update this, but I can't seem to just set the location from 
+         * onLocationChanged() above (returns null);
+         */
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        
+        locationManager.removeUpdates(locationListener);
     }
 
     public void updateLocation(Location location) {
         this.location = location;
+    }
+
+    /**
+     * Calculates the distance between this object and another GeoLocation object
+     * @param toLocation
+     * @return distance as a double
+     */
+    public double distance(GeoLocation toLocation) {
+        double latDist = this.getLatitude() - toLocation.getLatitude();
+        double longDist = this.getLongitude() - toLocation.getLongitude();
+        return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
     }
 
     public Location getLocation() {
@@ -47,14 +92,6 @@ public class GeoLocation {
         this.location = location;
     }
 
-    public LocationManager getLocationManager() {
-        return locationManager;
-    }
-
-    public void setLocationManager(LocationManager locationManager) {
-        this.locationManager = locationManager;
-    }
-
     public double getLatitude() {
         return location.getLatitude();
     }
@@ -62,5 +99,12 @@ public class GeoLocation {
     public double getLongitude() {
         return location.getLongitude();
     }
-
+    
+    public void setLatitude(double newLat) {
+        location.setLatitude(newLat);
+    }
+    
+    public void setLongitude(double newLong) {
+        location.setLongitude(newLong);
+    }
 }

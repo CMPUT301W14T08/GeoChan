@@ -20,5 +20,6 @@
     <string name="attach_image">Attach Image</string>
     <string name="post">Post</string>
     <string name="location">Location: Current Location</string>
+    <string name="placeholder_location">location text</string>
 
 </resources>

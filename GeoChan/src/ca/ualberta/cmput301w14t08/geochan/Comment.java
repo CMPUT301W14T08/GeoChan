@@ -25,13 +25,12 @@ import java.util.Collections;
 import java.util.Date;
 
 import android.graphics.Picture;
-import android.location.Location;
 
 public class Comment {
     private String textPost;
     private Date commentDate;
     private Picture image;
-    private Location location;
+    private GeoLocation location;
     /**
      * parent is the comment this comment is replying to
      */
@@ -44,7 +43,7 @@ public class Comment {
     /**
      * a comment without an image and without a parent
      */
-    public Comment(String textPost, Location location) {
+    public Comment(String textPost, GeoLocation location) {
         super();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
@@ -57,7 +56,7 @@ public class Comment {
     /**
      * a comment with an image and without a parent
      */
-    public Comment(String textPost, Picture image, Location location) {
+    public Comment(String textPost, Picture image, GeoLocation location) {
         super();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
@@ -70,7 +69,7 @@ public class Comment {
     /**
      * a comment with an image, with a parent
      */
-    public Comment(String textPost, Picture image, Location location, Comment parent) {
+    public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
         super();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
@@ -84,7 +83,7 @@ public class Comment {
     /**
      * a comment without an image and with a parent
      */
-    public Comment(String textPost, Location location, Comment parent) {
+    public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
@@ -135,11 +134,11 @@ public class Comment {
         this.image = image;
     }
 
-    public Location getLocation() {
+    public GeoLocation getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(GeoLocation location) {
         this.location = location;
     }
 
