@@ -21,10 +21,13 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import android.graphics.Picture;
+import android.util.Log;
 
 public class Comment {
     private String textPost;
@@ -200,5 +203,52 @@ public class Comment {
         }
         
         return;
+    }    
+    
+    public double getDistanceFrom(Comment c){
+        /*
+         * Determines the distance between 2 comments
+         * in terms of latitude and longitude coordinates.
+         */
+        return this.getLocation().distance(c.getLocation());
+    }
+    
+    public double getTimeFrom(Comment c){
+        /*
+         * Determines the amount of time between when 2 comments
+         * were posted for determining a comment's relative score.
+         */
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(this.getCommentDate());
+        cal2.setTime(c.getCommentDate());
+        long t1 = cal1.getTimeInMillis();
+        long t2 = cal2.getTimeInMillis();
+        return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+    }
+    
+    public double getScore(){
+        /*
+         * Determines the "score" of a comment
+         * in relation to its parent. Logs an error
+         * and returns 0 if parent is null, since this
+         * shouldn't be being called on a top comment.
+         */
+        int distConst = 25;
+        int timeConst = 10;
+        int maxScore = 1000;
+        /*These can be changed depending on how we want to weight distance vs. time
+         * for comment scoring.*/
+        if(this.parent == null){
+            Log.e("Comment:","getScore() was incorrectly called on a top comment.");
+            return 0;
+        }
+        double distScore = distConst * (1/Math.sqrt(this.getDistanceFrom(this.getParent())));
+        double timeScore = timeConst * (1/Math.sqrt(this.getTimeFrom(this.getParent())));
+        if ((distScore + timeScore) > maxScore){
+            return maxScore;
+        }else{
+            return distScore + timeScore;      
+        } 
     }
 }
