@@ -60,23 +60,24 @@ public class SortComparators {
            };
         }
         
-        //sort by nearest location **comments will need to calculate distance from user
         /*
-        static Comparator<Comment> sortByLocation() {
-            return new Comparator<Comment>() {
-                public int compare(Comment c1, Comment c2) {
-                    int val = c1.getDistFromTop() - c2.getDistFromTop();
-                    if (val < 0) {
-                        return -1;
-                    } else if (val > 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
+         * Comparator for pushing comments closest to parent to the top.
+         */
+        static Comparator<Comment> sortCommentsByParentDistance(){
+            return new Comparator<Comment>(){
+              public int compare(Comment c1, Comment c2){
+                  double val1 = c1.getDistanceFrom(c1.getParent());
+                  double val2 = c2.getDistanceFrom(c2.getParent());
+                  if (val1 > val2){
+                      return 1;
+                  } else if(val1 < val2){
+                      return -1;
+                  } else {
+                      return 0;
+                  }               
+              }
             };
         }
-        */
         
         //sort by combination of date and location
 }

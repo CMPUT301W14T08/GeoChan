@@ -131,6 +131,51 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c5 is at index 3", (c1.getChildren().get(3)) == c5);
     }
     
+    public void testSortByParentDistance(){
+        /*
+         * Tests the implementation of Comment.sortChildren("LOCATION_OP");
+         */
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        
+        c1.setLocation(new GeoLocation(activity));
+        c2.setLocation(new GeoLocation(activity));
+        c3.setLocation(new GeoLocation(activity));
+        c4.setLocation(new GeoLocation(activity));
+        c5.setLocation(new GeoLocation(activity));
+        
+        c2.setParent(c1);
+        c3.setParent(c1);
+        c4.setParent(c1);
+        c5.setParent(c1);
+        
+        c1.getLocation().setLatitude(0);
+        c1.getLocation().setLongitude(0);
+        c2.getLocation().setLatitude(1);
+        c2.getLocation().setLongitude(1);
+        c3.getLocation().setLatitude(2);
+        c3.getLocation().setLongitude(2);
+        c4.getLocation().setLatitude(3);
+        c4.getLocation().setLongitude(3);
+        c5.getLocation().setLatitude(4);
+        c5.getLocation().setLongitude(4);
+
+        c1.addChild(c5);
+        c1.addChild(c3);
+        c1.addChild(c4);
+        c1.addChild(c2);
+        
+        c1.sortChildren("LOCATION_OP");
+
+        assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
+        assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
+        assertTrue("c4 is at index 2", (c1.getChildren().get(2)) == c4);
+        assertTrue("c5 is at index 3", (c1.getChildren().get(3)) == c5);
+    }
+    
     public void testGetScore(){
         /*
          * Test the score calculation for child comments.
@@ -165,13 +210,6 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         
         c3.getLocation().setLatitude(53.527047);
         c3.getLocation().setLongitude(-113.525662);
-        
-        Log.e("c3 distance:", String.valueOf(c3.getDistanceFrom(c3.getParent())));
-        Log.e("c2 distance:", String.valueOf(c2.getDistanceFrom(c2.getParent())));
-        Log.e("c3 time:", String.valueOf(c3.getTimeFrom(c3.getParent())));
-        Log.e("c2 time:", String.valueOf(c2.getTimeFrom(c2.getParent())));
-        Log.e("c3 Score:", String.valueOf(c3.getScore()));
-        Log.e("c2 Score:", String.valueOf(c2.getScore()));
         
         assertTrue("Comment Scores calculated correctly.", c3.getScore() > c2.getScore());
     }

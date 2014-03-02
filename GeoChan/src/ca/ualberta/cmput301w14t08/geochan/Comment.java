@@ -186,9 +186,7 @@ public class Comment {
             Collections.sort(this.getChildren(), SortComparators.sortCommentsByDateOldest());
             
         } else if(tag == "LOCATION_OP"){
-            /*
-             * To be implemented once location work is finished.
-             */
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentDistance());
             
         } else if(tag == "SCORE_HIGHEST"){
             /*
