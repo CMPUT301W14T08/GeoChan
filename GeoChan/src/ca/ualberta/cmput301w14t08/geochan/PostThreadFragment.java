@@ -20,10 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +55,7 @@ public class PostThreadFragment extends Fragment {
                     ErrorDialog.show(getActivity(), "Could not obtain location.");
                     ThreadList.addThread(new Comment(comment, null), title);
                 } else {
-                    ThreadList.addThread(new Comment(comment,geoLocation),title);
+                    ThreadList.addThread(new Comment(comment, geoLocation), title);
                 }
                 InputMethodManager inputManager = (InputMethodManager)getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE); 
