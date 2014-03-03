@@ -46,7 +46,7 @@ public class GeoLocation {
          */
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location newLocation) {
-                //location = newLocation;
+                location = newLocation;
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
