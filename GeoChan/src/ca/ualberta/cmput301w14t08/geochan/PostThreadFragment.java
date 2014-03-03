@@ -24,6 +24,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -39,7 +40,6 @@ public class PostThreadFragment extends Fragment {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_post_thread, container, false);
     }
-
 
     public void postNewThread(View v) {
         if(v.getId() == R.id.post_thread_button) {

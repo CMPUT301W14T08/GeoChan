@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.Settings.Secure;
+import android.view.MenuItem;
 
 
 public class PreferencesFragment extends PreferenceFragment {
@@ -52,7 +53,7 @@ public class PreferencesFragment extends PreferenceFragment {
     public static String getAndroid_id() {
         return android_id;
     }
-
+    
     private static void setAndroid_id(String android_id) {
         PreferencesFragment.android_id = android_id;
     }
