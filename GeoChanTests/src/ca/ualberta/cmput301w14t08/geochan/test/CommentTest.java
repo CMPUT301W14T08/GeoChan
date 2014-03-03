@@ -178,7 +178,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     
     public void testSortByScoreHighest(){
         /*
-         * Tests the implementation of Comment.sortChildren("SCORE_HIGHEST");
+         * Tests the implementation of Comment.sortChildren("PARENT_SCORE_HIGHEST");
          */
         long extraTime = 1320000;
         Comment c1 = new Comment();
@@ -222,7 +222,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);
         
-        c1.sortChildren("SCORE_HIGHEST");
+        c1.sortChildren("PARENT_SCORE_HIGHEST");
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -276,7 +276,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);   
         
-        c1.sortChildren("SCORE_LOWEST");
+        c1.sortChildren("PARENT_SCORE_LOWEST");
 
         assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
         assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
@@ -319,7 +319,8 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.getLocation().setLatitude(53.527047);
         c3.getLocation().setLongitude(-113.525662);
         
-        assertTrue("Comment Scores calculated correctly.", c3.getScore() > c2.getScore());
+        assertTrue("Comment Scores calculated correctly.", 
+                    c3.getScoreFromParent() > c2.getScoreFromParent());
     }
     
     

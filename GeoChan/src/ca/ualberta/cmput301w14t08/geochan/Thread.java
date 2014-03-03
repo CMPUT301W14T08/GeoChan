@@ -37,6 +37,15 @@ public class Thread {
         this.threadDate = new Date();
         this.setTitle(title);
     }
+    
+    /*This constructor is only used for testing.*/
+    public Thread(){
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.bodyComment = null;
+        this.threadDate = null;
+        this.title = null;
+    }
 
     /**
      * Getters and setters
@@ -99,19 +108,13 @@ public class Thread {
             Collections.sort(this.getComments(), SortComparators.sortCommentsByDateOldest());
             
         } else if(tag == "LOCATION_OP"){
-            /*
-             * To be implemented once location work is finished.
-             */
+            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentDistance());
             
-        } else if(tag == "SCORE_HIGHEST"){
-            /*
-             * To be implemented once location work is finished.
-             */
+        } else if(tag == "PARENT_SCORE_HIGHEST"){
+            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreHighest());
             
-        } else if(tag == "SCORE_LOWEST"){
-            /*
-             * To be implemented once location work is finished.
-             */
+        } else if(tag == "PARENT_SCORE_LOWEST"){
+            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreLowest());
             
         }
         

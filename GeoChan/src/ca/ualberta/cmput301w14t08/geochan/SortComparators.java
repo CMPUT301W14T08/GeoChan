@@ -66,8 +66,8 @@ public class SortComparators {
         static Comparator<Comment> sortCommentsByParentDistance(){
             return new Comparator<Comment>(){
               public int compare(Comment c1, Comment c2){
-                  double val1 = c1.getDistanceFrom(c1.getParent());
-                  double val2 = c2.getDistanceFrom(c2.getParent());
+                  double val1 = c1.getDistanceFrom(c1.getParent().getLocation());
+                  double val2 = c2.getDistanceFrom(c2.getParent().getLocation());
                   if (val1 > val2){
                       return 1;
                   } else if(val1 < val2){
@@ -82,11 +82,11 @@ public class SortComparators {
         /*
          * Comparator for pushing higher scored comments to the top.
          */
-        static Comparator<Comment> sortCommentsByScoreHighest(){
+        static Comparator<Comment> sortCommentsByParentScoreHighest(){
             return new Comparator<Comment>(){
                 public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScore();
-                    double val2 = c2.getScore();
+                    double val1 = c1.getScoreFromParent();
+                    double val2 = c2.getScoreFromParent();
                     if(val1 > val2){
                         return -1;
                     } else if(val1 < val2){
@@ -101,11 +101,11 @@ public class SortComparators {
         /*
          * Comparator for pushing lower scored comments to the top.
          */
-        static Comparator<Comment> sortCommentsByScoreLowest(){
+        static Comparator<Comment> sortCommentsByParentScoreLowest(){
             return new Comparator<Comment>(){
                 public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScore();
-                    double val2 = c2.getScore();
+                    double val1 = c1.getScoreFromParent();
+                    double val2 = c2.getScoreFromParent();
                     if(val1 > val2){
                         return 1;
                     } else if(val1 < val2){
@@ -115,6 +115,42 @@ public class SortComparators {
                     }
                 }
             };
+        }
+        
+        /*
+         * Comparator for pushing old threads to the top.
+         */
+        static Comparator<Thread> sortThreadsByDateOldest() {
+            return new Comparator<Thread>() {
+                public int compare(Thread t1, Thread t2) {
+                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                    if (val < 0) {
+                        return -1;
+                    } else if (val > 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+           };
+        }
+        
+        /*
+         * Comparator for pushing new threads to the top.
+         */
+        static Comparator<Thread> sortThreadsByDateNewest() {
+            return new Comparator<Thread>() {
+                public int compare(Thread t1, Thread t2) {
+                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                    if (val < 0) {
+                        return 1;
+                    } else if (val > 0) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+           };
         }
         
 }
