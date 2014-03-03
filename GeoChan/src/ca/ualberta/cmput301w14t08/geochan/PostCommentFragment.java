@@ -49,7 +49,7 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        titleView.setText("Replying to: \n" + thread.getTitle());
+        titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
     }
 

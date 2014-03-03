@@ -5,9 +5,18 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/op_replyingTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:text="@string/op_replyingTo"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp" />
+    
+    <TextView
         android:id="@+id/op_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/op_replyingTo"
         android:maxLength="45"
         android:text="@string/hello_world"
         android:paddingRight="5dp"

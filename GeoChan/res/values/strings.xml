@@ -22,5 +22,6 @@
     <string name="location">Location: Current Location</string>
     <string name="placeholder_location">location text</string>
     <string name="thread_view_op_reply">Reply to OP</string>
+    <string name="op_replyingTo">Replying to:</string>
 
 </resources>
