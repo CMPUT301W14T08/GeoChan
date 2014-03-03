@@ -37,6 +37,15 @@ public class Thread {
         this.threadDate = new Date();
         this.setTitle(title);
     }
+    
+    /*This constructor is only used for testing.*/
+    public Thread(){
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.bodyComment = null;
+        this.threadDate = null;
+        this.title = null;
+    }
 
     /**
      * Getters and setters

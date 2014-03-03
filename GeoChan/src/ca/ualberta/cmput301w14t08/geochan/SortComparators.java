@@ -117,4 +117,40 @@ public class SortComparators {
             };
         }
         
+        /*
+         * Comparator for pushing old threads to the top.
+         */
+        static Comparator<Thread> sortThreadsByDateOldest() {
+            return new Comparator<Thread>() {
+                public int compare(Thread t1, Thread t2) {
+                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                    if (val < 0) {
+                        return -1;
+                    } else if (val > 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+           };
+        }
+        
+        /*
+         * Comparator for pushing new threads to the top.
+         */
+        static Comparator<Thread> sortThreadsByDateNewest() {
+            return new Comparator<Thread>() {
+                public int compare(Thread t1, Thread t2) {
+                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                    if (val < 0) {
+                        return 1;
+                    } else if (val > 0) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+           };
+        }
+        
 }
