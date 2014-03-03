@@ -20,8 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,13 +38,13 @@ import android.widget.TextView;
  */
 public class PostCommentFragment extends Fragment {
     Thread thread;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
-    
+
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
