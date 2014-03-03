@@ -29,7 +29,6 @@ import android.preference.PreferenceFragment;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
-
 public class PreferencesFragment extends PreferenceFragment {
 
     //private String username;
@@ -66,7 +65,7 @@ public class PreferencesFragment extends PreferenceFragment {
     public static String getAndroid_id() {
         return android_id;
     }
-
+    
     private static void setAndroid_id(String android_id) {
         PreferencesFragment.android_id = android_id;
     }
