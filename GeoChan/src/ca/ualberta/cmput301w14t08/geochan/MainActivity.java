@@ -20,9 +20,12 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
+import java.util.Collections;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +33,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends Activity implements OnBackStackChangedListener {
+    int sort;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

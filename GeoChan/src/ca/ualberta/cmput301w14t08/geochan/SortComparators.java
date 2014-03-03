@@ -23,134 +23,140 @@ package ca.ualberta.cmput301w14t08.geochan;
 import java.util.Comparator;
 
 public class SortComparators {
+    
+    public static final int SORT_DATE_NEWEST = 0;
+    public static final int SORT_DATE_OLDEST = 1;
+    public static final int SORT_LOCATION_OP = 2;
+    public static final int SORT_SCORE_HIGHEST = 3;
+    public static final int SORT_SCORE_LOWEST = 4;
 
-        /*
-         * Comparator for pushing old comments to the top.
-         */
-        static Comparator<Comment> sortCommentsByDateOldest() {
-            return new Comparator<Comment>() {
-                public int compare(Comment c1, Comment c2) {
-                    int val = c1.getCommentDate().compareTo(c2.getCommentDate());
-                    if (val < 0) {
-                        return -1;
-                    } else if (val > 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+    /*
+     * Comparator for pushing old comments to the top.
+     */
+    static Comparator<Comment> sortCommentsByDateOldest() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                int val = c1.getCommentDate().compareTo(c2.getCommentDate());
+                if (val < 0) {
+                    return -1;
+                } else if (val > 0) {
+                    return 1;
+                } else {
+                    return 0;
                 }
-           };
-        }
-        
-        /*
-         * Comparator for pushing new comments to the top.
-         */
-        static Comparator<Comment> sortCommentsByDateNewest() {
-            return new Comparator<Comment>() {
-                public int compare(Comment c1, Comment c2) {
-                    int val = c1.getCommentDate().compareTo(c2.getCommentDate());
-                    if (val < 0) {
-                        return 1;
-                    } else if (val > 0) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing new comments to the top.
+     */
+    static Comparator<Comment> sortCommentsByDateNewest() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                int val = c1.getCommentDate().compareTo(c2.getCommentDate());
+                if (val < 0) {
+                    return 1;
+                } else if (val > 0) {
+                    return -1;
+                } else {
+                    return 0;
                 }
-           };
-        }
-        
-        /*
-         * Comparator for pushing comments closest to parent to the top.
-         */
-        static Comparator<Comment> sortCommentsByParentDistance(){
-            return new Comparator<Comment>(){
-              public int compare(Comment c1, Comment c2){
-                  double val1 = c1.getDistanceFrom(c1.getParent().getLocation());
-                  double val2 = c2.getDistanceFrom(c2.getParent().getLocation());
-                  if (val1 > val2){
-                      return 1;
-                  } else if(val1 < val2){
-                      return -1;
-                  } else {
-                      return 0;
-                  }               
-              }
-            };
-        }
-        
-        /*
-         * Comparator for pushing higher scored comments to the top.
-         */
-        static Comparator<Comment> sortCommentsByParentScoreHighest(){
-            return new Comparator<Comment>(){
-                public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScoreFromParent();
-                    double val2 = c2.getScoreFromParent();
-                    if(val1 > val2){
-                        return -1;
-                    } else if(val1 < val2){
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing comments closest to parent to the top.
+     */
+    static Comparator<Comment> sortCommentsByParentDistance() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getDistanceFrom(c1.getParent().getLocation());
+                double val2 = c2.getDistanceFrom(c2.getParent().getLocation());
+                if (val1 > val2) {
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
+                } else {
+                    return 0;
                 }
-            };
-        }
-        
-        /*
-         * Comparator for pushing lower scored comments to the top.
-         */
-        static Comparator<Comment> sortCommentsByParentScoreLowest(){
-            return new Comparator<Comment>(){
-                public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScoreFromParent();
-                    double val2 = c2.getScoreFromParent();
-                    if(val1 > val2){
-                        return 1;
-                    } else if(val1 < val2){
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing higher scored comments to the top.
+     */
+    static Comparator<Comment> sortCommentsByParentScoreHighest() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getScoreFromParent();
+                double val2 = c2.getScoreFromParent();
+                if (val1 > val2) {
+                    return -1;
+                } else if (val1 < val2) {
+                    return 1;
+                } else {
+                    return 0;
                 }
-            };
-        }
-        
-        /*
-         * Comparator for pushing old threads to the top.
-         */
-        static Comparator<Thread> sortThreadsByDateOldest() {
-            return new Comparator<Thread>() {
-                public int compare(Thread t1, Thread t2) {
-                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
-                    if (val < 0) {
-                        return -1;
-                    } else if (val > 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing lower scored comments to the top.
+     */
+    static Comparator<Comment> sortCommentsByParentScoreLowest() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getScoreFromParent();
+                double val2 = c2.getScoreFromParent();
+                if (val1 > val2) {
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
+                } else {
+                    return 0;
                 }
-           };
-        }
-        
-        /*
-         * Comparator for pushing new threads to the top.
-         */
-        static Comparator<Thread> sortThreadsByDateNewest() {
-            return new Comparator<Thread>() {
-                public int compare(Thread t1, Thread t2) {
-                    int val = t1.getThreadDate().compareTo(t2.getThreadDate());
-                    if (val < 0) {
-                        return 1;
-                    } else if (val > 0) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing old threads to the top.
+     */
+    static Comparator<Thread> sortThreadsByDateOldest() {
+        return new Comparator<Thread>() {
+            public int compare(Thread t1, Thread t2) {
+                int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                if (val < 0) {
+                    return -1;
+                } else if (val > 0) {
+                    return 1;
+                } else {
+                    return 0;
                 }
-           };
-        }
-        
+            }
+        };
+    }
+
+    /*
+     * Comparator for pushing new threads to the top.
+     */
+    static Comparator<Thread> sortThreadsByDateNewest() {
+        return new Comparator<Thread>() {
+            public int compare(Thread t1, Thread t2) {
+                int val = t1.getThreadDate().compareTo(t2.getThreadDate());
+                if (val < 0) {
+                    return 1;
+                } else if (val > 0) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
+
 }

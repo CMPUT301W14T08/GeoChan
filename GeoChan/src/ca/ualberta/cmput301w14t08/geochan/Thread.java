@@ -29,6 +29,7 @@ public class Thread {
     private Comment bodyComment;
     private Date threadDate;
     private String title;
+    
 
     public Thread(Comment bodyComment, String title) {
         super();
@@ -86,7 +87,7 @@ public class Thread {
         this.comments.add(c);
     }
     
-    public void sortComments(String tag){
+    public void sortComments(int tag){
         /*
          * Sorts the thread's comments based
          * on the tag passed in.
@@ -97,28 +98,24 @@ public class Thread {
          * "SCORE_LOWEST" pushes the lowest scored comments to the top.
          */
         
-        /*
-         * Can't use switch statements and strings. GG Android.
-         */
-        
-        if(tag == "DATE_NEWEST"){
+        switch(tag) {
+        case SortComparators.SORT_DATE_NEWEST:
             Collections.sort(this.getComments(), SortComparators.sortCommentsByDateNewest());
-            
-        } else if(tag == "DATE_OLDEST"){
+            break;
+        case SortComparators.SORT_DATE_OLDEST:
             Collections.sort(this.getComments(), SortComparators.sortCommentsByDateOldest());
-            
-        } else if(tag == "LOCATION_OP"){
+            break;
+        case SortComparators.SORT_LOCATION_OP:
             Collections.sort(this.getComments(), SortComparators.sortCommentsByParentDistance());
-            
-        } else if(tag == "PARENT_SCORE_HIGHEST"){
+            break;
+        case SortComparators.SORT_SCORE_HIGHEST:
             Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreHighest());
-            
-        } else if(tag == "PARENT_SCORE_LOWEST"){
+            break;
+        case SortComparators.SORT_SCORE_LOWEST:
             Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreLowest());
-            
+            break;
         }
         
         return;
-    }
-    
+    }   
 }
