@@ -24,13 +24,14 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class ThreadViewFragment extends Fragment {
     private ListView threadView;
-    private ThreadViewAdapter adapter;
-    
+    private ThreadViewAdapter adapter; 
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,12 +45,9 @@ public class ThreadViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
-        int id = (int) bundle.getLong("id");
+        final int id = (int) bundle.getLong("id");
         Thread thread = ThreadList.getThreads().get(id);
-        thread.addComment(new Comment("Test comment. If you'd like to remove it, see ThreadViewFragment 50.", null));
-        thread.addComment(new Comment("OP sucks.", null));
-
-        threadView = (ListView) getActivity().findViewById(R.id.thread_view_list);
+        threadView = (ListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);        

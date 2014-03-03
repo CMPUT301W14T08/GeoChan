@@ -20,20 +20,60 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
- * Responsible for the UI fragment that allows a user to post a comment in an
- * existing thread.
+ * Responsible for the UI fragment that allows a user to post
+ * a reply to a comment.
  */
-
 public class PostCommentFragment extends Fragment {
+    int id;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
+        Bundle bundle = getArguments();
+        id = (int) bundle.getLong("id");
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
+    }
+    
+    public void onStart() {
+        super.onStart();
+        TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
+        TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
+        titleView.setText("Replying to: \n" + ThreadList.getThreads().get(id).getTitle());
+        bodyView.setText(ThreadList.getThreads().get(id).getBodyComment().getTextPost());
+    }
+
+    public static Fragment newInstance(int id) {
+        Fragment f = new PostCommentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        f.setArguments(bundle);
+        return f;
+    }
+
+    public void postComment(View v) {
+        if(v.getId() == R.id.post_comment_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+            String comment = editComment.getText().toString();
+            //GeoLocation geoLocation = new GeoLocation(this.getActivity());
+            Thread thread = ThreadList.getThreads().get(id);
+            thread.addComment(new Comment(comment, null));
+            //thread.addComment(new Comment(comment, geoLocation));
+            InputMethodManager inputManager = (InputMethodManager)getActivity()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE); 
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                    .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            this.getFragmentManager().popBackStackImmediate();
+        }
     }
 }

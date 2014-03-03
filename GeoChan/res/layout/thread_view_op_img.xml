@@ -37,6 +37,16 @@
         android:paddingRight="5dp"
         android:alpha="0.7"
         android:textColor="#f00" />
+    
+    <ImageButton
+        android:id="@+id/thread_view_op_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/thread_view_op_commentBy"
+        android:src="@drawable/ic_action_reply"
+        android:contentDescription="@string/thread_view_op_reply"
+        android:onClick="postReplyToOp" />
 
     <TextView
         android:id="@+id/thread_view_op_commentBy"

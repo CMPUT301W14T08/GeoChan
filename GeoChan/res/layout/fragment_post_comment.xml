@@ -1,8 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/op_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="45"
+        android:text="@string/hello_world"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/op_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:text="@string/hello_world"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/op_title" />
+
+    <EditText
+        android:id="@+id/commentBody"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        android:scrollbars="vertical"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/op_body"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="@string/commentHint" />
+
+    <Button
+        android:id="@+id/location_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/location" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/location_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/attach_image_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="@string/attach_image"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/post_comment_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:onClick="postComment"
+            android:text="@string/post"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</RelativeLayout>

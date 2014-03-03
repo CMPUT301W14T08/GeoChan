@@ -76,7 +76,25 @@ public class MainActivity extends Activity {
     }
     
     public void postNewThread(View v) {
-        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
+                .findFragmentByTag("postThreadFrag");
         fragment.postNewThread(v);
+    }
+    
+    public void postComment(View v) {
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                .findFragmentByTag("comFrag");
+        fragment.postComment(v);
+    }
+    
+    public void postReplyToOp(View v) {
+        ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager()
+                .findFragmentByTag("thread_view_fragment");
+        Bundle bundle = fragment.getArguments();
+        int id = bundle.getInt("id");
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, PostCommentFragment.newInstance(id), "comFrag")
+                .addToBackStack(null).commit();
+        getFragmentManager().executePendingTransactions();
     }
 }
