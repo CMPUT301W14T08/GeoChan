@@ -57,7 +57,6 @@ public class PostThreadFragment extends Fragment {
                     showLocationError();
                 } else {
                     ThreadList.addThread(new Comment(comment,geoLocation),title);
-                    //ThreadList.addThread(new Comment(comment, null), title);
                     InputMethodManager inputManager = (InputMethodManager)getActivity()
                             .getSystemService(Context.INPUT_METHOD_SERVICE); 
                     inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()

@@ -44,7 +44,7 @@
         android:textColor="#f00" />
 
     <TextView
-        android:id="@+id/locationText"
+        android:id="@+id/thread_list_item_no_image_locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

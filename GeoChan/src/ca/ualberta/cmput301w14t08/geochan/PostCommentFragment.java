@@ -20,8 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,13 +38,13 @@ import android.widget.TextView;
  */
 public class PostCommentFragment extends Fragment {
     Thread thread;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
-    
+
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
@@ -57,14 +59,29 @@ public class PostCommentFragment extends Fragment {
         if(v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
-            //GeoLocation geoLocation = new GeoLocation(this.getActivity());
-            thread.addComment(new Comment(comment, null));
-            //thread.addComment(new Comment(comment, geoLocation));
-            InputMethodManager inputManager = (InputMethodManager)getActivity()
-                    .getSystemService(Context.INPUT_METHOD_SERVICE); 
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                    .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-            this.getFragmentManager().popBackStackImmediate();
+            GeoLocation geoLocation = new GeoLocation(this.getActivity());
+            if (geoLocation.getLocation() == null) {
+                showLocationError();
+            } else {
+                thread.addComment(new Comment(comment, geoLocation));
+                InputMethodManager inputManager = (InputMethodManager)getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE); 
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                        .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                this.getFragmentManager().popBackStackImmediate();
+            }
         }
+    }
+
+    public void showLocationError() {
+        AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
+        error.setTitle("Error:");
+        error.setMessage("Could not retreive location. Check connection");
+        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        error.show();
     }
 }

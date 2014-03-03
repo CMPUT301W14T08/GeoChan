@@ -120,12 +120,23 @@ public class ThreadViewAdapter extends BaseAdapter {
                     // Thread timestamp
                     TextView time = (TextView) convertView.findViewById(R.id.thread_view_op_commentDate);
                     time.setText(makeCommentTimeString(thread.getBodyComment()));
+                    // Location text
+                    TextView origPostLocationText = (TextView) convertView.findViewById(R.id.thread_view_op_locationText);
+                    double origPostLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
+                    double origPostLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+                    origPostLocationText.setText("Latitude: " + Double.toString(origPostLat) +
+                                    " Longitude: " + Double.toString(origPostLong));     
                     break;
                 case TYPE_COMMENT:
                     Comment comment = (Comment) getItem(position);
                     convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
                     TextView commentBody = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBody);
-                    commentBody.setText(comment.getTextPost());
+                    commentBody.setText(comment.getTextPost());    
+                    TextView commentLocationText = (TextView) convertView.findViewById(R.id.thread_view_top_comment_locationText);
+                    double commentLat = Math.round(comment.getLocation().getLatitude() * 100)/100;
+                    double commentLong = Math.round(comment.getLocation().getLongitude() * 100)/100;
+                    commentLocationText.setText("Latitude: " + Double.toString(commentLat) +
+                                    " Longitude: " + Double.toString(commentLong)); 
                     break;
                 case TYPE_SEPARATOR:
                     convertView = inflater.inflate(R.layout.thread_view_separator, null);

@@ -79,7 +79,7 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView time = (TextView) convertView.findViewById(R.id.commentDate);
         time.setText(makeCommentTimeString(thread.getBodyComment()));
         // Location text
-        TextView location = (TextView) convertView.findViewById(R.id.locationText);
+        TextView location = (TextView) convertView.findViewById(R.id.thread_list_item_no_image_locationText);
         double roundedLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
         double roundedLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
         location.setText("Latitude: " + Double.toString(roundedLat) +
