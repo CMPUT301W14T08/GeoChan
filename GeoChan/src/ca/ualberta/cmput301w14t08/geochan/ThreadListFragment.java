@@ -52,12 +52,7 @@ public class ThreadListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
-        
-<<<<<<< HEAD
-=======
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-        
->>>>>>> a7f02132acddf8c119096e7570644be6e58f9471
+
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
