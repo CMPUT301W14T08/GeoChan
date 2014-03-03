@@ -91,10 +91,10 @@ public class MainActivity extends Activity {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager()
                 .findFragmentByTag("thread_view_fragment");
         Bundle bundle = fragment.getArguments();
-        int id = (int) bundle.getLong("id");
+        Fragment f = new PostCommentFragment();
+        f.setArguments(bundle);
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, PostCommentFragment.newInstance(id), "comFrag")
-                .addToBackStack(null).commit();
+                .replace(R.id.fragment_container, f, "comFrag").addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
 }

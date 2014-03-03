@@ -35,38 +35,37 @@ import android.widget.TextView;
  * a reply to a comment.
  */
 public class PostCommentFragment extends Fragment {
-    int id;
+    Thread thread;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        Bundle bundle = getArguments();
-        id = (int) bundle.getLong("id");
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
     
     public void onStart() {
         super.onStart();
+        Bundle bundle = getArguments();
+        thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        titleView.setText("Replying to: \n" + ThreadList.getThreads().get(id).getTitle());
-        bodyView.setText(ThreadList.getThreads().get(id).getBodyComment().getTextPost());
+        titleView.setText("Replying to: \n" + thread.getTitle());
+        bodyView.setText(thread.getBodyComment().getTextPost());
     }
 
-    public static Fragment newInstance(int id) {
+    /*public static Fragment newInstance(int id) {
         Fragment f = new PostCommentFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);
         f.setArguments(bundle);
         return f;
-    }
+    }*/
 
     public void postComment(View v) {
         if(v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
             //GeoLocation geoLocation = new GeoLocation(this.getActivity());
-            Thread thread = ThreadList.getThreads().get(id);
             thread.addComment(new Comment(comment, null));
             //thread.addComment(new Comment(comment, geoLocation));
             InputMethodManager inputManager = (InputMethodManager)getActivity()
