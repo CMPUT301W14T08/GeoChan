@@ -53,11 +53,6 @@ public class ThreadListFragment extends Fragment {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         
-        // Test code, remember to delete:
-        //Comment comment = new Comment("Testing testing testing testing", null);
-        //ThreadList.addThread(comment, "First Thread");
-        // End of test code
-        
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
