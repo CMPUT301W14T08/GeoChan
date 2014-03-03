@@ -53,11 +53,11 @@ public class ThreadListFragment extends Fragment {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         
-        // Test code, remember to delete:
-        //Comment comment = new Comment("Testing testing testing testing", null);
-        //ThreadList.addThread(comment, "First Thread");
-        // End of test code
+<<<<<<< HEAD
+=======
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
         
+>>>>>>> a7f02132acddf8c119096e7570644be6e58f9471
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
@@ -74,6 +74,8 @@ public class ThreadListFragment extends Fragment {
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "thread_view_fragment")
                         .addToBackStack(null).commit();
+                //getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                getFragmentManager().executePendingTransactions();
             }
         });
         adapter.notifyDataSetChanged();

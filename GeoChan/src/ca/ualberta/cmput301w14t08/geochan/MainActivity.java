@@ -22,13 +22,14 @@ package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
         }
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getFragmentManager().addOnBackStackChangedListener(this);
     }
     
     @Override
@@ -70,8 +72,21 @@ public class MainActivity extends Activity {
              */
             getFragmentManager().executePendingTransactions();
             return true;
+        case android.R.id.home:
+            getFragmentManager().popBackStack();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    @Override
+    public void onBackStackChanged() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if(count > 0) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
     

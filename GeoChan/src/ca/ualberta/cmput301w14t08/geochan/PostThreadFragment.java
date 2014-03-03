@@ -40,7 +40,6 @@ public class PostThreadFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_post_thread, container, false);
     }
 
-
     public void postNewThread(View v) {
         if(v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
