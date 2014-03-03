@@ -56,7 +56,7 @@ public class GeoLocation {
         };
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
