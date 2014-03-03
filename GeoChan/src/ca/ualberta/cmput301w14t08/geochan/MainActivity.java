@@ -29,9 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener {
-    int sort;
-    
+public class MainActivity extends Activity implements OnBackStackChangedListener { 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
