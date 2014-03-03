@@ -50,45 +50,21 @@ public class PostThreadFragment extends Fragment {
             String title = editTitle.getText().toString();
             String comment = editComment.getText().toString();
             if(title.equals("")) {
-                showInputError();
+                ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
                 GeoLocation geoLocation = new GeoLocation(this.getActivity());
                 if (geoLocation.getLocation() == null) {
-                    showLocationError();
+                    ErrorDialog.show(getActivity(), "Could not obtain location.");
+                    ThreadList.addThread(new Comment(comment, null), title);
                 } else {
                     ThreadList.addThread(new Comment(comment,geoLocation),title);
-                    //ThreadList.addThread(new Comment(comment, null), title);
-                    InputMethodManager inputManager = (InputMethodManager)getActivity()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE); 
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                            .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                    this.getFragmentManager().popBackStackImmediate();
                 }
+                InputMethodManager inputManager = (InputMethodManager)getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE); 
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+                        .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                this.getFragmentManager().popBackStackImmediate();
             }
         }
-    }
-
-    public void showInputError() {
-        AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
-        error.setTitle("Error:");
-        error.setMessage("Title field is mandatory.");
-        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        error.show();
-    }
-
-    public void showLocationError() {
-        AlertDialog.Builder error = new AlertDialog.Builder(getActivity());
-        error.setTitle("Error:");
-        error.setMessage("Could not retreive location. Check connection");
-        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        error.show();
     }
 }

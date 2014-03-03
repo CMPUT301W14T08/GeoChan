@@ -57,9 +57,13 @@ public class PostCommentFragment extends Fragment {
         if(v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
-            //GeoLocation geoLocation = new GeoLocation(this.getActivity());
-            thread.addComment(new Comment(comment, null));
-            //thread.addComment(new Comment(comment, geoLocation));
+            GeoLocation geoLocation = new GeoLocation(this.getActivity());
+            if (geoLocation.getLocation() == null) {
+                ErrorDialog.show(getActivity(), "Could not obtain location.");
+                thread.addComment(new Comment(comment, null));
+            } else {
+                thread.addComment(new Comment(comment, geoLocation));
+            }
             InputMethodManager inputManager = (InputMethodManager)getActivity()
                     .getSystemService(Context.INPUT_METHOD_SERVICE); 
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()

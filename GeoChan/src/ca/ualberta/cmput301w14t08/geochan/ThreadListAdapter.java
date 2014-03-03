@@ -80,10 +80,15 @@ public class ThreadListAdapter extends BaseAdapter {
         time.setText(makeCommentTimeString(thread.getBodyComment()));
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
-        double roundedLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
-        double roundedLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
-        location.setText("Latitude: " + Double.toString(roundedLat) +
-                        " Longitude: " + Double.toString(roundedLong));
+        GeoLocation loc = thread.getBodyComment().getLocation();
+        if (loc != null) {
+            double roundedLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
+            double roundedLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+            location.setText("Latitude: " + Double.toString(roundedLat) +
+                    " Longitude: " + Double.toString(roundedLong));
+        } else {
+            location.setText("Error: No location found");
+        }
         return convertView;      
     }
     
