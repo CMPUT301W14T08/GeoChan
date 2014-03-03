@@ -24,8 +24,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.Settings.Secure;
-import android.view.MenuItem;
-
 
 public class PreferencesFragment extends PreferenceFragment {
 
