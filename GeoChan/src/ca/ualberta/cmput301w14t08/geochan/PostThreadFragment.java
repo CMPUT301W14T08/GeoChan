@@ -34,10 +34,25 @@ import android.widget.EditText;
  * a new thread.
  */
 public class PostThreadFragment extends Fragment {
+    private LocationListenerService locationListenerService;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
+        locationListenerService = new LocationListenerService(getActivity());
         return inflater.inflate(R.layout.fragment_post_thread, container, false);
+    }
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        locationListenerService.startListening();
+    }
+    
+    @Override 
+    public void onStop() {
+        super.onStop();
+        locationListenerService.stopListening();
     }
 
     public void postNewThread(View v) {
@@ -49,7 +64,7 @@ public class PostThreadFragment extends Fragment {
             if(title.equals("")) {
                 ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
-                GeoLocation geoLocation = new GeoLocation(this.getActivity());
+                GeoLocation geoLocation = new GeoLocation(locationListenerService);
                 if (geoLocation.getLocation() == null) {
                     ErrorDialog.show(getActivity(), "Could not obtain location.");
                     ThreadList.addThread(new Comment(comment, null), title);

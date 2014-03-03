@@ -36,10 +36,12 @@ import android.widget.TextView;
  */
 public class PostCommentFragment extends Fragment {
     Thread thread;
+    private LocationListenerService locationListenerService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
+        locationListenerService = new LocationListenerService(getActivity());
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
 
@@ -51,13 +53,14 @@ public class PostCommentFragment extends Fragment {
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
+        locationListenerService.startListening();
     }
 
     public void postComment(View v) {
         if(v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
-            GeoLocation geoLocation = new GeoLocation(this.getActivity());
+            GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 ErrorDialog.show(getActivity(), "Could not obtain location.");
                 thread.addComment(new Comment(comment, null));
@@ -70,5 +73,11 @@ public class PostCommentFragment extends Fragment {
                     .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
             this.getFragmentManager().popBackStackImmediate();
         }
+    }
+    
+    @Override 
+    public void onStop() {
+        super.onStop();
+        locationListenerService.stopListening();
     }
 }
