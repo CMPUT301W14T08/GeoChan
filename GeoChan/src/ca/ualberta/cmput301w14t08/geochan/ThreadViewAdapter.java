@@ -122,10 +122,15 @@ public class ThreadViewAdapter extends BaseAdapter {
                     time.setText(makeCommentTimeString(thread.getBodyComment()));
                     // Location text
                     TextView origPostLocationText = (TextView) convertView.findViewById(R.id.thread_view_op_locationText);
-                    double origPostLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
-                    double origPostLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
-                    origPostLocationText.setText("Latitude: " + Double.toString(origPostLat) +
-                                    " Longitude: " + Double.toString(origPostLong));     
+                    GeoLocation loc = thread.getBodyComment().getLocation();
+                    if (loc != null) {
+                        double origPostLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
+                        double origPostLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+                        origPostLocationText.setText("Latitude: " + Double.toString(origPostLat) +
+                                        " Longitude: " + Double.toString(origPostLong));
+                    } else {
+                        origPostLocationText.setText("Error: No location found");
+                    }
                     break;
                 case TYPE_COMMENT:
                     Comment comment = (Comment) getItem(position);
@@ -133,10 +138,15 @@ public class ThreadViewAdapter extends BaseAdapter {
                     TextView commentBody = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBody);
                     commentBody.setText(comment.getTextPost());    
                     TextView commentLocationText = (TextView) convertView.findViewById(R.id.thread_view_top_comment_locationText);
-                    double commentLat = Math.round(comment.getLocation().getLatitude() * 100)/100;
-                    double commentLong = Math.round(comment.getLocation().getLongitude() * 100)/100;
-                    commentLocationText.setText("Latitude: " + Double.toString(commentLat) +
-                                    " Longitude: " + Double.toString(commentLong)); 
+                    GeoLocation loc = comment.getLocation();
+                    if (loc != null) {
+                        double commentLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
+                        double commentLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+                        commentLocationText.setText("Latitude: " + Double.toString(commentLat) +
+                                        " Longitude: " + Double.toString(commentLong));
+                    } else {
+                        commentLocationText.setText("Error: No location found");
+                    }
                     break;
                 case TYPE_SEPARATOR:
                     convertView = inflater.inflate(R.layout.thread_view_separator, null);
