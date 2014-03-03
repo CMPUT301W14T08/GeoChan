@@ -29,7 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener { 
+public class MainActivity extends Activity implements OnBackStackChangedListener {     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,4 +110,5 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .replace(R.id.fragment_container, f, "comFrag").addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
+    
 }

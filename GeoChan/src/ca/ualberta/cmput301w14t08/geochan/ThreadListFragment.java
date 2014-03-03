@@ -50,6 +50,15 @@ public class ThreadListFragment extends Fragment {
     }
     
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.thread_list, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+    @Override
     public void onStart() {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
@@ -75,14 +84,5 @@ public class ThreadListFragment extends Fragment {
             }
         });
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.thread_list, menu);
-        MenuItem item = menu.findItem(R.id.action_settings);
-        item.setVisible(true);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 }

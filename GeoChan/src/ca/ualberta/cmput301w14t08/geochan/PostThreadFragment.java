@@ -38,34 +38,19 @@ import android.widget.EditText;
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        locationListenerService = new LocationListenerService(getActivity());
         return inflater.inflate(R.layout.fragment_post_thread, container, false);
     }
     
     @Override
     public void onStart() {
         super.onStart();
-        locationListenerService.startListening();
+        locationListenerService = new LocationListenerService(getActivity());
     }
     
-    @Override 
-    public void onStop() {
-        super.onStop();
-        locationListenerService.stopListening();
-    }
-
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //inflater.inflate(R.menu.thread_list, menu);
-        MenuItem item = menu.findItem(R.id.action_settings);
-        item.setVisible(true);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     public void postNewThread(View v) {
         if(v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
