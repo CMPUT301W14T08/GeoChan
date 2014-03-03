@@ -44,7 +44,6 @@ public class PostCommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        locationListenerService = new LocationListenerService(getActivity());
         return inflater.inflate(R.layout.fragment_post_comment, container, false);
     }
 
@@ -65,6 +64,7 @@ public class PostCommentFragment extends Fragment {
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
+        locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
     }
 
