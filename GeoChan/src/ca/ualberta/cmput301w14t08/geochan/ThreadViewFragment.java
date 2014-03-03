@@ -25,6 +25,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -39,6 +42,15 @@ public class ThreadViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //inflater.inflate(R.menu.thread_list, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
     }
     
     @Override
