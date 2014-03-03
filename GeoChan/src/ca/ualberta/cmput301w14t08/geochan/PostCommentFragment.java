@@ -53,14 +53,6 @@ public class PostCommentFragment extends Fragment {
         bodyView.setText(thread.getBodyComment().getTextPost());
     }
 
-    /*public static Fragment newInstance(int id) {
-        Fragment f = new PostCommentFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", id);
-        f.setArguments(bundle);
-        return f;
-    }*/
-
     public void postComment(View v) {
         if(v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
