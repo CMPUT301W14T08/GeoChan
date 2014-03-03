@@ -26,11 +26,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 public class LocationListenerService {
 
-    private Location location;
+    private static Location location;
     private LocationListener locationListener;
     private LocationManager locationManager;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -40,7 +39,6 @@ public class LocationListenerService {
 
         locationListener = new LocationListener() {
             public void onLocationChanged(Location newLocation) {
-                Log.e("calling the isBetterLocation method from: ","onLocationChanged");
                 if (isBetterLocation(newLocation, location)) {
                     location = newLocation;
                 }
@@ -113,7 +111,7 @@ public class LocationListenerService {
         return false;
     }
 
-    /** Checks whether two providers are the same */
+    // Checks whether two providers are the same 
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;

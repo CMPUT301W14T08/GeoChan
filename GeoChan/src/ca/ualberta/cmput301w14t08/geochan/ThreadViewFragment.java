@@ -21,8 +21,13 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -33,10 +38,19 @@ public class ThreadViewFragment extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //inflater.inflate(R.menu.thread_list, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
     }
     
     @Override
@@ -46,6 +60,9 @@ public class ThreadViewFragment extends Fragment {
         final int id = (int) bundle.getLong("id");
         Thread thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int sort = pref.getInt("sort", SortComparators.SORT_DATE_NEWEST);
+        thread.sortComments(sort);
         adapter = new ThreadViewAdapter(getActivity(), thread);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);        

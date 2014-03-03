@@ -20,19 +20,16 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.provider.Settings.Secure;
-import android.util.Log;
 
 public class PreferencesFragment extends PreferenceFragment {
 
-    //private String username;
-    //private EditTextPreference username;
+    private EditTextPreference username;
     private static String android_id;
     
     @Override
@@ -43,12 +40,14 @@ public class PreferencesFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
 
-        EditTextPreference name = (EditTextPreference) findPreference("username");
-        name.setSummary(name.getText());
+        username = (EditTextPreference) findPreference("username");
+        username.setSummary(username.getText());
 
-        name.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        username.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
+                Preference hash = findPreference("device_hash");
+                hash.setSummary((String) newValue + "#");
                 return true;
             }
         });
@@ -59,7 +58,7 @@ public class PreferencesFragment extends PreferenceFragment {
         
         Preference hash = findPreference("device_hash");
         //hash.setSummary(hashDeviceId());
-        hash.setSummary(name.getText() + "#");
+        hash.setSummary(username.getText() + "#");
     }
 
     public static String getAndroid_id() {
@@ -70,10 +69,12 @@ public class PreferencesFragment extends PreferenceFragment {
         PreferencesFragment.android_id = android_id;
     }
     
+    /*
     // TODO
     private String hashDeviceId() {
         //String hash = Integer.toString( getAndroid_id().hashCode());
         //return hash;
         return null;
     }
+    */
 }

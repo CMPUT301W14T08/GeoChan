@@ -29,7 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener {
+public class MainActivity extends Activity implements OnBackStackChangedListener { 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,18 +58,16 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
                 .addToBackStack(null).commit(); 
-            /**
-             * This next line is necessary for JUnit to see fragments
-             */
+            
+            //This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case R.id.action_add_thread:
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
                 .addToBackStack(null).commit();
-            /**
-             * This next line is necessary for JUnit to see fragments
-             */
+            
+            //This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case android.R.id.home:
