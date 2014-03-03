@@ -188,40 +188,40 @@ public class Comment {
         } else if(tag == "LOCATION_OP"){
             Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentDistance());
             
-        } else if(tag == "SCORE_HIGHEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByScoreHighest());
+        } else if(tag == "PARENT_SCORE_HIGHEST"){
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentScoreHighest());
             
-        } else if(tag == "SCORE_LOWEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByScoreLowest());
+        } else if(tag == "PARENT_SCORE_LOWEST"){
+            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentScoreLowest());
             
         }
         
         return;
     }    
     
-    public double getDistanceFrom(Comment c){
+    public double getDistanceFrom(GeoLocation g){
         /*
-         * Determines the distance between 2 comments
+         * Determines the distance between a comment and a GeoLocation
          * in terms of latitude and longitude coordinates.
          */
-        return this.getLocation().distance(c.getLocation());
+        return this.getLocation().distance(g);
     }
     
-    public double getTimeFrom(Comment c){
+    public double getTimeFrom(Date d){
         /*
-         * Determines the amount of time between when 2 comments
-         * were posted for determining a comment's relative score.
+         * Determines the amount of time between when a comment
+         * was posted and a date for determining a comment's relative score.
          */
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(this.getCommentDate());
-        cal2.setTime(c.getCommentDate());
+        cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
         return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
     }
     
-    public double getScore(){
+    public double getScoreFromParent(){
         /*
          * Determines the "score" of a comment
          * in relation to its parent. Logs an error
@@ -237,8 +237,8 @@ public class Comment {
             Log.e("Comment:","getScore() was incorrectly called on a top comment.");
             return 0;
         }
-        double distScore = distConst * (1/Math.sqrt(this.getDistanceFrom(this.getParent())));
-        double timeScore = timeConst * (1/Math.sqrt(this.getTimeFrom(this.getParent())));
+        double distScore = distConst * (1/Math.sqrt(this.getDistanceFrom(this.getParent().getLocation())));
+        double timeScore = timeConst * (1/Math.sqrt(this.getTimeFrom(this.getParent().getCommentDate())));
         if ((distScore + timeScore) > maxScore){
             return maxScore;
         }else{

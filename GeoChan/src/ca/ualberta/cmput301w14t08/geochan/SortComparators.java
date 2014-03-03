@@ -66,8 +66,8 @@ public class SortComparators {
         static Comparator<Comment> sortCommentsByParentDistance(){
             return new Comparator<Comment>(){
               public int compare(Comment c1, Comment c2){
-                  double val1 = c1.getDistanceFrom(c1.getParent());
-                  double val2 = c2.getDistanceFrom(c2.getParent());
+                  double val1 = c1.getDistanceFrom(c1.getParent().getLocation());
+                  double val2 = c2.getDistanceFrom(c2.getParent().getLocation());
                   if (val1 > val2){
                       return 1;
                   } else if(val1 < val2){
@@ -82,11 +82,11 @@ public class SortComparators {
         /*
          * Comparator for pushing higher scored comments to the top.
          */
-        static Comparator<Comment> sortCommentsByScoreHighest(){
+        static Comparator<Comment> sortCommentsByParentScoreHighest(){
             return new Comparator<Comment>(){
                 public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScore();
-                    double val2 = c2.getScore();
+                    double val1 = c1.getScoreFromParent();
+                    double val2 = c2.getScoreFromParent();
                     if(val1 > val2){
                         return -1;
                     } else if(val1 < val2){
@@ -101,11 +101,11 @@ public class SortComparators {
         /*
          * Comparator for pushing lower scored comments to the top.
          */
-        static Comparator<Comment> sortCommentsByScoreLowest(){
+        static Comparator<Comment> sortCommentsByParentScoreLowest(){
             return new Comparator<Comment>(){
                 public int compare(Comment c1, Comment c2){
-                    double val1 = c1.getScore();
-                    double val2 = c2.getScore();
+                    double val1 = c1.getScoreFromParent();
+                    double val2 = c2.getScoreFromParent();
                     if(val1 > val2){
                         return 1;
                     } else if(val1 < val2){
