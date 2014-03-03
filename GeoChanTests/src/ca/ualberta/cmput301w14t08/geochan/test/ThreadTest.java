@@ -4,6 +4,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.Comment;
+import ca.ualberta.cmput301w14t08.geochan.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.Thread;
 
 public class ThreadTest extends TestCase {
@@ -34,7 +35,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments("DATE_NEWEST");
+        thread.sortComments(SortComparators.SORT_DATE_NEWEST);
 
         assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
         assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
@@ -68,7 +69,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments("DATE_OLDEST");
+        thread.sortComments(SortComparators.SORT_DATE_OLDEST);
 
         assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
         assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);

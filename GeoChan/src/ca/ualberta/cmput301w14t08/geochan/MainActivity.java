@@ -20,12 +20,9 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import java.util.Collections;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,18 +60,16 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
                 .addToBackStack(null).commit(); 
-            /**
-             * This next line is necessary for JUnit to see fragments
-             */
+            
+            //This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case R.id.action_add_thread:
             getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
                 .addToBackStack(null).commit();
-            /**
-             * This next line is necessary for JUnit to see fragments
-             */
+            
+            //This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case android.R.id.home:

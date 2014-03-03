@@ -34,19 +34,18 @@ import android.os.Bundle;
 public class GeoLocation {
 
     private Location location;
+    private LocationManager locationManager;
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     public GeoLocation(Activity activity) {
-   
-        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
-        /**
-         * Set up a listener so that the device can get the most current location.
-         * Without the listener, new GeoLocation objects only will be set to the
-         * cached location.
-         */
+        locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location newLocation) {
-                location = newLocation;
+                if (isBetterLocation(newLocation, location)) {
+                    location = newLocation;
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -57,20 +56,67 @@ public class GeoLocation {
         };
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         
-        /** 
-         * I'm not totally sure why this is required yet, but it crashes without.
-         * I believe this is the cached location. The listener above is required to 
-         * update this, but I can't seem to just set the location from 
-         * onLocationChanged() above (returns null);
-         */
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        
-        locationManager.removeUpdates(locationListener);
     }
 
     public void updateLocation(Location location) {
         this.location = location;
+    }
+
+    /** Determines whether one Location reading is better than the current Location fix
+     * @param location  The new Location that you want to evaluate
+     * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+     */
+    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.getTime() - currentBestLocation.getTime();
+        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(location.getProvider(),
+                currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Checks whether two providers are the same */
+    private boolean isSameProvider(String provider1, String provider2) {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
     }
 
     /**
@@ -82,6 +128,16 @@ public class GeoLocation {
         double latDist = this.getLatitude() - toLocation.getLatitude();
         double longDist = this.getLongitude() - toLocation.getLongitude();
         return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
+    }
+
+    public boolean providersEnabled(Activity activity) {
+        boolean gpsLocEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean networkLocEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!gpsLocEnabled && !networkLocEnabled) {
+            ErrorDialog.show(activity, "Location providers not enabled.");
+            return false;
+        }
+        return true;
     }
 
     public Location getLocation() {
@@ -99,11 +155,11 @@ public class GeoLocation {
     public double getLongitude() {
         return location.getLongitude();
     }
-    
+
     public void setLatitude(double newLat) {
         location.setLatitude(newLat);
     }
-    
+
     public void setLongitude(double newLong) {
         location.setLongitude(newLong);
     }
