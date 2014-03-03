@@ -124,8 +124,8 @@ public class ThreadViewAdapter extends BaseAdapter {
                     TextView origPostLocationText = (TextView) convertView.findViewById(R.id.thread_view_op_locationText);
                     GeoLocation loc = thread.getBodyComment().getLocation();
                     if (loc != null) {
-                        double origPostLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
-                        double origPostLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+                        double origPostLat = Math.round(loc.getLatitude() * 100)/100;
+                        double origPostLong = Math.round(loc.getLongitude() * 100)/100;
                         origPostLocationText.setText("Latitude: " + Double.toString(origPostLat) +
                                         " Longitude: " + Double.toString(origPostLong));
                     } else {
@@ -138,10 +138,10 @@ public class ThreadViewAdapter extends BaseAdapter {
                     TextView commentBody = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBody);
                     commentBody.setText(comment.getTextPost());    
                     TextView commentLocationText = (TextView) convertView.findViewById(R.id.thread_view_top_comment_locationText);
-                    GeoLocation loc = comment.getLocation();
-                    if (loc != null) {
-                        double commentLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
-                        double commentLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+                    GeoLocation locCom = comment.getLocation();
+                    if (locCom != null) {
+                        double commentLat = Math.round(locCom.getLatitude() * 100)/100;
+                        double commentLong = Math.round(locCom.getLongitude() * 100)/100;
                         commentLocationText.setText("Latitude: " + Double.toString(commentLat) +
                                         " Longitude: " + Double.toString(commentLong));
                     } else {

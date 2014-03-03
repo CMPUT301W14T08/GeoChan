@@ -82,8 +82,8 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            double roundedLat = Math.round(thread.getBodyComment().getLocation().getLatitude() * 100)/100;
-            double roundedLong = Math.round(thread.getBodyComment().getLocation().getLongitude() * 100)/100;
+            double roundedLat = Math.round(loc.getLatitude() * 100)/100;
+            double roundedLong = Math.round(loc.getLongitude() * 100)/100;
             location.setText("Latitude: " + Double.toString(roundedLat) +
                     " Longitude: " + Double.toString(roundedLong));
         } else {
