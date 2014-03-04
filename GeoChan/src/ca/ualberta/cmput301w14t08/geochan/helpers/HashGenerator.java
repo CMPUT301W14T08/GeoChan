@@ -18,22 +18,34 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.helpers;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.provider.Settings.Secure;
 
-public class ErrorDialog {
-    public static void show(Context context, String message) {
-        AlertDialog.Builder error = new AlertDialog.Builder(context);
-        error.setTitle("Error");
-        error.setMessage(message);
-        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        error.show();
+public class HashGenerator {
+    private Context context;
+    private String android_id;
+    private static final String hash = null;
+
+    public HashGenerator(Context context) {
+        this.context = context;
+        android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
+    }
+
+    public static String getHash() {
+        if (hash == null) {
+            return "12345";
+        } else {
+            return hash;
+        }
+    }
+
+    public String getAndroid_id() {
+        return android_id;
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.services;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,31 +44,34 @@ public class LocationListenerService {
                 }
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+            }
 
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
         };
     }
 
     public void startListening() {
         for (String provider : locationManager.getAllProviders()) {
             locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
-        } 
+        }
     }
 
     public void stopListening() {
         locationManager.removeUpdates(locationListener);
     }
-    
+
     public Location getCurrentLocation() {
         if (location == null) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         return location;
     }
-    
+
     public Location getLastKnownLocation() {
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
@@ -85,11 +88,13 @@ public class LocationListenerService {
         boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
         boolean isNewer = timeDelta > 0;
 
-        // If it's been more than two minutes since the current location, use the new location
+        // If it's been more than two minutes since the current location, use
+        // the new location
         // because the user has likely moved
         if (isSignificantlyNewer) {
             return true;
-            // If the new location is more than two minutes older, it must be worse
+            // If the new location is more than two minutes older, it must be
+            // worse
         } else if (isSignificantlyOlder) {
             return false;
         }
@@ -104,7 +109,8 @@ public class LocationListenerService {
         boolean isFromSameProvider = isSameProvider(location.getProvider(),
                 currentBestLocation.getProvider());
 
-        // Determine location quality using a combination of timeliness and accuracy
+        // Determine location quality using a combination of timeliness and
+        // accuracy
         if (isMoreAccurate) {
             return true;
         } else if (isNewer && !isLessAccurate) {
@@ -115,7 +121,7 @@ public class LocationListenerService {
         return false;
     }
 
-    // Checks whether two providers are the same 
+    // Checks whether two providers are the same
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;

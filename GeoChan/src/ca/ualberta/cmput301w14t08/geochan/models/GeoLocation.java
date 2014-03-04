@@ -18,10 +18,14 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 import android.location.Location;
+<<<<<<< HEAD:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/GeoLocation.java
 import android.util.Log;
+=======
+>>>>>>> 705d0b74a4046788700b6a8b260d4e7b9587fba2:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/models/GeoLocation.java
 
 /**
  * Responsible for GeoLocation services for Comment objects
@@ -48,9 +52,13 @@ public class GeoLocation {
         
         double latDist = this.getLatitude() - toLocation.getLatitude();
         double longDist = this.getLongitude() - toLocation.getLongitude();
+<<<<<<< HEAD:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/GeoLocation.java
         Log.e("latDist", Double.toString(latDist));
         Log.e("longDist", Double.toString(longDist));
         return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
+=======
+        return Math.sqrt(Math.pow(latDist, 2) + Math.pow(longDist, 2));
+>>>>>>> 705d0b74a4046788700b6a8b260d4e7b9587fba2:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/models/GeoLocation.java
     }
 
     public Location getLocation() {

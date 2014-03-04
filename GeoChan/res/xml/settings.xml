@@ -12,14 +12,10 @@
             android:defaultValue="Anon"
             android:dialogTitle="Username:"
             android:key="username"
+            android:singleLine="true"
+            android:maxLength="15"
             android:summary="@string/username"
             android:title="Change Username" />
-        
-        <Preference
-            android:key="device_id_tag"
-            android:selectable="false"
-            android:summary="@string/device_id"
-            android:title="Device ID:" />
         
         <Preference
             android:key="device_hash"

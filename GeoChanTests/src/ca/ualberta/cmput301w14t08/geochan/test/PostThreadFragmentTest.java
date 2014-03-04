@@ -7,9 +7,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import ca.ualberta.cmput301w14t08.geochan.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.PostThreadFragment;
-import ca.ualberta.cmput301w14t08.geochan.ThreadList;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     PostThreadFragment fragment;
