@@ -18,8 +18,17 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.activities;
 
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.R.id;
+import ca.ualberta.cmput301w14t08.geochan.R.layout;
+import ca.ualberta.cmput301w14t08.geochan.R.menu;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;

@@ -18,9 +18,12 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import java.util.Comparator;
+
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 
 public class SortComparators {
     
@@ -33,7 +36,7 @@ public class SortComparators {
     /*
      * Comparator for pushing old comments to the top.
      */
-    static Comparator<Comment> sortCommentsByDateOldest() {
+    public static Comparator<Comment> sortCommentsByDateOldest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 int val = c1.getCommentDate().compareTo(c2.getCommentDate());
@@ -51,7 +54,7 @@ public class SortComparators {
     /*
      * Comparator for pushing new comments to the top.
      */
-    static Comparator<Comment> sortCommentsByDateNewest() {
+    public static Comparator<Comment> sortCommentsByDateNewest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 int val = c1.getCommentDate().compareTo(c2.getCommentDate());
@@ -69,7 +72,7 @@ public class SortComparators {
     /*
      * Comparator for pushing comments closest to parent to the top.
      */
-    static Comparator<Comment> sortCommentsByParentDistance() {
+    public static Comparator<Comment> sortCommentsByParentDistance() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 double val1 = c1.getDistanceFrom(c1.getParent().getLocation());
@@ -88,7 +91,7 @@ public class SortComparators {
     /*
      * Comparator for pushing higher scored comments to the top.
      */
-    static Comparator<Comment> sortCommentsByParentScoreHighest() {
+    public static Comparator<Comment> sortCommentsByParentScoreHighest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 double val1 = c1.getScoreFromParent();
@@ -107,7 +110,7 @@ public class SortComparators {
     /*
      * Comparator for pushing lower scored comments to the top.
      */
-    static Comparator<Comment> sortCommentsByParentScoreLowest() {
+    public static Comparator<Comment> sortCommentsByParentScoreLowest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 double val1 = c1.getScoreFromParent();
@@ -126,7 +129,7 @@ public class SortComparators {
     /*
      * Comparator for pushing old threads to the top.
      */
-    static Comparator<Thread> sortThreadsByDateOldest() {
+    public static Comparator<Thread> sortThreadsByDateOldest() {
         return new Comparator<Thread>() {
             public int compare(Thread t1, Thread t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());
@@ -144,7 +147,7 @@ public class SortComparators {
     /*
      * Comparator for pushing new threads to the top.
      */
-    static Comparator<Thread> sortThreadsByDateNewest() {
+    public static Comparator<Thread> sortThreadsByDateNewest() {
         return new Comparator<Thread>() {
             public int compare(Thread t1, Thread t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());

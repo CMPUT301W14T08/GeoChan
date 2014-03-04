@@ -1,8 +1,8 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ca.ualberta.cmput301w14t08.geochan.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 
 public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     PostCommentFragment fragment;

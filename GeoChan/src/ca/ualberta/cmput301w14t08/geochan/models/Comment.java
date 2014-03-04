@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import android.graphics.Picture;
 import android.util.Log;
 

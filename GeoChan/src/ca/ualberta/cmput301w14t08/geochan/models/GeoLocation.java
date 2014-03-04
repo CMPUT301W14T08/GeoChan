@@ -18,8 +18,9 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 import android.location.Location;
 import android.location.LocationManager;
 

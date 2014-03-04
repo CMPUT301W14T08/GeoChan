@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import android.content.Context;
 import android.provider.Settings.Secure;

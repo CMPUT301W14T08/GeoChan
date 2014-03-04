@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import junit.framework.TestCase;
-import ca.ualberta.cmput301w14t08.geochan.Comment;
-import ca.ualberta.cmput301w14t08.geochan.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListTest extends TestCase {
 

@@ -18,8 +18,10 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.R.xml;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;

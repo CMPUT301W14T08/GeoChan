@@ -3,9 +3,9 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import junit.framework.TestCase;
-import ca.ualberta.cmput301w14t08.geochan.Comment;
-import ca.ualberta.cmput301w14t08.geochan.SortComparators;
-import ca.ualberta.cmput301w14t08.geochan.Thread;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 
 public class ThreadTest extends TestCase {
     

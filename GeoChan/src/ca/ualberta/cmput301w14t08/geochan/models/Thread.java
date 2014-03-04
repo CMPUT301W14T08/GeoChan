@@ -18,11 +18,13 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
 public class Thread {
     private ArrayList<Comment> comments;
