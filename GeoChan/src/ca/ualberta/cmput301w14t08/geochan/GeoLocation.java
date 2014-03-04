@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan;
 
-import android.app.Activity;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -30,10 +29,11 @@ import android.location.LocationManager;
 public class GeoLocation {
 
     private Location location;
-    private LocationManager locationManager;
+    private LocationListenerService locationListenerService;
     
     public GeoLocation(LocationListenerService locationListenerService) {
-        location = locationListenerService.getCurrentLocation();
+        this.location = locationListenerService.getCurrentLocation();
+        this.locationListenerService = locationListenerService;
     }
 
     public void updateLocation(Location location) {
@@ -46,17 +46,10 @@ public class GeoLocation {
         return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
     }
 
-    public boolean providersEnabled(Activity activity) {
-        boolean gpsLocEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean networkLocEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (!gpsLocEnabled && !networkLocEnabled) {
-            ErrorDialog.show(activity, "Location providers not enabled.");
-            return false;
-        }
-        return true;
-    }
-
     public Location getLocation() {
+        if (location == null) {
+            location = locationListenerService.getLastKnownLocation();
+        }
         return location;
     }
 
