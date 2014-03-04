@@ -42,7 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/thread_view_top_comment_commentDate"
+        android:layout_below="@+id/thread_view_top_comment_commentBy"
+        android:paddingLeft="5dp"
+        android:textColor="#2E8B57"
         android:text="@string/placeholder_location" />
 
 </RelativeLayout>

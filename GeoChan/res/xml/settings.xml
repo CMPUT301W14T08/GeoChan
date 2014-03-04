@@ -16,12 +16,6 @@
             android:title="Change Username" />
         
         <Preference
-            android:key="device_id_tag"
-            android:selectable="false"
-            android:summary="@string/device_id"
-            android:title="Device ID:" />
-        
-        <Preference
             android:key="device_hash"
             android:selectable="false"
             android:summary="@string/device_hash"

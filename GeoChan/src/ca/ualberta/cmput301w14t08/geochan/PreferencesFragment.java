@@ -25,18 +25,14 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
-import android.provider.Settings.Secure;
 
 public class PreferencesFragment extends PreferenceFragment {
 
     private EditTextPreference username;
-    private static String android_id;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);        
-        setAndroid_id(Secure.getString(this.getActivity().getContentResolver(),
-                Secure.ANDROID_ID));         
+        super.onCreate(savedInstanceState);                
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
 
@@ -45,36 +41,14 @@ public class PreferencesFragment extends PreferenceFragment {
 
         username.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);
+                preference.setSummary((String) newValue);          
                 Preference hash = findPreference("device_hash");
                 hash.setSummary((String) newValue + "#");
                 return true;
             }
         });
-
-        Preference id = findPreference("device_id_tag");
-        id.setDefaultValue(getAndroid_id());
-        id.setSummary(getAndroid_id());
         
         Preference hash = findPreference("device_hash");
-        //hash.setSummary(hashDeviceId());
         hash.setSummary(username.getText() + "#");
     }
-
-    public static String getAndroid_id() {
-        return android_id;
-    }
-    
-    private static void setAndroid_id(String android_id) {
-        PreferencesFragment.android_id = android_id;
-    }
-    
-    /*
-    // TODO
-    private String hashDeviceId() {
-        //String hash = Integer.toString( getAndroid_id().hashCode());
-        //return hash;
-        return null;
-    }
-    */
 }

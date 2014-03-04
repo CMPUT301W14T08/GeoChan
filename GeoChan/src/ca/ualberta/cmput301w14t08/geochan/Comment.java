@@ -34,6 +34,7 @@ public class Comment {
     private Date commentDate;
     private Picture image;
     private GeoLocation location;
+    private String user;
     /**
      * parent is the comment this comment is replying to
      */
@@ -54,6 +55,7 @@ public class Comment {
         this.setLocation(location);
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
+        this.setUser(new String());
     }
 
     /**
@@ -67,6 +69,7 @@ public class Comment {
         this.setLocation(location);
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
+        this.setUser(new String());
     }
 
     /**
@@ -81,6 +84,7 @@ public class Comment {
         this.setParent(parent);
         parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
+        this.setUser(new String());
     }
 
     /**
@@ -95,6 +99,7 @@ public class Comment {
         this.setParent(parent);
         parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
+        this.setUser(new String());
     }
     
     /**
@@ -108,6 +113,7 @@ public class Comment {
         this.location = null;
         this.parent = null;
         this.children = new ArrayList<Comment>();
+        this.setUser(new String());
     }
 
     public boolean hasImage() {
@@ -167,6 +173,14 @@ public class Comment {
 
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;
+    }
+    
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
     
     public void sortChildren(String tag){

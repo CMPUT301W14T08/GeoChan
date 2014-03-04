@@ -22,7 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,9 +77,15 @@ public class PostCommentFragment extends Fragment {
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 ErrorDialog.show(getActivity(), "Could not obtain location.");
-                thread.addComment(new Comment(comment, null));
+                //Create a new comment object and set username
+                Comment newComment = new Comment(comment, null);
+                newComment.setUser(retrieveUsername());
+                thread.addComment(newComment);
             } else {
-                thread.addComment(new Comment(comment, geoLocation));
+                //Create a new comment object and set username
+                Comment newComment = new Comment(comment, geoLocation);
+                newComment.setUser(retrieveUsername());
+                thread.addComment(newComment);
             }
             InputMethodManager inputManager = (InputMethodManager)getActivity()
                     .getSystemService(Context.INPUT_METHOD_SERVICE); 
@@ -85,6 +93,11 @@ public class PostCommentFragment extends Fragment {
                     .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
             this.getFragmentManager().popBackStackImmediate();
         }
+    }
+    
+    public String retrieveUsername() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
     }
     
     @Override 

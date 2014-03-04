@@ -78,6 +78,9 @@ public class ThreadListAdapter extends BaseAdapter {
         // Thread timestamp 
         TextView time = (TextView) convertView.findViewById(R.id.commentDate);
         time.setText(makeCommentTimeString(thread.getBodyComment()));
+        // Thread user creator
+        TextView user = (TextView) convertView.findViewById(R.id.commentBy);
+        user.setText("posted by " + thread.getBodyComment().getUser());
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();

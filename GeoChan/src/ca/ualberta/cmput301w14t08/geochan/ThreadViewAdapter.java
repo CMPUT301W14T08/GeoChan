@@ -51,9 +51,8 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        /**
-         * +2 is for the OP
-         */
+        
+        //+2 is for the OP
         return thread.getComments().size()+2;
     }
 
@@ -114,12 +113,15 @@ public class ThreadViewAdapter extends BaseAdapter {
                     // Thread title
                     TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
                     title.setText(thread.getTitle()); 
+                    // Thread creator
+                    TextView threadBy = (TextView) convertView.findViewById(R.id.thread_view_op_commentBy);
+                    threadBy.setText("posted by " + thread.getBodyComment().getUser());
                     // Thread body comment
                     TextView body = (TextView) convertView.findViewById(R.id.thread_view_op_commentBody);
                     body.setText(thread.getBodyComment().getTextPost());
                     // Thread timestamp
-                    TextView time = (TextView) convertView.findViewById(R.id.thread_view_op_commentDate);
-                    time.setText(makeCommentTimeString(thread.getBodyComment()));
+                    TextView threadTime = (TextView) convertView.findViewById(R.id.thread_view_op_commentDate);
+                    threadTime.setText(makeCommentTimeString(thread.getBodyComment()));
                     // Location text
                     TextView origPostLocationText = (TextView) convertView.findViewById(R.id.thread_view_op_locationText);
                     GeoLocation loc = thread.getBodyComment().getLocation();
@@ -135,8 +137,16 @@ public class ThreadViewAdapter extends BaseAdapter {
                 case TYPE_COMMENT:
                     Comment comment = (Comment) getItem(position);
                     convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                    // Comment body
                     TextView commentBody = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBody);
-                    commentBody.setText(comment.getTextPost());    
+                    commentBody.setText(comment.getTextPost());  
+                    // Comment creator
+                    TextView commentBy = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentBy);
+                    commentBy.setText("posted by " + comment.getUser());
+                    // Comment timestamp
+                    TextView commentTime = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentDate);
+                    commentTime.setText(makeCommentTimeString(comment));
+                    // Comment location
                     TextView commentLocationText = (TextView) convertView.findViewById(R.id.thread_view_top_comment_locationText);
                     GeoLocation locCom = comment.getLocation();
                     if (locCom != null) {
