@@ -64,7 +64,7 @@ public class LocationListenerService {
     
     public Location getCurrentLocation() {
         if (location == null) {
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         return location;
     }

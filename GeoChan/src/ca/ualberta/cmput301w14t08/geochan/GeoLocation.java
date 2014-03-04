@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.location.Location;
-import android.location.LocationManager;
+import android.util.Log;
 
 /**
  * Responsible for GeoLocation services for Comment objects
@@ -30,10 +30,10 @@ public class GeoLocation {
 
     private Location location;
     private LocationListenerService locationListenerService;
-    
+
     public GeoLocation(LocationListenerService locationListenerService) {
-        this.location = locationListenerService.getCurrentLocation();
         this.locationListenerService = locationListenerService;
+        this.location = locationListenerService.getCurrentLocation();
     }
 
     public void updateLocation(Location location) {
@@ -41,15 +41,19 @@ public class GeoLocation {
     }
 
     public double distance(GeoLocation toLocation) {
+        Log.e("location Lat:", Double.toString(getLatitude()));
+        Log.e("toLocation Lat:", Double.toString(toLocation.getLatitude()));
+        Log.e("location Long:", Double.toString(getLongitude()));
+        Log.e("toLocation Long:", Double.toString(toLocation.getLongitude()));
+        
         double latDist = this.getLatitude() - toLocation.getLatitude();
         double longDist = this.getLongitude() - toLocation.getLongitude();
+        Log.e("latDist", Double.toString(latDist));
+        Log.e("longDist", Double.toString(longDist));
         return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
     }
 
     public Location getLocation() {
-        if (location == null) {
-            location = locationListenerService.getLastKnownLocation();
-        }
         return location;
     }
 
