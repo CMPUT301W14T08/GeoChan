@@ -20,12 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.R.id;
-import ca.ualberta.cmput301w14t08.geochan.R.layout;
-import ca.ualberta.cmput301w14t08.geochan.R.menu;
-import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +31,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListFragment extends Fragment {
     private ListView threadListView;

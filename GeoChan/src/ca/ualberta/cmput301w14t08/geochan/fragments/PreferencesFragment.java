@@ -20,13 +20,12 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.R.xml;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import ca.ualberta.cmput301w14t08.geochan.R;
 
 public class PreferencesFragment extends PreferenceFragment {
 

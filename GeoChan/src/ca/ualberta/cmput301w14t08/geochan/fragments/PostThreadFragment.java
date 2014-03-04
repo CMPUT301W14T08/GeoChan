@@ -20,15 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.R.id;
-import ca.ualberta.cmput301w14t08.geochan.R.layout;
-import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,6 +30,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 /**
  * Responsible for the UI fragment that allows a user to post
