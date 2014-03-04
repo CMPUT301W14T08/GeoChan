@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import android.graphics.Picture;
 import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
 public class Comment {
     private String textPost;
@@ -268,8 +268,8 @@ public class Comment {
     }
 
     public String getCommentDateString() {
-        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
-        SimpleDateFormat formatTime = new SimpleDateFormat("hh:MM aa", Locale.getDefault());
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
+        SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
         return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
 }
