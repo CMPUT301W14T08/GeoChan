@@ -21,9 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -32,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 
@@ -81,7 +77,7 @@ public class ThreadListAdapter extends BaseAdapter {
         body.setText(thread.getBodyComment().getTextPost());
         // Thread timestamp 
         TextView time = (TextView) convertView.findViewById(R.id.commentDate);
-        time.setText(makeCommentTimeString(thread.getBodyComment()));
+        time.setText(thread.getBodyComment().getCommentDateString());
         // Thread user creator
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
         user.setText("posted by " + thread.getBodyComment().getUser());
@@ -97,20 +93,6 @@ public class ThreadListAdapter extends BaseAdapter {
             location.setText("Error: No location found");
         }
         return convertView;      
-    }
-    
-    public String makeCommentTimeString(Comment comment) {
-        Date date = comment.getCommentDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        
-        String ret = " | on " 
-                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
-                + "." + cal.get(Calendar.DATE)
-                + "," + cal.get(Calendar.YEAR) 
-                + " at " + cal.get(Calendar.HOUR_OF_DAY)
-                + ":" + cal.get(Calendar.MINUTE);
-        return ret;
     }
     
 }

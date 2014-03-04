@@ -20,10 +20,12 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
@@ -259,5 +261,11 @@ public class Comment {
         }else{
             return distScore + timeScore;      
         } 
+    }
+    
+    public String getCommentDateString() {
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        SimpleDateFormat formatTime = new SimpleDateFormat("hh:MM aa", Locale.getDefault());
+        return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
 }

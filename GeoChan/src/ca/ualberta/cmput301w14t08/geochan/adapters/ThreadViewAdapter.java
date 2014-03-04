@@ -21,9 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -125,7 +122,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     body.setText(thread.getBodyComment().getTextPost());
                     // Thread timestamp
                     TextView threadTime = (TextView) convertView.findViewById(R.id.thread_view_op_commentDate);
-                    threadTime.setText(makeCommentTimeString(thread.getBodyComment()));
+                    threadTime.setText(thread.getBodyComment().getCommentDateString());
                     // Location text
                     TextView origPostLocationText = (TextView) convertView.findViewById(R.id.thread_view_op_locationText);
                     GeoLocation loc = thread.getBodyComment().getLocation();
@@ -149,7 +146,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     commentBy.setText("posted by " + comment.getUser());
                     // Comment timestamp
                     TextView commentTime = (TextView) convertView.findViewById(R.id.thread_view_top_comment_commentDate);
-                    commentTime.setText(makeCommentTimeString(comment));
+                    commentTime.setText(comment.getCommentDateString());
                     // Comment location
                     TextView commentLocationText = (TextView) convertView.findViewById(R.id.thread_view_top_comment_locationText);
                     GeoLocation locCom = comment.getLocation();
@@ -170,20 +167,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
         }
         return convertView;
-    }
-    
-    public String makeCommentTimeString(Comment comment) {
-        Date date = comment.getCommentDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        
-        String ret = " | on " 
-                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
-                + "." + cal.get(Calendar.DATE)
-                + "," + cal.get(Calendar.YEAR) 
-                + " at " + cal.get(Calendar.HOUR_OF_DAY)
-                + ":" + cal.get(Calendar.MINUTE);
-        return ret;
     }
     
     // TODO 
