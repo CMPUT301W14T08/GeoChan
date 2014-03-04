@@ -1,17 +1,13 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
-<<<<<<< HEAD
 import android.app.Fragment;
 import android.os.SystemClock;
-=======
-import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
->>>>>>> 705d0b74a4046788700b6a8b260d4e7b9587fba2
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
-import ca.ualberta.cmput301w14t08.geochan.Comment;
-import ca.ualberta.cmput301w14t08.geochan.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     ThreadViewFragment fragment;
