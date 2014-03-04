@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -271,22 +272,4 @@ public class Comment {
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
         return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
-<<<<<<< HEAD
-    */
-
-    //Not optimal because single digit hours,minutes are displayed as single digits
-    public String getCommentDateString() {
-        Date date = this.getCommentDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        String ret = " | on " 
-                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) 
-                + "." + cal.get(Calendar.DATE)
-                + "," + cal.get(Calendar.YEAR) 
-                + " at " + cal.get(Calendar.HOUR_OF_DAY)
-                + ":" + cal.get(Calendar.MINUTE);
-        return ret;
-    }
-=======
->>>>>>> a604e85ac50e45ca56129e2b4ad2a11273b6767f
 }
