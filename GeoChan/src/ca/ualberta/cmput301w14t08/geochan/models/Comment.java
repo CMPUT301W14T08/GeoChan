@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -28,9 +27,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import android.graphics.Picture;
 import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
 public class Comment {
     private String textPost;
@@ -275,13 +274,13 @@ public class Comment {
     }
     */
 
+    //Not optimal because single digit hours,minutes are displayed as single digits
     public String getCommentDateString() {
         Date date = this.getCommentDate();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-
         String ret = " | on " 
-                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
+                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) 
                 + "." + cal.get(Calendar.DATE)
                 + "," + cal.get(Calendar.YEAR) 
                 + " at " + cal.get(Calendar.HOUR_OF_DAY)

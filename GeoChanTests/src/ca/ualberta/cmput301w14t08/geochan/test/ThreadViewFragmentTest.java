@@ -3,6 +3,8 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import android.app.Fragment;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.ViewAsserts;
+import android.view.View;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
@@ -11,9 +13,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     ThreadViewFragment fragment;
+    ListView threadViewList;
     MainActivity activity;
     
-    public ThreadViewFragmentTest(Class<MainActivity> activityClass) {
+    public ThreadViewFragmentTest() {
         super(MainActivity.class);
     }
     
@@ -21,25 +24,27 @@ public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<Mai
     protected void setUp() throws Exception {
         super.setUp();
         this.activity = getActivity();
-        ThreadList.addThread(new Comment("Hello", null), "test thread");
+        Comment testComment = new Comment("hello", null);
+        //testComment.addChild(new Comment("test", null));
+        ThreadList.addThread(testComment, "test thread");
         //Click the thread to open the fragment
-        this.getActivity().runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ListView listView = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_list);
                 listView.performItemClick(listView.getAdapter().getView(0, null, null), 0, 0);
             }
         });
-        Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 2000);
-        assertNotNull(fragment);
+        Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 5000);
+        assertNotNull("fragment not initialized",fragment);
     }
    
-    public void testListViewItemLayouts() {
-        
+    public void testListViewVisibility() {
+        threadViewList = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_list);
+        View rootView = activity.getWindow().getDecorView();
+        ViewAsserts.assertOnScreen(rootView, threadViewList);
     }
     
-    
-
     /**
      * http://stackoverflow.com/a/17789933
      * Sometimes the emulator is too slow.
