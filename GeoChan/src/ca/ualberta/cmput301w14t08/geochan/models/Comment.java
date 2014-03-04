@@ -267,9 +267,25 @@ public class Comment {
         }
     }
 
+    /*
     public String getCommentDateString() {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:MM aa", Locale.getDefault());
         return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
+    }
+    */
+
+    public String getCommentDateString() {
+        Date date = this.getCommentDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        String ret = " | on " 
+                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
+                + "." + cal.get(Calendar.DATE)
+                + "," + cal.get(Calendar.YEAR) 
+                + " at " + cal.get(Calendar.HOUR_OF_DAY)
+                + ":" + cal.get(Calendar.MINUTE);
+        return ret;
     }
 }
