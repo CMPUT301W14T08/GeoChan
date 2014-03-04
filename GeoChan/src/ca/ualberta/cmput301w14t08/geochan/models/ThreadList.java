@@ -48,24 +48,23 @@ public class ThreadList {
         }
         threads.add(new Thread(comment, title));
     }
-    
-    public static void addThread(Thread t){
+
+    public static void addThread(Thread t) {
         threads.add(t);
     }
-    
 
-    public void sortThreads(String tag){
+    public void sortThreads(String tag) {
         /*
-         * Sorts threads according to the tag passed.
-         * "DATE_NEWEST" pushes the most recent threads to the top.
-         * "DATE_OLDEST" pushes the oldest threads to the top.
+         * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the
+         * most recent threads to the top. "DATE_OLDEST" pushes the oldest
+         * threads to the top.
          */
-        if(tag == "DATE_NEWEST"){
+        if (tag == "DATE_NEWEST") {
             Collections.sort(threads, SortComparators.sortThreadsByDateNewest());
-            
-        } else if (tag == "DATE_OLDEST"){
+
+        } else if (tag == "DATE_OLDEST") {
             Collections.sort(threads, SortComparators.sortThreadsByDateOldest());
-            
+
         }
     }
 }

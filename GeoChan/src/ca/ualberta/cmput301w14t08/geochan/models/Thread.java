@@ -31,7 +31,6 @@ public class Thread {
     private Comment bodyComment;
     private Date threadDate;
     private String title;
-    
 
     public Thread(Comment bodyComment, String title) {
         super();
@@ -40,9 +39,9 @@ public class Thread {
         this.threadDate = new Date();
         this.setTitle(title);
     }
-    
-    /*This constructor is only used for testing.*/
-    public Thread(){
+
+    /* This constructor is only used for testing. */
+    public Thread() {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = null;
@@ -84,40 +83,39 @@ public class Thread {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    public void addComment(Comment c){
+
+    public void addComment(Comment c) {
         this.comments.add(c);
     }
-    
-    public void sortComments(int tag){
-        /*
-         * Sorts the thread's comments based
-         * on the tag passed in.
-         * "DATE_NEWEST" pushes the most recent comments to the top.
-         * "DATE_OLDEST" pushes the oldest comments to the top.
-         * "LOCATION_OP" pushes the closest comments to the OP to the top.
-         * "SCORE_HIGHEST" pushes the highest scored comments to the top.
-         * "SCORE_LOWEST" pushes the lowest scored comments to the top.
-         */
-        
-        switch(tag) {
+
+    /**
+     * Sorts thread comments according to the tag passed.
+     * 
+     * @param tag
+     *            Tag to sort comments by
+     */
+    public void sortComments(int tag) {
+        switch (tag) {
         case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortComparators.sortCommentsByDateNewest());
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByDateNewest());
             break;
         case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortComparators.sortCommentsByDateOldest());
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByDateOldest());
             break;
         case SortComparators.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentDistance());
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByParentDistance());
             break;
         case SortComparators.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreHighest());
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByParentScoreHighest());
             break;
         case SortComparators.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortComparators.sortCommentsByParentScoreLowest());
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByParentScoreLowest());
             break;
         }
-        
-        return;
-    }   
+    }
 }

@@ -30,7 +30,7 @@ public class GeoLocation {
 
     private Location location;
     private LocationListenerService locationListenerService;
-    
+
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
         this.locationListenerService = locationListenerService;
@@ -43,7 +43,7 @@ public class GeoLocation {
     public double distance(GeoLocation toLocation) {
         double latDist = this.getLatitude() - toLocation.getLatitude();
         double longDist = this.getLongitude() - toLocation.getLongitude();
-        return Math.sqrt(Math.pow(latDist,2) + Math.pow(longDist,2));
+        return Math.sqrt(Math.pow(latDist, 2) + Math.pow(longDist, 2));
     }
 
     public Location getLocation() {

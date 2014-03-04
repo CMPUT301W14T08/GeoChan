@@ -39,25 +39,24 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadViewFragment extends Fragment {
     private ListView threadView;
-    private ThreadViewAdapter adapter; 
-    
+    private ThreadViewAdapter adapter;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
     }
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //inflater.inflate(R.menu.thread_list, menu);
+        // inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     @Override
     public void onStart() {
         super.onStart();
@@ -70,7 +69,7 @@ public class ThreadViewFragment extends Fragment {
         thread.sortComments(sort);
         adapter = new ThreadViewAdapter(getActivity(), thread);
         // Assign custom adapter to the thread listView.
-        threadView.setAdapter(adapter);        
+        threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 }

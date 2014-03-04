@@ -26,7 +26,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 
 public class SortComparators {
-    
+
     public static final int SORT_DATE_NEWEST = 0;
     public static final int SORT_DATE_OLDEST = 1;
     public static final int SORT_LOCATION_OP = 2;

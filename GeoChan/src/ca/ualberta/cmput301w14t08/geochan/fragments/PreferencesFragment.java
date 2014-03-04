@@ -30,25 +30,25 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 public class PreferencesFragment extends PreferenceFragment {
 
     private EditTextPreference username;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);                
+        super.onCreate(savedInstanceState);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
 
         username = (EditTextPreference) findPreference("username");
         username.setSummary(username.getText());
 
-        username.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        username.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setSummary((String) newValue);          
+                preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
                 hash.setSummary((String) newValue + "#");
                 return true;
             }
         });
-        
+
         Preference hash = findPreference("device_hash");
         hash.setSummary(username.getText() + "#");
     }

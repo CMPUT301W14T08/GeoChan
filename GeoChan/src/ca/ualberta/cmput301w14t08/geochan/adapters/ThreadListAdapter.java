@@ -72,10 +72,10 @@ public class ThreadListAdapter extends BaseAdapter {
         // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
-        // Thread bodyComment snippet 
+        // Thread bodyComment snippet
         TextView body = (TextView) convertView.findViewById(R.id.commentBody);
         body.setText(thread.getBodyComment().getTextPost());
-        // Thread timestamp 
+        // Thread timestamp
         TextView time = (TextView) convertView.findViewById(R.id.commentDate);
         time.setText(thread.getBodyComment().getCommentDateString());
         // Thread user creator
@@ -85,14 +85,14 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            double roundedLat = Math.round(loc.getLatitude() * 100)/100;
-            double roundedLong = Math.round(loc.getLongitude() * 100)/100;
-            location.setText("Latitude: " + Double.toString(roundedLat) +
-                    " Longitude: " + Double.toString(roundedLong));
+            double roundedLat = Math.round(loc.getLatitude() * 100) / 100;
+            double roundedLong = Math.round(loc.getLongitude() * 100) / 100;
+            location.setText("Latitude: " + Double.toString(roundedLat) + " Longitude: "
+                    + Double.toString(roundedLong));
         } else {
             location.setText("Error: No location found");
         }
-        return convertView;      
+        return convertView;
     }
-    
+
 }

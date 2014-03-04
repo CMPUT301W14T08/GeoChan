@@ -38,20 +38,19 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class ThreadListFragment extends Fragment {
     private ListView threadListView;
     private ThreadListAdapter adapter;
-    
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_list, container, false);
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -60,7 +59,7 @@ public class ThreadListFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     @Override
     public void onStart() {
         super.onStart();
@@ -75,14 +74,15 @@ public class ThreadListFragment extends Fragment {
             /*
              * On click, launch the fragment responsible for thread viewing
              */
-            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong("id", id);
                 fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "thread_view_fragment")
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment, "thread_view_fragment")
                         .addToBackStack(null).commit();
-                //getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                 getFragmentManager().executePendingTransactions();
             }
         });
