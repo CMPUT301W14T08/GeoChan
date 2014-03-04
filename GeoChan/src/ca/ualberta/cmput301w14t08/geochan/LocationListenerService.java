@@ -68,6 +68,10 @@ public class LocationListenerService {
         }
         return location;
     }
+    
+    public Location getLastKnownLocation() {
+        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
 
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {

@@ -12,12 +12,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.Comment;
 import ca.ualberta.cmput301w14t08.geochan.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.MainActivity;
 
 public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
     private Location location;
+    private LocationListenerService locationListenerService;
     
     public CommentTest(){
         super(MainActivity.class);
@@ -28,30 +30,8 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         //Shamelessly ripped from GeolocationTest to test Comments with Geolocations.
         super.setUp();
         this.activity = getActivity();
-
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location newLocation) {
-                // Called when a new location is found by the network location provider.
-                location = newLocation;
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        locationManager.removeUpdates(locationListener);
+        locationListenerService = new LocationListenerService(activity);
+        locationListenerService.startListening();
     }
 
     public void testHasImage() {
@@ -141,11 +121,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(activity));
-        c2.setLocation(new GeoLocation(activity));
-        c3.setLocation(new GeoLocation(activity));
-        c4.setLocation(new GeoLocation(activity));
-        c5.setLocation(new GeoLocation(activity));
+        c1.setLocation(new GeoLocation(locationListenerService));
+        c2.setLocation(new GeoLocation(locationListenerService));
+        c3.setLocation(new GeoLocation(locationListenerService));
+        c4.setLocation(new GeoLocation(locationListenerService));
+        c5.setLocation(new GeoLocation(locationListenerService));
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -187,11 +167,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(activity));
-        c2.setLocation(new GeoLocation(activity));
-        c3.setLocation(new GeoLocation(activity));
-        c4.setLocation(new GeoLocation(activity));
-        c5.setLocation(new GeoLocation(activity));
+        c1.setLocation(new GeoLocation(locationListenerService));
+        c2.setLocation(new GeoLocation(locationListenerService));
+        c3.setLocation(new GeoLocation(locationListenerService));
+        c4.setLocation(new GeoLocation(locationListenerService));
+        c5.setLocation(new GeoLocation(locationListenerService));
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -241,11 +221,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(activity));
-        c2.setLocation(new GeoLocation(activity));
-        c3.setLocation(new GeoLocation(activity));
-        c4.setLocation(new GeoLocation(activity));
-        c5.setLocation(new GeoLocation(activity));
+        c1.setLocation(new GeoLocation(locationListenerService));
+        c2.setLocation(new GeoLocation(locationListenerService));
+        c3.setLocation(new GeoLocation(locationListenerService));
+        c4.setLocation(new GeoLocation(locationListenerService));
+        c5.setLocation(new GeoLocation(locationListenerService));
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -304,9 +284,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c2);
         c1.addChild(c3);
         
-        c1.setLocation(new GeoLocation(activity));
-        c2.setLocation(new GeoLocation(activity));
-        c3.setLocation(new GeoLocation(activity));
+        c1.setLocation(new GeoLocation(locationListenerService));
+        c2.setLocation(new GeoLocation(locationListenerService));
+        c3.setLocation(new GeoLocation(locationListenerService));
         
         assertTrue("c1 location not null", c1.getLocation().getLocation() != null);
         
