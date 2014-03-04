@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan;
 
 import android.location.Location;
-import android.location.LocationManager;
 
 /**
  * Responsible for GeoLocation services for Comment objects
