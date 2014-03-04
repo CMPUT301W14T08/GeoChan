@@ -266,12 +266,12 @@ public class Comment {
         }
     }
 
-    /*
     public String getCommentDateString() {
-        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
-        SimpleDateFormat formatTime = new SimpleDateFormat("hh:MM aa", Locale.getDefault());
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
+        SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
         return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
+<<<<<<< HEAD
     */
 
     //Not optimal because single digit hours,minutes are displayed as single digits
@@ -287,4 +287,6 @@ public class Comment {
                 + ":" + cal.get(Calendar.MINUTE);
         return ret;
     }
+=======
+>>>>>>> a604e85ac50e45ca56129e2b4ad2a11273b6767f
 }

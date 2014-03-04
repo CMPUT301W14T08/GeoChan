@@ -53,18 +53,20 @@ public class ThreadList {
         threads.add(t);
     }
 
-    public void sortThreads(String tag) {
-        /*
-         * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the
-         * most recent threads to the top. "DATE_OLDEST" pushes the oldest
-         * threads to the top.
-         */
-        if (tag == "DATE_NEWEST") {
+    /**
+     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the
+     * most recent threads to the top. "DATE_OLDEST" pushes the oldest
+     * threads to the top.
+     * @param tag Sets the sorting method to use
+     */
+    public void sortThreads(int tag) {
+        switch(tag) {
+        case SortComparators.SORT_DATE_NEWEST:
             Collections.sort(threads, SortComparators.sortThreadsByDateNewest());
-
-        } else if (tag == "DATE_OLDEST") {
+            break;
+        case SortComparators.SORT_DATE_OLDEST:
             Collections.sort(threads, SortComparators.sortThreadsByDateOldest());
-
+            break;
         }
     }
 }
