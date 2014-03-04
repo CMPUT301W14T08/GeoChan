@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
@@ -27,14 +27,14 @@ public class HashGenerator {
     private Context context;
     private String android_id;
     private static final String hash = null;
-    
+
     public HashGenerator(Context context) {
         this.context = context;
-        android_id = Secure.getString(getContext().getContentResolver(),Secure.ANDROID_ID); 
+        android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID);
     }
 
     public static String getHash() {
-        if(hash == null) {
+        if (hash == null) {
             return "12345";
         } else {
             return hash;

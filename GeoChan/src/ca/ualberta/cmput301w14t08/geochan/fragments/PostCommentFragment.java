@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -34,10 +34,18 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 /**
- * Responsible for the UI fragment that allows a user to post
- * a reply to a comment.
+ * Responsible for the UI fragment that allows a user to post a reply to a
+ * comment.
  */
 public class PostCommentFragment extends Fragment {
     Thread thread;
@@ -52,12 +60,12 @@ public class PostCommentFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //inflater.inflate(R.menu.thread_list, menu);
+        // inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
@@ -71,36 +79,37 @@ public class PostCommentFragment extends Fragment {
     }
 
     public void postComment(View v) {
-        if(v.getId() == R.id.post_comment_button) {
+        if (v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 ErrorDialog.show(getActivity(), "Could not obtain location.");
-                //Create a new comment object and set username
+                // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
                 newComment.setUser(retrieveUsername());
                 thread.addComment(newComment);
             } else {
-                //Create a new comment object and set username
+                // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation);
                 newComment.setUser(retrieveUsername());
                 thread.addComment(newComment);
             }
-            InputMethodManager inputManager = (InputMethodManager)getActivity()
-                    .getSystemService(Context.INPUT_METHOD_SERVICE); 
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                    .getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
             this.getFragmentManager().popBackStackImmediate();
         }
     }
-    
+
     public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
         return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
     }
-    
-    @Override 
+
+    @Override
     public void onStop() {
         super.onStop();
         locationListenerService.stopListening();

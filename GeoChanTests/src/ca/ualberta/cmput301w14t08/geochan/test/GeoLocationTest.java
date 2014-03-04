@@ -5,9 +5,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 

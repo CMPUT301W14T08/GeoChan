@@ -18,14 +18,17 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import android.graphics.Picture;
 import android.util.Log;
 
@@ -101,11 +104,11 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
         this.setUser(new String());
     }
-    
+
     /**
      * a comment initialized with no data. Only used for testing.
      */
-    public Comment(){
+    public Comment() {
         super();
         this.textPost = "This is a test comment.";
         this.commentDate = null;
@@ -174,7 +177,7 @@ public class Comment {
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;
     }
-    
+
     public String getUser() {
         return user;
     }
@@ -182,49 +185,50 @@ public class Comment {
     public void setUser(String user) {
         this.user = user;
     }
-    
-    public void sortChildren(String tag){
-        /*
-         * Sorts child comments according to the tag passed.
-         * "DATE_NEWEST" pushes the most recent children to the top.
-         * "DATE_OLDEST" pushes the oldest children to the top.
-         * "LOCATION_OP" pushes the closest children to the parent to the top.
-         * "SCORE_HIGHEST" pushes the highest scored children to the top.
-         * "SCORE_LOWEST" pushes the lowest scored children to the top.
-         */
-         
-        if(tag == "DATE_NEWEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByDateNewest());
-            
-        } else if(tag == "DATE_OLDEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByDateOldest());
-            
-        } else if(tag == "LOCATION_OP"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentDistance());
-            
-        } else if(tag == "PARENT_SCORE_HIGHEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentScoreHighest());
-            
-        } else if(tag == "PARENT_SCORE_LOWEST"){
-            Collections.sort(this.getChildren(), SortComparators.sortCommentsByParentScoreLowest());
-            
+
+    /**
+     * Sorts child comments according to the tag passed.
+     * 
+     * @param tag
+     *            Tag to sort comments by
+     */
+    public void sortChildren(int tag) {
+        switch (tag) {
+        case SortComparators.SORT_DATE_NEWEST:
+            Collections.sort(this.getChildren(), SortComparators
+                    .sortCommentsByDateNewest());
+            break;
+        case SortComparators.SORT_DATE_OLDEST:
+            Collections.sort(this.getChildren(), SortComparators
+                    .sortCommentsByDateOldest());
+            break;
+        case SortComparators.SORT_LOCATION_OP:
+            Collections.sort(this.getChildren(), SortComparators
+                    .sortCommentsByParentDistance());
+            break;
+        case SortComparators.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getChildren(), SortComparators
+                    .sortCommentsByParentScoreHighest());
+            break;
+        case SortComparators.SORT_SCORE_LOWEST:
+            Collections.sort(this.getChildren(), SortComparators
+                    .sortCommentsByParentScoreLowest());
+            break;
         }
-        
-        return;
-    }    
-    
-    public double getDistanceFrom(GeoLocation g){
+    }
+
+    public double getDistanceFrom(GeoLocation g) {
         /*
-         * Determines the distance between a comment and a GeoLocation
-         * in terms of latitude and longitude coordinates.
+         * Determines the distance between a comment and a GeoLocation in terms
+         * of latitude and longitude coordinates.
          */
         return this.getLocation().distance(g);
     }
-    
-    public double getTimeFrom(Date d){
+
+    public double getTimeFrom(Date d) {
         /*
-         * Determines the amount of time between when a comment
-         * was posted and a date for determining a comment's relative score.
+         * Determines the amount of time between when a comment was posted and a
+         * date for determining a comment's relative score.
          */
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -234,29 +238,38 @@ public class Comment {
         long t2 = cal2.getTimeInMillis();
         return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
     }
-    
-    public double getScoreFromParent(){
+
+    public double getScoreFromParent() {
         /*
-         * Determines the "score" of a comment
-         * in relation to its parent. Logs an error
-         * and returns 0 if parent is null, since this
-         * shouldn't be being called on a top comment.
+         * Determines the "score" of a comment in relation to its parent. Logs
+         * an error and returns 0 if parent is null, since this shouldn't be
+         * being called on a top comment.
          */
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 1000;
-        /*These can be changed depending on how we want to weight distance vs. time
-         * for comment scoring.*/
-        if(this.parent == null){
-            Log.e("Comment:","getScore() was incorrectly called on a top comment.");
+        /*
+         * These can be changed depending on how we want to weight distance vs.
+         * time for comment scoring.
+         */
+        if (this.parent == null) {
+            Log.e("Comment:", "getScore() was incorrectly called on a top comment.");
             return 0;
         }
-        double distScore = distConst * (1/Math.sqrt(this.getDistanceFrom(this.getParent().getLocation())));
-        double timeScore = timeConst * (1/Math.sqrt(this.getTimeFrom(this.getParent().getCommentDate())));
-        if ((distScore + timeScore) > maxScore){
+        double distScore = distConst
+                * (1 / Math.sqrt(this.getDistanceFrom(this.getParent().getLocation())));
+        double timeScore = timeConst
+                * (1 / Math.sqrt(this.getTimeFrom(this.getParent().getCommentDate())));
+        if ((distScore + timeScore) > maxScore) {
             return maxScore;
-        }else{
-            return distScore + timeScore;      
-        } 
+        } else {
+            return distScore + timeScore;
+        }
+    }
+
+    public String getCommentDateString() {
+        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        SimpleDateFormat formatTime = new SimpleDateFormat("hh:MM aa", Locale.getDefault());
+        return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
 }

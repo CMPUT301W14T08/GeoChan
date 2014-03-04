@@ -18,12 +18,9 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -31,6 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 
 /**
  * This is a custom adapter, used to display Thread objects in a list
@@ -72,12 +72,12 @@ public class ThreadListAdapter extends BaseAdapter {
         // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
-        // Thread bodyComment snippet 
+        // Thread bodyComment snippet
         TextView body = (TextView) convertView.findViewById(R.id.commentBody);
         body.setText(thread.getBodyComment().getTextPost());
-        // Thread timestamp 
+        // Thread timestamp
         TextView time = (TextView) convertView.findViewById(R.id.commentDate);
-        time.setText(makeCommentTimeString(thread.getBodyComment()));
+        time.setText(thread.getBodyComment().getCommentDateString());
         // Thread user creator
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
         user.setText("posted by " + thread.getBodyComment().getUser());
@@ -85,28 +85,14 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            double roundedLat = Math.round(loc.getLatitude() * 100)/100;
-            double roundedLong = Math.round(loc.getLongitude() * 100)/100;
-            location.setText("Latitude: " + Double.toString(roundedLat) +
-                    " Longitude: " + Double.toString(roundedLong));
+            double roundedLat = Math.round(loc.getLatitude() * 100) / 100;
+            double roundedLong = Math.round(loc.getLongitude() * 100) / 100;
+            location.setText("Latitude: " + Double.toString(roundedLat) + " Longitude: "
+                    + Double.toString(roundedLong));
         } else {
             location.setText("Error: No location found");
         }
-        return convertView;      
+        return convertView;
     }
-    
-    public String makeCommentTimeString(Comment comment) {
-        Date date = comment.getCommentDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        
-        String ret = " | on " 
-                + cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA) 
-                + "." + cal.get(Calendar.DATE)
-                + "," + cal.get(Calendar.YEAR) 
-                + " at " + cal.get(Calendar.HOUR_OF_DAY)
-                + ":" + cal.get(Calendar.MINUTE);
-        return ret;
-    }
-    
+
 }

@@ -7,12 +7,12 @@ import android.test.ViewAsserts;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
-import ca.ualberta.cmput301w14t08.geochan.Comment;
-import ca.ualberta.cmput301w14t08.geochan.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.PostThreadFragment;
-import ca.ualberta.cmput301w14t08.geochan.PreferencesFragment;
-import ca.ualberta.cmput301w14t08.geochan.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity activity;

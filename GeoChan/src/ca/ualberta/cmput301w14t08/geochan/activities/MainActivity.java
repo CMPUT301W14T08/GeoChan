@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan;
+package ca.ualberta.cmput301w14t08.geochan.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -28,8 +28,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener {     
+public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,33 +47,31 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         getFragmentManager().addOnBackStackChangedListener(this);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
         case R.id.action_settings:
             getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
-                .addToBackStack(null).commit(); 
-            
-            //This next line is necessary for JUnit to see fragments
+                    .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
+                    .addToBackStack(null).commit();
+
+            // This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case R.id.action_add_thread:
             getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
-                .addToBackStack(null).commit();
-            
-            //This next line is necessary for JUnit to see fragments
+                    .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
+                    .addToBackStack(null).commit();
+
+            // This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
         case android.R.id.home:
@@ -77,38 +81,38 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     public void onBackStackChanged() {
         int count = getFragmentManager().getBackStackEntryCount();
-        if(count > 0) {
+        if (count > 0) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             getActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
-    
+
     public void postNewThread(View v) {
-        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-                .findFragmentByTag("postThreadFrag");
+        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag(
+                "postThreadFrag");
         fragment.postNewThread(v);
     }
-    
+
     public void postComment(View v) {
         PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
                 .findFragmentByTag("comFrag");
         fragment.postComment(v);
     }
-    
+
     public void postReplyToOp(View v) {
-        ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager()
-                .findFragmentByTag("thread_view_fragment");
+        ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
+                "thread_view_fragment");
         Bundle bundle = fragment.getArguments();
         Fragment f = new PostCommentFragment();
         f.setArguments(bundle);
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, f, "comFrag").addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "comFrag")
+                .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-    
+
 }
