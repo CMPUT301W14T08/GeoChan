@@ -3,7 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import android.app.Fragment;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -31,7 +31,10 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Ma
             public void run() {
                 ListView listView = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_list);
                 listView.performItemClick(listView.getAdapter().getView(0, null, null), 0, 0);
-                //Button reply = (Button) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_op_reply);
+                Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 2000);
+                assertNotNull("threadViewFragment is null", fragment);
+                ImageButton reply = (ImageButton) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_op_reply);
+                assertNotNull("reply button is null", reply);
                 //reply.performClick();
             }
         });

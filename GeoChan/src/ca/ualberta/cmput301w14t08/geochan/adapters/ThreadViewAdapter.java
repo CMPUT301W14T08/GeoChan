@@ -141,7 +141,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 break;
             case TYPE_COMMENT:
                 Comment comment = (Comment) getItem(position);
-                convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
                 // Comment body
                 TextView commentBody = (TextView) convertView
                         .findViewById(R.id.thread_view_top_comment_commentBody);
