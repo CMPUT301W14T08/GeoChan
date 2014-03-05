@@ -22,17 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
-import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Index;
-import io.searchbox.core.Search;
-
-import java.util.ArrayList;
-
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-
 import ca.ualberta.cmput301w14t08.geochan.models.Thread;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
@@ -67,7 +59,10 @@ public class ElasticSearchClient {
     }
     
     public void setThreads() {
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        // SearchSourceBuilder needs elasticsearch jar which is huge and inefficient
+        // do this using JSON instead
+        
+        /* SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //searchSourceBuilder.query(QueryBuilders.matchQuery(name, text))
         Search search = new Search.Builder(searchSourceBuilder.toString())
                 .addIndex(URL_INDEX)
@@ -81,6 +76,6 @@ public class ElasticSearchClient {
         }
         ArrayList<Thread> threadList = new ArrayList<Thread>();
         threadList.addAll(result.getSourceAsObjectList(Thread.class));
-        ThreadList.setThreads(threadList);
+        ThreadList.setThreads(threadList); */
     }
 }
