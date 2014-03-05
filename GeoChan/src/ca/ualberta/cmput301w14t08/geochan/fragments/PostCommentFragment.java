@@ -50,6 +50,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;
     private LocationListenerService locationListenerService;
+    //private GeoLocationLog geoLocationLog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

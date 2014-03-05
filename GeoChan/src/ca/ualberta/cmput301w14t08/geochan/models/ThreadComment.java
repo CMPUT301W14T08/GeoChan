@@ -40,7 +40,6 @@ public class ThreadComment {
         this.bodyComment = bodyComment;
         this.setTitle(title);
         this.manager = UserHashManager.getInstance();
-        this.id = manager.getCommentIdHash();
     }
 
     /**
