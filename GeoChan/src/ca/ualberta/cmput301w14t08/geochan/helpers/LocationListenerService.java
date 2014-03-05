@@ -78,7 +78,7 @@ public class LocationListenerService {
     }
 
     // http://developer.android.com/guide/topics/location/strategies.html 
-    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+    public boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
@@ -124,7 +124,7 @@ public class LocationListenerService {
     }
 
     // Checks whether two providers are the same
-    private boolean isSameProvider(String provider1, String provider2) {
+    public boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
         }

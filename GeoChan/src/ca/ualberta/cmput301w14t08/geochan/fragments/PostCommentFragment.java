@@ -20,8 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import org.osmdroid.views.MapView;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
