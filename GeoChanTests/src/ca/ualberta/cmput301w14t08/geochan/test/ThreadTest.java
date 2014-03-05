@@ -6,7 +6,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
 
-import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
@@ -236,7 +235,6 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c4.getLocation().setLocation(location4);
         c5.getLocation().setLocation(location5);
         t.getSortLoc().setLocation(locationT);
-        
         
         c1.getLocation().setLatitude(0);
         c1.getLocation().setLongitude(0);
