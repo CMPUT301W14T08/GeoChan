@@ -44,7 +44,7 @@ public class ThreadListTest extends TestCase {
         tm.addThread(t3);
         tm.addThread(t4);
         
-        tm.sortThreads("DATE_NEWEST");
+        //tm.sortThreads("DATE_NEWEST");
         
         assertTrue("t5 is at index 0", tm.getThreads().get(0) == t5);
         assertTrue("t4 is at index 1", tm.getThreads().get(1) == t4);
@@ -81,7 +81,7 @@ public class ThreadListTest extends TestCase {
         tm.addThread(t3);
         tm.addThread(t4);
         
-        tm.sortThreads("DATE_OLDEST");
+        //tm.sortThreads("DATE_OLDEST");
         
         assertTrue("t1 is at index 0", tm.getThreads().get(0) == t1);
         assertTrue("t2 is at index 1", tm.getThreads().get(1) == t2);
