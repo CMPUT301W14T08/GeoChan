@@ -144,6 +144,7 @@ public class Thread {
         case SortComparators.SORT_LOCATION_MISC:
             Collections.sort(this.getComments(), SortComparators
                     .sortCommentsByLocationDistance(this.getSortLoc()));
+            break;
         }
     }
 }
