@@ -31,7 +31,7 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
@@ -40,10 +40,10 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_MAX_COUNT = 3;
 
     private Context context;
-    private Thread thread;
+    private ThreadComment thread;
     private ArrayList<Comment> comments;
 
-    public ThreadViewAdapter(Context context, Thread thread) {
+    public ThreadViewAdapter(Context context, ThreadComment thread) {
         super();
         this.context = context;
         this.thread = thread;

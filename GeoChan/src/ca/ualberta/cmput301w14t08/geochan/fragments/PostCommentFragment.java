@@ -40,7 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
@@ -48,8 +48,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * comment.
  */
 public class PostCommentFragment extends Fragment {
-    Thread thread;
+    ThreadComment thread;
     private LocationListenerService locationListenerService;
+    //private GeoLocationLog geoLocationLog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -36,6 +36,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
@@ -43,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
+    private GeoLocationLog log;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class PostThreadFragment extends Fragment {
         super.onStart();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        log = new GeoLocationLog();
     }
 
     public void postNewThread(View v) {
@@ -74,6 +77,8 @@ public class PostThreadFragment extends Fragment {
                     newComment.setUser(retrieveUsername());
                     ThreadList.addThread(newComment, title);
                 } else {
+                    // log the thread and the geolocation
+                    
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
                     newComment.setUser(retrieveUsername());

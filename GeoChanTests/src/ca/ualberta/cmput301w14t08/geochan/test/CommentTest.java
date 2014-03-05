@@ -2,14 +2,9 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
-import android.content.Context;
 import android.graphics.Picture;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;

@@ -26,13 +26,13 @@ import java.util.Date;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
-public class Thread {
+public class ThreadComment {
     private ArrayList<Comment> comments;
     private Comment bodyComment;
     private Date threadDate;
     private String title;
 
-    public Thread(Comment bodyComment, String title) {
+    public ThreadComment(Comment bodyComment, String title) {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
@@ -41,7 +41,7 @@ public class Thread {
     }
 
     /* This constructor is only used for testing. */
-    public Thread() {
+    public ThreadComment() {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = null;
