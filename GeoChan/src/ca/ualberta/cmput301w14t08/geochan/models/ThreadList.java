@@ -59,7 +59,7 @@ public class ThreadList {
      * threads to the top.
      * @param tag Sets the sorting method to use
      */
-    public void sortThreads(int tag) {
+    public static void sortThreads(int tag) {
         switch(tag) {
         case SortComparators.SORT_DATE_NEWEST:
             Collections.sort(threads, SortComparators.sortThreadsByDateNewest());

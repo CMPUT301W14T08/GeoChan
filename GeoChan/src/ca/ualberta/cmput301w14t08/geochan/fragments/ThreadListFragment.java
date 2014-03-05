@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListFragment extends Fragment {
@@ -66,6 +69,9 @@ public class ThreadListFragment extends Fragment {
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
 
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int sort = pref.getInt("sortThreads", SortComparators.SORT_DATE_NEWEST);
+        ThreadList.sortThreads(sort);
         // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
