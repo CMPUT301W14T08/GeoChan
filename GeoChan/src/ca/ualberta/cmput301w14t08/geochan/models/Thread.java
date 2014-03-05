@@ -104,7 +104,9 @@ public class Thread {
     }
 
     /**
-     * Sorts thread comments according to the tag passed.
+     * Sorts thread comments according to the tag passed. If sorting by score or a user
+     * provided location, the Thread's sortLoc member must be set to some GeoLocation (either the
+     * user's current GeoLocation or one that they provide).
      * 
      * @param tag
      *            Tag to sort comments by
@@ -134,6 +136,14 @@ public class Thread {
         case SortComparators.SORT_USER_SCORE_HIGHEST:
             Collections.sort(this.getComments(), SortComparators
                     .sortCommentsByUserScoreHighest(this.getSortLoc()));
+            break;
+        case SortComparators.SORT_USER_SCORE_LOWEST:
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByUserScoreLowest(this.getSortLoc()));
+            break;
+        case SortComparators.SORT_LOCATION_MISC:
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByLocationDistance(this.getSortLoc()));
         }
     }
 }
