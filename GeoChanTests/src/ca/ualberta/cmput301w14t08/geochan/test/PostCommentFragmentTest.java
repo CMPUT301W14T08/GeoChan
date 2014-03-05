@@ -31,10 +31,11 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Ma
             public void run() {
                 ListView listView = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_list);
                 listView.performItemClick(listView.getAdapter().getView(0, null, null), 0, 0);
-                Button reply = (Button) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_comment_button);
+                //Button reply = (Button) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_op_reply);
+                //reply.performClick();
             }
         });
-        Fragment fragment = (ThreadViewFragment) waitForFragment("comFrag", 5000);
+        fragment = (PostCommentFragment) waitForFragment("comFrag", 5000);
     }
     
     public void testPreconditions() {
