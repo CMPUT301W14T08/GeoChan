@@ -31,11 +31,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
@@ -72,12 +74,16 @@ public class PostThreadFragment extends Fragment {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, null);
                     newComment.setUser(retrieveUsername());
-                    ThreadList.addThread(newComment, title);
+                    //ThreadList.addThread(newComment, title);
+                    ElasticSearchClient client = ElasticSearchClient.getInstance();
+                    client.putThread(new Thread(newComment, title));
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
                     newComment.setUser(retrieveUsername());
-                    ThreadList.addThread(newComment, title);
+                    //ThreadList.addThread(newComment, title);
+                    ElasticSearchClient client = ElasticSearchClient.getInstance();
+                    client.putThread(new Thread(newComment, title));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
