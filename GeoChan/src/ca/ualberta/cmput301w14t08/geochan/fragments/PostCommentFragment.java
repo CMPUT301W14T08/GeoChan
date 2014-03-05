@@ -37,11 +37,11 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 /**
  * Responsible for the UI fragment that allows a user to post a reply to a

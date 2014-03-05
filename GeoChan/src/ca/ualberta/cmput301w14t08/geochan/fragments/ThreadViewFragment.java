@@ -64,9 +64,6 @@ public class ThreadViewFragment extends Fragment {
         final int id = (int) bundle.getLong("id");
         Thread thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
-        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortTopComments", SortComparators.SORT_DATE_NEWEST);
-        thread.sortComments(sort);
         adapter = new ThreadViewAdapter(getActivity(), thread);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);

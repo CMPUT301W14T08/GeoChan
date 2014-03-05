@@ -11,9 +11,9 @@ import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
