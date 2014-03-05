@@ -2,7 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 public class LocationListenerServiceTest extends ActivityInstrumentationTestCase2<MainActivity> {
     

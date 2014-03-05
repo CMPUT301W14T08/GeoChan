@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.models;
 
 import android.location.Location;
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
  * Responsible for GeoLocation services for Comment objects
