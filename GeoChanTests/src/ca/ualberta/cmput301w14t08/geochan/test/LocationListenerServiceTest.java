@@ -19,5 +19,4 @@ public class LocationListenerServiceTest extends ActivityInstrumentationTestCase
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         assertNotNull(locationListenerService.getCurrentLocation());
     }
-
 }
