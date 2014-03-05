@@ -20,8 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 import android.location.Location;
+import ca.ualberta.cmput301w14t08.geochan.services.LocationListenerService;
 
 /**
  * Responsible for GeoLocation services for Comment objects
@@ -29,15 +29,9 @@ import android.location.Location;
 public class GeoLocation {
 
     private Location location;
-    private LocationListenerService locationListenerService;
 
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
-        this.locationListenerService = locationListenerService;
-    }
-
-    public void updateLocation(Location location) {
-        this.location = location;
     }
 
     public double distance(GeoLocation toLocation) {
@@ -47,9 +41,6 @@ public class GeoLocation {
     }
 
     public Location getLocation() {
-        if (location == null) {
-            location = locationListenerService.getLastKnownLocation();
-        }
         return location;
     }
 
