@@ -40,7 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
@@ -48,7 +48,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * comment.
  */
 public class PostCommentFragment extends Fragment {
-    Thread thread;
+    ThreadComment thread;
     private LocationListenerService locationListenerService;
 
     @Override
@@ -84,7 +84,7 @@ public class PostCommentFragment extends Fragment {
             String comment = editComment.getText().toString();
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
-                ErrorDialog.show(getActivity(), "Could not obtain location.");
+                //ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
                 newComment.setUser(retrieveUsername());

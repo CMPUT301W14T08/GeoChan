@@ -23,7 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.util.Comparator;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class SortComparators {
 
@@ -129,9 +129,9 @@ public class SortComparators {
     /*
      * Comparator for pushing old threads to the top.
      */
-    public static Comparator<Thread> sortThreadsByDateOldest() {
-        return new Comparator<Thread>() {
-            public int compare(Thread t1, Thread t2) {
+    public static Comparator<ThreadComment> sortThreadsByDateOldest() {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());
                 if (val < 0) {
                     return -1;
@@ -147,9 +147,9 @@ public class SortComparators {
     /*
      * Comparator for pushing new threads to the top.
      */
-    public static Comparator<Thread> sortThreadsByDateNewest() {
-        return new Comparator<Thread>() {
-            public int compare(Thread t1, Thread t2) {
+    public static Comparator<ThreadComment> sortThreadsByDateNewest() {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());
                 if (val < 0) {
                     return 1;

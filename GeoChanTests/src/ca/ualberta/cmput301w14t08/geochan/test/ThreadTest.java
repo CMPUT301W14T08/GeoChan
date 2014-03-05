@@ -5,7 +5,7 @@ import java.util.Date;
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadTest extends TestCase {
     
@@ -30,7 +30,7 @@ public class ThreadTest extends TestCase {
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        Thread thread = new Thread(c1, "This thread is for testing!");
+        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
         thread.addComment(c4);
         thread.addComment(c3);
         thread.addComment(c5);
@@ -64,7 +64,7 @@ public class ThreadTest extends TestCase {
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        Thread thread = new Thread(c1, "This thread is for testing!");
+        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
         thread.addComment(c4);
         thread.addComment(c3);
         thread.addComment(c5);

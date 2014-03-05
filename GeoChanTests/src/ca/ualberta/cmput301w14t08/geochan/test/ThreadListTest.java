@@ -5,7 +5,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListTest extends TestCase {
@@ -23,11 +23,11 @@ public class ThreadListTest extends TestCase {
          */
         long extraTime = 1320000;
         ThreadList tm = new ThreadList();
-        Thread t1 = new Thread();
-        Thread t2 = new Thread();
-        Thread t3 = new Thread();
-        Thread t4 = new Thread();
-        Thread t5 = new Thread();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
         
         Date currentDate = new Date();
         
@@ -37,7 +37,7 @@ public class ThreadListTest extends TestCase {
         t4.setThreadDate(new Date(currentDate.getTime() + 4*extraTime));
         t5.setThreadDate(new Date(currentDate.getTime() + 5*extraTime));
         
-        tm.setThreads(new ArrayList<Thread>());
+        tm.setThreads(new ArrayList<ThreadComment>());
         tm.addThread(t1);
         tm.addThread(t2);
         tm.addThread(t5);
@@ -60,11 +60,11 @@ public class ThreadListTest extends TestCase {
          */
         long extraTime = 1320000;
         ThreadList tm = new ThreadList();
-        Thread t1 = new Thread();
-        Thread t2 = new Thread();
-        Thread t3 = new Thread();
-        Thread t4 = new Thread();
-        Thread t5 = new Thread();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
         
         Date currentDate = new Date();
         
@@ -74,7 +74,7 @@ public class ThreadListTest extends TestCase {
         t4.setThreadDate(new Date(currentDate.getTime() + 4*extraTime));
         t5.setThreadDate(new Date(currentDate.getTime() + 5*extraTime));
         
-        tm.setThreads(new ArrayList<Thread>());
+        tm.setThreads(new ArrayList<ThreadComment>());
         tm.addThread(t1);
         tm.addThread(t2);
         tm.addThread(t5);

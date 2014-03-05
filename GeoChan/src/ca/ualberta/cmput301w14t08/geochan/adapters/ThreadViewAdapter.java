@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
@@ -40,21 +41,23 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_MAX_COUNT = 3;
 
     private Context context;
-    private Thread thread;
+    private ThreadComment thread;
     private ArrayList<Comment> comments;
 
-    public ThreadViewAdapter(Context context, Thread thread) {
+    public ThreadViewAdapter(Context context, ThreadComment thread) {
         super();
         this.context = context;
         this.thread = thread;
-        this.comments = thread.getComments();
+        this.comments = this.thread.getComments();
     }
 
     @Override
     public int getCount() {
-
-        // +2 is for the OP
-        return thread.getComments().size() + 2;
+        int size = thread.getComments().size() + 2; // OP + separator + top comments
+        for (Comment c : comments) {
+            size = size + c.getChildren().size();
+        }
+        return size;
     }
 
     @Override
@@ -65,7 +68,58 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 1) {
             return null;
         } else {
-            return comments.get(position - 2);
+            //return comments.get(position-2);
+            
+            int TCindex = getItemGetTC(position - 2);
+            Log.e("TCindex", Integer.toString(TCindex));
+            
+            int Cindex = getItemGetChild(TCindex, position - 2);
+            Log.e("Cindex", Integer.toString(Cindex));
+            
+            if (Cindex == -1) {
+                return comments.get(TCindex);
+            } else {
+                return comments.get(TCindex).getChildren().get(Cindex);
+            }
+        }
+    }
+
+    // Get top comment related to the item, be it a reply to said top comment or the 
+    // top comment itself.
+    private int getItemGetTC(int position) {
+        int tc = 0;
+        int count = 0; 
+        
+        if (position == 0) {
+            return 0;
+        }
+
+        for (int i = 0; i < comments.size() ; ++i) {
+            Comment topComment = comments.get(i);
+            ++count;
+            count =+ topComment.getChildren().size();
+            if (count > position) {
+                tc = i;
+                break;
+            }
+        }
+        // Return which top comment this item belongs to, -1 for index compensation
+        // i.e. if it's the first top comment, we want index 0.
+        return tc+1;
+    }
+
+    private int getItemGetChild(int TCindex, int position) {
+        //int childIndex = 0;
+        int count = 0;
+        //Count all the comments up to the Top Comment in question
+        for(int i = 0; i < TCindex; ++i) {
+            count += 1;
+            count += comments.get(i).getChildren().size();
+        }
+        if (count == position) {
+            return -1;
+        } else {
+            return position - count - 1;
         }
     }
 
@@ -141,7 +195,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 break;
             case TYPE_COMMENT:
                 Comment comment = (Comment) getItem(position);
-                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+                convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
                 // Comment body
                 TextView commentBody = (TextView) convertView
                         .findViewById(R.id.thread_view_top_comment_commentBody);
@@ -170,7 +224,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             case TYPE_SEPARATOR:
                 convertView = inflater.inflate(R.layout.thread_view_separator, null);
                 TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
-                numComments.setText(Integer.toString(comments.size()) + " Comments:");
+                numComments.setText(Integer.toString(getCount()-2) + " Comments:");
                 break;
             }
         }

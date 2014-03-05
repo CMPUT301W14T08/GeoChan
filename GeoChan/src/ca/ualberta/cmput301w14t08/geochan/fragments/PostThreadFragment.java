@@ -70,7 +70,7 @@ public class PostThreadFragment extends Fragment {
             } else {
                 GeoLocation geoLocation = new GeoLocation(locationListenerService);
                 if (geoLocation.getLocation() == null) {
-                    ErrorDialog.show(getActivity(), "Could not obtain location.");
+                    //ErrorDialog.show(getActivity(), "Could not obtain location.");
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, null);
                     newComment.setUser(retrieveUsername());

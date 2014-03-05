@@ -34,7 +34,7 @@ import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadViewFragment extends Fragment {
@@ -62,10 +62,7 @@ public class ThreadViewFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         final int id = (int) bundle.getLong("id");
-        Thread thread = ThreadList.getThreads().get(id);
-        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortTopComments", SortComparators.SORT_DATE_NEWEST);
-        thread.sortComments(sort);
+        ThreadComment thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread);
         // Assign custom adapter to the thread listView.
