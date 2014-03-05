@@ -131,6 +131,9 @@ public class Thread {
             Collections.sort(this.getComments(), SortComparators
                     .sortCommentsByParentScoreLowest());
             break;
+        case SortComparators.SORT_USER_SCORE_HIGHEST:
+            Collections.sort(this.getComments(), SortComparators
+                    .sortCommentsByUserScoreHighest(this.getSortLoc()));
         }
     }
 }

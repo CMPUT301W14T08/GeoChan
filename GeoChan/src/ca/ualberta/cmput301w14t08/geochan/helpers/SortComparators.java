@@ -33,6 +33,7 @@ public class SortComparators {
     public static final int SORT_LOCATION_OP = 2;
     public static final int SORT_SCORE_HIGHEST = 3;
     public static final int SORT_SCORE_LOWEST = 4;
+    public static final int SORT_USER_SCORE_HIGHEST = 5;
 
     /*
      * Comparator for pushing old comments to the top.
@@ -108,7 +109,13 @@ public class SortComparators {
         };
     }
     
-  /*  public static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g){
+    /**
+     * Comparator for pushing higher scored comments (relative to user provided location)
+     * to the top.
+     * @param g The passed GeoLocation.
+     * @return A comparator for sorting comments by score relative to user provided location.
+     */
+    public static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g){
         return new Comparator<Comment>(){
           public int compare(Comment c1,Comment c2){
               double val1 = c1.getScoreFromUser(g);
@@ -117,10 +124,12 @@ public class SortComparators {
                   return -1;
               } else if (val1 < val2){
                   return 1;
+              } else {
+                  return 0;
               }
           }
         };
-    }*/
+    }
 
     /*
      * Comparator for pushing lower scored comments to the top.
