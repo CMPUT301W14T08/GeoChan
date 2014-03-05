@@ -24,6 +24,7 @@ import java.util.Comparator;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 public class SortComparators {
 
@@ -106,6 +107,20 @@ public class SortComparators {
             }
         };
     }
+    
+  /*  public static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g){
+        return new Comparator<Comment>(){
+          public int compare(Comment c1,Comment c2){
+              double val1 = c1.getScoreFromUser(g);
+              double val2 = c2.getScoreFromUser(g);
+              if (val1 > val2){
+                  return -1;
+              } else if (val1 < val2){
+                  return 1;
+              }
+          }
+        };
+    }*/
 
     /*
      * Comparator for pushing lower scored comments to the top.

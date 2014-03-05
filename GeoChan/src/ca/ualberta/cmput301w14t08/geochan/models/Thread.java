@@ -31,6 +31,13 @@ public class Thread {
     private Comment bodyComment;
     private Date threadDate;
     private String title;
+    
+    /**
+     * A location used for our comment sorting methods.
+     * Should be set by the fragment whenever the user decides
+     * to sort comments in a thread by relevance or location.
+     */
+    private GeoLocation sortLoc;
 
     public Thread(Comment bodyComment, String title) {
         super();
@@ -82,6 +89,14 @@ public class Thread {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public void setSortLoc(GeoLocation g){
+        this.sortLoc = g;
+    }
+    
+    public GeoLocation getSortLoc(){
+        return this.sortLoc;
     }
 
     public void addComment(Comment c) {
