@@ -24,7 +24,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Index;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
@@ -48,7 +48,7 @@ public class ElasticSearchClient {
         return instance;
     }
     
-    public void putThread(Thread thread) {
+    public void putThread(ThreadComment thread) {
         Index index = new Index.Builder(thread).index(URL_INDEX).type(TYPE_THREAD).build();
         try {
             client.execute(index);

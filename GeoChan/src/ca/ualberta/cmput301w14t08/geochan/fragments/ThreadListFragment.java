@@ -37,7 +37,6 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListFragment extends Fragment {
