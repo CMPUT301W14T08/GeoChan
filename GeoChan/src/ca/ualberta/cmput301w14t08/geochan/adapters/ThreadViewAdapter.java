@@ -92,6 +92,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
 
         for (int i = 0; i < comments.size() ; ++i) {
+            Log.e("cimments#:", Integer.toString(comments.size()));
             Comment topComment = comments.get(i);
             ++count;
             count = count + topComment.getChildren().size();
@@ -150,80 +151,95 @@ public class ThreadViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            switch (type) {
-            case TYPE_OP:
-                if (!thread.getBodyComment().hasImage()) {
+
+
+        switch (type) {
+        case TYPE_OP:
+            if (!thread.getBodyComment().hasImage()) {
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.thread_view_op, null);
-                } else {
+                }
+            } else {
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) context
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.thread_view_op_img, null);
                 }
-                // Thread title
-                TextView title = (TextView) convertView
-                        .findViewById(R.id.thread_view_op_threadTitle);
-                title.setText(thread.getTitle());
-                // Thread creator
-                TextView threadBy = (TextView) convertView
-                        .findViewById(R.id.thread_view_op_commentBy);
-                threadBy.setText("posted by " + thread.getBodyComment().getUser());
-                // Thread body comment
-                TextView body = (TextView) convertView
-                        .findViewById(R.id.thread_view_op_commentBody);
-                body.setText(thread.getBodyComment().getTextPost());
-                // Thread timestamp
-                TextView threadTime = (TextView) convertView
-                        .findViewById(R.id.thread_view_op_commentDate);
-                threadTime.setText(thread.getBodyComment().getCommentDateString());
-                // Location text
-                TextView origPostLocationText = (TextView) convertView
-                        .findViewById(R.id.thread_view_op_locationText);
-                GeoLocation loc = thread.getBodyComment().getLocation();
-                if (loc != null) {
-                    double origPostLat = Math.round(loc.getLatitude() * 100) / 100;
-                    double origPostLong = Math.round(loc.getLongitude() * 100) / 100;
-                    origPostLocationText.setText("Latitude: " + Double.toString(origPostLat)
-                            + " Longitude: " + Double.toString(origPostLong));
-                } else {
-                    origPostLocationText.setText("Error: No location found");
-                }
-                break;
-            case TYPE_COMMENT:
-                Comment comment = (Comment) getItem(position);
-                convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
-                // Comment body
-                TextView commentBody = (TextView) convertView
-                        .findViewById(R.id.thread_view_top_comment_commentBody);
-                commentBody.setText(comment.getTextPost());
-                // Comment creator
-                TextView commentBy = (TextView) convertView
-                        .findViewById(R.id.thread_view_top_comment_commentBy);
-                commentBy.setText("posted by " + comment.getUser());
-                // Comment timestamp
-                TextView commentTime = (TextView) convertView
-                        .findViewById(R.id.thread_view_top_comment_commentDate);
-                commentTime.setText(comment.getCommentDateString());
-                // Comment location
-                TextView commentLocationText = (TextView) convertView
-                        .findViewById(R.id.thread_view_top_comment_locationText);
-                GeoLocation locCom = comment.getLocation();
-                if (locCom != null) {
-                    double commentLat = Math.round(locCom.getLatitude() * 100) / 100;
-                    double commentLong = Math.round(locCom.getLongitude() * 100) / 100;
-                    commentLocationText.setText("Latitude: " + Double.toString(commentLat)
-                            + " Longitude: " + Double.toString(commentLong));
-                } else {
-                    commentLocationText.setText("Error: No location found");
-                }
-                break;
-            case TYPE_SEPARATOR:
-                convertView = inflater.inflate(R.layout.thread_view_separator, null);
-                TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
-                numComments.setText(Integer.toString(getCount()-2) + " Comments:");
-                break;
             }
+            // Thread title
+            TextView title = (TextView) convertView
+                    .findViewById(R.id.thread_view_op_threadTitle);
+            title.setText(thread.getTitle());
+            // Thread creator
+            TextView threadBy = (TextView) convertView
+                    .findViewById(R.id.thread_view_op_commentBy);
+            threadBy.setText("posted by " + thread.getBodyComment().getUser());
+            // Thread body comment
+            TextView body = (TextView) convertView
+                    .findViewById(R.id.thread_view_op_commentBody);
+            body.setText(thread.getBodyComment().getTextPost());
+            // Thread timestamp
+            TextView threadTime = (TextView) convertView
+                    .findViewById(R.id.thread_view_op_commentDate);
+            threadTime.setText(thread.getBodyComment().getCommentDateString());
+            // Location text
+            TextView origPostLocationText = (TextView) convertView
+                    .findViewById(R.id.thread_view_op_locationText);
+            GeoLocation loc = thread.getBodyComment().getLocation();
+            if (loc != null) {
+                double origPostLat = Math.round(loc.getLatitude() * 100) / 100;
+                double origPostLong = Math.round(loc.getLongitude() * 100) / 100;
+                origPostLocationText.setText("Latitude: " + Double.toString(origPostLat)
+                        + " Longitude: " + Double.toString(origPostLong));
+            } else {
+                origPostLocationText.setText("Error: No location found");
+            }
+            break;
+        case TYPE_COMMENT:
+            Comment comment = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+            }
+            // Comment body
+            TextView commentBody = (TextView) convertView
+                    .findViewById(R.id.thread_view_top_comment_commentBody);
+            commentBody.setText(comment.getTextPost());
+            // Comment creator
+            TextView commentBy = (TextView) convertView
+                    .findViewById(R.id.thread_view_top_comment_commentBy);
+            commentBy.setText("posted by " + comment.getUser());
+            // Comment timestamp
+            TextView commentTime = (TextView) convertView
+                    .findViewById(R.id.thread_view_top_comment_commentDate);
+            commentTime.setText(comment.getCommentDateString());
+            // Comment location
+            TextView commentLocationText = (TextView) convertView
+                    .findViewById(R.id.thread_view_top_comment_locationText);
+            GeoLocation locCom = comment.getLocation();
+            if (locCom != null) {
+                double commentLat = Math.round(locCom.getLatitude() * 100) / 100;
+                double commentLong = Math.round(locCom.getLongitude() * 100) / 100;
+                commentLocationText.setText("Latitude: " + Double.toString(commentLat)
+                        + " Longitude: " + Double.toString(commentLong));
+            } else {
+                commentLocationText.setText("Error: No location found");
+            }
+            break;
+        case TYPE_SEPARATOR:
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_separator, null);
+            }
+            TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
+            numComments.setText(Integer.toString(getCount()-2) + " Comments:");
+            break;
         }
+
         return convertView;
     }
 
