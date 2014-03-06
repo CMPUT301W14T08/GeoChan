@@ -24,6 +24,10 @@ import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
+/**
+ * Records previously used GeoLocations and the ThreadComments
+ * in which they were used in LogEntry objects.
+ */
 public class GeoLocationLog {
     
     private static GeoLocationLog instance = null;
