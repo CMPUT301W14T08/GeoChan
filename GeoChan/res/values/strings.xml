@@ -23,5 +23,9 @@
     <string name="placeholder_location">location text</string>
     <string name="thread_view_op_reply">Reply to OP</string>
     <string name="op_replyingTo">Replying to:</string>
+    <string name="placeholder_latitude">Latitude</string>
+    <string name="placeholder_longitude">Longitude</string>
+    <string name="current_location_button_text">Use Current Location</string>
+    <string name="new_location_button_text">Submit New Location</string>
 
 </resources>
