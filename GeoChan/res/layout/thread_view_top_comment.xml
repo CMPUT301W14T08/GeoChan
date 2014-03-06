@@ -45,16 +45,17 @@
         android:layout_below="@+id/thread_view_top_comment_commentBy"
         android:text="@string/placeholder_location" />
 
-    <Button
+    <TextView
         android:id="@+id/comment_reply_button"
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/thread_view_top_comment_locationText"
         android:layout_alignBottom="@+id/thread_view_top_comment_locationText"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/thread_view_top_comment_locationText"
         android:layout_toRightOf="@+id/thread_view_top_comment_commentDate"
         android:text="Reply"
-        android:textSize="12sp" />
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
 </RelativeLayout>

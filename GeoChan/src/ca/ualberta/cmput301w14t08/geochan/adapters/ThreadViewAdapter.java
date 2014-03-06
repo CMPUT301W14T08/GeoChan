@@ -22,17 +22,17 @@ package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -177,11 +177,26 @@ public class ThreadViewAdapter extends BaseAdapter {
             
             setTopCommentFields(convertView, comment);
             //Here handle button presses
-            final Button button = (Button) convertView.findViewById(R.id.comment_reply_button);
-            button.setOnClickListener(new View.OnClickListener() {
+            final TextView replyButton = (TextView) convertView.findViewById(R.id.comment_reply_button);
+            replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click   
                     Log.e("ButtonClick", "click");
+                    /*
+                    Fragment fragment = new PostReplyFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("id", getItemId(position));
+                    int tc = getItemGetTC(position);
+                    bundle.putLong("tc", tc);
+                    bundle.putLong("ci", getItemGetChild(tc, position));
+
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "post_tc_reply")
+                            .addToBackStack(null).commit();
+                    // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                    getFragmentManager().executePendingTransactions();
+                    */
                 }
             });
             break;
