@@ -38,6 +38,13 @@ public class GeoLocation {
         this.location = location;
     }
 
+    /**
+     * Determines the distance in terms of coordinates between
+     * the GeoLocation object and the passed GeoLocation.
+     * @param toLocation The GeoLocation to be compared to.
+     * @return The distance between the GeoLocations in terms
+     * of coordinates.
+     */
     public double distance(GeoLocation toLocation) {
         double latDist = this.getLatitude() - toLocation.getLatitude();
         double longDist = this.getLongitude() - toLocation.getLongitude();
@@ -52,18 +59,34 @@ public class GeoLocation {
         this.location = location;
     }
 
+    /**
+     * Returns the latitude of the GeoLocation.
+     * @return Latitude of the GeoLocation.
+     */
     public double getLatitude() {
         return location.getLatitude();
     }
 
+    /**
+     * Returns the longitude of the GeoLocation.
+     * @return Longitude of the GeoLocation.
+     */
     public double getLongitude() {
         return location.getLongitude();
     }
 
+    /**
+     * Changes the latitude of the GeoLocation to the passed value.
+     * @param newLat The new latitude.
+     */
     public void setLatitude(double newLat) {
         location.setLatitude(newLat);
     }
 
+    /**
+     * Changes the longitude of the GeoLocation to the passed value.
+     * @param newLong The new longitude.
+     */
     public void setLongitude(double newLong) {
         location.setLongitude(newLong);
     }

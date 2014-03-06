@@ -48,7 +48,11 @@ public class ThreadList {
         }
         threads.add(new ThreadComment(comment, title));
     }
-
+    
+    /**
+     * Adds a new ThreadComment to the ThreadList.
+     * @param t The ThreadComment to be added.
+     */
     public static void addThread(ThreadComment t) {
         threads.add(t);
     }

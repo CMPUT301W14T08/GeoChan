@@ -217,19 +217,25 @@ public class Comment {
         }
     }
 
+    /**
+     * Determines the distance between a comment and a GeoLocation
+     * in terms of latitude and longitude coordinates.
+     * @param g The GeoLocation to be compared with.
+     * @return The distance between the Comment and the passed
+     * GeoLocation in terms of coordinates.
+     */
     public double getDistanceFrom(GeoLocation g) {
-        /*
-         * Determines the distance between a comment and a GeoLocation in terms
-         * of latitude and longitude coordinates.
-         */
         return this.getLocation().distance(g);
     }
 
+    /**
+     * Determines the amount of time between when the Comment was
+     * posted and the passed date in terms of hours.
+     * @param d The Date to be compared with.
+     * @return The number of hours between when the Comment was
+     * posted and the passed Date.
+     */
     public double getTimeFrom(Date d) {
-        /*
-         * Determines the amount of time between when a comment was posted and a
-         * date for determining a comment's relative score.
-         */
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(this.getCommentDate());
@@ -239,12 +245,13 @@ public class Comment {
         return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
     }
 
+    /**
+     * Determines the "score" of the Comment in relation to its
+     * parent. Should never be called on the bodyComment of a
+     * ThreadComment, and will return 0 if it does.
+     * @return The score of the Comment in relation to its parent.
+     */
     public double getScoreFromParent() {
-        /*
-         * Determines the "score" of a comment in relation to its parent. Logs
-         * an error and returns 0 if parent is null, since this shouldn't be
-         * being called on a top comment.
-         */
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 1000;
@@ -267,6 +274,11 @@ public class Comment {
         }
     }
 
+    /**
+     * Converts the Comment's commentDate to an appropriately
+     * formatted string.
+     * @return The string of the Comment's commentDate.
+     */
     public String getCommentDateString() {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());

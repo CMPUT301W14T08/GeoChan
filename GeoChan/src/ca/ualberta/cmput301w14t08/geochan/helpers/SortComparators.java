@@ -33,7 +33,7 @@ public class SortComparators {
     public static final int SORT_SCORE_HIGHEST = 3;
     public static final int SORT_SCORE_LOWEST = 4;
 
-    /*
+    /**
      * Comparator for pushing old comments to the top.
      */
     public static Comparator<Comment> sortCommentsByDateOldest() {
@@ -51,7 +51,7 @@ public class SortComparators {
         };
     }
 
-    /*
+    /**
      * Comparator for pushing new comments to the top.
      */
     public static Comparator<Comment> sortCommentsByDateNewest() {
@@ -69,7 +69,7 @@ public class SortComparators {
         };
     }
 
-    /*
+    /**
      * Comparator for pushing comments closest to parent to the top.
      */
     public static Comparator<Comment> sortCommentsByParentDistance() {
@@ -88,8 +88,8 @@ public class SortComparators {
         };
     }
 
-    /*
-     * Comparator for pushing higher scored comments to the top.
+    /**
+     * Comparator for pushing higher scored comments (relative to parent) to the top.
      */
     public static Comparator<Comment> sortCommentsByParentScoreHighest() {
         return new Comparator<Comment>() {
@@ -107,8 +107,8 @@ public class SortComparators {
         };
     }
 
-    /*
-     * Comparator for pushing lower scored comments to the top.
+    /**
+     * Comparator for pushing lower scored comments (relative to parent) to the top.
      */
     public static Comparator<Comment> sortCommentsByParentScoreLowest() {
         return new Comparator<Comment>() {
@@ -126,7 +126,7 @@ public class SortComparators {
         };
     }
 
-    /*
+    /**
      * Comparator for pushing old threads to the top.
      */
     public static Comparator<ThreadComment> sortThreadsByDateOldest() {
@@ -144,7 +144,7 @@ public class SortComparators {
         };
     }
 
-    /*
+    /**
      * Comparator for pushing new threads to the top.
      */
     public static Comparator<ThreadComment> sortThreadsByDateNewest() {
