@@ -79,6 +79,10 @@ public class GeoLocation {
 
     // create a new location so we do not affect the LocationListenerService's
     // lastKnownLocation
+    /**
+     * Changes the latitude in the GeoLocation to the passed latitude.
+     * @param newLat The new value for the latitude.
+     */
     public void setLatitude(double newLat) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
         newLocation.setLatitude(newLat);
@@ -89,6 +93,10 @@ public class GeoLocation {
 
     // create a new location so we do not affect the LocationListenerService's
     // lastKnownLocation
+    /**
+     * Changes the longitude in the GeoLocation to the passed longitude.
+     * @param newLong The new value for the longitude.
+     */
     public void setLongitude(double newLong) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
         newLocation.setLongitude(newLong);
