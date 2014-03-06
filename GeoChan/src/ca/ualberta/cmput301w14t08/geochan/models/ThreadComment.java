@@ -40,6 +40,15 @@ public class ThreadComment {
         this.bodyComment = bodyComment;
         this.setTitle(title);
         this.manager = UserHashManager.getInstance();
+        this.id = manager.getCommentIdHash();
+    }
+
+    /* This constructor is only used for testing. */
+    public ThreadComment() {
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.bodyComment = null;
+        this.title = null;
     }
 
     /**

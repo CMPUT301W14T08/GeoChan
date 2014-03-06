@@ -122,6 +122,25 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
     }
+    
+    /**
+     * a comment initialized with no data. Only used for testing.
+     */
+    public Comment() {
+        super();
+        this.textPost = "This is a test comment.";
+        this.commentDate = null;
+        this.image = null;
+        this.location = null;
+        this.parent = null;
+        this.children = new ArrayList<Comment>();
+        this.setUser(new String());
+        this.setHash(new String());
+        this.depth = -1;
+        this.setParent(null);
+        this.setChildren(new ArrayList<Comment>());
+        this.id = -1;
+    }
 
     public boolean hasImage() {
         return !(image == null);

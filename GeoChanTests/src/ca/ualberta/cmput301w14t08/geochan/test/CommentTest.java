@@ -3,7 +3,6 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import android.graphics.Picture;
-import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -13,7 +12,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
-    private Location location;
     private LocationListenerService locationListenerService;
     
     public CommentTest(){

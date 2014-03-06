@@ -40,6 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -50,7 +51,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;
     private LocationListenerService locationListenerService;
-    //private GeoLocationLog geoLocationLog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,9 +91,18 @@ public class PostCommentFragment extends Fragment {
                 client.postComment(thread, thread.getBodyComment(), newComment);
             } else {
                 // Create a new comment object and set username
+<<<<<<< HEAD
                 Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, thread.getBodyComment(), newComment);
+=======
+                Comment newComment = new Comment(comment, geoLocation);
+                newComment.setUser(retrieveUsername());
+                thread.addComment(newComment);
+                // log the location and thread title
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+>>>>>>> 7449248... Logged locations in the PostThreadFragment and PostCommentFragment
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
