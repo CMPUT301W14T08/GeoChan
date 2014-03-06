@@ -46,8 +46,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * Responsible for the UI fragment that allows a user to post a reply to a
  * thread.
  */
-public class PostCommentFragment extends Fragment {
+public class PostReplyFragment extends Fragment {
     ThreadComment thread;
+    Comment commentToReplyTo;
     private LocationListenerService locationListenerService;
 
     @Override
@@ -68,17 +69,24 @@ public class PostCommentFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-        TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
-        TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        titleView.setText(thread.getTitle());
-        bodyView.setText(thread.getBodyComment().getTextPost());
+        Comment tc = thread.getComments().get((int) bundle.getLong("tc"));
+        int childIndex = (int) bundle.getLong("ci");
+        if (childIndex == -1) {
+            commentToReplyTo = tc; 
+        } else {
+            commentToReplyTo = tc.getChildren().get(childIndex);
+        }
+        TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
+        TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        bodyReplyTo.setText(commentToReplyTo.getTextPost());
+        replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
     }
 
     public void postComment(View v) {
-        if (v.getId() == R.id.post_comment_button) {
-            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+        if (v.getId() == R.id.post_reply_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
@@ -86,12 +94,12 @@ public class PostCommentFragment extends Fragment {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
                 newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                commentToReplyTo.addChild(newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation);
                 newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                commentToReplyTo.addChild(newComment);
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
