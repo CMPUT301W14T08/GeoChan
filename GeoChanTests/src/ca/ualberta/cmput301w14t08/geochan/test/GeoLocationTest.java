@@ -54,14 +54,14 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         assertNotNull(geoLocation.getLocation());
     }
 
-    public void testLatitude() {
+    public void testNewLatitude() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         geoLocation.setLatitude(1.0);
         assertEquals("Latitude should be 1.0", 1.0, geoLocation.getLatitude());
     }
 
-    public void testLongitude() {
+    public void testNewLongitude() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         geoLocation.setLongitude(1.0);
