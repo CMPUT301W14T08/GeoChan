@@ -3,7 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import junit.framework.TestCase;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -35,7 +35,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments(SortComparators.SORT_DATE_NEWEST);
+        thread.sortComments(SortTypes.SORT_DATE_NEWEST);
 
         assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
         assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
@@ -69,7 +69,7 @@ public class ThreadTest extends TestCase {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments(SortComparators.SORT_DATE_OLDEST);
+        thread.sortComments(SortTypes.SORT_DATE_OLDEST);
 
         assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
         assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);

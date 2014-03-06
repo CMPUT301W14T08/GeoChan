@@ -22,9 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;

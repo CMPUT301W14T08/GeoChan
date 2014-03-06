@@ -22,11 +22,22 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Index;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+import com.google.gson.Gson;
+
 public class ElasticSearchClient {
+    private Context context;
     private static ElasticSearchClient instance = null;
     private static JestClient client;
     private static final String TYPE_COMMENT = "geoComment";
@@ -34,16 +45,17 @@ public class ElasticSearchClient {
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
     
-    private ElasticSearchClient() {
+    private ElasticSearchClient(Context context) {
+        this.context = context;
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
         client = factory.getObject();
     }
     
-    public static ElasticSearchClient getInstance() {
+    public static ElasticSearchClient getInstance(Context context) {
         if (instance == null) {
-            instance = new ElasticSearchClient();
+            instance = new ElasticSearchClient(context);
         }
         return instance;
     }
@@ -58,7 +70,11 @@ public class ElasticSearchClient {
         }
     }
     
-    public void setThreads() {
+    public ArrayList<ThreadComment> getThreads() {
+        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+        SharedPreferences sortPref = context.getSharedPreferences("sort", Context.MODE_PRIVATE);
+        int sortType = sortPref.getInt("thread", SortTypes.SORT_DATE_NEWEST);
+        return list;
         // SearchSourceBuilder needs elasticsearch jar which is huge and inefficient
         // do this using JSON instead
         
@@ -77,5 +93,28 @@ public class ElasticSearchClient {
         ArrayList<Thread> threadList = new ArrayList<Thread>();
         threadList.addAll(result.getSourceAsObjectList(Thread.class));
         ThreadList.setThreads(threadList); */
+    }
+    
+    public void test(final ThreadComment thread) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
+                String json = gson.toJson(thread);
+                Index index = new Index.Builder(json).index("testing").type("yolo").id("1").build();
+                Log.e("lol", "test");
+                JestResult result;
+                try {
+                    result = client.execute(index);
+                    Log.e("lol", result.toString());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    Log.e("lol", e.toString());
+                }
+               
+            }
+        };
+        t.start();
     }
 }

@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.graphics.Picture;
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class Comment {
     private String textPost;
@@ -38,6 +38,8 @@ public class Comment {
     private Picture image;
     private GeoLocation location;
     private String user;
+    private String hash;
+    
     /**
      * parent is the comment this comment is replying to
      */
@@ -194,24 +196,24 @@ public class Comment {
      */
     public void sortChildren(int tag) {
         switch (tag) {
-        case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(this.getChildren(), SortComparators
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(this.getChildren(), SortTypes
                     .sortCommentsByDateNewest());
             break;
-        case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(this.getChildren(), SortComparators
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(this.getChildren(), SortTypes
                     .sortCommentsByDateOldest());
             break;
-        case SortComparators.SORT_LOCATION_OP:
-            Collections.sort(this.getChildren(), SortComparators
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(this.getChildren(), SortTypes
                     .sortCommentsByParentDistance());
             break;
-        case SortComparators.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getChildren(), SortComparators
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getChildren(), SortTypes
                     .sortCommentsByParentScoreHighest());
             break;
-        case SortComparators.SORT_SCORE_LOWEST:
-            Collections.sort(this.getChildren(), SortComparators
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(this.getChildren(), SortTypes
                     .sortCommentsByParentScoreLowest());
             break;
         }

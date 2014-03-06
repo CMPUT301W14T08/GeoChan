@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadComment {
     private ArrayList<Comment> comments;
@@ -64,8 +64,8 @@ public class ThreadComment {
         return bodyComment;
     }
 
-    public void setTopComment(Comment topComment) {
-        this.bodyComment = topComment;
+    public void setBodyComment(Comment bodyComment) {
+        this.bodyComment = bodyComment;
     }
 
     public ArrayList<Comment> getComments() {
@@ -96,24 +96,24 @@ public class ThreadComment {
      */
     public void sortComments(int tag) {
         switch (tag) {
-        case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortComparators
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(this.getComments(), SortTypes
                     .sortCommentsByDateNewest());
             break;
-        case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortComparators
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(this.getComments(), SortTypes
                     .sortCommentsByDateOldest());
             break;
-        case SortComparators.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortComparators
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(this.getComments(), SortTypes
                     .sortCommentsByParentDistance());
             break;
-        case SortComparators.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortComparators
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getComments(), SortTypes
                     .sortCommentsByParentScoreHighest());
             break;
-        case SortComparators.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortComparators
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(this.getComments(), SortTypes
                     .sortCommentsByParentScoreLowest());
             break;
         }

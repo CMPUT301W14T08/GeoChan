@@ -58,7 +58,7 @@ public class PostThreadFragment extends Fragment {
         locationListenerService.startListening();
     }
 
-    public void postNewThread(View v) {
+    public void postNewThread(View v){
         if (v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
@@ -74,15 +74,15 @@ public class PostThreadFragment extends Fragment {
                     Comment newComment = new Comment(comment, null);
                     newComment.setUser(retrieveUsername());
                     //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance();
-                    client.putThread(new ThreadComment(newComment, title));
+                    ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                    client.test(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
                     newComment.setUser(retrieveUsername());
                     //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance();
-                    client.putThread(new ThreadComment(newComment, title));
+                    ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                    client.test(new ThreadComment(newComment, title));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
