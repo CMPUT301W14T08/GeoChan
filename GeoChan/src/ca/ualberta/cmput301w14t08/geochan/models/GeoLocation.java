@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.models;
 
 import android.location.Location;
+import android.location.LocationManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -75,19 +76,23 @@ public class GeoLocation {
         return location.getLongitude();
     }
 
-    /**
-     * Changes the latitude of the GeoLocation to the passed value.
-     * @param newLat The new latitude.
-     */
+
+    // create a new location so we do not affect the LocationListenerService's
+    // lastKnownLocation
     public void setLatitude(double newLat) {
-        location.setLatitude(newLat);
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLatitude(newLat);
+        newLocation.setLongitude(this.location.getLongitude());
+        this.location = newLocation;
     }
 
-    /**
-     * Changes the longitude of the GeoLocation to the passed value.
-     * @param newLong The new longitude.
-     */
+
+    // create a new location so we do not affect the LocationListenerService's
+    // lastKnownLocation
     public void setLongitude(double newLong) {
-        location.setLongitude(newLong);
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLongitude(newLong);
+        newLocation.setLatitude(this.location.getLatitude());
+        this.location = newLocation;
     }
 }
