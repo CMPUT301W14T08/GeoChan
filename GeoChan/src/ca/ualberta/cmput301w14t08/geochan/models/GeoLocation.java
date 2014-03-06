@@ -38,6 +38,10 @@ public class GeoLocation {
         this.location = new Location("preset");
         setLatitude(latitude);
         setLongitude(longitude);
+    }    
+        
+    public GeoLocation(Location location) {
+        this.location = location;
     }
 
     public double distance(GeoLocation toLocation) {
