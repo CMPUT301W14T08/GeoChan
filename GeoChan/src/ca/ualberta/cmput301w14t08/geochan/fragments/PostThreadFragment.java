@@ -57,7 +57,7 @@ public class PostThreadFragment extends Fragment {
         super.onStart();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        log = new GeoLocationLog();
+        //log = new GeoLocationLog();
     }
 
     public void postNewThread(View v) {

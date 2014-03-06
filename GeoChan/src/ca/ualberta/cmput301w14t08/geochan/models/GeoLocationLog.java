@@ -20,15 +20,17 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+
+import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
 public class GeoLocationLog {
     
-    private HashMap<GeoLocation, ThreadComment> logEntries;
     private static GeoLocationLog instance = null;
+    private static ArrayList<LogEntry> entries; 
     
-    public GeoLocationLog() {
-        logEntries = new HashMap<GeoLocation, ThreadComment>();
+    private GeoLocationLog() {
+        entries = new ArrayList<LogEntry>(); 
     }
 
     public static GeoLocationLog getInstance() {
@@ -37,16 +39,25 @@ public class GeoLocationLog {
         }
         return instance;
     }
-    
-    public void addLogEntry(GeoLocation location, ThreadComment thread) {
-        logEntries.put(location, thread);
+   
+    public void addLogEntry(String threadTitle,GeoLocation geoLocation) {
+        LogEntry logEntry = new LogEntry(threadTitle,geoLocation);
+        entries.add(logEntry);
     }
     
-    public HashMap<GeoLocation, ThreadComment> getLogEntries() {
-        return logEntries;
+    public ArrayList<LogEntry> getLogEntries() {
+        return entries;
     }
     
-    public boolean isLogEmpty() {
-        return logEntries.size() == 0;
+    public boolean isEmpty() {
+        return entries.size() == 0;
+    }
+    
+    public void clearLog() {
+        entries.clear();
+    }
+    
+    public int size() {
+        return entries.size();
     }
 }

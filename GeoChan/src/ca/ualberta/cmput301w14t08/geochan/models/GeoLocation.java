@@ -33,6 +33,10 @@ public class GeoLocation {
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
     }
+    
+    public GeoLocation(Location location) {
+        this.location = location;
+    }
 
     public double distance(GeoLocation toLocation) {
         double latDist = this.getLatitude() - toLocation.getLatitude();
