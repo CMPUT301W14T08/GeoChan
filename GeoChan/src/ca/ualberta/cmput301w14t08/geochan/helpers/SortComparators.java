@@ -231,5 +231,47 @@ public class SortComparators {
             }
         };
     }
+    
+    /**
+     * Comparator for passing higher scored Threads to the top.
+     * @param g The current ThreadList.sortLoc
+     * @return A Comparator used to sort Threads according to highest score.
+     */
+    public static Comparator<Thread> sortThreadsByUserScoreHighest(final GeoLocation g){
+        return new Comparator<Thread>(){
+            public int compare(Thread t1, Thread t2){
+                double val1 = t1.getScoreFromUser(g);
+                double val2 = t2.getScoreFromUser(g);
+                if (val1 > val2) {
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
+    
+    /**
+     * Comparator for pushing lower scored Threads to the top.
+     * @param g The current ThreadList.sortLoc
+     * @return A Comparator used to sort Threads according to lowest score.
+     */
+    public static Comparator<Thread> sortThreadsByUserScoreLowest(final GeoLocation g){
+        return new Comparator<Thread>(){
+            public int compare(Thread t1, Thread t2){
+                double val1 = t1.getScoreFromUser(g);
+                double val2 = t2.getScoreFromUser(g);
+                if (val1 > val2) {
+                    return -1;
+                } else if (val1 < val2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
 
 }

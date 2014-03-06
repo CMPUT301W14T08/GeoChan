@@ -21,8 +21,12 @@
 package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import android.util.Log;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
@@ -68,10 +72,10 @@ public class Thread {
     }
 
     public Comment getBodyComment() {
-        return bodyComment;
+        return this.bodyComment;
     }
 
-    public void setTopComment(Comment topComment) {
+    public void setBodyComment(Comment topComment) {
         this.bodyComment = topComment;
     }
 
@@ -101,6 +105,63 @@ public class Thread {
 
     public void addComment(Comment c) {
         this.comments.add(c);
+    }
+    
+    /**
+     * Determines the distance between the Thread (defined by the GeoLocation of
+     * the top comment) and the provided GeoLocation in terms of coordinates.
+     * @param g The GeoLocation we want to determine the distance from.
+     * @return The distance, in terms of coordinates, between the Thread and the passed GeoLocation.
+     */
+    public double getDistanceFrom(GeoLocation g) {
+      return this.getBodyComment().getLocation().distance(g);
+    }
+    
+    /**
+     * Determines the time passed between when the Thread was posted and the
+     * passed Date in terms of number of hours.
+     * @param d The Date we are comparing with.
+     * @return The number of hours between when the Thread was posted and the passed Date.
+     * Returns a minimum of 0.5.
+     */
+    public double getTimeFrom(Date d) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(this.getBodyComment().getCommentDate());
+        cal2.setTime(d);
+        long t1 = cal1.getTimeInMillis();
+        long t2 = cal2.getTimeInMillis();
+        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+            return 0.5;
+        } else {
+            return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+        }
+    }
+    
+    /**
+     * Determines the score of a thread relevant to 
+     * @param g The GeoLocation relevant to sorting. In sorting, the Thread.sortLoc GeoLocation
+     * of the sorting thread is used and should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and current time.
+     */
+    public double getScoreFromUser(GeoLocation g){
+        int distConst = 25;
+        int timeConst = 10;
+        int maxScore = 10000;
+        
+        if(g == null){
+            Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");
+            return 0;
+        }
+        double distScore = distConst 
+                * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst
+                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        if (distScore + timeScore > maxScore) {
+            return maxScore;
+        } else {
+            return distScore + timeScore;
+        }
     }
 
     /**
