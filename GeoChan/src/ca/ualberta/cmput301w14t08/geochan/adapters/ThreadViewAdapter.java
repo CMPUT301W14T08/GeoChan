@@ -38,7 +38,8 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
     private static final int TYPE_OP = 1;
     private static final int TYPE_SEPARATOR = 2;
-    private static final int TYPE_MAX_COUNT = 3;
+    private static final int TYPE_COMMENT_REPLY = 3;
+    private static final int TYPE_MAX_COUNT = 4;
 
     private Context context;
     private ThreadComment thread;
@@ -92,7 +93,6 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
 
         for (int i = 0; i < comments.size() ; ++i) {
-            Log.e("cimments#:", Integer.toString(comments.size()));
             Comment topComment = comments.get(i);
             ++count;
             count = count + topComment.getChildren().size();
@@ -113,6 +113,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             count += 1;
             count += comments.get(i).getChildren().size();
         }
+        //Case where the item at position is a top comment
         if (count == position) {
             return -1;
         } else {
@@ -132,7 +133,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
 
         else if (position > 1) {
-            type = TYPE_COMMENT;
+            int Cindex = getItemGetChild(getItemGetTC(position - 2), position - 2);
+            if (Cindex == -1) {
+                type = TYPE_COMMENT;
+            } else {
+                type = TYPE_COMMENT_REPLY;
+            }
         }
         return type;
     }
@@ -227,6 +233,38 @@ public class ThreadViewAdapter extends BaseAdapter {
                         + " Longitude: " + Double.toString(commentLong));
             } else {
                 commentLocationText.setText("Error: No location found");
+            }
+            break;
+        case TYPE_COMMENT_REPLY:
+            Comment reply = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+            }
+            // Comment body
+            TextView replyBody = (TextView) convertView
+                    .findViewById(R.id.thread_view_comment_commentBody);
+            replyBody.setText(reply.getTextPost());
+            // Comment creator
+            TextView replyBy = (TextView) convertView
+                    .findViewById(R.id.thread_view_comment_commentBy);
+            replyBy.setText("Posted by " + reply.getUser());
+            // Comment timestamp
+            TextView replyTime = (TextView) convertView
+                    .findViewById(R.id.thread_view_comment_commentDate);
+            replyTime.setText(reply.getCommentDateString());
+            // Comment location
+            TextView replyLocationText = (TextView) convertView
+                    .findViewById(R.id.thread_view_comment_locationText);
+            GeoLocation repLocCom = reply.getLocation();
+            if (repLocCom != null) {
+                double commentLat = Math.round(repLocCom.getLatitude() * 100) / 100;
+                double commentLong = Math.round(repLocCom.getLongitude() * 100) / 100;
+                replyLocationText.setText("Latitude: " + Double.toString(commentLat)
+                        + " Longitude: " + Double.toString(commentLong));
+            } else {
+                replyLocationText.setText("Error: No location found");
             }
             break;
         case TYPE_SEPARATOR:

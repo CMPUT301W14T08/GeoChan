@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/thread_view_top_comment_commentBody"
+        android:id="@+id/thread_view_comment_commentBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/imageView1"
@@ -22,35 +22,33 @@
         android:src="@drawable/ic_bar" />
 
     <TextView
-        android:id="@+id/thread_view_top_comment_commentBy"
+        android:id="@+id/thread_view_comment_commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_view_top_comment_commentBody"
+        android:layout_below="@+id/thread_view_comment_commentBody"
         android:layout_toRightOf="@+id/imageView1"
         android:alpha="0.7"
-        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:text="@string/placeholder_postby"
         android:textColor="#00f" />
 
     <TextView
-        android:id="@+id/thread_view_top_comment_commentDate"
+        android:id="@+id/thread_view_comment_commentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/thread_view_top_comment_commentBy"
-        android:layout_below="@+id/thread_view_top_comment_commentBy"
+        android:layout_alignLeft="@+id/thread_view_comment_commentBy"
+        android:layout_below="@+id/thread_view_comment_commentBy"
         android:alpha="0.7"
-        android:paddingBottom="5dp"
         android:paddingRight="5dp"
         android:text="@string/placeholder_date"
         android:textColor="#00f" />
 
     <TextView
-        android:id="@+id/thread_view_top_comment_locationText"
+        android:id="@+id/thread_view_comment_locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/thread_view_top_comment_commentDate"
-        android:layout_below="@+id/thread_view_top_comment_commentDate"
+        android:layout_alignLeft="@+id/thread_view_comment_commentDate"
+        android:layout_below="@+id/thread_view_comment_commentDate"
         android:paddingLeft="5dp"
         android:text="@string/placeholder_location"
         android:textColor="#2E8B57" />

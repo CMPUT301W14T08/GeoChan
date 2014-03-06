@@ -87,6 +87,8 @@ public class PostCommentFragment extends Fragment {
                 //ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
+                newComment.addChild(new Comment("Reply to above comment", null));
+                newComment.addChild(new Comment("Another reply", null));
                 newComment.setUser(retrieveUsername());
                 thread.addComment(newComment);
             } else {
