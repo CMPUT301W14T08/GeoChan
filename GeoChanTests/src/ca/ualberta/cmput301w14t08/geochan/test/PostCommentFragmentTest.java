@@ -3,11 +3,9 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import android.app.Fragment;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.Button;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
