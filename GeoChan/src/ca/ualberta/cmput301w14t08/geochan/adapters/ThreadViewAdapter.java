@@ -84,12 +84,9 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 
-    // Get top comment related to the item, be it a reply to said top comment or the 
-    // top comment itself.
-    private int getItemGetTC(int position) {
-        int tc = 0;
+    // Get top comment related to the position.
+        private int getItemGetTC(int position) {
         int count = 0; 
-        
         if (position == 0) {
             return 0;
         }
@@ -97,15 +94,14 @@ public class ThreadViewAdapter extends BaseAdapter {
         for (int i = 0; i < comments.size() ; ++i) {
             Comment topComment = comments.get(i);
             ++count;
-            count =+ topComment.getChildren().size();
+            count = count + topComment.getChildren().size();
             if (count > position) {
-                tc = i;
-                break;
+                return i;
             }
         }
         // Return which top comment this item belongs to, -1 for index compensation
         // i.e. if it's the first top comment, we want index 0.
-        return tc+1;
+        return 0;
     }
 
     private int getItemGetChild(int TCindex, int position) {
