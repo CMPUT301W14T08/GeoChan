@@ -68,11 +68,13 @@ public class PostReplyFragment extends Fragment {
 
     public void onStart() {
         super.onStart();
+        Bundle bundle = getArguments();
+        commentToReplyTo = (Comment) bundle.getParcelable("cmt");
         
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
-        //bodyReplyTo.setText(commentToReplyTo.getTextPost());
-        //replyTo.setText(commentToReplyTo.getUser() + " says:");
+        bodyReplyTo.setText(commentToReplyTo.getTextPost());
+        replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
     }

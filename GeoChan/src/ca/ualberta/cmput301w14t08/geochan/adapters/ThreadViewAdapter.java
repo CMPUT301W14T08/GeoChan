@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,7 +177,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             break;
             
         case TYPE_COMMENT:
-            Comment comment = (Comment) getItem(position);
+            final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -190,8 +191,12 @@ public class ThreadViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     // Perform action on click   
                     Log.e("ButtonClick", "click");
-                    
+                    Log.e("Comment being replied:", comment.getTextPost());
                     Fragment fragment = new PostReplyFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("cmt", comment);
+                    fragment.setArguments(bundle);
+                    
                     manager.beginTransaction()
                             .replace(R.id.fragment_container, fragment, "post_tc_reply")
                             .addToBackStack(null).commit();

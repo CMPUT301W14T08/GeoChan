@@ -29,11 +29,13 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.graphics.Picture;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
-public class Comment {
+public class Comment implements Parcelable {
     private String textPost;
     private Date commentDate;
     private Picture image;
@@ -141,6 +143,7 @@ public class Comment {
         this.setChildren(new ArrayList<Comment>());
         this.id = -1;
     }
+
 
     public boolean hasImage() {
         return !(image == null);
@@ -345,4 +348,46 @@ public class Comment {
     public void setDepth(int depth) {
         this.depth = depth;
     }
+    /* (non-Javadoc)
+     * @see android.os.Parcelable#describeContents()
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /* (non-Javadoc)
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(textPost);
+        dest.writeValue(commentDate);
+        dest.writeValue(image);
+        dest.writeValue(location);
+        dest.writeValue(user);
+        dest.writeParcelable(parent, flags);
+        dest.writeTypedList(children);
+    }
+    
+    public Comment(Parcel in) {
+        super();
+        this.setTextPost((String) in.readValue(getClass().getClassLoader()));
+        this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
+        this.setImage((Picture) in.readValue(getClass().getClassLoader()));
+        this.setLocation((GeoLocation) in.readValue(getClass().getClassLoader()));
+        this.setUser((String) in.readValue(getClass().getClassLoader()));
+        this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
+        in.readTypedList(children, Comment.CREATOR);
+    }
+    
+    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {  
+        public Comment createFromParcel(Parcel in) {
+          return new Comment(in);
+        }
+
+        public Comment[] newArray(int size) {
+          return new Comment[size];
+        }
+      };
 }
