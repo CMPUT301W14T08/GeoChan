@@ -57,7 +57,6 @@ public class PostThreadFragment extends Fragment {
         super.onStart();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        //log = new GeoLocationLog();
     }
 
     public void postNewThread(View v){
@@ -80,17 +79,12 @@ public class PostThreadFragment extends Fragment {
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
-<<<<<<< HEAD
                     //ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
-=======
-                    newComment.setUser(retrieveUsername());
-                    ThreadList.addThread(newComment, title);
                     // log the thread and the geolocation
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
                     geoLocationLog.addLogEntry(title, geoLocation);
->>>>>>> 7449248... Logged locations in the PostThreadFragment and PostCommentFragment
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

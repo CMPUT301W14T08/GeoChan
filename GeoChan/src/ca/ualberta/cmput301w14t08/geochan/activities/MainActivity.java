@@ -24,12 +24,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
@@ -108,6 +110,11 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .findFragmentByTag("comFrag");
         fragment.postComment(v);
     }
+    
+    public void submitLocation(View v) {
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        fragment.submitLocation(v);
+    }
 
     public void postReplyToOp(View v) {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
@@ -119,5 +126,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-
+    
+    public void changeLocation(View v) {
+        Log.e("clicked","changeLocationButton");
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
+                .addToBackStack(null).commit();
+    }
 }
