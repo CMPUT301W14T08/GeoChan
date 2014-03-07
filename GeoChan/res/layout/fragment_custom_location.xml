@@ -4,50 +4,76 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/current_location_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/new_location_button"
-        android:layout="@+id/new_location_button"
-        android:text="@string/current_location_button_text" />
+<ListView
+    android:id="@+id/custom_location_list_view"
+    android:layout_width="match_parent"
+    android:layout_height="312dp"
+    android:layout_above="@+id/linearLayout1"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/textView1" >
 
-    <Button
-        android:id="@+id/new_location_button"
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/new_location_button_text" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
 
-    <EditText
-        android:id="@+id/longitude_edit_text"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="@string/placeholder_longitude" />
+        <Button
+            android:id="@+id/current_location_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout="@+id/new_location_button"
+            android:text="@string/current_location_button_text" />
 
-    <EditText
-        android:id="@+id/latitude_edit_text"
-        android:layout_width="127dp"
+        <Button
+            android:id="@+id/new_location_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/new_location_button_text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="@string/placeholder_latitude" >
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/longitude_edit_text"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/placeholder_longitude" />
 
-    <ListView
-        android:id="@+id/custom_location_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="312dp"
-        android:layout_above="@+id/current_location_button"
-        android:layout_alignParentLeft="true" >
-    </ListView>
+        <EditText
+            android:id="@+id/latitude_edit_text"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/placeholder_latitude" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/linearLayout2"
+        android:text="@string/location_log"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
