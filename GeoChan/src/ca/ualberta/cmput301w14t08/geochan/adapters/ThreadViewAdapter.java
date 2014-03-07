@@ -198,7 +198,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     fragment.setArguments(bundle);
                     
                     manager.beginTransaction()
-                            .replace(R.id.fragment_container, fragment, "post_tc_reply")
+                            .replace(R.id.fragment_container, fragment, "repFrag")
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();                    
                 }

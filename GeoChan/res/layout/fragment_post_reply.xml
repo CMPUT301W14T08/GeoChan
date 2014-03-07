@@ -68,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:onClick="postComment"
+            android:onClick="postReply"
             android:text="@string/post"
             android:textSize="12sp" />
     </LinearLayout>

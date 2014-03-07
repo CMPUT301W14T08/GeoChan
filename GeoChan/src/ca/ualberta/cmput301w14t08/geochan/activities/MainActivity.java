@@ -33,6 +33,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
@@ -114,6 +115,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     public void submitLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitLocation(v);
+    }
+        
+    public void postReply(View v) {
+        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager()
+                .findFragmentByTag("repFrag");
+        fragment.postReply(v);
     }
 
     public void postReplyToOp(View v) {

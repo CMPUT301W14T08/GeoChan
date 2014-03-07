@@ -41,7 +41,6 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Responsible for the UI fragment that allows a user to post a reply to a
@@ -55,7 +54,7 @@ public class PostReplyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        return inflater.inflate(R.layout.fragment_post_comment, container, false);
+        return inflater.inflate(R.layout.fragment_post_reply, container, false);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class PostReplyFragment extends Fragment {
         locationListenerService.startListening();
     }
 
-    public void postComment(View v) {
+    public void postReply(View v) {
         if (v.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
