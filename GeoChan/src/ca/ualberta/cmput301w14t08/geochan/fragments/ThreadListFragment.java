@@ -94,7 +94,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "thread_view_fragment")
-                        .addToBackStack(null).commit();
+                        .addToBackStack("thread_view_fragment").commit();
                 // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                 getFragmentManager().executePendingTransactions();
             }

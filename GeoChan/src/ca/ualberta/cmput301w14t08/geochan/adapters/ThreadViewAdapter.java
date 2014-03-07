@@ -22,6 +22,8 @@ package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -44,11 +47,13 @@ public class ThreadViewAdapter extends BaseAdapter {
     private Context context;
     private ThreadComment thread;
     private ArrayList<Comment> comments;
+    private FragmentManager manager;
 
-    public ThreadViewAdapter(Context context, ThreadComment thread) {
+    public ThreadViewAdapter(Context context, ThreadComment thread, FragmentManager manager) {
         super();
         this.context = context;
         this.thread = thread;
+        this.manager = manager;
         this.comments = this.thread.getComments();
     }
     
@@ -185,21 +190,12 @@ public class ThreadViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     // Perform action on click   
                     Log.e("ButtonClick", "click");
-                    /*
+                    
                     Fragment fragment = new PostReplyFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("id", getItemId(position));
-                    int tc = getItemGetTC(position);
-                    bundle.putLong("tc", tc);
-                    bundle.putLong("ci", getItemGetChild(tc, position));
-
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction()
+                    manager.beginTransaction()
                             .replace(R.id.fragment_container, fragment, "post_tc_reply")
                             .addToBackStack(null).commit();
-                    // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-                    getFragmentManager().executePendingTransactions();
-                    */
+                    manager.executePendingTransactions();                    
                 }
             });
             break;

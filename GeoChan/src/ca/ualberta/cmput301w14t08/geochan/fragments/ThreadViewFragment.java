@@ -77,7 +77,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         final int id = (int) bundle.getLong("id");
         ThreadComment thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
-        adapter = new ThreadViewAdapter(getActivity(), thread);
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
