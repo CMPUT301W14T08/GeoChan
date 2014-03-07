@@ -29,7 +29,8 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:layout="@+id/new_location_button"
-            android:text="@string/current_location_button_text" />
+            android:text="@string/current_location_button_text"
+            android:onClick="submitLocation" />
 
         <Button
             android:id="@+id/new_location_button"
@@ -37,7 +38,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/new_location_button_text" />
+            android:text="@string/new_location_button_text"
+            android:onClick="submitLocation" />
 
     </LinearLayout>
 

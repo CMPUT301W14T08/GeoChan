@@ -23,18 +23,18 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.util.ArrayList;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
@@ -49,7 +49,7 @@ public class CustomLocationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(false);        
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
@@ -61,33 +61,31 @@ public class CustomLocationFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
+    
     public void onStart() {
         super.onStart();
         GeoLocationLog log = GeoLocationLog.getInstance();
         logArray = log.getLogEntries();
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
+        lv.setOnItemClickListener(new OnItemClickListener () {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("Clicked", "An Item in the previous locations");
+            }
+        });
         customLocationAdapter = new CustomLocationAdapter(logArray);
         lv.setAdapter(customLocationAdapter);
     }
 
-    public void postComment(View v) {
-        
+    public void submitLocation(View v) {
         if (v.getId() == R.id.new_location_button) {
-            EditText latitudeText = (EditText) getActivity().findViewById(R.id.latitude_edit_text);
-            EditText longitudeText = (EditText) getActivity().findViewById(R.id.longitude_edit_text);
-            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-            this.getFragmentManager().popBackStackImmediate();
-        } 
-        
-        if (v.getId() == R.id.current_location_button) {
-            
+            Log.e("Clicked","New Location Button");
+        }
+        else if (v.getId() == R.id.current_location_button) {
+            Log.e("Clicked","Current Location Button"); 
         }
     }
-
+    
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
