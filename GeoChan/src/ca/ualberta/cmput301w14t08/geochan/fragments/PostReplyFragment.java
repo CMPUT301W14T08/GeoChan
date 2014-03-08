@@ -94,12 +94,12 @@ public class PostReplyFragment extends Fragment {
                 //ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
-                ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation);
-                ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(

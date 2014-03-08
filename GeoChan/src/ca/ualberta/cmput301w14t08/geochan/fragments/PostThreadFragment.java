@@ -73,13 +73,13 @@ public class PostThreadFragment extends Fragment {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, null);
                     //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                    ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
                     //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                    ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()

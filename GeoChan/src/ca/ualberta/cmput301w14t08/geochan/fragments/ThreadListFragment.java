@@ -20,9 +20,11 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,11 +37,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadListLoader;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
-public class ThreadListFragment extends Fragment {
+public class ThreadListFragment extends Fragment implements LoaderCallbacks<ArrayList<ThreadComment>> {
     private ListView threadListView;
     private ThreadListAdapter adapter;
 
@@ -54,6 +56,12 @@ public class ThreadListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -67,12 +75,23 @@ public class ThreadListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+     */
+    @Override
+    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
+        return new ThreadListLoader(getActivity());
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
+     */
+    @Override
+    public void onLoadFinished(Loader<ArrayList<ThreadComment>> arg0, ArrayList<ThreadComment> arg1) {
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
-        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
-        ThreadList.sortThreads(sort);
-        // Assign custom adapter to the list
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
         threadListView.setOnItemClickListener(new OnItemClickListener() {
@@ -92,6 +111,18 @@ public class ThreadListFragment extends Fragment {
                 getFragmentManager().executePendingTransactions();
             }
         });
-        adapter.notifyDataSetChanged();
+        // SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        // int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
+        // ThreadList.sortThreads(sort);
+        adapter.notifyDataSetChanged();  
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content.Loader)
+     */
+    @Override
+    public void onLoaderReset(Loader<ArrayList<ThreadComment>> arg0) {
+        // TODO Auto-generated method stub
+        
     }
 }

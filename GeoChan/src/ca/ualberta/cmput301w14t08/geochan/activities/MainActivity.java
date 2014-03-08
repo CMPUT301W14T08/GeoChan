@@ -20,15 +20,16 @@
 
 package ca.ualberta.cmput301w14t08.geochan.activities;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
@@ -36,7 +37,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
-public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
+public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         if (savedInstanceState != null) {
             return;
         }
-        // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
+        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
+        ElasticSearchClient.generateInstance(this);
         UserHashManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();

@@ -50,11 +50,14 @@ public class ElasticSearchClient {
         client = factory.getObject();
     }
     
-    public static ElasticSearchClient getInstance(Context context) {
+    public static ElasticSearchClient getInstance() {
+        return instance;
+    }
+    
+    public static void generateInstance(Context context) {
         if (instance == null) {
             instance = new ElasticSearchClient(context);
         }
-        return instance;
     }
     
     public void postThread(final ThreadComment thread) {
@@ -97,5 +100,13 @@ public class ElasticSearchClient {
             }
         };
         t.start();
+    }
+    
+    public String getThreads() {
+        return null;
+    }
+    
+    public String getComments() {
+        return null;
     }
 }
