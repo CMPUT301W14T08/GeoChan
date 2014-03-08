@@ -24,40 +24,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadComment {
     private ArrayList<Comment> comments;
     private Comment bodyComment;
-    private Date threadDate;
     private String title;
+    private UserManager manager;
+    private long id;
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
-        this.threadDate = new Date();
         this.setTitle(title);
-    }
-
-    /* This constructor is only used for testing. */
-    public ThreadComment() {
-        super();
-        this.comments = new ArrayList<Comment>();
-        this.bodyComment = null;
-        this.threadDate = null;
-        this.title = null;
+        this.manager = UserManager.getInstance();
+        this.id = manager.getCommentIdHash();
     }
 
     /**
      * Getters and setters
      */
     public Date getThreadDate() {
-        return threadDate;
+        return bodyComment.getCommentDate();
     }
 
     public void setThreadDate(Date threadDate) {
-        this.threadDate = threadDate;
+        bodyComment.setCommentDate(threadDate);
+    }
+    
+    public String getId() {
+        return Long.toString(id);
     }
 
     public Comment getBodyComment() {

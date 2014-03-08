@@ -34,6 +34,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
     @Override
@@ -43,6 +44,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         if (savedInstanceState != null) {
             return;
         }
+        // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
+        UserManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         getFragmentManager().addOnBackStackChangedListener(this);

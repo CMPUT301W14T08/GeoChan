@@ -35,7 +35,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -93,13 +94,13 @@ public class PostReplyFragment extends Fragment {
                 //ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
-                newComment.setUser(retrieveUsername());
-                commentToReplyTo.addChild(newComment);
+                ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                client.postComment(thread, commentToReplyTo, newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation);
-                newComment.setUser(retrieveUsername());
-                commentToReplyTo.addChild(newComment);
+                ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
+                client.postComment(thread, commentToReplyTo, newComment);
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
@@ -112,7 +113,7 @@ public class PostReplyFragment extends Fragment {
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
+        return preferences.getString("username", "Anon") + "#" + UserManager.getHash();
     }
 
     @Override

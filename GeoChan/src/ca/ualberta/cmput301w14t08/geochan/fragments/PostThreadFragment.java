@@ -33,7 +33,7 @@ import android.widget.EditText;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -72,17 +72,15 @@ public class PostThreadFragment extends Fragment {
                     //ErrorDialog.show(getActivity(), "Could not obtain location.");
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, null);
-                    newComment.setUser(retrieveUsername());
                     //ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
-                    client.test(new ThreadComment(newComment, title));
+                    client.postThread(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
-                    newComment.setUser(retrieveUsername());
                     //ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
-                    client.test(new ThreadComment(newComment, title));
+                    client.postThread(new ThreadComment(newComment, title));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -96,7 +94,7 @@ public class PostThreadFragment extends Fragment {
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
+        return preferences.getString("username", "Anon") + "#" + UserManager.getHash();
     }
 
     @Override

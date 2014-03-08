@@ -22,19 +22,16 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
-import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Index;
-
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializer;
+import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ElasticSearchClient {
     private Context context;
@@ -60,58 +57,43 @@ public class ElasticSearchClient {
         return instance;
     }
     
-    public void putThread(ThreadComment thread) {
-        Index index = new Index.Builder(thread).index(URL_INDEX).type(TYPE_THREAD).build();
-        try {
-            client.execute(index);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    
-    public ArrayList<ThreadComment> getThreads() {
-        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
-        SharedPreferences sortPref = context.getSharedPreferences("sort", Context.MODE_PRIVATE);
-        int sortType = sortPref.getInt("thread", SortTypes.SORT_DATE_NEWEST);
-        return list;
-        // SearchSourceBuilder needs elasticsearch jar which is huge and inefficient
-        // do this using JSON instead
-        
-        /* SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        //searchSourceBuilder.query(QueryBuilders.matchQuery(name, text))
-        Search search = new Search.Builder(searchSourceBuilder.toString())
-                .addIndex(URL_INDEX)
-                .build();
-        JestResult result = null;
-        try {
-            result = client.execute(search);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        ArrayList<Thread> threadList = new ArrayList<Thread>();
-        threadList.addAll(result.getSourceAsObjectList(Thread.class));
-        ThreadList.setThreads(threadList); */
-    }
-    
-    public void test(final ThreadComment thread) {
+    public void postThread(final ThreadComment thread) {
         Thread t = new Thread() {
             @Override
             public void run() {
-                Gson gson = new Gson();
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
+                Gson gson = gsonBuilder.create();
                 String json = gson.toJson(thread);
-                Index index = new Index.Builder(json).index("testing").type("yolo").id("1").build();
-                Log.e("lol", "test");
-                JestResult result;
+                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_THREAD).id(thread.getId()).build();
                 try {
-                    result = client.execute(index);
-                    Log.e("lol", result.toString());
+                    client.execute(index);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    Log.e("lol", e.toString());
                 }
+               
+            }
+        };
+        t.start();
+    }
+    
+    public void postComment(final ThreadComment thread, final Comment commentToReplyTo, final Comment comment) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(Comment.class, new CommentSerializer());
+                Gson gson = gsonBuilder.create();
+                String json = gson.toJson(comment);
+                // TODO
+                /* Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT).id(comment.getC).build();
+                try {
+                    client.execute(index);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }*/
                
             }
         };

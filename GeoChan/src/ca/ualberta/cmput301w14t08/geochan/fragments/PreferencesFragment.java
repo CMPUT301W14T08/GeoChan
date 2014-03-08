@@ -26,7 +26,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 
 public class PreferencesFragment extends PreferenceFragment {
 
@@ -45,12 +45,12 @@ public class PreferencesFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
-                hash.setSummary((String) newValue + " #" + HashGenerator.getHash((String) newValue));
+                hash.setSummary((String) newValue + " #" + UserManager.getHash((String) newValue));
                 return true;
             }
         });
 
         Preference hash = findPreference("device_hash");
-        hash.setSummary(username.getText() + " #" + HashGenerator.getHash());
+        hash.setSummary(username.getText() + " #" + UserManager.getHash());
     }
 }

@@ -31,36 +31,37 @@ import java.util.concurrent.TimeUnit;
 import android.graphics.Picture;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
 
 public class Comment {
     private String textPost;
     private Date commentDate;
     private Picture image;
+    private Picture imageThumb;
     private GeoLocation location;
     private String user;
-    private String hash;
-    
-    /**
-     * parent is the comment this comment is replying to
-     */
+    private long hash;
+    private int depth;
     private Comment parent;
-    /**
-     * child is a reply to this comment
-     */
     private ArrayList<Comment> children;
+    private UserManager manager;
 
     /**
      * a comment without an image and without a parent
      */
     public Comment(String textPost, GeoLocation location) {
         super();
+        this.manager = UserManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
+        this.setImageThumb(null);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getCommentIdHash());
+        this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
     }
 
     /**
@@ -68,13 +69,17 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location) {
         super();
+        this.manager = UserManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
+        this.setImageThumb(image);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getCommentIdHash());
+        this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
     }
 
     /**
@@ -82,14 +87,17 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
         super();
+        this.manager = UserManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
+        this.setImageThumb(image);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getCommentIdHash());
+        this.depth = parent.depth + 1;
         this.setParent(parent);
-        parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
     }
 
     /**
@@ -97,28 +105,17 @@ public class Comment {
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
+        this.manager = UserManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
+        this.setImageThumb(null);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getCommentIdHash());
+        this.depth = parent.depth + 1;
         this.setParent(parent);
-        parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
-    }
-
-    /**
-     * a comment initialized with no data. Only used for testing.
-     */
-    public Comment() {
-        super();
-        this.textPost = "This is a test comment.";
-        this.commentDate = null;
-        this.image = null;
-        this.location = null;
-        this.parent = null;
-        this.children = new ArrayList<Comment>();
-        this.setUser(new String());
     }
 
     public boolean hasImage() {
@@ -273,5 +270,47 @@ public class Comment {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
         return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
+    }
+
+    /**
+     * @return the imageThumb
+     */
+    public Picture getImageThumb() {
+        return imageThumb;
+    }
+
+    /**
+     * @param imageThumb the imageThumb to set
+     */
+    public void setImageThumb(Picture imageThumb) {
+        this.imageThumb = imageThumb;
+    }
+
+    /**
+     * @return the hash
+     */
+    public long getHash() {
+        return hash;
+    }
+
+    /**
+     * @param hash the hash to set
+     */
+    public void setHash(long hash) {
+        this.hash = hash;
+    }
+
+    /**
+     * @return the depth
+     */
+    public int getDepth() {
+        return depth;
+    }
+
+    /**
+     * @param depth the depth to set
+     */
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 }

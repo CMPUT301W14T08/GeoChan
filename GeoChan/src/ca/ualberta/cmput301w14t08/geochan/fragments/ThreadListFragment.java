@@ -68,8 +68,6 @@ public class ThreadListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
-        ElasticSearchClient client = ElasticSearchClient.getInstance(getActivity());
-        ThreadList.setThreads(client.getThreads());
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
         int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
