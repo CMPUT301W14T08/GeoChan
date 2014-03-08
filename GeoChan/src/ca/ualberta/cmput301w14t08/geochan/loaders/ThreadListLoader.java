@@ -28,8 +28,6 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadListLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
-    ArrayList<ThreadComment> threadList = null;
-
     public ThreadListLoader(Context context) {
         super(context);
     }
@@ -44,17 +42,4 @@ public class ThreadListLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> 
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         return list;
     }
-    
-    @Override
-    protected void onStartLoading() {
-        if (threadList != null) {
-            deliverResult(threadList);
-        }
-        
-        // TODO
-        // if (threadList == null || client.isUpdateNeeded()) {
-        if (threadList == null) {
-            forceLoad();
-        }
-    }    
 }

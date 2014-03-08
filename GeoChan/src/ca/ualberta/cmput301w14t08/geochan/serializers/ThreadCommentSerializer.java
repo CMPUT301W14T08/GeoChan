@@ -58,7 +58,7 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
             /* http://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string */
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encoded);

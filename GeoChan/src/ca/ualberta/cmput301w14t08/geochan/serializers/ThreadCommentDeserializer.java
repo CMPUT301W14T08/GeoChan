@@ -21,12 +21,17 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment> {
@@ -35,10 +40,30 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
      * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
      */
     @Override
-    public ThreadComment deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+    public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
-        // TODO Auto-generated method stub
-        return null;
+        JsonObject object = json.getAsJsonObject();
+        String title = object.get("title").getAsString();
+        long threadDate = object.get("threadDate").getAsLong();
+        boolean hasImage = object.get("hasImage").getAsBoolean();
+        String locationString = object.get("location").getAsString();
+        List<String> locationEntries = Arrays.asList(locationString.split(","));
+        double latitude = Long.parseLong(locationEntries.get(0));
+        double longitude = Long.parseLong(locationEntries.get(1));
+        String user = object.get("user").getAsString();
+        String hash = object.get("hash").getAsString();
+        String textPost = object.get("textPost").getAsString();
+        if (hasImage) {
+            // TODO: Implement decoding of images
+        }
+        GeoLocation location = new GeoLocation(latitude, longitude);
+        ThreadComment comment = new ThreadComment(new Comment(textPost, location), title);
+        comment.getBodyComment().getCommentDate().setTime(threadDate);
+        comment.getThreadDate().setTime(threadDate);
+        comment.getBodyComment().setUser(user);
+        comment.getBodyComment().setHash(hash);
+        // TODO: Set image
+        return comment;
     }
 
 }

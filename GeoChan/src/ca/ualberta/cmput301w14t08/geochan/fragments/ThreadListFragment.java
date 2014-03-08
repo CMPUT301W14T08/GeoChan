@@ -75,21 +75,6 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onStart() {
         super.onStart();
-    }
-
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
-     */
-    @Override
-    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-        return new ThreadListLoader(getActivity());
-    }
-
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
-     */
-    @Override
-    public void onLoadFinished(Loader<ArrayList<ThreadComment>> arg0, ArrayList<ThreadComment> arg1) {
         threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
@@ -114,15 +99,30 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
         // SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
         // int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
         // ThreadList.sortThreads(sort);
-        adapter.notifyDataSetChanged();  
+        adapter.notifyDataSetChanged();
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+     */
+    @Override
+    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
+        return new ThreadListLoader(getActivity());
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
+     */
+    @Override
+    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader, ArrayList<ThreadComment> list) {
+        adapter.setList(list);
     }
 
     /* (non-Javadoc)
      * @see android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content.Loader)
      */
     @Override
-    public void onLoaderReset(Loader<ArrayList<ThreadComment>> arg0) {
-        // TODO Auto-generated method stub
-        
+    public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
+        adapter.setList(new ArrayList<ThreadComment>());
     }
 }

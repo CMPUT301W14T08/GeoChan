@@ -53,7 +53,7 @@ public class CommentSerializer implements JsonSerializer<Comment> {
             /* http://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string */
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encoded);
@@ -61,6 +61,8 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         object.addProperty("depth", comment.getDepth());
         if (comment.getParent() != null) {
             object.addProperty("parent", comment.getParent().getId());
+        } else {
+            object.addProperty("parent", "0");
         }
         return object;
     }

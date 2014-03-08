@@ -59,6 +59,11 @@ public class ThreadListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    
+    public void setList(ArrayList<ThreadComment> list) {
+        displayList = list;
+        notifyDataSetChanged();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

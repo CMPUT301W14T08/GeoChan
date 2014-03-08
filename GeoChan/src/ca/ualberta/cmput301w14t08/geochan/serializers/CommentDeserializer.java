@@ -21,12 +21,16 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 public class CommentDeserializer implements JsonDeserializer<Comment> {
@@ -35,10 +39,34 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
      * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
      */
     @Override
-    public Comment deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
+    public Comment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
-        // TODO Auto-generated method stub
-        return null;
+        JsonObject object = json.getAsJsonObject();
+        long commentDate = object.get("commentDate").getAsLong();
+        boolean hasImage = object.get("hasImage").getAsBoolean();
+        String locationString = object.get("location").getAsString();
+        List<String> locationEntries = Arrays.asList(locationString.split(","));
+        double latitude = Long.parseLong(locationEntries.get(0));
+        double longitude = Long.parseLong(locationEntries.get(1));
+        String user = object.get("user").getAsString();
+        String hash = object.get("hash").getAsString();
+        String textPost = object.get("textPost").getAsString();
+        if (hasImage) {
+            // TODO: Implement decoding of images
+        }
+        int depth = object.get("depth").getAsInt();
+        String parent = object.get("parent").getAsString();
+        GeoLocation location = new GeoLocation(latitude, longitude);
+        Comment comment = new Comment(textPost, location);
+        comment.getCommentDate().setTime(commentDate);
+        comment.setUser(user);
+        comment.setHash(hash);
+        comment.setDepth(depth);
+        if (!(parent.equals("0"))) {
+            // TODO: Write code to figure out parent Comment and assign in
+        }
+        // TODO: Set image
+        return comment;
     }
 
 }
