@@ -34,6 +34,9 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/**
+ * Fragment which displays the contents of a ThreadComment.
+ */
 public class ThreadViewFragment extends Fragment {
     private ListView threadView;
     private ThreadViewAdapter adapter;
