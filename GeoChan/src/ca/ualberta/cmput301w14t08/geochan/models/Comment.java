@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 import android.graphics.Picture;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 public class Comment {
     private String textPost;
@@ -40,28 +40,30 @@ public class Comment {
     private Picture imageThumb;
     private GeoLocation location;
     private String user;
-    private long hash;
+    private String hash;
     private int depth;
     private Comment parent;
     private ArrayList<Comment> children;
-    private UserManager manager;
+    private UserHashManager manager;
+    private long id;
 
     /**
      * a comment without an image and without a parent
      */
     public Comment(String textPost, GeoLocation location) {
         super();
-        this.manager = UserManager.getInstance();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getCommentIdHash());
+        this.setHash(manager.getHash());
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -69,17 +71,18 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location) {
         super();
-        this.manager = UserManager.getInstance();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getCommentIdHash());
+        this.setHash(manager.getHash());
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -87,17 +90,18 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserManager.getInstance();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getCommentIdHash());
+        this.setHash(manager.getHash());
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -105,17 +109,18 @@ public class Comment {
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserManager.getInstance();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getCommentIdHash());
+        this.setHash(manager.getHash());
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
+        this.id = manager.getCommentIdHash();
     }
 
     public boolean hasImage() {
@@ -184,6 +189,11 @@ public class Comment {
     public void setUser(String user) {
         this.user = user;
     }
+    
+    public String getId() {
+        return Long.toString(id);
+    }
+
 
     /**
      * Sorts child comments according to the tag passed.
@@ -289,14 +299,14 @@ public class Comment {
     /**
      * @return the hash
      */
-    public long getHash() {
+    public String getHash() {
         return hash;
     }
 
     /**
      * @param hash the hash to set
      */
-    public void setHash(long hash) {
+    public void setHash(String hash) {
         this.hash = hash;
     }
 

@@ -28,27 +28,27 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
-public class UserManager {
+public class UserHashManager {
     private static Context context;
-    private static UserManager instance;
+    private static UserHashManager instance;
     private static String android_id;
 
-    private UserManager(Context context) {
-        UserManager.context = context;
+    private UserHashManager(Context context) {
+        UserHashManager.context = context;
         android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
     }
     
     public static void generateInstance(Context context) {
         if (instance == null) {
-            instance = new UserManager(context);
+            instance = new UserHashManager(context);
         }
     }
     
-    public static UserManager getInstance() {
+    public static UserHashManager getInstance() {
         return instance;
     }
 
-    public static String getHash() {
+    public String getHash() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = pref.getString("username", "Anon");
         int id = android_id.hashCode();

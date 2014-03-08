@@ -86,14 +86,13 @@ public class ElasticSearchClient {
                 gsonBuilder.registerTypeAdapter(Comment.class, new CommentSerializer());
                 Gson gson = gsonBuilder.create();
                 String json = gson.toJson(comment);
-                // TODO
-                /* Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT).id(comment.getC).build();
+                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT).id(comment.getId()).build();
                 try {
                     client.execute(index);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }*/
+                }
                
             }
         };

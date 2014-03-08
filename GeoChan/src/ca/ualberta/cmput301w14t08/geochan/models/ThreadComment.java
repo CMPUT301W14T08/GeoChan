@@ -24,14 +24,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadComment {
     private ArrayList<Comment> comments;
     private Comment bodyComment;
     private String title;
-    private UserManager manager;
+    private UserHashManager manager;
     private long id;
 
     public ThreadComment(Comment bodyComment, String title) {
@@ -39,7 +39,7 @@ public class ThreadComment {
         this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
         this.setTitle(title);
-        this.manager = UserManager.getInstance();
+        this.manager = UserHashManager.getInstance();
         this.id = manager.getCommentIdHash();
     }
 

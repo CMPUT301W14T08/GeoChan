@@ -36,7 +36,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -113,7 +113,8 @@ public class PostReplyFragment extends Fragment {
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        return preferences.getString("username", "Anon") + "#" + UserManager.getHash();
+        UserHashManager manager = UserHashManager.getInstance();
+        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override
