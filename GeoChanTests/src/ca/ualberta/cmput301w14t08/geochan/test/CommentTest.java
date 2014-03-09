@@ -3,9 +3,13 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import android.graphics.Picture;
+import android.location.Location;
+import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
@@ -66,7 +70,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);
         
-        //c1.sortChildren("DATE_NEWEST");
+        c1.sortChildren(SortComparators.SORT_DATE_NEWEST);
 
         assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
         assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
@@ -96,7 +100,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);
         
-        //c1.sortChildren("DATE_OLDEST");
+        c1.sortChildren(SortComparators.SORT_DATE_OLDEST);
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -108,17 +112,38 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         /*
          * Tests the implementation of Comment.sortChildren("LOCATION_OP");
          */
+        
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(locationListenerService));
-        c2.setLocation(new GeoLocation(locationListenerService));
-        c3.setLocation(new GeoLocation(locationListenerService));
-        c4.setLocation(new GeoLocation(locationListenerService));
-        c5.setLocation(new GeoLocation(locationListenerService));
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -127,21 +152,26 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         
         c1.getLocation().setLatitude(0);
         c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
 
         c1.addChild(c5);
         c1.addChild(c3);
         c1.addChild(c4);
         c1.addChild(c2);
         
-        //c1.sortChildren("LOCATION_OP");
+        c1.sortChildren(SortComparators.SORT_LOCATION_OP);
+        
+        Log.i("Val of child at 0:", String.valueOf(c1.getChildren().get(0).getLocation().getLatitude()));
+        Log.i("Val of child at 1:", String.valueOf(c1.getChildren().get(1).getLocation().getLatitude()));
+        Log.i("Val of child at 2:", String.valueOf(c1.getChildren().get(2).getLocation().getLatitude()));
+        Log.i("Val of child at 3:", String.valueOf(c1.getChildren().get(3).getLocation().getLatitude()));
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -160,11 +190,31 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(locationListenerService));
-        c2.setLocation(new GeoLocation(locationListenerService));
-        c3.setLocation(new GeoLocation(locationListenerService));
-        c4.setLocation(new GeoLocation(locationListenerService));
-        c5.setLocation(new GeoLocation(locationListenerService));
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -173,29 +223,34 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         
         c1.getLocation().setLatitude(0);
         c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
-        
-        Date currentDate = new Date();
-        
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
 
         c1.addChild(c5);
         c1.addChild(c3);
         c1.addChild(c4);
         c1.addChild(c2);
         
-        //c1.sortChildren("PARENT_SCORE_HIGHEST");
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(currentDate);
+        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        c1.sortChildren(SortComparators.SORT_SCORE_HIGHEST);
+        
+        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
+        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
+        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
+        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -214,11 +269,31 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
-        c1.setLocation(new GeoLocation(locationListenerService));
-        c2.setLocation(new GeoLocation(locationListenerService));
-        c3.setLocation(new GeoLocation(locationListenerService));
-        c4.setLocation(new GeoLocation(locationListenerService));
-        c5.setLocation(new GeoLocation(locationListenerService));
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
         
         c2.setParent(c1);
         c3.setParent(c1);
@@ -227,29 +302,34 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         
         c1.getLocation().setLatitude(0);
         c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
-        
-        Date currentDate = new Date();
-        
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
 
         c1.addChild(c5);
         c1.addChild(c3);
         c1.addChild(c4);
-        c1.addChild(c2);   
+        c1.addChild(c2);
         
-        //c1.sortChildren("PARENT_SCORE_LOWEST");
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(currentDate);
+        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        c1.sortChildren(SortComparators.SORT_SCORE_LOWEST);
+        
+        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
+        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
+        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
+        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
 
         assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
         assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
@@ -257,7 +337,10 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c2 is at index 3", (c1.getChildren().get(3)) == c2);
     }
     
-    public void testGetScore(){
+    /**
+     * Tests the calculation of comment scores in relation to their parent.
+     */
+    public void testGetParentScore(){
         /*
          * Test the score calculation for child comments.
          */
@@ -265,35 +348,73 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
-        Date currentDate = new Date();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
         
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 500 * extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 500 * extraTime));
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
         
         c2.setParent(c1);
         c3.setParent(c1);
+        c4.setParent(c1);
+        c5.setParent(c1);
         
-        c1.addChild(c2);
+        c1.getLocation().setLatitude(0);
+        c1.getLocation().setLongitude(0);
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
+
+        c1.addChild(c5);
         c1.addChild(c3);
+        c1.addChild(c4);
+        c1.addChild(c2);
         
-        c1.setLocation(new GeoLocation(locationListenerService));
-        c2.setLocation(new GeoLocation(locationListenerService));
-        c3.setLocation(new GeoLocation(locationListenerService));
+        Date currentDate = new Date();
         
-        assertTrue("c1 location not null", c1.getLocation().getLocation() != null);
+        c1.setCommentDate(currentDate);
+        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
         
-        c1.getLocation().setLatitude(53.526802);
-        c1.getLocation().setLongitude(-113.527170);
-        
-        c2.getLocation().setLatitude(53.523636);
-        c2.getLocation().setLongitude(-113.527437);
-        
-        c3.getLocation().setLatitude(53.527047);
-        c3.getLocation().setLongitude(-113.525662);
-        
-        assertTrue("Comment Scores calculated correctly.", 
-                    c3.getScoreFromParent() > c2.getScoreFromParent());
+        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
+        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
+        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
+        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
+
+        assertTrue("c5 is > 0", c5.getScoreFromParent() > 0);
+        assertTrue("c4 is > 0", c4.getScoreFromParent() > 0);
+        assertTrue("c3 is > 0", c3.getScoreFromParent() > 0);
+        assertTrue("c2 is > 0", c2.getScoreFromParent() > 0);
     }
     
     

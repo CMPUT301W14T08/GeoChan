@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 

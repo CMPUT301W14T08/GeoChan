@@ -111,7 +111,7 @@ public class Comment {
     public Comment() {
         super();
         this.textPost = "This is a test comment.";
-        this.commentDate = null;
+        this.commentDate = new Date();
         this.image = null;
         this.location = null;
         this.parent = null;
@@ -227,6 +227,7 @@ public class Comment {
     public double getDistanceFrom(GeoLocation g) {
         return this.getLocation().distance(g);
     }
+    
 
     /**
      * Determines the amount of time between when the Comment was
@@ -242,7 +243,11 @@ public class Comment {
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+            return 0.5;
+        } else {
+            return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+        }
     }
 
     /**
@@ -254,13 +259,13 @@ public class Comment {
     public double getScoreFromParent() {
         int distConst = 25;
         int timeConst = 10;
-        int maxScore = 1000;
+        int maxScore = 50000;
         /*
          * These can be changed depending on how we want to weight distance vs.
          * time for comment scoring.
          */
         if (this.parent == null) {
-            Log.e("Comment:", "getScore() was incorrectly called on a top comment.");
+            Log.e("Comment:", "getScoreFromParent() was incorrectly called on a top comment.");
             return 0;
         }
         double distScore = distConst
@@ -268,6 +273,33 @@ public class Comment {
         double timeScore = timeConst
                 * (1 / Math.sqrt(this.getTimeFrom(this.getParent().getCommentDate())));
         if ((distScore + timeScore) > maxScore) {
+            return maxScore;
+        } else {
+            return distScore + timeScore;
+        }
+    }
+    
+    /**
+     * Determines the score of a comment in a thread relevant to the user's current location
+     * and time.
+     * @param g The current GeoLocation of the user. In sorting, the Thread.sortLoc GeoLocation
+     * of the sorting thread is used and should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and current time.
+     */
+    public double getScoreFromUser(GeoLocation g){
+        int distConst = 25;
+        int timeConst = 10;
+        int maxScore = 10000;
+        
+        if(g == null){
+            Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
+            return 0;
+        }
+        double distScore = distConst
+                * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst
+                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        if ((distScore + timeScore) > maxScore){
             return maxScore;
         } else {
             return distScore + timeScore;

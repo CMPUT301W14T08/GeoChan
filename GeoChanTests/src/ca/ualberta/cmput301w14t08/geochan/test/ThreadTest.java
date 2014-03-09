@@ -2,12 +2,36 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
+import android.location.Location;
+import android.location.LocationManager;
+import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-public class ThreadTest extends TestCase {
+public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
+    
+    private MainActivity activity;
+    private Location location;
+    private LocationListenerService locationListenerService;
+    
+    public ThreadTest(){
+        super(MainActivity.class);
+    }
+    
+    @Override
+    protected void setUp() throws Exception {
+        //Shamelessly ripped from GeolocationTest to test Comments with Geolocations.
+        super.setUp();
+        this.activity = getActivity();
+        locationListenerService = new LocationListenerService(activity);
+        locationListenerService.startListening();
+    }
     
     public void testSortByDateNewest(){
         /*
@@ -77,4 +101,276 @@ public class ThreadTest extends TestCase {
         assertTrue("c5 is at index 3", (thread.getComments().get(3)) == c5);
     }
 
+    /**
+     * Tests the sorting of comments in a thread by the score relative to the user.
+     */
+    public void testSortByUserScoreHighest(){
+        long extraTime = 1320000;
+        ThreadComment t = new ThreadComment();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        Location locationT = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        t.setSortLoc(geoLocationT);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
+        t.getSortLoc().setLocation(locationT);
+        
+        
+        c1.getLocation().setLatitude(0);
+        c1.getLocation().setLongitude(0);
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
+        
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(currentDate);
+        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        t.addComment(c3);
+        t.addComment(c2);
+        t.addComment(c4);
+        t.addComment(c5);
+        t.addComment(c1);
+        
+        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
+        
+        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
+        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
+        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        
+        Log.i("Score of c1:", String.valueOf(c1.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c2:", String.valueOf(c2.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c3:", String.valueOf(c3.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c4:", String.valueOf(c4.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c5:", String.valueOf(c5.getScoreFromUser(t.getSortLoc())));
+        
+        c5.setCommentDate(currentDate);
+        c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        t.getSortLoc().setLatitude(20);
+        t.getSortLoc().setLongitude(20);
+        
+        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
+        
+        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
+        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
+        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+    }
+    
+    /**
+     * Tests the sorting of comments in a thread by the score relative to the user.
+     */
+    public void testSortByUserScoreLowest(){
+        long extraTime = 1320000;
+        ThreadComment t = new ThreadComment();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        Location locationT = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        t.setSortLoc(geoLocationT);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
+        t.getSortLoc().setLocation(locationT);
+        
+        c1.getLocation().setLatitude(0);
+        c1.getLocation().setLongitude(0);
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
+        
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(currentDate);
+        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        t.addComment(c3);
+        t.addComment(c2);
+        t.addComment(c4);
+        t.addComment(c5);
+        t.addComment(c1);
+        
+        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
+        
+        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
+        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
+        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        
+        c5.setCommentDate(currentDate);
+        c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
+        c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        
+        t.getSortLoc().setLatitude(20);
+        t.getSortLoc().setLongitude(20);
+        
+        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
+        
+        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
+        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
+        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+    }
+    
+    /**
+     * Tests the sorting of comments in a thread by the score relative to the user.
+     */
+    public void testSortByLocation(){
+        ThreadComment t = new ThreadComment();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        
+        Location location1 = new Location(LocationManager.GPS_PROVIDER);
+        Location location2 = new Location(LocationManager.GPS_PROVIDER);
+        Location location3 = new Location(LocationManager.GPS_PROVIDER);
+        Location location4 = new Location(LocationManager.GPS_PROVIDER);
+        Location location5 = new Location(LocationManager.GPS_PROVIDER);
+        Location locationT = new Location(LocationManager.GPS_PROVIDER);
+        
+        locationListenerService = new LocationListenerService(activity);
+        
+        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
+        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        t.setSortLoc(geoLocationT);
+        
+        c1.getLocation().setLocation(location1);
+        c2.getLocation().setLocation(location2);
+        c3.getLocation().setLocation(location3);
+        c4.getLocation().setLocation(location4);
+        c5.getLocation().setLocation(location5);
+        t.getSortLoc().setLocation(locationT);
+        
+        t.getSortLoc().setLatitude(0);
+        t.getSortLoc().setLongitude(0);
+        c1.getLocation().setLatitude(0);
+        c1.getLocation().setLongitude(0);
+        c2.getLocation().setLatitude(5);
+        c2.getLocation().setLongitude(5);
+        c3.getLocation().setLatitude(10);
+        c3.getLocation().setLongitude(10);
+        c4.getLocation().setLatitude(15);
+        c4.getLocation().setLongitude(15);
+        c5.getLocation().setLatitude(20);
+        c5.getLocation().setLongitude(20);
+        
+        t.addComment(c3);
+        t.addComment(c2);
+        t.addComment(c4);
+        t.addComment(c5);
+        t.addComment(c1);
+        
+        t.sortComments(SortComparators.SORT_LOCATION_MISC);
+        
+        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
+        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
+        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        
+        t.getSortLoc().setLatitude(20);
+        t.getSortLoc().setLongitude(20);
+        
+        t.sortComments(SortComparators.SORT_LOCATION_MISC);
+        
+        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
+        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
+        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
+        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
+        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+    }
 }
