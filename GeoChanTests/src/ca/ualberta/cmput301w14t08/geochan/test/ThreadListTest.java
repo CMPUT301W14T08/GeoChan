@@ -306,4 +306,104 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         assertEquals("t2 is at index 3:", t2, T.getThreads().get(3));
         assertEquals("t1 is at index 4:", t1, T.getThreads().get(4));
     }
+    
+    /**
+     * Tests the sorting of comments in a thread by the score relative to the user.
+     */
+    @SuppressWarnings("static-access")
+    public void testSortByLocation(){
+        LocationListenerService llc = new LocationListenerService(getActivity());
+        llc.startListening();
+        
+        ThreadList.clearThreads();
+        long extraTime = 1320000;
+        Date currentDate = new Date();
+        ThreadList T = new ThreadList();
+        
+        Thread t1 = new Thread();
+        Thread t2 = new Thread();
+        Thread t3 = new Thread();
+        Thread t4 = new Thread();
+        Thread t5 = new Thread();
+        
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        
+        Location loc1 = new Location(LocationManager.GPS_PROVIDER);
+        Location loc2 = new Location(LocationManager.GPS_PROVIDER);
+        Location loc3 = new Location(LocationManager.GPS_PROVIDER);
+        Location loc4 = new Location(LocationManager.GPS_PROVIDER);
+        Location loc5 = new Location(LocationManager.GPS_PROVIDER);
+        Location locT = new Location(LocationManager.GPS_PROVIDER);
+        
+        GeoLocation g1 = new GeoLocation(llc);
+        GeoLocation g2 = new GeoLocation(llc);
+        GeoLocation g3 = new GeoLocation(llc);
+        GeoLocation g4 = new GeoLocation(llc);
+        GeoLocation g5 = new GeoLocation(llc);
+        GeoLocation gT = new GeoLocation(llc);
+        
+        g1.setLocation(loc1);
+        g2.setLocation(loc2);
+        g3.setLocation(loc3);
+        g4.setLocation(loc4);
+        g5.setLocation(loc5);
+        gT.setLocation(locT);
+        
+        c1.setLocation(g1);
+        c2.setLocation(g2);
+        c3.setLocation(g3);
+        c4.setLocation(g4);
+        c5.setLocation(g5);
+        T.setSortLoc(gT);
+        
+        c1.setTextPost("c1");
+        c2.setTextPost("c2");
+        c3.setTextPost("c3");
+        c4.setTextPost("c4");
+        c5.setTextPost("c5");
+        
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        
+        t1.getBodyComment().getLocation().setLatitude(1);
+        t1.getBodyComment().getLocation().setLongitude(1);
+        t2.getBodyComment().getLocation().setLatitude(2);
+        t2.getBodyComment().getLocation().setLongitude(2);
+        t3.getBodyComment().getLocation().setLatitude(3);
+        t3.getBodyComment().getLocation().setLongitude(3);
+        t4.getBodyComment().getLocation().setLatitude(4);
+        t4.getBodyComment().getLocation().setLongitude(4);
+        t5.getBodyComment().getLocation().setLatitude(5);
+        t5.getBodyComment().getLocation().setLongitude(5);
+        
+        t1.setThreadDate(new Date(currentDate.getTime() + extraTime * 1));
+        t2.setThreadDate(new Date(currentDate.getTime() + extraTime * 2));
+        t3.setThreadDate(new Date(currentDate.getTime() + extraTime * 3));
+        t4.setThreadDate(new Date(currentDate.getTime() + extraTime * 4));
+        t5.setThreadDate(new Date(currentDate.getTime() + extraTime * 5));
+        
+        T.addThread(t2);
+        T.addThread(t3);
+        T.addThread(t1);
+        T.addThread(t5);
+        T.addThread(t4);
+        
+        T.getSortLoc().setLatitude(0);
+        T.getSortLoc().setLongitude(0);
+        
+        T.sortThreads(SortComparators.SORT_LOCATION_MISC);
+        
+        assertEquals("t1 is at index 0:", t1, T.getThreads().get(0));
+        assertEquals("t2 is at index 1:", t2, T.getThreads().get(1));
+        assertEquals("t3 is at index 2:", t3, T.getThreads().get(2));
+        assertEquals("t4 is at index 3:", t4, T.getThreads().get(3));
+        assertEquals("t5 is at index 4:", t5, T.getThreads().get(4));
+    }
 }

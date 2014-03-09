@@ -273,5 +273,21 @@ public class SortComparators {
             }
         };
     }
+    
+    public static Comparator<Thread> sortThreadsByLocation(final GeoLocation g){
+        return new Comparator<Thread>(){
+            public int compare(Thread t1, Thread t2){
+                double val1 = t1.getDistanceFrom(g);
+                double val2 = t2.getDistanceFrom(g);
+                if (val1 > val2){
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
 
 }

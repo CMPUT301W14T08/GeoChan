@@ -95,6 +95,9 @@ public class ThreadList {
         case SortComparators.SORT_USER_SCORE_LOWEST:
             Collections.sort(threads,SortComparators.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
             break;
+        case SortComparators.SORT_LOCATION_MISC:
+            Collections.sort(threads, SortComparators.sortThreadsByLocation(sortLoc));
+            break;
         }
     }
 }
