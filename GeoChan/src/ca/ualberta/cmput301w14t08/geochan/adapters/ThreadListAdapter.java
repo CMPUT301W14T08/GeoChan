@@ -30,7 +30,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * This is a custom adapter, used to display Thread objects in a list
@@ -38,9 +38,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.Thread;
 public class ThreadListAdapter extends BaseAdapter {
 
     private Context context;
-    private static ArrayList<Thread> displayList;
+    private static ArrayList<ThreadComment> displayList;
 
-    public ThreadListAdapter(Context context, ArrayList<Thread> list) {
+    public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
         this.context = context;
         ThreadListAdapter.displayList = list;
     }
@@ -51,7 +51,7 @@ public class ThreadListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Thread getItem(int position) {
+    public ThreadComment getItem(int position) {
         return displayList.get(position);
     }
 
@@ -62,7 +62,7 @@ public class ThreadListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Thread thread = getItem(position);
+        ThreadComment thread = getItem(position);
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context

@@ -26,7 +26,7 @@ import java.util.Collections;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
 public class ThreadList {
-    private static ArrayList<Thread> threads = null;
+    private static ArrayList<ThreadComment> threads = null;
     
     /**
      * A GeoLocation used for our thread sorting methods, should be set
@@ -38,14 +38,14 @@ public class ThreadList {
     /**
      * Getters and setters
      */
-    public static ArrayList<Thread> getThreads() {
+    public static ArrayList<ThreadComment> getThreads() {
         if (threads == null) {
-            threads = new ArrayList<Thread>();
+            threads = new ArrayList<ThreadComment>();
         }
         return threads;
     }
 
-    public static void setThreads(ArrayList<Thread> listOfThreads) {
+    public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
         threads = listOfThreads;
     }
     
@@ -59,14 +59,14 @@ public class ThreadList {
 
     public static void addThread(Comment comment, String title) {
         if (threads == null) {
-            threads = new ArrayList<Thread>();
+            threads = new ArrayList<ThreadComment>();
         }
-        threads.add(new Thread(comment, title));
+        threads.add(new ThreadComment(comment, title));
     }
 
-    public static void addThread(Thread t) {
+    public static void addThread(ThreadComment t) {
         if (threads == null) {
-            threads = new ArrayList<Thread>();
+            threads = new ArrayList<ThreadComment>();
         }
         threads.add(t);
     }

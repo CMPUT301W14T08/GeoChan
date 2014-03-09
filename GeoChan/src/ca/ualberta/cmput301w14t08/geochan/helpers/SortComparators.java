@@ -23,7 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.util.Comparator;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 public class SortComparators {
@@ -199,9 +199,9 @@ public class SortComparators {
     /**
      * Comparator for pushing old threads to the top.
      */
-    public static Comparator<Thread> sortThreadsByDateOldest() {
-        return new Comparator<Thread>() {
-            public int compare(Thread t1, Thread t2) {
+    public static Comparator<ThreadComment> sortThreadsByDateOldest() {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());
                 if (val < 0) {
                     return -1;
@@ -217,9 +217,9 @@ public class SortComparators {
     /**
      * Comparator for pushing new threads to the top.
      */
-    public static Comparator<Thread> sortThreadsByDateNewest() {
-        return new Comparator<Thread>() {
-            public int compare(Thread t1, Thread t2) {
+    public static Comparator<ThreadComment> sortThreadsByDateNewest() {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 int val = t1.getThreadDate().compareTo(t2.getThreadDate());
                 if (val < 0) {
                     return 1;
@@ -237,9 +237,9 @@ public class SortComparators {
      * @param g The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to highest score.
      */
-    public static Comparator<Thread> sortThreadsByUserScoreHighest(final GeoLocation g){
-        return new Comparator<Thread>(){
-            public int compare(Thread t1, Thread t2){
+    public static Comparator<ThreadComment> sortThreadsByUserScoreHighest(final GeoLocation g){
+        return new Comparator<ThreadComment>(){
+            public int compare(ThreadComment t1, ThreadComment t2){
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
@@ -258,9 +258,9 @@ public class SortComparators {
      * @param g The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to lowest score.
      */
-    public static Comparator<Thread> sortThreadsByUserScoreLowest(final GeoLocation g){
-        return new Comparator<Thread>(){
-            public int compare(Thread t1, Thread t2){
+    public static Comparator<ThreadComment> sortThreadsByUserScoreLowest(final GeoLocation g){
+        return new Comparator<ThreadComment>(){
+            public int compare(ThreadComment t1, ThreadComment t2){
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
@@ -274,9 +274,9 @@ public class SortComparators {
         };
     }
     
-    public static Comparator<Thread> sortThreadsByLocation(final GeoLocation g){
-        return new Comparator<Thread>(){
-            public int compare(Thread t1, Thread t2){
+    public static Comparator<ThreadComment> sortThreadsByLocation(final GeoLocation g){
+        return new Comparator<ThreadComment>(){
+            public int compare(ThreadComment t1, ThreadComment t2){
                 double val1 = t1.getDistanceFrom(g);
                 double val2 = t2.getDistanceFrom(g);
                 if (val1 > val2){

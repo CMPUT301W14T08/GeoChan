@@ -12,7 +12,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.Thread;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
@@ -54,7 +54,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        Thread thread = new Thread(c1, "This thread is for testing!");
+        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
         thread.addComment(c4);
         thread.addComment(c3);
         thread.addComment(c5);
@@ -88,7 +88,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        Thread thread = new Thread(c1, "This thread is for testing!");
+        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
         thread.addComment(c4);
         thread.addComment(c3);
         thread.addComment(c5);
@@ -106,7 +106,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
      */
     public void testSortByUserScoreHighest(){
         long extraTime = 1320000;
-        Thread t = new Thread();
+        ThreadComment t = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
@@ -206,7 +206,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
      */
     public void testSortByUserScoreLowest(){
         long extraTime = 1320000;
-        Thread t = new Thread();
+        ThreadComment t = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
@@ -298,7 +298,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
      * Tests the sorting of comments in a thread by the score relative to the user.
      */
     public void testSortByLocation(){
-        Thread t = new Thread();
+        ThreadComment t = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
