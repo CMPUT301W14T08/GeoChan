@@ -127,7 +127,7 @@ public class Thread {
     public double getTimeFrom(Date d) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(this.getBodyComment().getCommentDate());
+        cal1.setTime(this.getThreadDate());
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();

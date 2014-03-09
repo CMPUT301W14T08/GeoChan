@@ -5,6 +5,7 @@ import java.util.Date;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -175,6 +176,12 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
         assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
         assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        
+        Log.i("Score of c1:", String.valueOf(c1.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c2:", String.valueOf(c2.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c3:", String.valueOf(c3.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c4:", String.valueOf(c4.getScoreFromUser(t.getSortLoc())));
+        Log.i("Score of c5:", String.valueOf(c5.getScoreFromUser(t.getSortLoc())));
         
         c5.setCommentDate(currentDate);
         c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));

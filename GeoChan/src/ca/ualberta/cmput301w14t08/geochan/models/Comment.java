@@ -111,7 +111,7 @@ public class Comment {
     public Comment() {
         super();
         this.textPost = "This is a test comment.";
-        this.commentDate = null;
+        this.commentDate = new Date();
         this.image = null;
         this.location = null;
         this.parent = null;

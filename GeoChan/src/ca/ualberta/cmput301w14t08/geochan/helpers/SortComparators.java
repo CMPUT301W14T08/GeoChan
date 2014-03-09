@@ -243,9 +243,9 @@ public class SortComparators {
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
-                    return 1;
-                } else if (val1 < val2) {
                     return -1;
+                } else if (val1 < val2) {//mixed these 2 around
+                    return 1;
                 } else {
                     return 0;
                 }
@@ -264,9 +264,9 @@ public class SortComparators {
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
-                    return -1;
-                } else if (val1 < val2) {
                     return 1;
+                } else if (val1 < val2) {
+                    return -1;
                 } else {
                     return 0;
                 }
