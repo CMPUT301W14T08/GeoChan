@@ -25,39 +25,39 @@ import java.util.ArrayList;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
 public class GeoLocationLog {
-    
-    private static GeoLocationLog instance = null;
-    private static ArrayList<LogEntry> entries; 
-    
-    private GeoLocationLog() {
-        entries = new ArrayList<LogEntry>(); 
-    }
 
-    public static GeoLocationLog getInstance() {
-        if (instance == null) {
-            instance = new GeoLocationLog();
-        }
-        return instance;
-    }
-   
-    public void addLogEntry(String threadTitle,GeoLocation geoLocation) {
-        LogEntry logEntry = new LogEntry(threadTitle,geoLocation);
-        entries.add(logEntry);
-    }
-    
-    public ArrayList<LogEntry> getLogEntries() {
-        return entries;
-    }
-    
-    public boolean isEmpty() {
-        return entries.size() == 0;
-    }
-    
-    public void clearLog() {
-        entries.clear();
-    }
-    
-    public int size() {
-        return entries.size();
-    }
+	private static GeoLocationLog instance = null;
+	private static ArrayList<LogEntry> entries;
+
+	private GeoLocationLog() {
+		entries = new ArrayList<LogEntry>();
+	}
+
+	public static GeoLocationLog getInstance() {
+		if (instance == null) {
+			instance = new GeoLocationLog();
+		}
+		return instance;
+	}
+
+	public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
+		LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
+		entries.add(logEntry);
+	}
+
+	public ArrayList<LogEntry> getLogEntries() {
+		return entries;
+	}
+
+	public boolean isEmpty() {
+		return entries.size() == 0;
+	}
+
+	public void clearLog() {
+		entries.clear();
+	}
+
+	public int size() {
+		return entries.size();
+	}
 }

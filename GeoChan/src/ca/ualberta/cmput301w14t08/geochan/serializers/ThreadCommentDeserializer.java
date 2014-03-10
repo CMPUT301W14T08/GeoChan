@@ -35,40 +35,45 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment> {
+public class ThreadCommentDeserializer implements
+		JsonDeserializer<ThreadComment> {
 
-    /* (non-Javadoc)
-     * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
-     */
-    @Override
-    public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-            throws JsonParseException {
-        JsonObject object = json.getAsJsonObject();
-        String title = object.get("title").getAsString();
-        long threadDate = object.get("threadDate").getAsLong();
-        boolean hasImage = object.get("hasImage").getAsBoolean();
-        String locationString = object.get("location").getAsString();
-        List<String> locationEntries = Arrays.asList(locationString.split(","));
-        double latitude = Double.parseDouble(locationEntries.get(0));
-        double longitude = Double.parseDouble(locationEntries.get(1));
-        String user = object.get("user").getAsString();
-        String hash = object.get("hash").getAsString();
-        String id = object.get("id").getAsString();
-        String textPost = object.get("textPost").getAsString();
-        if (hasImage) {
-            // TODO: Implement decoding of images
-        }
-        GeoLocation location = new GeoLocation(latitude, longitude);
-        final Comment c = new Comment(textPost, location);
-        c.getCommentDate().setTime(threadDate);
-        c.setUser(user);
-        c.setHash(hash);
-        c.setId(Long.parseLong(id));
-        final ThreadComment comment = new ThreadComment(c, title);
-        comment.setThreadDate(new Date(threadDate));
-        comment.setId(Long.parseLong(id));
-        // TODO: Set image
-        return comment;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
+	 * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+	 */
+	@Override
+	public ThreadComment deserialize(JsonElement json, Type type,
+			JsonDeserializationContext context) throws JsonParseException {
+		JsonObject object = json.getAsJsonObject();
+		String title = object.get("title").getAsString();
+		long threadDate = object.get("threadDate").getAsLong();
+		boolean hasImage = object.get("hasImage").getAsBoolean();
+		String locationString = object.get("location").getAsString();
+		List<String> locationEntries = Arrays.asList(locationString.split(","));
+		double latitude = Double.parseDouble(locationEntries.get(0));
+		double longitude = Double.parseDouble(locationEntries.get(1));
+		String user = object.get("user").getAsString();
+		String hash = object.get("hash").getAsString();
+		String id = object.get("id").getAsString();
+		String textPost = object.get("textPost").getAsString();
+		if (hasImage) {
+			// TODO: Implement decoding of images
+		}
+		GeoLocation location = new GeoLocation(latitude, longitude);
+		final Comment c = new Comment(textPost, location);
+		c.getCommentDate().setTime(threadDate);
+		c.setUser(user);
+		c.setHash(hash);
+		c.setId(Long.parseLong(id));
+		final ThreadComment comment = new ThreadComment(c, title);
+		comment.setThreadDate(new Date(threadDate));
+		comment.setId(Long.parseLong(id));
+		// TODO: Set image
+		return comment;
+	}
 
 }

@@ -44,67 +44,78 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * Responsible for the UI fragment that allows a user to post a new thread.
  */
 public class PostThreadFragment extends Fragment {
-    private LocationListenerService locationListenerService;
+	private LocationListenerService locationListenerService;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(false);
-        return inflater.inflate(R.layout.fragment_post_thread, container, false);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		setHasOptionsMenu(false);
+		return inflater
+				.inflate(R.layout.fragment_post_thread, container, false);
+	}
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		locationListenerService = new LocationListenerService(getActivity());
+		locationListenerService.startListening();
+	}
 
-    public void postNewThread(View v){
-        if (v.getId() == R.id.post_thread_button) {
-            EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
-            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
-            String title = editTitle.getText().toString();
-            String comment = editComment.getText().toString();
-            if (title.equals("")) {
-                ErrorDialog.show(getActivity(), "Title can not be left blank.");
-            } else {
-                GeoLocation geoLocation = new GeoLocation(locationListenerService);
-                if (geoLocation.getLocation() == null) {
-                    //ErrorDialog.show(getActivity(), "Could not obtain location.");
-                    // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, null);
-                    //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance();
-                    client.postThread(new ThreadComment(newComment, title));
-                } else {
-                    // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, geoLocation);
-                    //ThreadList.addThread(newComment, title);
-                    ElasticSearchClient client = ElasticSearchClient.getInstance();
-                    client.postThread(new ThreadComment(newComment, title));
-                    // log the thread and the geolocation
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-                    geoLocationLog.addLogEntry(title, geoLocation);
-                }
-                InputMethodManager inputManager = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                this.getFragmentManager().popBackStackImmediate();
-            }
-        }
-    }
+	public void postNewThread(View v) {
+		if (v.getId() == R.id.post_thread_button) {
+			EditText editTitle = (EditText) this.getView().findViewById(
+					R.id.titlePrompt);
+			EditText editComment = (EditText) this.getView().findViewById(
+					R.id.commentBody);
+			String title = editTitle.getText().toString();
+			String comment = editComment.getText().toString();
+			if (title.equals("")) {
+				ErrorDialog.show(getActivity(), "Title can not be left blank.");
+			} else {
+				GeoLocation geoLocation = new GeoLocation(
+						locationListenerService);
+				if (geoLocation.getLocation() == null) {
+					// ErrorDialog.show(getActivity(),
+					// "Could not obtain location.");
+					// Create a new comment object and set username
+					Comment newComment = new Comment(comment, null);
+					// ThreadList.addThread(newComment, title);
+					ElasticSearchClient client = ElasticSearchClient
+							.getInstance();
+					client.postThread(new ThreadComment(newComment, title));
+				} else {
+					// Create a new comment object and set username
+					Comment newComment = new Comment(comment, geoLocation);
+					// ThreadList.addThread(newComment, title);
+					ElasticSearchClient client = ElasticSearchClient
+							.getInstance();
+					client.postThread(new ThreadComment(newComment, title));
+					// log the thread and the geolocation
+					GeoLocationLog geoLocationLog = GeoLocationLog
+							.getInstance();
+					geoLocationLog.addLogEntry(title, geoLocation);
+				}
+				InputMethodManager inputManager = (InputMethodManager) getActivity()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(getActivity()
+						.getCurrentFocus().getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+				this.getFragmentManager().popBackStackImmediate();
+			}
+		}
+	}
 
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        UserHashManager manager = UserHashManager.getInstance();
-        return preferences.getString("username", "Anon") + "#" + manager.getHash();
-    }
+	public String retrieveUsername() {
+		SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		UserHashManager manager = UserHashManager.getInstance();
+		return preferences.getString("username", "Anon") + "#"
+				+ manager.getHash();
+	}
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        locationListenerService.stopListening();
-    }
+	@Override
+	public void onStop() {
+		super.onStop();
+		locationListenerService.stopListening();
+	}
 }

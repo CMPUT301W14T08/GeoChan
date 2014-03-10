@@ -35,44 +35,48 @@ import com.google.gson.JsonSerializer;
 
 public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
-     * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
-     */
-    @Override
-    public JsonElement serialize(ThreadComment thread, Type type, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        object.addProperty("title", thread.getTitle());
-        object.addProperty("threadDate", thread.getThreadDate().getTime());
-        object.addProperty("hasImage", thread.getBodyComment().hasImage());
-        object.addProperty("id", thread.getId());
-        if (thread.getBodyComment().getLocation() != null) {
-            object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
-                    + "," + thread.getBodyComment().getLocation().getLongitude());
-        } else {
-            object.addProperty("location", "-999,-999");
-        }
-        object.addProperty("user", thread.getBodyComment().getUser());
-        object.addProperty("hash", thread.getBodyComment().getHash());
-        object.addProperty("textPost", thread.getBodyComment().getTextPost());
-        if (thread.getBodyComment().hasImage()) {
-            Picture picture = thread.getBodyComment().getImage();
-            Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(),
-                    Bitmap.Config.RGB_565);
-            /*
-             * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
-             * -string
-             */
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            object.addProperty("image", encoded);
-            object.addProperty("imageThumbnail", encoded);
-        }
-        return object;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+	 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+	 */
+	@Override
+	public JsonElement serialize(ThreadComment thread, Type type,
+			JsonSerializationContext context) {
+		JsonObject object = new JsonObject();
+		object.addProperty("title", thread.getTitle());
+		object.addProperty("threadDate", thread.getThreadDate().getTime());
+		object.addProperty("hasImage", thread.getBodyComment().hasImage());
+		object.addProperty("id", thread.getId());
+		if (thread.getBodyComment().getLocation() != null) {
+			object.addProperty("location", thread.getBodyComment()
+					.getLocation().getLatitude()
+					+ ","
+					+ thread.getBodyComment().getLocation().getLongitude());
+		} else {
+			object.addProperty("location", "-999,-999");
+		}
+		object.addProperty("user", thread.getBodyComment().getUser());
+		object.addProperty("hash", thread.getBodyComment().getHash());
+		object.addProperty("textPost", thread.getBodyComment().getTextPost());
+		if (thread.getBodyComment().hasImage()) {
+			Picture picture = thread.getBodyComment().getImage();
+			Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(),
+					picture.getHeight(), Bitmap.Config.RGB_565);
+			/*
+			 * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
+			 * -string
+			 */
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 90,
+					byteArrayOutputStream);
+			byte[] byteArray = byteArrayOutputStream.toByteArray();
+			String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+			object.addProperty("image", encoded);
+			object.addProperty("imageThumbnail", encoded);
+		}
+		return object;
+	}
 
 }

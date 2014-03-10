@@ -29,59 +29,59 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
  */
 public class GeoLocation {
 
-    private Location location;
+	private Location location;
 
-    public GeoLocation(LocationListenerService locationListenerService) {
-        this.location = locationListenerService.getCurrentLocation();
-    }
-    
-    public GeoLocation(double latitude, double longitude) {
-        this.location = new Location(LocationManager.GPS_PROVIDER);
-        setLatitude(latitude);
-        setLongitude(longitude);
-    }    
-        
-    public GeoLocation(Location location) {
-        this.location = location;
-    }
+	public GeoLocation(LocationListenerService locationListenerService) {
+		this.location = locationListenerService.getCurrentLocation();
+	}
 
-    public double distance(GeoLocation toLocation) {
-        double latDist = this.getLatitude() - toLocation.getLatitude();
-        double longDist = this.getLongitude() - toLocation.getLongitude();
-        return Math.sqrt(Math.pow(latDist, 2) + Math.pow(longDist, 2));
-    }
+	public GeoLocation(double latitude, double longitude) {
+		this.location = new Location(LocationManager.GPS_PROVIDER);
+		setLatitude(latitude);
+		setLongitude(longitude);
+	}
 
-    public Location getLocation() {
-        return location;
-    }
+	public GeoLocation(Location location) {
+		this.location = location;
+	}
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+	public double distance(GeoLocation toLocation) {
+		double latDist = this.getLatitude() - toLocation.getLatitude();
+		double longDist = this.getLongitude() - toLocation.getLongitude();
+		return Math.sqrt(Math.pow(latDist, 2) + Math.pow(longDist, 2));
+	}
 
-    public double getLatitude() {
-        return location.getLatitude();
-    }
+	public Location getLocation() {
+		return location;
+	}
 
-    public double getLongitude() {
-        return location.getLongitude();
-    }
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
-    // create a new location so we do not affect the LocationListenerService's
-    // lastKnownLocation
-    public void setLatitude(double newLat) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(newLat);
-        newLocation.setLongitude(this.location.getLongitude());
-        this.location = newLocation;
-    }
+	public double getLatitude() {
+		return location.getLatitude();
+	}
 
-    // create a new location so we do not affect the LocationListenerService's
-    // lastKnownLocation
-    public void setLongitude(double newLong) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLongitude(newLong);
-        newLocation.setLatitude(this.location.getLatitude());
-        this.location = newLocation;
-    }
+	public double getLongitude() {
+		return location.getLongitude();
+	}
+
+	// create a new location so we do not affect the LocationListenerService's
+	// lastKnownLocation
+	public void setLatitude(double newLat) {
+		Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+		newLocation.setLatitude(newLat);
+		newLocation.setLongitude(this.location.getLongitude());
+		this.location = newLocation;
+	}
+
+	// create a new location so we do not affect the LocationListenerService's
+	// lastKnownLocation
+	public void setLongitude(double newLong) {
+		Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+		newLocation.setLongitude(newLong);
+		newLocation.setLatitude(this.location.getLatitude());
+		this.location = newLocation;
+	}
 }

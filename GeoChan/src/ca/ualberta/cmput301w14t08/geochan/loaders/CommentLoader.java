@@ -32,43 +32,45 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
 	ArrayList<Comment> list = null;
 	ElasticSearchClient client;
-    String id;
-    
-    public static final int LOADER_ID = 1;
-    
-    public CommentLoader(Context context, String id) {
-        super(context);
-        client = ElasticSearchClient.getInstance();
-        this.id = id;
-    }
+	String id;
 
-    /* (non-Javadoc)
-     * @see android.content.AsyncTaskLoader#loadInBackground()
-     */
-    @Override
-    public ArrayList<Comment> loadInBackground() {
-        if (list == null) {
-        	list = new ArrayList<Comment>();
-        }
-        return client.getComments(id);
-    }
-    
-    @Override
-    public void deliverResult(ArrayList<Comment> list) {
-    	this.list = list;
-    	if (isStarted()) {
-    		super.deliverResult(list);
-    	}
-    }
-    
-    @Override
-    protected void onStartLoading() {
-    	if (list != null) {
-    		deliverResult(list);
-    	}
-    	
-    	Timer timer = new Timer();
-    	timer.scheduleAtFixedRate(new TimerTask(){
+	public static final int LOADER_ID = 1;
+
+	public CommentLoader(Context context, String id) {
+		super(context);
+		client = ElasticSearchClient.getInstance();
+		this.id = id;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.content.AsyncTaskLoader#loadInBackground()
+	 */
+	@Override
+	public ArrayList<Comment> loadInBackground() {
+		if (list == null) {
+			list = new ArrayList<Comment>();
+		}
+		return client.getComments(id);
+	}
+
+	@Override
+	public void deliverResult(ArrayList<Comment> list) {
+		this.list = list;
+		if (isStarted()) {
+			super.deliverResult(list);
+		}
+	}
+
+	@Override
+	protected void onStartLoading() {
+		if (list != null) {
+			deliverResult(list);
+		}
+
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -77,10 +79,10 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
 					forceLoad();
 				}
 			}
-    	}, 5000, 60000);
-    	
-    	if (list == null) {
-    		forceLoad();
-    	}
-    }
+		}, 5000, 60000);
+
+		if (list == null) {
+			forceLoad();
+		}
+	}
 }

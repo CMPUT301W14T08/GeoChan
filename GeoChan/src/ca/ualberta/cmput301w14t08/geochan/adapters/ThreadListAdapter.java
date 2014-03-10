@@ -37,68 +37,70 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  */
 public class ThreadListAdapter extends BaseAdapter {
 
-    private Context context;
-    private static ArrayList<ThreadComment> displayList;
+	private Context context;
+	private static ArrayList<ThreadComment> displayList;
 
-    public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
-        this.context = context;
-        ThreadListAdapter.displayList = list;
-    }
+	public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
+		this.context = context;
+		ThreadListAdapter.displayList = list;
+	}
 
-    @Override
-    public int getCount() {
-        return displayList.size();
-    }
+	@Override
+	public int getCount() {
+		return displayList.size();
+	}
 
-    @Override
-    public ThreadComment getItem(int position) {
-        return displayList.get(position);
-    }
+	@Override
+	public ThreadComment getItem(int position) {
+		return displayList.get(position);
+	}
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
 
-    public void setList(ArrayList<ThreadComment> list) {
-        displayList = list;
-        notifyDataSetChanged();
-    }
+	public void setList(ArrayList<ThreadComment> list) {
+		displayList = list;
+		notifyDataSetChanged();
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ThreadComment thread = getItem(position);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ThreadComment thread = getItem(position);
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.thread_list_item_no_image, null);
-        }
-        // Thread title
-        TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
-        title.setText(thread.getTitle());
-        // Thread bodyComment snippet
-        TextView body = (TextView) convertView.findViewById(R.id.commentBody);
-        body.setText(thread.getBodyComment().getTextPost());
-        // Thread timestamp
-        TextView time = (TextView) convertView.findViewById(R.id.commentDate);
-        time.setText(thread.getBodyComment().getCommentDateString());
-        // Thread user creator
-        TextView user = (TextView) convertView.findViewById(R.id.commentBy);
-        user.setText("posted by " + thread.getBodyComment().getUser() + "#"
-                + thread.getBodyComment().getHash());
-        // Location text
-        TextView location = (TextView) convertView.findViewById(R.id.locationText);
-        GeoLocation loc = thread.getBodyComment().getLocation();
-        if (loc != null) {
-            double roundedLat = Math.round(loc.getLatitude() * 100) / 100;
-            double roundedLong = Math.round(loc.getLongitude() * 100) / 100;
-            location.setText("Latitude: " + Double.toString(roundedLat) + " Longitude: "
-                    + Double.toString(roundedLong));
-        } else {
-            location.setText("Error: No location found");
-        }
-        return convertView;
-    }
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.thread_list_item_no_image,
+					null);
+		}
+		// Thread title
+		TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
+		title.setText(thread.getTitle());
+		// Thread bodyComment snippet
+		TextView body = (TextView) convertView.findViewById(R.id.commentBody);
+		body.setText(thread.getBodyComment().getTextPost());
+		// Thread timestamp
+		TextView time = (TextView) convertView.findViewById(R.id.commentDate);
+		time.setText(thread.getBodyComment().getCommentDateString());
+		// Thread user creator
+		TextView user = (TextView) convertView.findViewById(R.id.commentBy);
+		user.setText("posted by " + thread.getBodyComment().getUser() + "#"
+				+ thread.getBodyComment().getHash());
+		// Location text
+		TextView location = (TextView) convertView
+				.findViewById(R.id.locationText);
+		GeoLocation loc = thread.getBodyComment().getLocation();
+		if (loc != null) {
+			double roundedLat = Math.round(loc.getLatitude() * 100) / 100;
+			double roundedLong = Math.round(loc.getLongitude() * 100) / 100;
+			location.setText("Latitude: " + Double.toString(roundedLat)
+					+ " Longitude: " + Double.toString(roundedLong));
+		} else {
+			location.setText("Error: No location found");
+		}
+		return convertView;
+	}
 
 }

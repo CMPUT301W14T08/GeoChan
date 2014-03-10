@@ -24,27 +24,27 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 public class LogEntry {
 
-    private String threadTitle;
-    private GeoLocation geoLocation;
+	private String threadTitle;
+	private GeoLocation geoLocation;
 
-    public LogEntry(String title, GeoLocation geoLocation) {
-        this.threadTitle = title;
-        this.geoLocation = geoLocation;
-    }
+	public LogEntry(String title, GeoLocation geoLocation) {
+		this.threadTitle = title;
+		this.geoLocation = geoLocation;
+	}
 
-    public String getThreadTitle() {
-        return threadTitle;
-    }
+	public String getThreadTitle() {
+		return threadTitle;
+	}
 
-    public void setThreadTitle(String threadTitle) {
-        this.threadTitle = threadTitle;
-    }
+	public void setThreadTitle(String threadTitle) {
+		this.threadTitle = threadTitle;
+	}
 
-    public GeoLocation getGeoLocation() {
-        return geoLocation;
-    }
-    
-    public void setGeoLocation(GeoLocation geoLocation) {
-        this.geoLocation = geoLocation;
-    }
+	public GeoLocation getGeoLocation() {
+		return geoLocation;
+	}
+
+	public void setGeoLocation(GeoLocation geoLocation) {
+		this.geoLocation = geoLocation;
+	}
 }

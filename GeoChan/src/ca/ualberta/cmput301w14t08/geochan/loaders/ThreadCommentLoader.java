@@ -29,44 +29,47 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
+public class ThreadCommentLoader extends
+		AsyncTaskLoader<ArrayList<ThreadComment>> {
 	ArrayList<ThreadComment> list = null;
 	ElasticSearchClient client;
-	
-	public static final int LOADER_ID = 0;
-	
-    public ThreadCommentLoader(Context context) {
-        super(context);
-        client = ElasticSearchClient.getInstance();
-    }
 
-    /* (non-Javadoc)
-     * @see android.content.AsyncTaskLoader#loadInBackground()
-     */
-    @Override
-    public ArrayList<ThreadComment> loadInBackground() {
-        if (list == null) {
-        	list = new ArrayList<ThreadComment>();
-        }
-	    return client.getThreads();
-    }
-    
-    @Override
-    public void deliverResult(ArrayList<ThreadComment> list) {
-    	this.list = list;
-    	if (isStarted()) {
-    		super.deliverResult(list);
-    	}
-    }
-    
-    @Override
-    protected void onStartLoading() {
-    	if (list != null) {
-    		deliverResult(list);
-    	}
-    	
-    	Timer timer = new Timer();
-    	timer.scheduleAtFixedRate(new TimerTask(){
+	public static final int LOADER_ID = 0;
+
+	public ThreadCommentLoader(Context context) {
+		super(context);
+		client = ElasticSearchClient.getInstance();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.content.AsyncTaskLoader#loadInBackground()
+	 */
+	@Override
+	public ArrayList<ThreadComment> loadInBackground() {
+		if (list == null) {
+			list = new ArrayList<ThreadComment>();
+		}
+		return client.getThreads();
+	}
+
+	@Override
+	public void deliverResult(ArrayList<ThreadComment> list) {
+		this.list = list;
+		if (isStarted()) {
+			super.deliverResult(list);
+		}
+	}
+
+	@Override
+	protected void onStartLoading() {
+		if (list != null) {
+			deliverResult(list);
+		}
+
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -75,10 +78,10 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
 					forceLoad();
 				}
 			}
-    	}, 5000, 60000);
-    	
-    	if (list == null) {
-    		forceLoad();
-    	}
-    }
+		}, 5000, 60000);
+
+		if (list == null) {
+			forceLoad();
+		}
+	}
 }
