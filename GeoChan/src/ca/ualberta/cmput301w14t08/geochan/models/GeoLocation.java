@@ -22,14 +22,12 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Parcel;
-import android.os.Parcelable;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
  * Responsible for GeoLocation services for Comment objects
  */
-public class GeoLocation implements Parcelable {
+public class GeoLocation {
 
     private Location location;
 
@@ -74,17 +72,5 @@ public class GeoLocation implements Parcelable {
         newLocation.setLatitude(newLat);
         newLocation.setLongitude(newLong);
         this.location = newLocation;
-    }
-
-    @Override
-    public int describeContents() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stub
-        
     }
 }
