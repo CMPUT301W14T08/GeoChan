@@ -1,0 +1,17 @@
+{
+	"geoComment" : {
+		"properties" : {
+			"commentDate" : {"type" : "date", "format" : "date_time"},
+			"hasImage" : {"type" : "boolean", "null_value" : false},
+			"location" : {"type" : "geo_point", "lat_lon" : true},
+			"user" : {"type" : "string", "index" : "not_analyzed"},
+			"hash" : {"type" : "string", "index" : "not_analyzed"},
+			"textPost" : {"type" : "string", "store" : true},
+			"image" : {"type" : "binary"},
+			"imageThumbnail" : {"type" : "binary"},
+			"depth" : {"type" : "integer"},
+			"parent" : {"type" : "string", "null_value" : "0"},
+            "id" : {"type" : "string"}
+		}
+	}
+}

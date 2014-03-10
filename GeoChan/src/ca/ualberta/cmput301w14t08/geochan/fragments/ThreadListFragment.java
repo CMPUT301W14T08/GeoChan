@@ -24,7 +24,9 @@ import java.util.ArrayList;
 
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,8 +37,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadListLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -60,7 +65,13 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        /*setEmptyText(getText(R.string.no_threads));
+        setHasOptionsMenu(true);
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+        setListAdapter(adapter);
+        setListShown(false);*/
         getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().getLoader(0).startLoading();
     }
 
     @Override
@@ -96,9 +107,9 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
                 getFragmentManager().executePendingTransactions();
             }
         });
-        // SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        // int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
-        // ThreadList.sortThreads(sort);
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
+        ThreadList.sortThreads(sort);
         adapter.notifyDataSetChanged();
     }
 
@@ -107,6 +118,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
+        Toast.makeText(getActivity(), "Loading...", Toast.LENGTH_SHORT).show();
         return new ThreadListLoader(getActivity());
     }
 
@@ -115,7 +127,9 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader, ArrayList<ThreadComment> list) {
+        Toast.makeText(getActivity(), "Loading finished", Toast.LENGTH_SHORT).show();
         adapter.setList(list);
+        adapter.notifyDataSetChanged();
     }
 
     /* (non-Javadoc)

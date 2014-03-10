@@ -47,22 +47,31 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         object.addProperty("title", thread.getTitle());
         object.addProperty("threadDate", thread.getThreadDate().getTime());
         object.addProperty("hasImage", thread.getBodyComment().hasImage());
-        object.addProperty("location", thread.getBodyComment().getLocation().getLatitude() + ","
-                + thread.getBodyComment().getLocation().getLongitude());
+        object.addProperty("id", thread.getId());
+        if (thread.getBodyComment().getLocation() != null) {
+            object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
+                    + "," + thread.getBodyComment().getLocation().getLongitude());
+        } else {
+            object.addProperty("location", "-999,-999");
+        }
         object.addProperty("user", thread.getBodyComment().getUser());
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
         if (thread.getBodyComment().hasImage()) {
             Picture picture = thread.getBodyComment().getImage();
-            Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.RGB_565);
-            /* http://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string */
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
+            Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(),
+                    Bitmap.Config.RGB_565);
+            /*
+             * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
+             * -string
+             */
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encoded);
-        } 
+        }
         return object;
     }
 

@@ -43,9 +43,15 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         JsonObject object = new JsonObject();
         object.addProperty("commentDate", comment.getCommentDate().getTime());
         object.addProperty("hasImage", comment.hasImage());
-        object.addProperty("location", comment.getLocation().getLatitude() + "," + comment.getLocation().getLongitude());
+        if (comment.getLocation() != null) {
+            object.addProperty("location", comment.getLocation().getLatitude()
+                    + "," + comment.getLocation().getLongitude());
+        } else {
+            object.addProperty("location", "-999,-999");
+        }
         object.addProperty("user", comment.getUser());
         object.addProperty("hash", comment.getHash());
+        object.addProperty("id", comment.getId());
         object.addProperty("textPost", comment.getTextPost());
         if (comment.hasImage()) {
             Picture picture = comment.getImage();
@@ -61,8 +67,6 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         object.addProperty("depth", comment.getDepth());
         if (comment.getParent() != null) {
             object.addProperty("parent", comment.getParent().getId());
-        } else {
-            object.addProperty("parent", "0");
         }
         return object;
     }

@@ -58,6 +58,10 @@ public class ThreadComment {
         return Long.toString(id);
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     public Comment getBodyComment() {
         return bodyComment;
     }

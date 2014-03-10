@@ -194,7 +194,10 @@ public class Comment {
         return Long.toString(id);
     }
 
-
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     /**
      * Sorts child comments according to the tag passed.
      * 

@@ -22,6 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -48,20 +49,24 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         boolean hasImage = object.get("hasImage").getAsBoolean();
         String locationString = object.get("location").getAsString();
         List<String> locationEntries = Arrays.asList(locationString.split(","));
-        double latitude = Long.parseLong(locationEntries.get(0));
-        double longitude = Long.parseLong(locationEntries.get(1));
+        double latitude = Double.parseDouble(locationEntries.get(0));
+        double longitude = Double.parseDouble(locationEntries.get(1));
         String user = object.get("user").getAsString();
         String hash = object.get("hash").getAsString();
+        String id = object.get("id").getAsString(); // TODO ADD TO MAP
         String textPost = object.get("textPost").getAsString();
         if (hasImage) {
             // TODO: Implement decoding of images
         }
         GeoLocation location = new GeoLocation(latitude, longitude);
-        ThreadComment comment = new ThreadComment(new Comment(textPost, location), title);
-        comment.getBodyComment().getCommentDate().setTime(threadDate);
-        comment.getThreadDate().setTime(threadDate);
-        comment.getBodyComment().setUser(user);
-        comment.getBodyComment().setHash(hash);
+        final Comment c = new Comment(textPost, location);
+        c.getCommentDate().setTime(threadDate);
+        c.setUser(user);
+        c.setHash(hash);
+        c.setId(Long.parseLong(id));
+        final ThreadComment comment = new ThreadComment(c, title);
+        comment.setThreadDate(new Date(threadDate));
+        comment.setId(Long.parseLong(id));
         // TODO: Set image
         return comment;
     }

@@ -22,16 +22,25 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializer;
+import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentDeserializer;
 import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class ElasticSearchClient {
     private Context context;
@@ -102,8 +111,65 @@ public class ElasticSearchClient {
         t.start();
     }
     
-    public String getThreads() {
-        return null;
+    public ArrayList<ThreadComment> getThreads() {
+        /*Thread t = new Thread() {
+            @Override
+            public void run() {
+                String query = "{\n" + 
+                        "   \"query\": {\n" +
+                        "       \"match_all\" : { } \n" +
+                        "   }\n" +
+                        "}";
+                Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+                JestResult result = null;
+                try {
+                    result = client.execute(search);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                String json = result.getJsonString();
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
+                gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
+                Gson gson = gsonBuilder.create();
+                Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>(){}.getType();
+                ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+                ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+                for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
+                    ThreadComment comment = r.getSource();
+                    list.add(comment);
+                }
+                ThreadList.setThreads(list);
+            }
+        };
+        t.start();*/
+        String query = "{\n" + 
+                "   \"query\": {\n" +
+                "       \"match_all\" : { } \n" +
+                "   }\n" +
+                "}";
+        Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+        JestResult result = null;
+        try {
+            result = client.execute(search);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String json = result.getJsonString();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
+        gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
+        Gson gson = gsonBuilder.create();
+        Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>(){}.getType();
+        ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+        for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
+            ThreadComment comment = r.getSource();
+            list.add(comment);
+        }
+        return list;
     }
     
     public String getComments() {
