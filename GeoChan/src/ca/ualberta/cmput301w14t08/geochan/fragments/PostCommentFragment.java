@@ -35,6 +35,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -85,13 +86,13 @@ public class PostCommentFragment extends Fragment {
                 //ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null);
-                newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, null, newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation);
-                newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, null, newComment);
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);

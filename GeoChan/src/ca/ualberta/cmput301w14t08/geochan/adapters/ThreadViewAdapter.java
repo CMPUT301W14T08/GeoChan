@@ -51,6 +51,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         this.thread = thread;
         this.comments = this.thread.getComments();
     }
+    
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {

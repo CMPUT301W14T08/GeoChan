@@ -20,7 +20,11 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,15 +33,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
-public class ThreadViewFragment extends Fragment {
+public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private ListView threadView;
     private ThreadViewAdapter adapter;
-
+    private ThreadComment thread;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +68,38 @@ public class ThreadViewFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         final int id = (int) bundle.getLong("id");
-        ThreadComment thread = ThreadList.getThreads().get(id);
+        thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread);
+        adapter.setComments(new ArrayList<Comment>());
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+    
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+     */
+    @Override
+    public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
+        Toast.makeText(getActivity(), "Loading...", Toast.LENGTH_SHORT).show();
+        return new CommentLoader(getActivity(), "id", thread.getId());
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
+     */
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
+        Toast.makeText(getActivity(), "Loading finished", Toast.LENGTH_SHORT).show();
+        adapter.setComments(list);
+    }
+
+    /* (non-Javadoc)
+     * @see android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content.Loader)
+     */
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
+        adapter.setComments(new ArrayList<Comment>());
     }
 }

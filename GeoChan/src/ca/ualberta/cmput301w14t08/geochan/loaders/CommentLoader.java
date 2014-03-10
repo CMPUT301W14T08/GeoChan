@@ -24,12 +24,18 @@ import java.util.ArrayList;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.os.Bundle;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
-public class ThreadListLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
-    public ThreadListLoader(Context context) {
+public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
+    String type;
+    String id;
+    
+    public CommentLoader(Context context, String type, String id) {
         super(context);
+        this.type = type;
+        this.id = id;
         forceLoad(); 
     }
 
@@ -37,9 +43,9 @@ public class ThreadListLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> 
      * @see android.content.AsyncTaskLoader#loadInBackground()
      */
     @Override
-    public ArrayList<ThreadComment> loadInBackground() {
+    public ArrayList<Comment> loadInBackground() {
         ElasticSearchClient client = ElasticSearchClient.getInstance();
-        ArrayList<ThreadComment> list = client.getThreads();
+        ArrayList<Comment> list = client.getComments(type, id);
         return list;
     }
 }

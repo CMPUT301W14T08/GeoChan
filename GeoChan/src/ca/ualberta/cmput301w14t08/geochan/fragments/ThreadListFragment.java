@@ -42,7 +42,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadListLoader;
+import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -119,7 +119,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
         Toast.makeText(getActivity(), "Loading...", Toast.LENGTH_SHORT).show();
-        return new ThreadListLoader(getActivity());
+        return new ThreadCommentLoader(getActivity());
     }
 
     /* (non-Javadoc)
