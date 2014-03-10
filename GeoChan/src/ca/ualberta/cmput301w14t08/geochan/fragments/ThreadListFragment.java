@@ -65,13 +65,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        /*setEmptyText(getText(R.string.no_threads));
-        setHasOptionsMenu(true);
-        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
-        setListAdapter(adapter);
-        setListShown(false);*/
         getLoaderManager().initLoader(0, null, this);
-        getLoaderManager().getLoader(0).startLoading();
     }
 
     @Override

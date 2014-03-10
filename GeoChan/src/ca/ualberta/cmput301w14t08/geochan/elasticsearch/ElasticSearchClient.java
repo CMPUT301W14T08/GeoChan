@@ -31,6 +31,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -139,7 +140,7 @@ public class ElasticSearchClient {
         return list;
     }
     
-    public ArrayList<Comment> getComments(String type, String id) {
+    public ArrayList<Comment> matchComments(String type, String id) {
         String query = "{\n" + 
                 "   \"query\": {\n" +
                 "       \"match\" : {\n" +
@@ -174,7 +175,7 @@ public class ElasticSearchClient {
     }
     
     public void getChildComments(Comment comment) {
-        ArrayList<Comment> children = getComments("parent", comment.getId());
+        ArrayList<Comment> children = matchComments("parent", comment.getId());
         for (Comment child : children) {
             getChildComments(child);
         }

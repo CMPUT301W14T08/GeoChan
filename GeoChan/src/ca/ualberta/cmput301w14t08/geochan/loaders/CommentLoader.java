@@ -45,7 +45,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     @Override
     public ArrayList<Comment> loadInBackground() {
         ElasticSearchClient client = ElasticSearchClient.getInstance();
-        ArrayList<Comment> list = client.getComments(type, id);
+        ArrayList<Comment> list = client.matchComments(type, id);
         return list;
     }
 }
