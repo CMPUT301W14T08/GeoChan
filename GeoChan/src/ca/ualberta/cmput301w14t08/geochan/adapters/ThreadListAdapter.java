@@ -59,7 +59,7 @@ public class ThreadListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    
+
     public void setList(ArrayList<ThreadComment> list) {
         displayList = list;
         notifyDataSetChanged();
@@ -85,7 +85,8 @@ public class ThreadListAdapter extends BaseAdapter {
         time.setText(thread.getBodyComment().getCommentDateString());
         // Thread user creator
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
-        user.setText("posted by " + thread.getBodyComment().getUser());
+        user.setText("posted by " + thread.getBodyComment().getUser() + "#"
+                + thread.getBodyComment().getHash());
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
