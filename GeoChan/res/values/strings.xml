@@ -28,5 +28,6 @@
     <string name="current_location_button_text">Use Current Location</string>
     <string name="new_location_button_text">Submit New Location</string>
     <string name="location_log">Your previously used locations:</string>
+    <string name="reply">Reply</string>
 
 </resources>

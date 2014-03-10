@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/thread_view_top_comment_commentDate"
         android:background="#339933"
-        android:text="Reply"
+        android:text="@string/reply"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold" />

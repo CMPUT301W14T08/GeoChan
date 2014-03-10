@@ -30,7 +30,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class CustomLocationAdapter extends BaseAdapter {
     private ArrayList<LogEntry> logArray;
