@@ -46,8 +46,8 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         boolean hasImage = object.get("hasImage").getAsBoolean();
         String locationString = object.get("location").getAsString();
         List<String> locationEntries = Arrays.asList(locationString.split(","));
-        double latitude = Long.parseLong(locationEntries.get(0));
-        double longitude = Long.parseLong(locationEntries.get(1));
+        double latitude = Double.parseDouble(locationEntries.get(0));
+        double longitude = Double.parseDouble(locationEntries.get(1));
         String user = object.get("user").getAsString();
         String hash = object.get("hash").getAsString();
         String textPost = object.get("textPost").getAsString();
