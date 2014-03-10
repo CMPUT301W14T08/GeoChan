@@ -53,7 +53,7 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         double longitude = Double.parseDouble(locationEntries.get(1));
         String user = object.get("user").getAsString();
         String hash = object.get("hash").getAsString();
-        String id = object.get("id").getAsString(); // TODO ADD TO MAP
+        String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
         if (hasImage) {
             // TODO: Implement decoding of images

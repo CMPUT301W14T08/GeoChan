@@ -175,6 +175,9 @@ public class ElasticSearchClient {
         for (Comment child : children) {
             getChildComments(child);
         }
+        for (Comment child : children) {
+        	child.setParent(comment);
+        }
         comment.setChildren(children);
     }
 }
