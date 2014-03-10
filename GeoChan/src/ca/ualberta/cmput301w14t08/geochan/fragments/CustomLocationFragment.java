@@ -70,7 +70,7 @@ public class CustomLocationFragment extends Fragment {
                 Log.e("Clicked", "An Item in the previous locations");
             }
         });
-        customLocationAdapter = new CustomLocationAdapter(logArray);
+        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
     }
 

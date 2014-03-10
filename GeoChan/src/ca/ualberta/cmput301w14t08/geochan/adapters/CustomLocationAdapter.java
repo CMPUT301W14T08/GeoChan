@@ -22,54 +22,59 @@ package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
+import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class CustomLocationAdapter extends BaseAdapter {
+    private ArrayList<LogEntry> logArray;
+    private Context context;
 
-    /**
-     * 
-     */
-    public CustomLocationAdapter(ArrayList<LogEntry> logEntries) {
-        // TODO Auto-generated constructor stub
+    public CustomLocationAdapter(Context context, ArrayList<LogEntry> logEntries) {
+        this.logArray = logEntries;
+        this.context = context;
     }
 
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getCount()
-     */
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return logArray.size();
     }
 
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getItem(int)
-     */
     @Override
-    public Object getItem(int arg0) {
-        // TODO Auto-generated method stub
-        return null;
+    public LogEntry getItem(int arg0) {
+        return logArray.get(arg0);
     }
 
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getItemId(int)
-     */
     @Override
     public long getItemId(int arg0) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
-     */
     @Override
-    public View getView(int arg0, View arg1, ViewGroup arg2) {
-        // TODO Auto-generated method stub
-        return null;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LogEntry logEntry = getItem(position);
+        
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.log_entry_layout, null);
+        }
+        
+        TextView title = (TextView) convertView.findViewById(R.id.log_entry_title);
+        title.setText(logEntry.getThreadTitle());
+        
+        TextView loc = (TextView) convertView.findViewById(R.id.log_entry_location);
+        String lat = Double.toString(logEntry.getGeoLocation().getLatitude());
+        String lon = Double.toString(logEntry.getGeoLocation().getLongitude());
+        loc.setText("Lattitiude: " + lat + ", Longtitude: " + lon);
+        
+        return convertView;
     }
 
 }

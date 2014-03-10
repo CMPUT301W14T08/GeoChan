@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@+id/imageView1"
-        android:src="@drawable/ic_bar" />
+        android:src="@drawable/ic_temp_indent" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentBy"
