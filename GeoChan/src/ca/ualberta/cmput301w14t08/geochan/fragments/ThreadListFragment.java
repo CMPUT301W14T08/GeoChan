@@ -63,7 +63,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 
     @Override

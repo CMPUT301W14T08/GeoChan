@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -28,14 +30,16 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
-    String type;
+	ArrayList<Comment> list = null;
+	ElasticSearchClient client;
     String id;
     
-    public CommentLoader(Context context, String type, String id) {
+    public static final int LOADER_ID = 1;
+    
+    public CommentLoader(Context context, String id) {
         super(context);
-        this.type = type;
+        client = ElasticSearchClient.getInstance();
         this.id = id;
-        forceLoad(); 
     }
 
     /* (non-Javadoc)
@@ -43,8 +47,40 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
      */
     @Override
     public ArrayList<Comment> loadInBackground() {
-        ElasticSearchClient client = ElasticSearchClient.getInstance();
-        ArrayList<Comment> list = client.matchComments(type, id);
-        return list;
+        if (list == null) {
+        	list = new ArrayList<Comment>();
+        }
+        return client.getComments(id);
+    }
+    
+    @Override
+    public void deliverResult(ArrayList<Comment> list) {
+    	this.list = list;
+    	if (isStarted()) {
+    		super.deliverResult(list);
+    	}
+    }
+    
+    @Override
+    protected void onStartLoading() {
+    	if (list != null) {
+    		deliverResult(list);
+    	}
+    	
+    	Timer timer = new Timer();
+    	timer.scheduleAtFixedRate(new TimerTask(){
+
+			@Override
+			public void run() {
+				int count = client.getCommentCount();
+				if (count != list.size()) {
+					forceLoad();
+				}
+			}
+    	}, 5000, 60000);
+    	
+    	if (list == null) {
+    		forceLoad();
+    	}
     }
 }

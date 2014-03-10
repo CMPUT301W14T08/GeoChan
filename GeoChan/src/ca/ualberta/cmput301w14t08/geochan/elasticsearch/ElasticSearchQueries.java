@@ -6,4 +6,18 @@ public class ElasticSearchQueries {
             "       \"match_all\" : { } \n" +
             "   }\n" +
             "}";
+	
+	private static final String QUERY_SEARCH_MATCH_PARENT_BEGIN = "{\n" + 
+            "   \"query\": {\n" +
+            "       \"match\" : {\n" +
+            "           \"parent\" : \"";
+	
+	private static final String QUERY_SEARCH_MATCH_PARENT_END = "\" \n" + 
+            "       }\n" +
+            "   }\n" +
+            "}";
+	
+	public static String getMatchParent(String id) {
+		return QUERY_SEARCH_MATCH_PARENT_BEGIN + id + QUERY_SEARCH_MATCH_PARENT_END;
+	}
 }

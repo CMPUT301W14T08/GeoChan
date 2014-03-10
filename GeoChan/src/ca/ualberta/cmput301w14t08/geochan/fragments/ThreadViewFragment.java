@@ -58,7 +58,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         Bundle bundle = getArguments();
         final int id = (int) bundle.getLong("id");
         thread = ThreadList.getThreads().get(id);
-        getLoaderManager().restartLoader(1, null, this);
+        getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
-        return new CommentLoader(getActivity(), "parent", thread.getId());
+        return new CommentLoader(getActivity(), thread.getId());
     }
 
     /* (non-Javadoc)

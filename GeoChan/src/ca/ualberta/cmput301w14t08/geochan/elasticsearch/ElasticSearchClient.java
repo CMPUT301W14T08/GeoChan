@@ -31,6 +31,7 @@ import io.searchbox.core.Search;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import android.app.LoaderManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -46,12 +47,13 @@ public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static Gson gson;
     private static JestClient client;
+    private LoaderManager manager;
     private static final String TYPE_COMMENT = "geoComment";
     private static final String TYPE_THREAD = "geoThread";
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
     
-    private ElasticSearchClient() {
+    private ElasticSearchClient(LoaderManager manager) {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Comment.class, new CommentSerializer());
@@ -61,6 +63,7 @@ public class ElasticSearchClient {
         gson = builder.create();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
+        this.manager = manager;
         client = factory.getObject();
     }
     
@@ -68,9 +71,9 @@ public class ElasticSearchClient {
         return instance;
     }
     
-    public static void generateInstance() {
+    public static void generateInstance(LoaderManager manager) {
         if (instance == null) {
-            instance = new ElasticSearchClient();
+            instance = new ElasticSearchClient(manager);
         }
     }
     
@@ -125,6 +128,22 @@ public class ElasticSearchClient {
         }
     }
     
+    public int getCommentCount() {
+    	Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
+    	JestResult result = null;
+    	try {
+            result = client.execute(count);
+            String json = result.getJsonString();
+            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>(){}.getType();
+            ElasticSearchCountResponse esResponse = gson.fromJson(json, elasticSearchCountResponseType);
+            return esResponse.getCount();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
     public ArrayList<ThreadComment> getThreads() {
         String query = "{\n" + 
                 "   \"query\": {\n" +
@@ -152,15 +171,8 @@ public class ElasticSearchClient {
         
     }
     
-    public ArrayList<Comment> matchComments(String type, String id) {
-        String query = "{\n" + 
-                "   \"query\": {\n" +
-                "       \"match\" : {\n" +
-                "           \"" + type + "\" : \"" + id + "\" \n" + 
-                "       }\n" +
-                "   }\n" +
-                "}";
-        Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
+    public ArrayList<Comment> getComments(String id) {
+        Search search = new Search.Builder(ElasticSearchQueries.getMatchParent(id)).addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
         JestResult result = null;
         try {
             result = client.execute(search);
@@ -185,7 +197,7 @@ public class ElasticSearchClient {
     }
     
     public void getChildComments(Comment comment) {
-        ArrayList<Comment> children = matchComments("parent", comment.getId());
+        ArrayList<Comment> children = getComments(comment.getId());
         for (Comment child : children) {
             getChildComments(child);
         }

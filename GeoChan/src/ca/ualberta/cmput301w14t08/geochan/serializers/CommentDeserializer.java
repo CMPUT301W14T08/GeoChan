@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
             // TODO: Implement decoding of images
         }
         int depth = object.get("depth").getAsInt();
-        String parent = object.get("parent").getAsString();
+        // String parent = object.get("parent").getAsString();
         GeoLocation location = new GeoLocation(latitude, longitude);
         final Comment comment = new Comment(textPost, location);
         comment.getCommentDate().setTime(commentDate);

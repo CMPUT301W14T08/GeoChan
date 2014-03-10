@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -30,12 +32,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
 	ArrayList<ThreadComment> list = null;
 	ElasticSearchClient client;
-	int count;
+	
+	public static final int LOADER_ID = 0;
 	
     public ThreadCommentLoader(Context context) {
         super(context);
         client = ElasticSearchClient.getInstance();
-        count = 0;
     }
 
     /* (non-Javadoc)
@@ -63,10 +65,19 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
     		deliverResult(list);
     	}
     	
-    	int oldCount = count;
-    	count = client.getThreadCount();
+    	Timer timer = new Timer();
+    	timer.scheduleAtFixedRate(new TimerTask(){
+
+			@Override
+			public void run() {
+				int count = client.getThreadCount();
+				if (count != list.size()) {
+					forceLoad();
+				}
+			}
+    	}, 5000, 60000);
     	
-    	if (list == null || count != oldCount) {
+    	if (list == null) {
     		forceLoad();
     	}
     }
