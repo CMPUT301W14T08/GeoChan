@@ -76,7 +76,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onStart() {
         super.onStart();
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
-
+        adapter = new ThreadViewAdapter(getActivity(), thread);
+        // Assign custom adapter to the thread listView.
+        threadView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
     
     /* (non-Javadoc)
@@ -95,10 +98,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
         Toast.makeText(getActivity(), "Loading finished", Toast.LENGTH_SHORT).show();
         thread.setComments(list);
-        adapter = new ThreadViewAdapter(getActivity(), thread);
-        // Assign custom adapter to the thread listView.
-        threadView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        adapter.setThread(thread);
     }
 
     /* (non-Javadoc)
@@ -106,6 +106,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
-        adapter.setComments(new ArrayList<Comment>());
+        //
     }
 }
