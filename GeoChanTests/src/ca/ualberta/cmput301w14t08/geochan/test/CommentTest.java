@@ -125,16 +125,13 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c4.setParent(c1);
         c5.setParent(c1);
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
+       
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(1,1);
+        c3.getLocation().setCoordinates(2,2);
+        c4.getLocation().setCoordinates(3,3);
+        c5.getLocation().setCoordinates(4,4);
+        
 
         c1.addChild(c5);
         c1.addChild(c3);
@@ -171,16 +168,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c4.setParent(c1);
         c5.setParent(c1);
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(1,1);
+        c3.getLocation().setCoordinates(2,2);
+        c4.getLocation().setCoordinates(3,3);
+        c5.getLocation().setCoordinates(4,4);
         
         Date currentDate = new Date();
         
@@ -225,16 +217,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c4.setParent(c1);
         c5.setParent(c1);
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(1);
-        c2.getLocation().setLongitude(1);
-        c3.getLocation().setLatitude(2);
-        c3.getLocation().setLongitude(2);
-        c4.getLocation().setLatitude(3);
-        c4.getLocation().setLongitude(3);
-        c5.getLocation().setLatitude(4);
-        c5.getLocation().setLongitude(4);
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(1,1);
+        c3.getLocation().setCoordinates(2,2);
+        c4.getLocation().setCoordinates(3,3);
+        c5.getLocation().setCoordinates(4,4);
         
         Date currentDate = new Date();
         
@@ -283,14 +270,11 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         
         assertTrue("c1 location not null", c1.getLocation().getLocation() != null);
         
-        c1.getLocation().setLatitude(53.526802);
-        c1.getLocation().setLongitude(-113.527170);
+        c1.getLocation().setCoordinates(53.526802,-113.527170);
         
-        c2.getLocation().setLatitude(53.523636);
-        c2.getLocation().setLongitude(-113.527437);
-        
-        c3.getLocation().setLatitude(53.527047);
-        c3.getLocation().setLongitude(-113.525662);
+        c2.getLocation().setCoordinates(53.523636,-113.527437);
+       
+        c3.getLocation().setCoordinates(53.527047,-113.525662);
         
         assertTrue("Comment Scores calculated correctly.", 
                     c3.getScoreFromParent() > c2.getScoreFromParent());

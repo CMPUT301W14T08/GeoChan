@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan.helpers;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 public class LogEntry {
 

@@ -22,12 +22,14 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Parcel;
+import android.os.Parcelable;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
  * Responsible for GeoLocation services for Comment objects
  */
-public class GeoLocation {
+public class GeoLocation implements Parcelable {
 
     private Location location;
 
@@ -37,6 +39,10 @@ public class GeoLocation {
     
     public GeoLocation(Location location) {
         this.location = location;
+    }
+    
+    public GeoLocation(double latitude, double longitude) {
+        setCoordinates(latitude, longitude);
     }
 
     public double distance(GeoLocation toLocation) {
@@ -63,19 +69,22 @@ public class GeoLocation {
 
     // create a new location so we do not affect the LocationListenerService's
     // lastKnownLocation
-    public void setLatitude(double newLat) {
+    public void setCoordinates(double newLat, double newLong) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
         newLocation.setLatitude(newLat);
-        newLocation.setLongitude(this.location.getLongitude());
+        newLocation.setLongitude(newLong);
         this.location = newLocation;
     }
 
-    // create a new location so we do not affect the LocationListenerService's
-    // lastKnownLocation
-    public void setLongitude(double newLong) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLongitude(newLong);
-        newLocation.setLatitude(this.location.getLatitude());
-        this.location = newLocation;
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // TODO Auto-generated method stub
+        
     }
 }

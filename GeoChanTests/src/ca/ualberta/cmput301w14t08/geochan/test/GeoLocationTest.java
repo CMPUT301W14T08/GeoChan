@@ -41,8 +41,7 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
 
         assertEquals("The distance between the objects should be 0", geoLocation1.distance(geoLocation2), 0.0);
 
-        geoLocation2.setLatitude(geoLocation2.getLatitude() + 2);
-        geoLocation2.setLongitude(geoLocation2.getLongitude() + 2);
+        geoLocation2.setCoordinates(geoLocation2.getLatitude() + 2,geoLocation2.getLongitude() + 2);
         double distance = Math.sqrt(8);
 
         assertEquals("The distance should be sqrt(8)", distance, geoLocation1.distance(geoLocation2)); 
@@ -52,19 +51,21 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         assertNotNull(geoLocation.getLocation());
+        
+        GeoLocation geoLocation1 = new GeoLocation(1.0,2.0);
+        assertEquals("Latitude should be the same", 1.0, geoLocation1.getLatitude());
+        assertEquals("Longitude should be the same", 2.0, geoLocation1.getLongitude());
+        
+        Location location = new Location(LocationManager.GPS_PROVIDER);
+        GeoLocation geoLocation2 = new GeoLocation(location);
+        assertEquals("Locations should be the same", location, geoLocation2.getLocation());
     }
 
-    public void testNewLatitude() {
+    public void testNewCoordinates() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
-        geoLocation.setLatitude(1.0);
+        geoLocation.setCoordinates(1.0, 1.0);
         assertEquals("Latitude should be 1.0", 1.0, geoLocation.getLatitude());
-    }
-
-    public void testNewLongitude() {
-        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
-        GeoLocation geoLocation = new GeoLocation(locationListenerService);
-        geoLocation.setLongitude(1.0);
         assertEquals("Latitude should be 1.0", 1.0, geoLocation.getLongitude());
     }
 
@@ -85,8 +86,7 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         location.setLatitude(geoLocation1.getLatitude());
         location.setLongitude(geoLocation1.getLongitude());
         
-        geoLocation1.setLatitude(5.0);
-        geoLocation1.setLongitude(5.0);
+        geoLocation1.setCoordinates(5.0,5.0);
         
         assertNotSame("The latitude values should not be equal", location.getLatitude(), geoLocation1.getLatitude());
         assertNotSame("The longitude values should not be equal", location.getLongitude(), geoLocation1.getLongitude());

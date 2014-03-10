@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 public class CustomLocationAdapter extends BaseAdapter {
 

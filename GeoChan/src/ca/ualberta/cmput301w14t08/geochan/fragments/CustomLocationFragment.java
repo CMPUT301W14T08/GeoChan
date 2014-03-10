@@ -35,12 +35,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
-import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
+import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 public class CustomLocationFragment extends Fragment {
 
@@ -80,10 +82,19 @@ public class CustomLocationFragment extends Fragment {
     public void submitLocation(View v) {
         if (v.getId() == R.id.new_location_button) {
             Log.e("Clicked","New Location Button");
+            
+            EditText latText = (EditText) getView().findViewById(R.id.latitude_edit_text);
+            EditText longText = (EditText) getView().findViewById(R.id.longitude_edit_text);
+            double latitude = Double.valueOf(latText.toString());
+            double longitude = Double.valueOf(longText.toString());
+            GeoLocation geoLocation = new GeoLocation(latitude, longitude);
+            Bundle bundle = new Bundle();
         }
         else if (v.getId() == R.id.current_location_button) {
-            Log.e("Clicked","Current Location Button"); 
+            Log.e("Clicked","Current Location Button");
+            
         }
+        this.getFragmentManager().popBackStackImmediate();
     }
     
     public String retrieveUsername() {

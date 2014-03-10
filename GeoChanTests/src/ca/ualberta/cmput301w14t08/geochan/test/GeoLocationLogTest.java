@@ -3,9 +3,9 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
+import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainActivity> {
 

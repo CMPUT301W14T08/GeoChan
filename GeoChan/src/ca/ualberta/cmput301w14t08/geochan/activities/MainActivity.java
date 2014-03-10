@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,11 +105,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         fragment.postComment(v);
     }
     
-    public void submitLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
-        fragment.submitLocation(v);
-    }
-
     public void postReplyToOp(View v) {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
                 "thread_view_fragment");
@@ -123,8 +117,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     }
     
     public void changeLocation(View v) {
-        Log.e("clicked","changeLocationButton");
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
                 .addToBackStack(null).commit();
+    }
+    
+    public void submitLocation(View v) {
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        fragment.submitLocation(v);
     }
 }

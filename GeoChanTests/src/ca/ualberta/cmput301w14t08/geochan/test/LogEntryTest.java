@@ -3,8 +3,8 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import junit.framework.TestCase;
 import android.location.Location;
 import android.location.LocationManager;
-import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 public class LogEntryTest extends TestCase {
 

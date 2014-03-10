@@ -22,7 +22,6 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
 public class GeoLocationLog {
     
