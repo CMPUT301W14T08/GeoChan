@@ -39,7 +39,7 @@ public class ThreadListLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> 
     @Override
     public ArrayList<ThreadComment> loadInBackground() {
         ElasticSearchClient client = ElasticSearchClient.getInstance();
-        ArrayList<ThreadComment> list =  client.getThreads();;
+        ArrayList<ThreadComment> list = client.getThreads();
         return list;
     }
 }
