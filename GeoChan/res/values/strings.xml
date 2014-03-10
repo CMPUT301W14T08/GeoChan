@@ -29,5 +29,6 @@
     <string name="new_location_button_text">Submit New Location</string>
     <string name="location_log">Your previously used locations:</string>
     <string name="reply">Reply</string>
+    <string name="comment_reply_button">Reply</string>
 
 </resources>

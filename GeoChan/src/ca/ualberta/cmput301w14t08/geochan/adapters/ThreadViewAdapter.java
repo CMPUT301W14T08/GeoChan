@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
@@ -192,7 +193,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
             setTopCommentFields(convertView, comment);
             // Here handle button presses
-            final TextView replyButton = (TextView) convertView
+            final ImageButton replyButton = (ImageButton) convertView
                     .findViewById(R.id.comment_reply_button);
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {

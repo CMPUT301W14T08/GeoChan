@@ -13,12 +13,13 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@+id/imageView1"
-        android:src="@drawable/ic_temp_indent" />
+        android:src="@drawable/ic_lvl_1" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentBy"
