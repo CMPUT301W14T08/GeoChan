@@ -26,12 +26,16 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
+	ArrayList<ThreadComment> list = null;
+	ElasticSearchClient client;
+	int count;
+	
     public ThreadCommentLoader(Context context) {
         super(context);
-        forceLoad(); 
+        client = ElasticSearchClient.getInstance();
+        count = 0;
     }
 
     /* (non-Javadoc)
@@ -39,9 +43,31 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
      */
     @Override
     public ArrayList<ThreadComment> loadInBackground() {
-        ElasticSearchClient client = ElasticSearchClient.getInstance();
-        ArrayList<ThreadComment> list = client.getThreads();
-        ThreadList.setThreads(list);
-        return list;
+        if (list == null) {
+        	list = new ArrayList<ThreadComment>();
+        }
+	    return client.getThreads();
+    }
+    
+    @Override
+    public void deliverResult(ArrayList<ThreadComment> list) {
+    	this.list = list;
+    	if (isStarted()) {
+    		super.deliverResult(list);
+    	}
+    }
+    
+    @Override
+    protected void onStartLoading() {
+    	if (list != null) {
+    		deliverResult(list);
+    	}
+    	
+    	int oldCount = count;
+    	count = client.getThreadCount();
+    	
+    	if (list == null || count != oldCount) {
+    		forceLoad();
+    	}
     }
 }

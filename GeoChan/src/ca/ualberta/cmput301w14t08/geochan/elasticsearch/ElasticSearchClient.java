@@ -24,6 +24,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
+import io.searchbox.core.Count;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 
@@ -43,6 +44,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
+    private static Gson gson;
     private static JestClient client;
     private static final String TYPE_COMMENT = "geoComment";
     private static final String TYPE_THREAD = "geoThread";
@@ -51,6 +53,12 @@ public class ElasticSearchClient {
     
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Comment.class, new CommentSerializer());
+        builder.registerTypeAdapter(Comment.class, new CommentDeserializer());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
+        gson = builder.create();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
         client = factory.getObject();
@@ -70,9 +78,6 @@ public class ElasticSearchClient {
         Thread t = new Thread() {
             @Override
             public void run() {
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
-                Gson gson = gsonBuilder.create();
                 String json = gson.toJson(thread);
                 Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_THREAD).id(thread.getId()).build();
                 try {
@@ -90,9 +95,6 @@ public class ElasticSearchClient {
         Thread t = new Thread() {
             @Override
             public void run() {
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(Comment.class, new CommentSerializer());
-                Gson gson = gsonBuilder.create();
                 String json = gson.toJson(comment);
                 Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT).id(comment.getId()).build();
                 try {
@@ -107,6 +109,22 @@ public class ElasticSearchClient {
         t.start();
     }
     
+    public int getThreadCount() {
+    	Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+    	JestResult result = null;
+    	try {
+            result = client.execute(count);
+            String json = result.getJsonString();
+            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>(){}.getType();
+            ElasticSearchCountResponse esResponse = gson.fromJson(json, elasticSearchCountResponseType);
+            return esResponse.getCount();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
     public ArrayList<ThreadComment> getThreads() {
         String query = "{\n" + 
                 "   \"query\": {\n" +
@@ -117,23 +135,21 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(search);
+            String json = result.getJsonString();
+            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>(){}.getType();
+            ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+            ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+            for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
+                ThreadComment comment = r.getSource();
+                list.add(comment);
+            }
+            return list;
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return new ArrayList<ThreadComment>();
         }
-        String json = result.getJsonString();
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
-        gsonBuilder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
-        Gson gson = gsonBuilder.create();
-        Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>(){}.getType();
-        ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
-        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
-        for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
-            ThreadComment comment = r.getSource();
-            list.add(comment);
-        }
-        return list;
+        
     }
     
     public ArrayList<Comment> matchComments(String type, String id) {
@@ -148,26 +164,24 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(search);
+            String json = result.getJsonString();
+            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>(){}.getType();
+            ElasticSearchSearchResponse<Comment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+            ArrayList<Comment> list = new ArrayList<Comment>();
+            for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
+                Comment comment = r.getSource();
+                list.add(comment);
+            }
+            for (Comment c : list) {
+                getChildComments(c);
+            }
+            return list;
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return new ArrayList<Comment>();
         }
-        String json = result.getJsonString();
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Comment.class, new CommentSerializer());
-        gsonBuilder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-        Gson gson = gsonBuilder.create();
-        Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>(){}.getType();
-        ElasticSearchSearchResponse<Comment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
-        ArrayList<Comment> list = new ArrayList<Comment>();
-        for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
-            Comment comment = r.getSource();
-            list.add(comment);
-        }
-        for (Comment c : list) {
-            getChildComments(c);
-        }
-        return list;
+        
     }
     
     public void getChildComments(Comment comment) {

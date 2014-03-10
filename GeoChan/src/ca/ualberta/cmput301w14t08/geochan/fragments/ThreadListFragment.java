@@ -118,6 +118,7 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader, ArrayList<ThreadComment> list) {
+    	ThreadList.setThreads(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
