@@ -44,21 +44,21 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ListView threadView;
     private ThreadViewAdapter adapter;
     private ThreadComment thread = null;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         final int id = (int) bundle.getLong("id");
         thread = ThreadList.getThreads().get(id);
-        getLoaderManager().restartLoader(1, null, this);
+        getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -82,17 +82,24 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-    
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
+     * android.os.Bundle)
      */
     @Override
     public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
-        return new CommentLoader(getActivity(), "parent", thread.getId());
+        return new CommentLoader(getActivity(), thread.getId());
     }
 
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
+     * .Loader, java.lang.Object)
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
@@ -100,8 +107,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         adapter.setThread(thread);
     }
 
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content.Loader)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
+     * .Loader)
      */
     @Override
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {

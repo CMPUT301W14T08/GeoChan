@@ -45,7 +45,8 @@ public class PreferencesFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
-                hash.setSummary((String) newValue + " #" + UserHashManager.getHash((String) newValue));
+                hash.setSummary((String) newValue + " #"
+                        + UserHashManager.getHash((String) newValue));
                 return true;
             }
         });

@@ -43,7 +43,7 @@ public class LogEntry {
     public GeoLocation getGeoLocation() {
         return geoLocation;
     }
-    
+
     public void setGeoLocation(GeoLocation geoLocation) {
         this.geoLocation = geoLocation;
     }

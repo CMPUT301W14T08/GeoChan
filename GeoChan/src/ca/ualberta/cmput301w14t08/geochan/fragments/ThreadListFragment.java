@@ -44,7 +44,8 @@ import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
-public class ThreadListFragment extends Fragment implements LoaderCallbacks<ArrayList<ThreadComment>> {
+public class ThreadListFragment extends Fragment implements
+        LoaderCallbacks<ArrayList<ThreadComment>> {
     private ListView threadListView;
     private ThreadListAdapter adapter;
 
@@ -59,11 +60,11 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -105,26 +106,38 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
         adapter.notifyDataSetChanged();
     }
 
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
+     * android.os.Bundle)
      */
     @Override
     public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
         return new ThreadCommentLoader(getActivity());
     }
 
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content.Loader, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
+     * .Loader, java.lang.Object)
      */
     @Override
-    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader, ArrayList<ThreadComment> list) {
-    	ThreadList.setThreads(list);
+    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
+            ArrayList<ThreadComment> list) {
+        ThreadList.setThreads(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
 
-    /* (non-Javadoc)
-     * @see android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content.Loader)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
+     * .Loader)
      */
     @Override
     public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {

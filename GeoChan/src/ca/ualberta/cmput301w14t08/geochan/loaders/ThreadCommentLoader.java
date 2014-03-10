@@ -21,6 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -28,46 +30,57 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
-	ArrayList<ThreadComment> list = null;
-	ElasticSearchClient client;
-	int count;
-	
+    ArrayList<ThreadComment> list = null;
+    ElasticSearchClient client;
+
+    public static final int LOADER_ID = 0;
+
     public ThreadCommentLoader(Context context) {
         super(context);
         client = ElasticSearchClient.getInstance();
-        count = 0;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see android.content.AsyncTaskLoader#loadInBackground()
      */
     @Override
     public ArrayList<ThreadComment> loadInBackground() {
         if (list == null) {
-        	list = new ArrayList<ThreadComment>();
+            list = new ArrayList<ThreadComment>();
         }
-	    return client.getThreads();
+        return client.getThreads();
     }
-    
+
     @Override
     public void deliverResult(ArrayList<ThreadComment> list) {
-    	this.list = list;
-    	if (isStarted()) {
-    		super.deliverResult(list);
-    	}
+        this.list = list;
+        if (isStarted()) {
+            super.deliverResult(list);
+        }
     }
-    
+
     @Override
     protected void onStartLoading() {
-    	if (list != null) {
-    		deliverResult(list);
-    	}
-    	
-    	int oldCount = count;
-    	count = client.getThreadCount();
-    	
-    	if (list == null || count != oldCount) {
-    		forceLoad();
-    	}
+        if (list != null) {
+            deliverResult(list);
+        }
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                int count = client.getThreadCount();
+                if (count != list.size()) {
+                    forceLoad();
+                }
+            }
+        }, 5000, 60000);
+
+        if (list == null) {
+            forceLoad();
+        }
     }
 }

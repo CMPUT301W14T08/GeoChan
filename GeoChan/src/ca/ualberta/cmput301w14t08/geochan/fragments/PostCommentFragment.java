@@ -85,7 +85,8 @@ public class PostCommentFragment extends Fragment {
             String comment = editComment.getText().toString();
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
-                //ErrorDialog.show(getActivity(), "Could not obtain location.");
+                // ErrorDialog.show(getActivity(),
+                // "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null, thread.getBodyComment());
                 ElasticSearchClient client = ElasticSearchClient.getInstance();

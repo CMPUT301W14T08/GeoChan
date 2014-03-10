@@ -77,7 +77,7 @@ public class LocationListenerService {
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
-    // http://developer.android.com/guide/topics/location/strategies.html 
+    // http://developer.android.com/guide/topics/location/strategies.html
     public boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location

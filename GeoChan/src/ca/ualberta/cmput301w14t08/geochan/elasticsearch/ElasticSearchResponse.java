@@ -28,11 +28,11 @@ public class ElasticSearchResponse<T> {
     boolean exists;
     T _source;
     double max_score;
-    
+
     public T getSource() {
         return _source;
     }
-    
+
     @Override
     public String toString() {
         return "_index: " + _index + ", _source:" + _source.toString();

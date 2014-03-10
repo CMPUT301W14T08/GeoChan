@@ -34,13 +34,13 @@ public class GeoLocation {
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
     }
-    
+
     public GeoLocation(double latitude, double longitude) {
-        this.location = new Location("preset");
+        this.location = new Location(LocationManager.GPS_PROVIDER);
         setLatitude(latitude);
         setLongitude(longitude);
-    }    
-        
+    }
+
     public GeoLocation(Location location) {
         this.location = location;
     }

@@ -37,8 +37,12 @@ import com.google.gson.JsonParseException;
 
 public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment> {
 
-    /* (non-Javadoc)
-     * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
+     * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
      */
     @Override
     public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)

@@ -69,7 +69,7 @@ public class PostReplyFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         commentToReplyTo = (Comment) bundle.getParcelable("cmt");
-        
+
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
         bodyReplyTo.setText(commentToReplyTo.getTextPost());
@@ -84,7 +84,8 @@ public class PostReplyFragment extends Fragment {
             String comment = editComment.getText().toString();
             GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
-                //ErrorDialog.show(getActivity(), "Could not obtain location.");
+                // ErrorDialog.show(getActivity(),
+                // "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();

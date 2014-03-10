@@ -111,15 +111,16 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .findFragmentByTag("comFrag");
         fragment.postComment(v);
     }
-    
+
     public void submitLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+                .findFragmentByTag("customLocFrag");
         fragment.submitLocation(v);
     }
-        
+
     public void postReply(View v) {
-        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager()
-                .findFragmentByTag("repFrag");
+        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(
+                "repFrag");
         fragment.postReply(v);
     }
 
@@ -133,10 +134,11 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-    
+
     public void changeLocation(View v) {
-        Log.e("clicked","changeLocationButton");
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
+        Log.e("clicked", "changeLocationButton");
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
                 .addToBackStack(null).commit();
     }
 }

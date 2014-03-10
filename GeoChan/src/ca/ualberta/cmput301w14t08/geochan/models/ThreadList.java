@@ -54,13 +54,15 @@ public class ThreadList {
     }
 
     /**
-     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the
-     * most recent threads to the top. "DATE_OLDEST" pushes the oldest
-     * threads to the top.
-     * @param tag Sets the sorting method to use
+     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the most
+     * recent threads to the top. "DATE_OLDEST" pushes the oldest threads to the
+     * top.
+     * 
+     * @param tag
+     *            Sets the sorting method to use
      */
     public static void sortThreads(int tag) {
-        switch(tag) {
+        switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
             Collections.sort(threads, SortTypes.sortThreadsByDateNewest());
             break;

@@ -50,7 +50,7 @@ public class ElasticSearchClient {
     private static final String TYPE_THREAD = "geoThread";
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
-    
+
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
         GsonBuilder builder = new GsonBuilder();
@@ -63,60 +63,65 @@ public class ElasticSearchClient {
         factory.setClientConfig(config);
         client = factory.getObject();
     }
-    
+
     public static ElasticSearchClient getInstance() {
         return instance;
     }
-    
+
     public static void generateInstance() {
         if (instance == null) {
             instance = new ElasticSearchClient();
         }
     }
-    
+
     public void postThread(final ThreadComment thread) {
         Thread t = new Thread() {
             @Override
             public void run() {
                 String json = gson.toJson(thread);
-                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_THREAD).id(thread.getId()).build();
-                try {
-                    client.execute(index);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }         
-            }
-        };
-        t.start();
-    }
-    
-    public void postComment(final ThreadComment thread, final Comment commentToReplyTo, final Comment comment) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                String json = gson.toJson(comment);
-                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT).id(comment.getId()).build();
+                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_THREAD)
+                        .id(thread.getId()).build();
                 try {
                     client.execute(index);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-               
             }
         };
         t.start();
     }
-    
+
+    public void postComment(final ThreadComment thread, final Comment commentToReplyTo,
+            final Comment comment) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                String json = gson.toJson(comment);
+                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT)
+                        .id(comment.getId()).build();
+                try {
+                    client.execute(index);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        t.start();
+    }
+
     public int getThreadCount() {
-    	Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_THREAD).build();
-    	JestResult result = null;
-    	try {
+        Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+        JestResult result = null;
+        try {
             result = client.execute(count);
             String json = result.getJsonString();
-            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>(){}.getType();
-            ElasticSearchCountResponse esResponse = gson.fromJson(json, elasticSearchCountResponseType);
+            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>() {
+            }.getType();
+            ElasticSearchCountResponse esResponse = gson.fromJson(json,
+                    elasticSearchCountResponseType);
             return esResponse.getCount();
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -124,20 +129,37 @@ public class ElasticSearchClient {
             return 0;
         }
     }
-    
+
+    public int getCommentCount() {
+        Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
+        JestResult result = null;
+        try {
+            result = client.execute(count);
+            String json = result.getJsonString();
+            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>() {
+            }.getType();
+            ElasticSearchCountResponse esResponse = gson.fromJson(json,
+                    elasticSearchCountResponseType);
+            return esResponse.getCount();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public ArrayList<ThreadComment> getThreads() {
-        String query = "{\n" + 
-                "   \"query\": {\n" +
-                "       \"match_all\" : { } \n" +
-                "   }\n" +
-                "}";
+        String query = "{\n" + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n"
+                + "}";
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_THREAD).build();
         JestResult result = null;
         try {
             result = client.execute(search);
             String json = result.getJsonString();
-            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>(){}.getType();
-            ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
+            }.getType();
+            ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json,
+                    elasticSearchSearchResponseType);
             ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
             for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
                 ThreadComment comment = r.getSource();
@@ -149,24 +171,20 @@ public class ElasticSearchClient {
             e.printStackTrace();
             return new ArrayList<ThreadComment>();
         }
-        
+
     }
-    
-    public ArrayList<Comment> matchComments(String type, String id) {
-        String query = "{\n" + 
-                "   \"query\": {\n" +
-                "       \"match\" : {\n" +
-                "           \"" + type + "\" : \"" + id + "\" \n" + 
-                "       }\n" +
-                "   }\n" +
-                "}";
-        Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
+
+    public ArrayList<Comment> getComments(String id) {
+        Search search = new Search.Builder(ElasticSearchQueries.getMatchParent(id))
+                .addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
         JestResult result = null;
         try {
             result = client.execute(search);
             String json = result.getJsonString();
-            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>(){}.getType();
-            ElasticSearchSearchResponse<Comment> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>() {
+            }.getType();
+            ElasticSearchSearchResponse<Comment> esResponse = gson.fromJson(json,
+                    elasticSearchSearchResponseType);
             ArrayList<Comment> list = new ArrayList<Comment>();
             for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
                 Comment comment = r.getSource();
@@ -181,16 +199,16 @@ public class ElasticSearchClient {
             e.printStackTrace();
             return new ArrayList<Comment>();
         }
-        
+
     }
-    
+
     public void getChildComments(Comment comment) {
-        ArrayList<Comment> children = matchComments("parent", comment.getId());
+        ArrayList<Comment> children = getComments(comment.getId());
         for (Comment child : children) {
             getChildComments(child);
         }
         for (Comment child : children) {
-        	child.setParent(comment);
+            child.setParent(comment);
         }
         comment.setChildren(children);
     }

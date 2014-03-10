@@ -37,13 +37,13 @@ public class UserHashManager {
         UserHashManager.context = context;
         android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
     }
-    
+
     public static void generateInstance(Context context) {
         if (instance == null) {
             instance = new UserHashManager(context);
         }
     }
-    
+
     public static UserHashManager getInstance() {
         return instance;
     }
@@ -55,19 +55,19 @@ public class UserHashManager {
         int temp = (id + id + id * 3 + user.hashCode()) / 42;
         return Integer.toHexString(temp + id);
     }
-    
+
     public String getUser() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = pref.getString("username", "Anon");
         return user;
     }
-    
+
     public static String getHash(String string) {
         int id = android_id.hashCode();
         int temp = (id + id + id * 3 + string.hashCode()) / 42;
         return Integer.toHexString(temp + id);
     }
-    
+
     public long getCommentIdHash() {
         Date date = new Date();
         Random random = new Random();

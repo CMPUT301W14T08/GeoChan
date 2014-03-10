@@ -29,20 +29,20 @@ public class ElasticSearchSearchResponse<T> {
     transient Object _shards;
     ElasticSearchHits<T> hits;
     boolean exists;
-    
+
     public Collection<ElasticSearchResponse<T>> getHits() {
-        return hits.getHits();        
+        return hits.getHits();
     }
-    
+
     public Collection<T> getSources() {
         Collection<T> out = new ArrayList<T>();
         for (ElasticSearchResponse<T> essrt : getHits()) {
-            out.add( essrt.getSource() );
+            out.add(essrt.getSource());
         }
         return out;
     }
-    
+
     public String toString() {
-        return (super.toString() + ":" + took + "," + _shards + "," + exists + ","  + hits);     
+        return (super.toString() + ":" + took + "," + _shards + "," + exists + "," + hits);
     }
 }

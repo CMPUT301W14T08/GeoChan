@@ -24,12 +24,12 @@ import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
-public class GeoLocationLog {
-    
-    private static ArrayList<LogEntry> entries; 
-    
+public class GeoLocationLog {    
+
+    private static ArrayList<LogEntry> entries;
+
     private GeoLocationLog() {
-        entries = new ArrayList<LogEntry>(); 
+        entries = new ArrayList<LogEntry>();
     }
    
     public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
@@ -46,21 +46,21 @@ public class GeoLocationLog {
         }
         return entries;
     }
-    
+
     public boolean isEmpty() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size() == 0;
     }
-    
+
     public void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         entries.clear();
     }
-    
+
     public int size() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();

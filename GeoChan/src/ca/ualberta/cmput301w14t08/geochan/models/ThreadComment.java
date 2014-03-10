@@ -61,7 +61,7 @@ public class ThreadComment {
     public void setThreadDate(Date threadDate) {
         bodyComment.setCommentDate(threadDate);
     }
-    
+
     public String getId() {
         return Long.toString(id);
     }
@@ -69,7 +69,7 @@ public class ThreadComment {
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public Comment getBodyComment() {
         return bodyComment;
     }
@@ -107,24 +107,19 @@ public class ThreadComment {
     public void sortComments(int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortTypes
-                    .sortCommentsByDateNewest());
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateNewest());
             break;
         case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortTypes
-                    .sortCommentsByDateOldest());
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateOldest());
             break;
         case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortTypes
-                    .sortCommentsByParentDistance());
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
             break;
         case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortTypes
-                    .sortCommentsByParentScoreHighest());
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortTypes
-                    .sortCommentsByParentScoreLowest());
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }

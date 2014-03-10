@@ -124,7 +124,7 @@ public class Comment implements Parcelable {
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
     }
-    
+
     /**
      * a comment initialized with no data. Only used for testing.
      */
@@ -143,7 +143,6 @@ public class Comment implements Parcelable {
         this.setChildren(new ArrayList<Comment>());
         this.id = -1;
     }
-
 
     public boolean hasImage() {
         return !(image == null);
@@ -211,7 +210,7 @@ public class Comment implements Parcelable {
     public void setUser(String user) {
         this.user = user;
     }
-    
+
     public String getId() {
         return Long.toString(id);
     }
@@ -219,7 +218,7 @@ public class Comment implements Parcelable {
     public void setId(long id) {
         this.id = id;
     }
-    
+
     /**
      * Sorts child comments according to the tag passed.
      * 
@@ -229,24 +228,19 @@ public class Comment implements Parcelable {
     public void sortChildren(int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getChildren(), SortTypes
-                    .sortCommentsByDateNewest());
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateNewest());
             break;
         case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getChildren(), SortTypes
-                    .sortCommentsByDateOldest());
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateOldest());
             break;
         case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getChildren(), SortTypes
-                    .sortCommentsByParentDistance());
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentDistance());
             break;
         case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getChildren(), SortTypes
-                    .sortCommentsByParentScoreHighest());
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getChildren(), SortTypes
-                    .sortCommentsByParentScoreLowest());
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }
@@ -315,7 +309,8 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * @param imageThumb the imageThumb to set
+     * @param imageThumb
+     *            the imageThumb to set
      */
     public void setImageThumb(Picture imageThumb) {
         this.imageThumb = imageThumb;
@@ -329,7 +324,8 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * @param hash the hash to set
+     * @param hash
+     *            the hash to set
      */
     public void setHash(String hash) {
         this.hash = hash;
@@ -343,12 +339,16 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * @param depth the depth to set
+     * @param depth
+     *            the depth to set
      */
     public void setDepth(int depth) {
         this.depth = depth;
     }
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see android.os.Parcelable#describeContents()
      */
     @Override
@@ -356,7 +356,9 @@ public class Comment implements Parcelable {
         return 0;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
      */
     @Override
@@ -369,7 +371,7 @@ public class Comment implements Parcelable {
         dest.writeParcelable(parent, flags);
         dest.writeTypedList(children);
     }
-    
+
     public Comment(Parcel in) {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));
@@ -380,14 +382,14 @@ public class Comment implements Parcelable {
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
         in.readTypedList(children, Comment.CREATOR);
     }
-    
-    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {  
+
+    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
         public Comment createFromParcel(Parcel in) {
-          return new Comment(in);
+            return new Comment(in);
         }
 
         public Comment[] newArray(int size) {
-          return new Comment[size];
+            return new Comment[size];
         }
-      };
+    };
 }
