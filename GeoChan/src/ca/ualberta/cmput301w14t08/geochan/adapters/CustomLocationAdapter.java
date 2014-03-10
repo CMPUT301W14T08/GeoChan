@@ -32,50 +32,48 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LogEntry;
 
 public class CustomLocationAdapter extends BaseAdapter {
-	private ArrayList<LogEntry> logArray;
-	private Context context;
+    private ArrayList<LogEntry> logArray;
+    private Context context;
 
-	public CustomLocationAdapter(Context context, ArrayList<LogEntry> logEntries) {
-		this.logArray = logEntries;
-		this.context = context;
-	}
+    public CustomLocationAdapter(Context context, ArrayList<LogEntry> logEntries) {
+        this.logArray = logEntries;
+        this.context = context;
+    }
 
-	@Override
-	public int getCount() {
-		return logArray.size();
-	}
+    @Override
+    public int getCount() {
+        return logArray.size();
+    }
 
-	@Override
-	public LogEntry getItem(int arg0) {
-		return logArray.get(arg0);
-	}
+    @Override
+    public LogEntry getItem(int arg0) {
+        return logArray.get(arg0);
+    }
 
-	@Override
-	public long getItemId(int arg0) {
-		return 0;
-	}
+    @Override
+    public long getItemId(int arg0) {
+        return 0;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		LogEntry logEntry = getItem(position);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LogEntry logEntry = getItem(position);
 
-		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.log_entry_layout, null);
-		}
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.log_entry_layout, null);
+        }
 
-		TextView title = (TextView) convertView
-				.findViewById(R.id.log_entry_title);
-		title.setText(logEntry.getThreadTitle());
+        TextView title = (TextView) convertView.findViewById(R.id.log_entry_title);
+        title.setText(logEntry.getThreadTitle());
 
-		TextView loc = (TextView) convertView
-				.findViewById(R.id.log_entry_location);
-		String lat = Double.toString(logEntry.getGeoLocation().getLatitude());
-		String lon = Double.toString(logEntry.getGeoLocation().getLongitude());
-		loc.setText("Lattitiude: " + lat + ", Longtitude: " + lon);
+        TextView loc = (TextView) convertView.findViewById(R.id.log_entry_location);
+        String lat = Double.toString(logEntry.getGeoLocation().getLatitude());
+        String lon = Double.toString(logEntry.getGeoLocation().getLongitude());
+        loc.setText("Lattitiude: " + lat + ", Longtitude: " + lon);
 
-		return convertView;
-	}
+        return convertView;
+    }
 
 }

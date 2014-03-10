@@ -35,49 +35,47 @@ import com.google.gson.JsonSerializer;
 
 public class CommentSerializer implements JsonSerializer<Comment> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
-	 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
-	 */
-	@Override
-	public JsonElement serialize(Comment comment, Type type,
-			JsonSerializationContext context) {
-		JsonObject object = new JsonObject();
-		object.addProperty("commentDate", comment.getCommentDate().getTime());
-		object.addProperty("hasImage", comment.hasImage());
-		if (comment.getLocation() != null) {
-			object.addProperty("location", comment.getLocation().getLatitude()
-					+ "," + comment.getLocation().getLongitude());
-		} else {
-			object.addProperty("location", "-999,-999");
-		}
-		object.addProperty("user", comment.getUser());
-		object.addProperty("hash", comment.getHash());
-		object.addProperty("id", comment.getId());
-		object.addProperty("textPost", comment.getTextPost());
-		if (comment.hasImage()) {
-			Picture picture = comment.getImage();
-			Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(),
-					picture.getHeight(), Bitmap.Config.RGB_565);
-			/*
-			 * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
-			 * -string
-			 */
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 90,
-					byteArrayOutputStream);
-			byte[] byteArray = byteArrayOutputStream.toByteArray();
-			String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-			object.addProperty("image", encoded);
-			object.addProperty("imageThumbnail", encoded);
-		}
-		object.addProperty("depth", comment.getDepth());
-		if (comment.getParent() != null) {
-			object.addProperty("parent", comment.getParent().getId());
-		}
-		return object;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+     * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+     */
+    @Override
+    public JsonElement serialize(Comment comment, Type type, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        object.addProperty("commentDate", comment.getCommentDate().getTime());
+        object.addProperty("hasImage", comment.hasImage());
+        if (comment.getLocation() != null) {
+            object.addProperty("location", comment.getLocation().getLatitude() + ","
+                    + comment.getLocation().getLongitude());
+        } else {
+            object.addProperty("location", "-999,-999");
+        }
+        object.addProperty("user", comment.getUser());
+        object.addProperty("hash", comment.getHash());
+        object.addProperty("id", comment.getId());
+        object.addProperty("textPost", comment.getTextPost());
+        if (comment.hasImage()) {
+            Picture picture = comment.getImage();
+            Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(),
+                    Bitmap.Config.RGB_565);
+            /*
+             * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
+             * -string
+             */
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+            object.addProperty("image", encoded);
+            object.addProperty("imageThumbnail", encoded);
+        }
+        object.addProperty("depth", comment.getDepth());
+        if (comment.getParent() != null) {
+            object.addProperty("parent", comment.getParent().getId());
+        }
+        return object;
+    }
 
 }

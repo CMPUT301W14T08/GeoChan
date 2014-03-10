@@ -45,111 +45,102 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadListFragment extends Fragment implements
-		LoaderCallbacks<ArrayList<ThreadComment>> {
-	private ListView threadListView;
-	private ThreadListAdapter adapter;
+        LoaderCallbacks<ArrayList<ThreadComment>> {
+    private ListView threadListView;
+    private ThreadListAdapter adapter;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		return inflater
-				.inflate(R.layout.fragment_thread_list, container, false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_thread_list, container, false);
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		getLoaderManager()
-				.initLoader(ThreadCommentLoader.LOADER_ID, null, this);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		inflater.inflate(R.menu.thread_list, menu);
-		MenuItem item = menu.findItem(R.id.action_settings);
-		item.setVisible(true);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.thread_list, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		threadListView = (ListView) getActivity()
-				.findViewById(R.id.thread_list);
-		adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
-		threadListView.setEmptyView(getActivity().findViewById(
-				R.id.empty_list_view));
-		threadListView.setAdapter(adapter);
-		threadListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			/*
-			 * On click, launch the fragment responsible for thread viewing
-			 */
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Fragment fragment = new ThreadViewFragment();
-				Bundle bundle = new Bundle();
-				bundle.putLong("id", id);
-				fragment.setArguments(bundle);
-				getFragmentManager()
-						.beginTransaction()
-						.replace(R.id.fragment_container, fragment,
-								"thread_view_fragment")
-						.addToBackStack("thread_view_fragment").commit();
-				// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-				getFragmentManager().executePendingTransactions();
-			}
-		});
-		SharedPreferences pref = getActivity().getPreferences(
-				Context.MODE_PRIVATE);
-		int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
-		ThreadList.sortThreads(sort);
-		adapter.notifyDataSetChanged();
-	}
+    @Override
+    public void onStart() {
+        super.onStart();
+        threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+        threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
+        threadListView.setAdapter(adapter);
+        threadListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            /*
+             * On click, launch the fragment responsible for thread viewing
+             */
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = new ThreadViewFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("id", id);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment, "thread_view_fragment")
+                        .addToBackStack("thread_view_fragment").commit();
+                // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                getFragmentManager().executePendingTransactions();
+            }
+        });
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
+        ThreadList.sortThreads(sort);
+        adapter.notifyDataSetChanged();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
-	 * android.os.Bundle)
-	 */
-	@Override
-	public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-		return new ThreadCommentLoader(getActivity());
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
+     * android.os.Bundle)
+     */
+    @Override
+    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
+        return new ThreadCommentLoader(getActivity());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
-	 * .Loader, java.lang.Object)
-	 */
-	@Override
-	public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
-			ArrayList<ThreadComment> list) {
-		ThreadList.setThreads(list);
-		adapter.setList(list);
-		adapter.notifyDataSetChanged();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
+     * .Loader, java.lang.Object)
+     */
+    @Override
+    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
+            ArrayList<ThreadComment> list) {
+        ThreadList.setThreads(list);
+        adapter.setList(list);
+        adapter.notifyDataSetChanged();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
-	 * .Loader)
-	 */
-	@Override
-	public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
-		adapter.setList(new ArrayList<ThreadComment>());
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
+     * .Loader)
+     */
+    @Override
+    public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
+        adapter.setList(new ArrayList<ThreadComment>());
+    }
 }

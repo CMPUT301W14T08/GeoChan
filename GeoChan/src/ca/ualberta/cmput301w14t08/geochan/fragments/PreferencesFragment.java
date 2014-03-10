@@ -30,30 +30,29 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 public class PreferencesFragment extends PreferenceFragment {
 
-	private EditTextPreference username;
+    private EditTextPreference username;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.settings);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.settings);
 
-		username = (EditTextPreference) findPreference("username");
-		username.setSummary(username.getText());
+        username = (EditTextPreference) findPreference("username");
+        username.setSummary(username.getText());
 
-		username.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			public boolean onPreferenceChange(Preference preference,
-					Object newValue) {
-				preference.setSummary((String) newValue);
-				Preference hash = findPreference("device_hash");
-				hash.setSummary((String) newValue + " #"
-						+ UserHashManager.getHash((String) newValue));
-				return true;
-			}
-		});
+        username.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                Preference hash = findPreference("device_hash");
+                hash.setSummary((String) newValue + " #"
+                        + UserHashManager.getHash((String) newValue));
+                return true;
+            }
+        });
 
-		Preference hash = findPreference("device_hash");
-		UserHashManager manager = UserHashManager.getInstance();
-		hash.setSummary(username.getText() + " #" + manager.getHash());
-	}
+        Preference hash = findPreference("device_hash");
+        UserHashManager manager = UserHashManager.getInstance();
+        hash.setSummary(username.getText() + " #" + manager.getHash());
+    }
 }

@@ -30,59 +30,59 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
-	ArrayList<Comment> list = null;
-	ElasticSearchClient client;
-	String id;
+    ArrayList<Comment> list = null;
+    ElasticSearchClient client;
+    String id;
 
-	public static final int LOADER_ID = 1;
+    public static final int LOADER_ID = 1;
 
-	public CommentLoader(Context context, String id) {
-		super(context);
-		client = ElasticSearchClient.getInstance();
-		this.id = id;
-	}
+    public CommentLoader(Context context, String id) {
+        super(context);
+        client = ElasticSearchClient.getInstance();
+        this.id = id;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.content.AsyncTaskLoader#loadInBackground()
-	 */
-	@Override
-	public ArrayList<Comment> loadInBackground() {
-		if (list == null) {
-			list = new ArrayList<Comment>();
-		}
-		return client.getComments(id);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.content.AsyncTaskLoader#loadInBackground()
+     */
+    @Override
+    public ArrayList<Comment> loadInBackground() {
+        if (list == null) {
+            list = new ArrayList<Comment>();
+        }
+        return client.getComments(id);
+    }
 
-	@Override
-	public void deliverResult(ArrayList<Comment> list) {
-		this.list = list;
-		if (isStarted()) {
-			super.deliverResult(list);
-		}
-	}
+    @Override
+    public void deliverResult(ArrayList<Comment> list) {
+        this.list = list;
+        if (isStarted()) {
+            super.deliverResult(list);
+        }
+    }
 
-	@Override
-	protected void onStartLoading() {
-		if (list != null) {
-			deliverResult(list);
-		}
+    @Override
+    protected void onStartLoading() {
+        if (list != null) {
+            deliverResult(list);
+        }
 
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
 
-			@Override
-			public void run() {
-				int count = client.getCommentCount();
-				if (count != list.size()) {
-					forceLoad();
-				}
-			}
-		}, 5000, 60000);
+            @Override
+            public void run() {
+                int count = client.getCommentCount();
+                if (count != list.size()) {
+                    forceLoad();
+                }
+            }
+        }, 5000, 60000);
 
-		if (list == null) {
-			forceLoad();
-		}
-	}
+        if (list == null) {
+            forceLoad();
+        }
+    }
 }

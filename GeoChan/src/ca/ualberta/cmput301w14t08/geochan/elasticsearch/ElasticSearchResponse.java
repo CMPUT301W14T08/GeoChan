@@ -21,20 +21,20 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 public class ElasticSearchResponse<T> {
-	String _index;
-	String _type;
-	String _id;
-	int _version;
-	boolean exists;
-	T _source;
-	double max_score;
+    String _index;
+    String _type;
+    String _id;
+    int _version;
+    boolean exists;
+    T _source;
+    double max_score;
 
-	public T getSource() {
-		return _source;
-	}
+    public T getSource() {
+        return _source;
+    }
 
-	@Override
-	public String toString() {
-		return "_index: " + _index + ", _source:" + _source.toString();
-	}
+    @Override
+    public String toString() {
+        return "_index: " + _index + ", _source:" + _source.toString();
+    }
 }

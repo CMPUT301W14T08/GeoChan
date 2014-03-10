@@ -28,104 +28,99 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadComment {
-	private ArrayList<Comment> comments;
-	private Comment bodyComment;
-	private String title;
-	private UserHashManager manager;
-	private long id;
+    private ArrayList<Comment> comments;
+    private Comment bodyComment;
+    private String title;
+    private UserHashManager manager;
+    private long id;
 
-	public ThreadComment(Comment bodyComment, String title) {
-		super();
-		this.comments = new ArrayList<Comment>();
-		this.bodyComment = bodyComment;
-		this.setTitle(title);
-		this.manager = UserHashManager.getInstance();
-		this.id = manager.getCommentIdHash();
-	}
+    public ThreadComment(Comment bodyComment, String title) {
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.bodyComment = bodyComment;
+        this.setTitle(title);
+        this.manager = UserHashManager.getInstance();
+        this.id = manager.getCommentIdHash();
+    }
 
-	/* This constructor is only used for testing. */
-	public ThreadComment() {
-		super();
-		this.comments = new ArrayList<Comment>();
-		this.bodyComment = null;
-		this.title = null;
-	}
+    /* This constructor is only used for testing. */
+    public ThreadComment() {
+        super();
+        this.comments = new ArrayList<Comment>();
+        this.bodyComment = null;
+        this.title = null;
+    }
 
-	/**
-	 * Getters and setters
-	 */
-	public Date getThreadDate() {
-		return bodyComment.getCommentDate();
-	}
+    /**
+     * Getters and setters
+     */
+    public Date getThreadDate() {
+        return bodyComment.getCommentDate();
+    }
 
-	public void setThreadDate(Date threadDate) {
-		bodyComment.setCommentDate(threadDate);
-	}
+    public void setThreadDate(Date threadDate) {
+        bodyComment.setCommentDate(threadDate);
+    }
 
-	public String getId() {
-		return Long.toString(id);
-	}
+    public String getId() {
+        return Long.toString(id);
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public Comment getBodyComment() {
-		return bodyComment;
-	}
+    public Comment getBodyComment() {
+        return bodyComment;
+    }
 
-	public void setBodyComment(Comment bodyComment) {
-		this.bodyComment = bodyComment;
-	}
+    public void setBodyComment(Comment bodyComment) {
+        this.bodyComment = bodyComment;
+    }
 
-	public ArrayList<Comment> getComments() {
-		return comments;
-	}
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
 
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
-	}
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void addComment(Comment c) {
-		this.comments.add(c);
-	}
+    public void addComment(Comment c) {
+        this.comments.add(c);
+    }
 
-	/**
-	 * Sorts thread comments according to the tag passed.
-	 * 
-	 * @param tag
-	 *            Tag to sort comments by
-	 */
-	public void sortComments(int tag) {
-		switch (tag) {
-		case SortTypes.SORT_DATE_NEWEST:
-			Collections.sort(this.getComments(),
-					SortTypes.sortCommentsByDateNewest());
-			break;
-		case SortTypes.SORT_DATE_OLDEST:
-			Collections.sort(this.getComments(),
-					SortTypes.sortCommentsByDateOldest());
-			break;
-		case SortTypes.SORT_LOCATION_OP:
-			Collections.sort(this.getComments(),
-					SortTypes.sortCommentsByParentDistance());
-			break;
-		case SortTypes.SORT_SCORE_HIGHEST:
-			Collections.sort(this.getComments(),
-					SortTypes.sortCommentsByParentScoreHighest());
-			break;
-		case SortTypes.SORT_SCORE_LOWEST:
-			Collections.sort(this.getComments(),
-					SortTypes.sortCommentsByParentScoreLowest());
-			break;
-		}
-	}
+    /**
+     * Sorts thread comments according to the tag passed.
+     * 
+     * @param tag
+     *            Tag to sort comments by
+     */
+    public void sortComments(int tag) {
+        switch (tag) {
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateNewest());
+            break;
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateOldest());
+            break;
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
+            break;
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
+            break;
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
+            break;
+        }
+    }
 }

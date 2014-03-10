@@ -40,112 +40,105 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
-public class MainActivity extends Activity implements
-		OnBackStackChangedListener {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		if (savedInstanceState != null) {
-			return;
-		}
-		// DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
-		ElasticSearchClient.generateInstance();
-		UserHashManager.generateInstance(this);
-		Fragment fragment = new ThreadListFragment();
-		getFragmentManager().beginTransaction()
-				.add(R.id.fragment_container, fragment).commit();
-		getFragmentManager().addOnBackStackChangedListener(this);
-	}
+public class MainActivity extends Activity implements OnBackStackChangedListener {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            return;
+        }
+        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
+        ElasticSearchClient.generateInstance();
+        UserHashManager.generateInstance(this);
+        Fragment fragment = new ThreadListFragment();
+        getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getFragmentManager().addOnBackStackChangedListener(this);
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			getFragmentManager()
-					.beginTransaction()
-					.replace(R.id.fragment_container,
-							new PreferencesFragment(), "prefFrag")
-					.addToBackStack(null).commit();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_settings:
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
+                    .addToBackStack(null).commit();
 
-			// This next line is necessary for JUnit to see fragments
-			getFragmentManager().executePendingTransactions();
-			return true;
-		case R.id.action_add_thread:
-			getFragmentManager()
-					.beginTransaction()
-					.replace(R.id.fragment_container, new PostThreadFragment(),
-							"postThreadFrag").addToBackStack(null).commit();
+            // This next line is necessary for JUnit to see fragments
+            getFragmentManager().executePendingTransactions();
+            return true;
+        case R.id.action_add_thread:
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
+                    .addToBackStack(null).commit();
 
-			// This next line is necessary for JUnit to see fragments
-			getFragmentManager().executePendingTransactions();
-			return true;
-		case android.R.id.home:
-			getFragmentManager().popBackStack();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+            // This next line is necessary for JUnit to see fragments
+            getFragmentManager().executePendingTransactions();
+            return true;
+        case android.R.id.home:
+            getFragmentManager().popBackStack();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
-	@Override
-	public void onBackStackChanged() {
-		int count = getFragmentManager().getBackStackEntryCount();
-		if (count > 0) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		} else {
-			getActionBar().setDisplayHomeAsUpEnabled(false);
-		}
-	}
+    @Override
+    public void onBackStackChanged() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
 
-	public void postNewThread(View v) {
-		PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-				.findFragmentByTag("postThreadFrag");
-		fragment.postNewThread(v);
-	}
+    public void postNewThread(View v) {
+        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag(
+                "postThreadFrag");
+        fragment.postNewThread(v);
+    }
 
-	public void postComment(View v) {
-		PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-				.findFragmentByTag("comFrag");
-		fragment.postComment(v);
-	}
+    public void postComment(View v) {
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                .findFragmentByTag("comFrag");
+        fragment.postComment(v);
+    }
 
-	public void submitLocation(View v) {
-		CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
-				.findFragmentByTag("customLocFrag");
-		fragment.submitLocation(v);
-	}
+    public void submitLocation(View v) {
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+                .findFragmentByTag("customLocFrag");
+        fragment.submitLocation(v);
+    }
 
-	public void postReply(View v) {
-		PostReplyFragment fragment = (PostReplyFragment) getFragmentManager()
-				.findFragmentByTag("repFrag");
-		fragment.postReply(v);
-	}
+    public void postReply(View v) {
+        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(
+                "repFrag");
+        fragment.postReply(v);
+    }
 
-	public void postReplyToOp(View v) {
-		ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager()
-				.findFragmentByTag("thread_view_fragment");
-		Bundle bundle = fragment.getArguments();
-		Fragment f = new PostCommentFragment();
-		f.setArguments(bundle);
-		getFragmentManager().beginTransaction()
-				.replace(R.id.fragment_container, f, "comFrag")
-				.addToBackStack(null).commit();
-		getFragmentManager().executePendingTransactions();
-	}
+    public void postReplyToOp(View v) {
+        ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
+                "thread_view_fragment");
+        Bundle bundle = fragment.getArguments();
+        Fragment f = new PostCommentFragment();
+        f.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "comFrag")
+                .addToBackStack(null).commit();
+        getFragmentManager().executePendingTransactions();
+    }
 
-	public void changeLocation(View v) {
-		Log.e("clicked", "changeLocationButton");
-		getFragmentManager()
-				.beginTransaction()
-				.replace(R.id.fragment_container, new CustomLocationFragment(),
-						"customLocFrag").addToBackStack(null).commit();
-	}
+    public void changeLocation(View v) {
+        Log.e("clicked", "changeLocationButton");
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
+                .addToBackStack(null).commit();
+    }
 }

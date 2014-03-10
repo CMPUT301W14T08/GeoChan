@@ -26,49 +26,49 @@ import java.util.Collections;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadList {
-	private static ArrayList<ThreadComment> threads = null;
+    private static ArrayList<ThreadComment> threads = null;
 
-	/**
-	 * Getters and setters
-	 */
-	public static ArrayList<ThreadComment> getThreads() {
-		if (threads == null) {
-			threads = new ArrayList<ThreadComment>();
-		}
-		return threads;
-	}
+    /**
+     * Getters and setters
+     */
+    public static ArrayList<ThreadComment> getThreads() {
+        if (threads == null) {
+            threads = new ArrayList<ThreadComment>();
+        }
+        return threads;
+    }
 
-	public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
-		threads = listOfThreads;
-	}
+    public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
+        threads = listOfThreads;
+    }
 
-	public static void addThread(Comment comment, String title) {
-		if (threads == null) {
-			threads = new ArrayList<ThreadComment>();
-		}
-		threads.add(new ThreadComment(comment, title));
-	}
+    public static void addThread(Comment comment, String title) {
+        if (threads == null) {
+            threads = new ArrayList<ThreadComment>();
+        }
+        threads.add(new ThreadComment(comment, title));
+    }
 
-	public static void addThread(ThreadComment t) {
-		threads.add(t);
-	}
+    public static void addThread(ThreadComment t) {
+        threads.add(t);
+    }
 
-	/**
-	 * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the most
-	 * recent threads to the top. "DATE_OLDEST" pushes the oldest threads to the
-	 * top.
-	 * 
-	 * @param tag
-	 *            Sets the sorting method to use
-	 */
-	public static void sortThreads(int tag) {
-		switch (tag) {
-		case SortTypes.SORT_DATE_NEWEST:
-			Collections.sort(threads, SortTypes.sortThreadsByDateNewest());
-			break;
-		case SortTypes.SORT_DATE_OLDEST:
-			Collections.sort(threads, SortTypes.sortThreadsByDateOldest());
-			break;
-		}
-	}
+    /**
+     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the most
+     * recent threads to the top. "DATE_OLDEST" pushes the oldest threads to the
+     * top.
+     * 
+     * @param tag
+     *            Sets the sorting method to use
+     */
+    public static void sortThreads(int tag) {
+        switch (tag) {
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(threads, SortTypes.sortThreadsByDateNewest());
+            break;
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(threads, SortTypes.sortThreadsByDateOldest());
+            break;
+        }
+    }
 }

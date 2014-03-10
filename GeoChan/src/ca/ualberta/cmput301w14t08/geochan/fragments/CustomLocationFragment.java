@@ -41,49 +41,44 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 public class CustomLocationFragment extends Fragment {
 
-	private ArrayList<LogEntry> logArray;
-	private CustomLocationAdapter customLocationAdapter;
+    private ArrayList<LogEntry> logArray;
+    private CustomLocationAdapter customLocationAdapter;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setHasOptionsMenu(false);
-		return inflater.inflate(R.layout.fragment_custom_location, container,
-				false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
+        return inflater.inflate(R.layout.fragment_custom_location, container, false);
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		// inflater.inflate(R.menu.thread_list, menu);
-		MenuItem item = menu.findItem(R.id.action_settings);
-		item.setVisible(true);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        // inflater.inflate(R.menu.thread_list, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	public void onStart() {
-		super.onStart();
-		GeoLocationLog log = GeoLocationLog.getInstance();
-		logArray = log.getLogEntries();
-		ListView lv = (ListView) getView().findViewById(
-				R.id.custom_location_list_view);
-		lv.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Log.e("Clicked", "An Item in the previous locations");
-			}
-		});
-		customLocationAdapter = new CustomLocationAdapter(getActivity(),
-				logArray);
-		lv.setAdapter(customLocationAdapter);
-	}
+    public void onStart() {
+        super.onStart();
+        GeoLocationLog log = GeoLocationLog.getInstance();
+        logArray = log.getLogEntries();
+        ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
+        lv.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("Clicked", "An Item in the previous locations");
+            }
+        });
+        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
+        lv.setAdapter(customLocationAdapter);
+    }
 
-	public void submitLocation(View v) {
-		if (v.getId() == R.id.new_location_button) {
-			Log.e("Clicked", "New Location Button");
-		} else if (v.getId() == R.id.current_location_button) {
-			Log.e("Clicked", "Current Location Button");
-		}
-	}
+    public void submitLocation(View v) {
+        if (v.getId() == R.id.new_location_button) {
+            Log.e("Clicked", "New Location Button");
+        } else if (v.getId() == R.id.current_location_button) {
+            Log.e("Clicked", "Current Location Button");
+        }
+    }
 }

@@ -49,82 +49,74 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * thread.
  */
 public class PostCommentFragment extends Fragment {
-	ThreadComment thread;
-	private LocationListenerService locationListenerService;
+    ThreadComment thread;
+    private LocationListenerService locationListenerService;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setHasOptionsMenu(false);
-		return inflater.inflate(R.layout.fragment_post_comment, container,
-				false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
+        return inflater.inflate(R.layout.fragment_post_comment, container, false);
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		MenuItem item = menu.findItem(R.id.action_settings);
-		item.setVisible(true);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	public void onStart() {
-		super.onStart();
-		Bundle bundle = getArguments();
-		thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-		TextView titleView = (TextView) getActivity().findViewById(
-				R.id.op_title);
-		TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-		titleView.setText(thread.getTitle());
-		bodyView.setText(thread.getBodyComment().getTextPost());
-		locationListenerService = new LocationListenerService(getActivity());
-		locationListenerService.startListening();
-	}
+    public void onStart() {
+        super.onStart();
+        Bundle bundle = getArguments();
+        thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
+        TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
+        TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
+        titleView.setText(thread.getTitle());
+        bodyView.setText(thread.getBodyComment().getTextPost());
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+    }
 
-	public void postComment(View v) {
-		if (v.getId() == R.id.post_comment_button) {
-			EditText editComment = (EditText) this.getView().findViewById(
-					R.id.commentBody);
-			String comment = editComment.getText().toString();
-			GeoLocation geoLocation = new GeoLocation(locationListenerService);
-			if (geoLocation.getLocation() == null) {
-				// ErrorDialog.show(getActivity(),
-				// "Could not obtain location.");
-				// Create a new comment object and set username
-				Comment newComment = new Comment(comment, null,
-						thread.getBodyComment());
-				ElasticSearchClient client = ElasticSearchClient.getInstance();
-				client.postComment(thread, thread.getBodyComment(), newComment);
-			} else {
-				// Create a new comment object and set username
-				Comment newComment = new Comment(comment, geoLocation,
-						thread.getBodyComment());
-				ElasticSearchClient client = ElasticSearchClient.getInstance();
-				client.postComment(thread, thread.getBodyComment(), newComment);
-				// log the location and thread title
-				GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-				geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
-			}
-			InputMethodManager inputManager = (InputMethodManager) getActivity()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.hideSoftInputFromWindow(getActivity()
-					.getCurrentFocus().getWindowToken(),
-					InputMethodManager.HIDE_NOT_ALWAYS);
-			this.getFragmentManager().popBackStackImmediate();
-		}
-	}
+    public void postComment(View v) {
+        if (v.getId() == R.id.post_comment_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+            String comment = editComment.getText().toString();
+            GeoLocation geoLocation = new GeoLocation(locationListenerService);
+            if (geoLocation.getLocation() == null) {
+                // ErrorDialog.show(getActivity(),
+                // "Could not obtain location.");
+                // Create a new comment object and set username
+                Comment newComment = new Comment(comment, null, thread.getBodyComment());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, thread.getBodyComment(), newComment);
+            } else {
+                // Create a new comment object and set username
+                Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, thread.getBodyComment(), newComment);
+                // log the location and thread title
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+            }
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            this.getFragmentManager().popBackStackImmediate();
+        }
+    }
 
-	public String retrieveUsername() {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
-		UserHashManager manager = UserHashManager.getInstance();
-		return preferences.getString("username", "Anon") + "#"
-				+ manager.getHash();
-	}
+    public String retrieveUsername() {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        UserHashManager manager = UserHashManager.getInstance();
+        return preferences.getString("username", "Anon") + "#" + manager.getHash();
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		locationListenerService.stopListening();
-	}
+    @Override
+    public void onStop() {
+        super.onStop();
+        locationListenerService.stopListening();
+    }
 }

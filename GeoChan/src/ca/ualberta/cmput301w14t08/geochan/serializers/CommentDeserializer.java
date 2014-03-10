@@ -35,40 +35,40 @@ import com.google.gson.JsonParseException;
 
 public class CommentDeserializer implements JsonDeserializer<Comment> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
-	 * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
-	 */
-	@Override
-	public Comment deserialize(JsonElement json, Type type,
-			JsonDeserializationContext context) throws JsonParseException {
-		JsonObject object = json.getAsJsonObject();
-		long commentDate = object.get("commentDate").getAsLong();
-		boolean hasImage = object.get("hasImage").getAsBoolean();
-		String locationString = object.get("location").getAsString();
-		List<String> locationEntries = Arrays.asList(locationString.split(","));
-		double latitude = Double.parseDouble(locationEntries.get(0));
-		double longitude = Double.parseDouble(locationEntries.get(1));
-		String user = object.get("user").getAsString();
-		String hash = object.get("hash").getAsString();
-		String textPost = object.get("textPost").getAsString();
-		String id = object.get("id").getAsString();
-		if (hasImage) {
-			// TODO: Implement decoding of images
-		}
-		int depth = object.get("depth").getAsInt();
-		// String parent = object.get("parent").getAsString();
-		GeoLocation location = new GeoLocation(latitude, longitude);
-		final Comment comment = new Comment(textPost, location);
-		comment.getCommentDate().setTime(commentDate);
-		comment.setUser(user);
-		comment.setHash(hash);
-		comment.setDepth(depth);
-		comment.setId(Long.parseLong(id));
-		// TODO: Set image
-		return comment;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
+     * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+     */
+    @Override
+    public Comment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+            throws JsonParseException {
+        JsonObject object = json.getAsJsonObject();
+        long commentDate = object.get("commentDate").getAsLong();
+        boolean hasImage = object.get("hasImage").getAsBoolean();
+        String locationString = object.get("location").getAsString();
+        List<String> locationEntries = Arrays.asList(locationString.split(","));
+        double latitude = Double.parseDouble(locationEntries.get(0));
+        double longitude = Double.parseDouble(locationEntries.get(1));
+        String user = object.get("user").getAsString();
+        String hash = object.get("hash").getAsString();
+        String textPost = object.get("textPost").getAsString();
+        String id = object.get("id").getAsString();
+        if (hasImage) {
+            // TODO: Implement decoding of images
+        }
+        int depth = object.get("depth").getAsInt();
+        // String parent = object.get("parent").getAsString();
+        GeoLocation location = new GeoLocation(latitude, longitude);
+        final Comment comment = new Comment(textPost, location);
+        comment.getCommentDate().setTime(commentDate);
+        comment.setUser(user);
+        comment.setHash(hash);
+        comment.setDepth(depth);
+        comment.setId(Long.parseLong(id));
+        // TODO: Set image
+        return comment;
+    }
 }

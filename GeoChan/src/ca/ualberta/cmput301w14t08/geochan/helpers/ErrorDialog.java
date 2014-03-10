@@ -25,16 +25,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 public class ErrorDialog {
-	public static void show(Context context, String message) {
-		AlertDialog.Builder error = new AlertDialog.Builder(context);
-		error.setTitle("Error");
-		error.setMessage(message);
-		error.setPositiveButton(android.R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-		error.show();
-	}
+    public static void show(Context context, String message) {
+        AlertDialog.Builder error = new AlertDialog.Builder(context);
+        error.setTitle("Error");
+        error.setMessage(message);
+        error.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        error.show();
+    }
 }

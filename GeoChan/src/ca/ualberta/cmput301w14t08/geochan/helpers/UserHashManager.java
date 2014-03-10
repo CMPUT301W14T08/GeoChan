@@ -29,57 +29,54 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
 public class UserHashManager {
-	private static Context context;
-	private static UserHashManager instance;
-	private static String android_id;
+    private static Context context;
+    private static UserHashManager instance;
+    private static String android_id;
 
-	private UserHashManager(Context context) {
-		UserHashManager.context = context;
-		android_id = Secure.getString(context.getContentResolver(),
-				Secure.ANDROID_ID);
-	}
+    private UserHashManager(Context context) {
+        UserHashManager.context = context;
+        android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+    }
 
-	public static void generateInstance(Context context) {
-		if (instance == null) {
-			instance = new UserHashManager(context);
-		}
-	}
+    public static void generateInstance(Context context) {
+        if (instance == null) {
+            instance = new UserHashManager(context);
+        }
+    }
 
-	public static UserHashManager getInstance() {
-		return instance;
-	}
+    public static UserHashManager getInstance() {
+        return instance;
+    }
 
-	public String getHash() {
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		String user = pref.getString("username", "Anon");
-		int id = android_id.hashCode();
-		int temp = (id + id + id * 3 + user.hashCode()) / 42;
-		return Integer.toHexString(temp + id);
-	}
+    public String getHash() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String user = pref.getString("username", "Anon");
+        int id = android_id.hashCode();
+        int temp = (id + id + id * 3 + user.hashCode()) / 42;
+        return Integer.toHexString(temp + id);
+    }
 
-	public String getUser() {
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		String user = pref.getString("username", "Anon");
-		return user;
-	}
+    public String getUser() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String user = pref.getString("username", "Anon");
+        return user;
+    }
 
-	public static String getHash(String string) {
-		int id = android_id.hashCode();
-		int temp = (id + id + id * 3 + string.hashCode()) / 42;
-		return Integer.toHexString(temp + id);
-	}
+    public static String getHash(String string) {
+        int id = android_id.hashCode();
+        int temp = (id + id + id * 3 + string.hashCode()) / 42;
+        return Integer.toHexString(temp + id);
+    }
 
-	public long getCommentIdHash() {
-		Date date = new Date();
-		Random random = new Random();
-		random.setSeed(date.getTime());
-		return (date.getTime() + random.nextLong());
-	}
+    public long getCommentIdHash() {
+        Date date = new Date();
+        Random random = new Random();
+        random.setSeed(date.getTime());
+        return (date.getTime() + random.nextLong());
+    }
 
-	public String getAndroid_id() {
-		return android_id;
-	}
+    public String getAndroid_id() {
+        return android_id;
+    }
 
 }

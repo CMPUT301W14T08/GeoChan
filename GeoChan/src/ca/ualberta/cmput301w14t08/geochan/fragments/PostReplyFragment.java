@@ -47,81 +47,73 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * thread.
  */
 public class PostReplyFragment extends Fragment {
-	ThreadComment thread;
-	Comment commentToReplyTo;
-	private LocationListenerService locationListenerService;
+    ThreadComment thread;
+    Comment commentToReplyTo;
+    private LocationListenerService locationListenerService;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		setHasOptionsMenu(false);
-		return inflater.inflate(R.layout.fragment_post_reply, container, false);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
+        return inflater.inflate(R.layout.fragment_post_reply, container, false);
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		MenuItem item = menu.findItem(R.id.action_settings);
-		item.setVisible(true);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(true);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	public void onStart() {
-		super.onStart();
-		Bundle bundle = getArguments();
-		commentToReplyTo = (Comment) bundle.getParcelable("cmt");
+    public void onStart() {
+        super.onStart();
+        Bundle bundle = getArguments();
+        commentToReplyTo = (Comment) bundle.getParcelable("cmt");
 
-		TextView replyTo = (TextView) getActivity().findViewById(
-				R.id.comment_replyingTo);
-		TextView bodyReplyTo = (TextView) getActivity().findViewById(
-				R.id.reply_to_body);
-		bodyReplyTo.setText(commentToReplyTo.getTextPost());
-		replyTo.setText(commentToReplyTo.getUser() + " says:");
-		locationListenerService = new LocationListenerService(getActivity());
-		locationListenerService.startListening();
-	}
+        TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
+        TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        bodyReplyTo.setText(commentToReplyTo.getTextPost());
+        replyTo.setText(commentToReplyTo.getUser() + " says:");
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+    }
 
-	public void postReply(View v) {
-		if (v.getId() == R.id.post_reply_button) {
-			EditText editComment = (EditText) this.getView().findViewById(
-					R.id.replyBody);
-			String comment = editComment.getText().toString();
-			GeoLocation geoLocation = new GeoLocation(locationListenerService);
-			if (geoLocation.getLocation() == null) {
-				// ErrorDialog.show(getActivity(),
-				// "Could not obtain location.");
-				// Create a new comment object and set username
-				Comment newComment = new Comment(comment, null,
-						commentToReplyTo);
-				ElasticSearchClient client = ElasticSearchClient.getInstance();
-				client.postComment(thread, commentToReplyTo, newComment);
-			} else {
-				// Create a new comment object and set username
-				Comment newComment = new Comment(comment, geoLocation,
-						commentToReplyTo);
-				ElasticSearchClient client = ElasticSearchClient.getInstance();
-				client.postComment(thread, commentToReplyTo, newComment);
-			}
-			InputMethodManager inputManager = (InputMethodManager) getActivity()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.hideSoftInputFromWindow(getActivity()
-					.getCurrentFocus().getWindowToken(),
-					InputMethodManager.HIDE_NOT_ALWAYS);
-			this.getFragmentManager().popBackStackImmediate();
-		}
-	}
+    public void postReply(View v) {
+        if (v.getId() == R.id.post_reply_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
+            String comment = editComment.getText().toString();
+            GeoLocation geoLocation = new GeoLocation(locationListenerService);
+            if (geoLocation.getLocation() == null) {
+                // ErrorDialog.show(getActivity(),
+                // "Could not obtain location.");
+                // Create a new comment object and set username
+                Comment newComment = new Comment(comment, null, commentToReplyTo);
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, commentToReplyTo, newComment);
+            } else {
+                // Create a new comment object and set username
+                Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, commentToReplyTo, newComment);
+            }
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            this.getFragmentManager().popBackStackImmediate();
+        }
+    }
 
-	public String retrieveUsername() {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
-		UserHashManager manager = UserHashManager.getInstance();
-		return preferences.getString("username", "Anon") + "#"
-				+ manager.getHash();
-	}
+    public String retrieveUsername() {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        UserHashManager manager = UserHashManager.getInstance();
+        return preferences.getString("username", "Anon") + "#" + manager.getHash();
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		locationListenerService.stopListening();
-	}
+    @Override
+    public void onStop() {
+        super.onStop();
+        locationListenerService.stopListening();
+    }
 }
