@@ -40,6 +40,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/**
+ * Fragment which displays the contents of a ThreadComment.
+ */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private ListView threadView;
     private ThreadViewAdapter adapter;

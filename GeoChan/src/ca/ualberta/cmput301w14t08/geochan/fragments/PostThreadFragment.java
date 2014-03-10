@@ -41,6 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+
 /**
  * Responsible for the UI fragment that allows a user to post a new thread.
  */
@@ -58,6 +59,7 @@ public class PostThreadFragment extends Fragment {
         super.onStart();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        //log = new GeoLocationLog();
     }
 
     public void postNewThread(View v) {

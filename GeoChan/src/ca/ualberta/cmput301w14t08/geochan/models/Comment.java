@@ -131,7 +131,7 @@ public class Comment implements Parcelable {
     public Comment() {
         super();
         this.textPost = "This is a test comment.";
-        this.commentDate = null;
+        this.commentDate = new Date();
         this.image = null;
         this.location = null;
         this.parent = null;
@@ -245,43 +245,55 @@ public class Comment implements Parcelable {
         }
     }
 
+    /**
+     * Determines the distance between a comment and a GeoLocation
+     * in terms of latitude and longitude coordinates.
+     * @param g The GeoLocation to be compared with.
+     * @return The distance between the Comment and the passed
+     * GeoLocation in terms of coordinates.
+     */
     public double getDistanceFrom(GeoLocation g) {
-        /*
-         * Determines the distance between a comment and a GeoLocation in terms
-         * of latitude and longitude coordinates.
-         */
         return this.getLocation().distance(g);
     }
+    
 
+    /**
+     * Determines the amount of time between when the Comment was
+     * posted and the passed date in terms of hours.
+     * @param d The Date to be compared with.
+     * @return The number of hours between when the Comment was
+     * posted and the passed Date.
+     */
     public double getTimeFrom(Date d) {
-        /*
-         * Determines the amount of time between when a comment was posted and a
-         * date for determining a comment's relative score.
-         */
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(this.getCommentDate());
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+            return 0.5;
+        } else {
+            return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+        }
     }
 
+    /**
+     * Determines the "score" of the Comment in relation to its
+     * parent. Should never be called on the bodyComment of a
+     * ThreadComment, and will return 0 if it does.
+     * @return The score of the Comment in relation to its parent.
+     */
     public double getScoreFromParent() {
-        /*
-         * Determines the "score" of a comment in relation to its parent. Logs
-         * an error and returns 0 if parent is null, since this shouldn't be
-         * being called on a top comment.
-         */
         int distConst = 25;
         int timeConst = 10;
-        int maxScore = 1000;
+        int maxScore = 50000;
         /*
          * These can be changed depending on how we want to weight distance vs.
          * time for comment scoring.
          */
         if (this.parent == null) {
-            Log.e("Comment:", "getScore() was incorrectly called on a top comment.");
+            Log.e("Comment:", "getScoreFromParent() was incorrectly called on a top comment.");
             return 0;
         }
         double distScore = distConst
@@ -294,7 +306,39 @@ public class Comment implements Parcelable {
             return distScore + timeScore;
         }
     }
+    
+    /**
+     * Determines the score of a comment in a thread relevant to the user's current location
+     * and time.
+     * @param g The current GeoLocation of the user. In sorting, the Thread.sortLoc GeoLocation
+     * of the sorting thread is used and should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and current time.
+     */
+    public double getScoreFromUser(GeoLocation g){
+        int distConst = 25;
+        int timeConst = 10;
+        int maxScore = 10000;
+        
+        if(g == null){
+            Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
+            return 0;
+        }
+        double distScore = distConst
+                * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst
+                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        if ((distScore + timeScore) > maxScore){
+            return maxScore;
+        } else {
+            return distScore + timeScore;
+        }
+    }
 
+    /**
+     * Converts the Comment's commentDate to an appropriately
+     * formatted string.
+     * @return The string of the Comment's commentDate.
+     */
     public String getCommentDateString() {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
