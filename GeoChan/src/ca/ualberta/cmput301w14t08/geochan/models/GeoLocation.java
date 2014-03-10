@@ -36,7 +36,7 @@ public class GeoLocation {
     }
     
     public GeoLocation(double latitude, double longitude) {
-        this.location = new Location("preset");
+        this.location = new Location(LocationManager.GPS_PROVIDER);
         setLatitude(latitude);
         setLongitude(longitude);
     }    

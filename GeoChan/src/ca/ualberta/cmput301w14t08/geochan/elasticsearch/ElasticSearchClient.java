@@ -31,7 +31,6 @@ import io.searchbox.core.Search;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import android.app.LoaderManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -47,13 +46,12 @@ public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static Gson gson;
     private static JestClient client;
-    private LoaderManager manager;
     private static final String TYPE_COMMENT = "geoComment";
     private static final String TYPE_THREAD = "geoThread";
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
     
-    private ElasticSearchClient(LoaderManager manager) {
+    private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Comment.class, new CommentSerializer());
@@ -63,7 +61,6 @@ public class ElasticSearchClient {
         gson = builder.create();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
-        this.manager = manager;
         client = factory.getObject();
     }
     
@@ -71,9 +68,9 @@ public class ElasticSearchClient {
         return instance;
     }
     
-    public static void generateInstance(LoaderManager manager) {
+    public static void generateInstance() {
         if (instance == null) {
-            instance = new ElasticSearchClient(manager);
+            instance = new ElasticSearchClient();
         }
     }
     
