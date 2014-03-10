@@ -30,8 +30,6 @@ import io.searchbox.core.Search;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -44,7 +42,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class ElasticSearchClient {
-    private Context context;
     private static ElasticSearchClient instance = null;
     private static JestClient client;
     private static final String TYPE_COMMENT = "geoComment";
@@ -52,8 +49,7 @@ public class ElasticSearchClient {
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
     
-    private ElasticSearchClient(Context context) {
-        this.context = context;
+    private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
@@ -64,9 +60,9 @@ public class ElasticSearchClient {
         return instance;
     }
     
-    public static void generateInstance(Context context) {
+    public static void generateInstance() {
         if (instance == null) {
-            instance = new ElasticSearchClient(context);
+            instance = new ElasticSearchClient();
         }
     }
     

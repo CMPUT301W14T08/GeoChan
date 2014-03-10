@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.os.Bundle;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 

@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return;
         }
         // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
-        ElasticSearchClient.generateInstance(this);
+        ElasticSearchClient.generateInstance();
         UserHashManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
