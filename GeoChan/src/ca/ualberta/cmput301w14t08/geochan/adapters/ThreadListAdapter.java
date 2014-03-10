@@ -38,7 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 public class ThreadListAdapter extends BaseAdapter {
 
     private Context context;
-    private static ArrayList<ThreadComment> displayList;
+    private ArrayList<ThreadComment> displayList;
 
     public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
         this.context = context;
@@ -85,7 +85,7 @@ public class ThreadListAdapter extends BaseAdapter {
         time.setText(thread.getBodyComment().getCommentDateString());
         // Thread user creator
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
-        user.setText("posted by " + thread.getBodyComment().getUser() + "#"
+        user.setText("Posted by " + thread.getBodyComment().getUser() + "#"
                 + thread.getBodyComment().getHash());
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);

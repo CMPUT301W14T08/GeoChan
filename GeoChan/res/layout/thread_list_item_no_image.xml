@@ -25,16 +25,6 @@
         android:textColor="#65000000" />
 
     <TextView
-        android:id="@+id/commentDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/commentBy"
-        android:layout_alignBottom="@+id/commentBy"
-        android:layout_toRightOf="@+id/commentBy"
-        android:text="@string/placeholder_date"
-        android:textColor="#f00" />
-
-    <TextView
         android:id="@+id/commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,12 +34,20 @@
         android:textColor="#f00" />
 
     <TextView
+        android:id="@+id/commentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/commentBy"
+        android:text="@string/placeholder_date"
+        android:textColor="#f00" />
+
+    <TextView
         android:id="@+id/locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/commentDate"
-        android:layout_below="@+id/commentBy"
+        android:layout_below="@+id/commentDate"
         android:text="@string/placeholder_location" />
 
 </RelativeLayout>

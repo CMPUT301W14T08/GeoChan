@@ -13,25 +13,25 @@
         android:text="@string/lorem_ipsum" />
 
     <TextView
-        android:id="@+id/thread_view_top_comment_commentDate"
+        android:id="@+id/comment_reply_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/thread_view_top_comment_commentBy"
-        android:layout_alignBottom="@+id/thread_view_top_comment_commentBy"
-        android:layout_toRightOf="@+id/thread_view_top_comment_commentBy"
-        android:alpha="0.7"
-        android:paddingRight="5dp"
-        android:text="@string/placeholder_date"
-        android:textColor="#00f" />
-
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/thread_view_top_comment_commentBy"
+        android:layout_marginRight="74dp"
+        android:text="@string/reply"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+    
     <TextView
         android:id="@+id/thread_view_top_comment_commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/thread_view_top_comment_commentBody"
         android:layout_below="@+id/thread_view_top_comment_commentBody"
-        android:alpha="0.7"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="@string/placeholder_postby"
         android:textColor="#00f" />
 
@@ -39,24 +39,22 @@
         android:id="@+id/thread_view_top_comment_locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/thread_view_top_comment_commentBody"
+        android:layout_below="@+id/thread_view_top_comment_commentDate"
         android:paddingLeft="5dp"
-        android:textColor="#2E8B57"
-        android:layout_below="@+id/thread_view_top_comment_commentBy"
-        android:text="@string/placeholder_location" />
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_location"
+        android:textColor="#2E8B57" />
 
     <TextView
-        android:id="@+id/comment_reply_button"
+        android:id="@+id/thread_view_top_comment_commentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/thread_view_top_comment_locationText"
-        android:layout_alignBottom="@+id/thread_view_top_comment_locationText"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/thread_view_top_comment_commentDate"
-        android:background="#339933"
-        android:text="@string/reply"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+        android:layout_alignLeft="@+id/thread_view_top_comment_commentBody"
+        android:layout_below="@+id/thread_view_top_comment_commentBy"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_date"
+        android:textColor="#00f" />
 
 </RelativeLayout>

@@ -342,7 +342,7 @@ public class Comment implements Parcelable {
     public String getCommentDateString() {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-        return " on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
+        return "On " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
 
     /**

@@ -270,7 +270,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         title.setText(thread.getTitle());
         // Thread creator
         TextView threadBy = (TextView) convertView.findViewById(R.id.thread_view_op_commentBy);
-        threadBy.setText("posted by " + thread.getBodyComment().getUser() + "#"
+        threadBy.setText("Posted by " + thread.getBodyComment().getUser() + "#"
                 + thread.getBodyComment().getHash());
         // Thread body comment
         TextView body = (TextView) convertView.findViewById(R.id.thread_view_op_commentBody);
@@ -299,7 +299,8 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText("Posted by " + reply.getUser());
+        replyBy.setText("Posted by " + reply.getUser() + "#"
+                + thread.getBodyComment().getHash());
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
