@@ -16,8 +16,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
     }
     
     public void testConstruction() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        assertNotNull(geoLocationLog.getLogEntries());
+        assertNotNull(GeoLocationLog.getLogEntries());
     }
     
     public void testAddLogEntry() {

@@ -61,8 +61,7 @@ public class CustomLocationFragment extends Fragment {
     
     public void onStart() {
         super.onStart();
-        GeoLocationLog log = GeoLocationLog.getInstance();
-        logArray = log.getLogEntries();
+        logArray = GeoLocationLog.getLogEntries();
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener () {
             @Override

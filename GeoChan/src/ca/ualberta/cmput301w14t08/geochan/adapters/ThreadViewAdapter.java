@@ -83,10 +83,10 @@ public class ThreadViewAdapter extends BaseAdapter {
             return null;
         } else {
             int TCindex = getItemGetTC(position - 2);
-            Log.e("TCindex", Integer.toString(TCindex));
+            //Log.e("TCindex", Integer.toString(TCindex));
 
             int Cindex = getItemGetChild(TCindex, position - 2);
-            Log.e("Cindex", Integer.toString(Cindex));
+            //Log.e("Cindex", Integer.toString(Cindex));
 
             if (Cindex == -1) {
                 return comments.get(TCindex);

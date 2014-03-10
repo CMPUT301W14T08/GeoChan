@@ -36,8 +36,8 @@ public class CustomLocationAdapter extends BaseAdapter {
     private Context context;
 
     public CustomLocationAdapter(Context context, ArrayList<LogEntry> logEntries) {
-        this.logArray = logEntries;
         this.context = context;
+        this.logArray = logEntries;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class CustomLocationAdapter extends BaseAdapter {
     }
 
     @Override
-    public LogEntry getItem(int arg0) {
-        return logArray.get(arg0);
+    public LogEntry getItem(int position) {
+        return logArray.get(position);
     }
 
     @Override
-    public long getItemId(int arg0) {
+    public long getItemId(int position) {
         return 0;
     }
 

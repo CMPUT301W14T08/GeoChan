@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,7 @@ public class PostThreadFragment extends Fragment {
         locationListenerService.startListening();
     }
 
-    public void postNewThread(View v){
+    public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
@@ -70,21 +71,23 @@ public class PostThreadFragment extends Fragment {
             } else {
                 GeoLocation geoLocation = new GeoLocation(locationListenerService);
                 if (geoLocation.getLocation() == null) {
-                    //ErrorDialog.show(getActivity(), "Could not obtain location.");
+                    // ErrorDialog.show(getActivity(),
+                    // "Could not obtain location.");
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, null);
-                    //ThreadList.addThread(newComment, title);
+                    // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
                     Comment newComment = new Comment(comment, geoLocation);
-                    //ThreadList.addThread(newComment, title);
+                    // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                     // log the thread and the geolocation
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-                    geoLocationLog.addLogEntry(title, geoLocation);
+                    GeoLocationLog.addLogEntry(title, geoLocation);
+                    Log.e("size of locLog:",
+                            Integer.toString(GeoLocationLog.getLogEntries().size()));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

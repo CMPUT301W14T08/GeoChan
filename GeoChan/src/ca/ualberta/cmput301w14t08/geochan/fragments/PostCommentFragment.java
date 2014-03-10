@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -95,8 +96,9 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, thread.getBodyComment(), newComment);
                 // log the location and thread title
-                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                Log.e("size of locLog:",
+                        Integer.toString(GeoLocationLog.getLogEntries().size()));
             }
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
