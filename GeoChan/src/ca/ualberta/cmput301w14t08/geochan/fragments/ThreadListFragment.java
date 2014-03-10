@@ -37,10 +37,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -112,7 +110,6 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-        Toast.makeText(getActivity(), "Loading...", Toast.LENGTH_SHORT).show();
         return new ThreadCommentLoader(getActivity());
     }
 
@@ -121,7 +118,6 @@ public class ThreadListFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader, ArrayList<ThreadComment> list) {
-        Toast.makeText(getActivity(), "Loading finished", Toast.LENGTH_SHORT).show();
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }

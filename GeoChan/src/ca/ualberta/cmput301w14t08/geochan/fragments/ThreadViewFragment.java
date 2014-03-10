@@ -33,11 +33,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
-import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -87,7 +85,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
-        Toast.makeText(getActivity(), "Loading...", Toast.LENGTH_SHORT).show();
         return new CommentLoader(getActivity(), "parent", thread.getId());
     }
 
@@ -96,7 +93,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
-        Toast.makeText(getActivity(), "Loading finished", Toast.LENGTH_SHORT).show();
         thread.setComments(list);
         adapter.setThread(thread);
     }
