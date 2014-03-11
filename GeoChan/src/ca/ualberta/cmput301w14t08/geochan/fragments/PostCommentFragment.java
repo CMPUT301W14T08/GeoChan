@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,6 +74,7 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
+        bodyView.setMovementMethod(new ScrollingMovementMethod());
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
         locationListenerService = new LocationListenerService(getActivity());
