@@ -47,6 +47,10 @@ public class CustomLocationFragment extends Fragment {
     private CustomLocationAdapter customLocationAdapter;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
+    private int postType;
+
+    public static final int THREAD = 1;
+    public static final int COMMENT = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,23 +85,33 @@ public class CustomLocationFragment extends Fragment {
     }
 
     public void submitLocation(View v) {
-        Log.e("Clicked","New Location Button");
         if (v.getId() == R.id.new_location_button) {
+
             if (latitudeEditText.getText().toString().equals("") && longitudeEditText.getText().toString().equals("")) {
                 ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
+
             } else {
-                PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
-                Bundle args = fragment.getArguments();
-                args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
-                args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
+                Bundle bundle = getArguments();
+                postType = bundle.getInt("postType");
+                if (postType == THREAD) {
+                    Log.e("post type: ", "THREAD");
+                    PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+                    Bundle args = fragment.getArguments();
+                    args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
+                    args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
+                } else if (postType == COMMENT) {
+                    Log.e("post type: ", "COMMENT");
+                    PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+                    Bundle args = fragment.getArguments();
+                    args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
+                    args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
+                }
                 this.getFragmentManager().popBackStackImmediate();
             }
         }
 
         else if (v.getId() == R.id.current_location_button) {
-            Log.e("Clicked","Current Location Button");
             this.getFragmentManager().popBackStackImmediate();
         }
-
     }
 }

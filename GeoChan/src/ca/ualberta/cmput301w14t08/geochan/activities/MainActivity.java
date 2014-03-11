@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -119,7 +120,19 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     }
     
     public void changeLocation(View v) {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
+        Log.e("trying to change","location");
+        Bundle args = new Bundle();
+        if (v.getId() == R.id.thread_location_button) {
+            args.putInt("postType", CustomLocationFragment.THREAD);
+            Log.e("changing","thread");
+        } 
+        else if (v.getId() == R.id.comment_location_button) {
+            args.putInt("postType", CustomLocationFragment.COMMENT);
+            Log.e("changing","comment");
+        }
+        CustomLocationFragment frag = new CustomLocationFragment();
+        frag.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, frag, "customLocFrag")
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }

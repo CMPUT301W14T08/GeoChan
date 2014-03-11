@@ -25,9 +25,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,12 +49,11 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * comment.
  */
 public class PostCommentFragment extends Fragment {
-    
-    ThreadComment thread;
+
+    private ThreadComment thread;
     private LocationListenerService locationListenerService;
-    GeoLocation geoLocation;
-    EditText latText;
-    
+    private GeoLocation geoLocation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -79,30 +75,22 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        geoLocation = new GeoLocation(locationListenerService);
-        
-        //latText = (EditText) this.getView().findViewById(R.id.latitude_edit_text);
-        latText.addTextChangedListener(new TextWatcher () {
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                Log.e("AfterTextChanged", "latitude");
-                //geoLocation.setLatitude(Integer.valueOf(latText.getText().toString()));
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {     
-            }
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { 
-                Log.e("OnTextChanged", "latitude"); 
-            }
-        });
-        
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        geoLocation = new GeoLocation(locationListenerService);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+            }
+        }
     }
 
     public void postComment(View v) {
@@ -124,10 +112,13 @@ public class PostCommentFragment extends Fragment {
                 GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
+            
+            /* RIGHT NOW THIS BLOCK CAUSES A CRASH
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    InputMethodManager.HIDE_NOT_ALWAYS);*/
+            
             this.getFragmentManager().popBackStackImmediate();
         }
     }
