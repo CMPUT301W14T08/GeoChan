@@ -92,11 +92,34 @@ public class ElasticSearchClient {
     }
 
     public ArrayList<ThreadComment> getThreads() {
-        return get(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD);
+        Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
+        }.getType();
+        ElasticSearchSearchResponse<ThreadComment> esResponse = gson
+                .fromJson(get(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
+                elasticSearchSearchResponseType);
+        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+        for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
+            ThreadComment object = r.getSource();
+            list.add(object);
+        }
+        return list;
     }
 
     public ArrayList<Comment> getComments(String id) {
-        return get(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT);
+        Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>() {
+        }.getType();
+        ElasticSearchSearchResponse<Comment> esResponse = gson
+                .fromJson(get(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT),
+                elasticSearchSearchResponseType);
+        ArrayList<Comment> list = new ArrayList<Comment>();
+        for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
+            Comment object = r.getSource();
+            list.add(object);
+        }
+        for (Comment object : list) {
+                getChildComments(object);
+        }
+        return list;
     }
     
     private void post(final String json, final String type, final String id) {
@@ -134,31 +157,16 @@ public class ElasticSearchClient {
         }
     }
     
-    private <T> ArrayList<T> get(final String query, final String type) {
+    private String get(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
             result = client.execute(search);
-            String json = result.getJsonString();
-            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<T>>() {
-            }.getType();
-            ElasticSearchSearchResponse<T> esResponse = gson.fromJson(json,
-                    elasticSearchSearchResponseType);
-            ArrayList<T> list = new ArrayList<T>();
-            for (ElasticSearchResponse<T> r : esResponse.getHits()) {
-                T object = r.getSource();
-                list.add(object);
-            }
-            if (type == TYPE_COMMENT) {
-                for (T object : list) {
-                    getChildComments((Comment) object);
-                }
-            }
-            return list;
+            return result.getJsonString();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return new ArrayList<T>();
+            return "";
         }
     }
     
