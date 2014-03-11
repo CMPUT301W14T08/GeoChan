@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +73,7 @@ public class PostReplyFragment extends Fragment {
 
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
         bodyReplyTo.setText(commentToReplyTo.getTextPost());
         replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
