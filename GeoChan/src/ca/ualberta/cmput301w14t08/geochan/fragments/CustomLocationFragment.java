@@ -77,7 +77,25 @@ public class CustomLocationFragment extends Fragment {
         lv.setOnItemClickListener(new OnItemClickListener () {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("Clicked", "An Item in the previous locations");
+                // HAVE NOT UNIT OR SMOKE TESTED THIS YET
+                
+                Log.e("Clicked item position", Integer.toString(position));
+                LogEntry clickedEntry = (LogEntry) parent.getItemAtPosition(position);
+                Bundle bundle = getArguments();
+                postType = bundle.getInt("postType");
+                if (postType == THREAD) {
+                    Log.e("post type: ", "THREAD");
+                    PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+                    Bundle args = fragment.getArguments();
+                    args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
+                    args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
+                } else if (postType == COMMENT) {
+                    Log.e("post type: ", "COMMENT");
+                    PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+                    Bundle args = fragment.getArguments();
+                    args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
+                    args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
+                }
             }
         });
         customLocationAdapter = new CustomLocationAdapter(logArray);
