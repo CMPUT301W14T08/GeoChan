@@ -68,8 +68,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             getFragmentManager().executePendingTransactions();
             return true;
         case R.id.action_add_thread:
+            PostThreadFragment frag = new PostThreadFragment();
+            frag.setArguments(new Bundle());
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new PostThreadFragment(), "postThreadFrag")
+                    .replace(R.id.fragment_container, frag, "postThreadFrag")
                     .addToBackStack(null).commit();
 
             // This next line is necessary for JUnit to see fragments
@@ -119,6 +121,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     public void changeLocation(View v) {
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
                 .addToBackStack(null).commit();
+        getFragmentManager().executePendingTransactions();
     }
     
     public void submitLocation(View v) {

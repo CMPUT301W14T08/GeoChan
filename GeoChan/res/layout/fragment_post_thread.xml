@@ -61,8 +61,8 @@
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:onClick="postNewThread"
             android:text="@string/post"
+            android:onClick="postNewThread"
             android:textSize="12sp" />
     </LinearLayout>
 

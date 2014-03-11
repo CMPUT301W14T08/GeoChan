@@ -23,10 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.util.ArrayList;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,10 +33,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -47,10 +45,12 @@ public class CustomLocationFragment extends Fragment {
 
     private ArrayList<LogEntry> logArray;
     private CustomLocationAdapter customLocationAdapter;
+    private EditText latitudeEditText;
+    private EditText longitudeEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(false);        
+        setHasOptionsMenu(false); 
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
@@ -62,11 +62,13 @@ public class CustomLocationFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     public void onStart() {
         super.onStart();
         GeoLocationLog log = GeoLocationLog.getInstance();
         logArray = log.getLogEntries();
+        latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
+        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener () {
             @Override
@@ -79,27 +81,23 @@ public class CustomLocationFragment extends Fragment {
     }
 
     public void submitLocation(View v) {
+        Log.e("Clicked","New Location Button");
         if (v.getId() == R.id.new_location_button) {
-            Log.e("Clicked","New Location Button");
-            
-            //EditText latText = (EditText) getView().findViewById(R.id.latitude_edit_text);
-            //EditText longText = (EditText) getView().findViewById(R.id.longitude_edit_text);
-            //double latitude = Double.valueOf(latText.toString());
-            //double longitude = Double.valueOf(longText.toString());
-            //GeoLocation geoLocation = new GeoLocation(latitude, longitude);
-            FragmentManager fm = getFragmentManager();
-            
-            //Bundle bundle = new Bundle();
+            if (latitudeEditText.getText().toString().equals("") && longitudeEditText.getText().toString().equals("")) {
+                ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
+            } else {
+                PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+                Bundle args = fragment.getArguments();
+                args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
+                args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
+                this.getFragmentManager().popBackStackImmediate();
+            }
         }
+
         else if (v.getId() == R.id.current_location_button) {
             Log.e("Clicked","Current Location Button");
+            this.getFragmentManager().popBackStackImmediate();
         }
-        this.getFragmentManager().popBackStackImmediate();
-    }
-    
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
+
     }
 }

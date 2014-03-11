@@ -25,6 +25,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,9 +52,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * comment.
  */
 public class PostCommentFragment extends Fragment {
+    
     ThreadComment thread;
     private LocationListenerService locationListenerService;
-
+    GeoLocation geoLocation;
+    EditText latText;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -73,6 +79,26 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
+        geoLocation = new GeoLocation(locationListenerService);
+        
+        //latText = (EditText) this.getView().findViewById(R.id.latitude_edit_text);
+        latText.addTextChangedListener(new TextWatcher () {
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                Log.e("AfterTextChanged", "latitude");
+                //geoLocation.setLatitude(Integer.valueOf(latText.getText().toString()));
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {     
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { 
+                Log.e("OnTextChanged", "latitude"); 
+            }
+        });
+        
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
         locationListenerService = new LocationListenerService(getActivity());
@@ -83,7 +109,6 @@ public class PostCommentFragment extends Fragment {
         if (v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
-            GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 ErrorDialog.show(getActivity(), "Could not obtain location.");
                 // Create a new comment object and set username

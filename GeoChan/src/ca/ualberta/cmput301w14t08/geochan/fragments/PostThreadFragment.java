@@ -44,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
+    private GeoLocation geoLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +57,18 @@ public class PostThreadFragment extends Fragment {
         super.onStart();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        geoLocation = new GeoLocation(locationListenerService);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+            }
+        }
     }
 
     public void postNewThread(View v) {
@@ -67,7 +80,6 @@ public class PostThreadFragment extends Fragment {
             if (title.equals("")) {
                 ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
-                GeoLocation geoLocation = new GeoLocation(locationListenerService);
                 if (geoLocation.getLocation() == null) {
                     ErrorDialog.show(getActivity(), "Could not obtain location.");
                     // Create a new comment object and set username

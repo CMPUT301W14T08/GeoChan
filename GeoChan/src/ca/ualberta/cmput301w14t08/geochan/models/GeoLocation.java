@@ -73,4 +73,30 @@ public class GeoLocation {
         newLocation.setLongitude(newLong);
         this.location = newLocation;
     }
+    
+    public void setLatitude(double newLat) {
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLatitude(newLat);
+        
+        if (location != null) {
+            newLocation.setLongitude(this.getLongitude());
+        } else {
+            newLocation.setLongitude(0);
+        }
+       
+        this.location = newLocation;
+    }
+    
+    public void setLongitude(double newLong) {
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLatitude(newLong);
+        
+        if (location != null) {
+            newLocation.setLatitude(this.getLatitude());
+        } else {
+            newLocation.setLatitude(0);
+        }
+       
+        this.location = newLocation;
+    }
 }
