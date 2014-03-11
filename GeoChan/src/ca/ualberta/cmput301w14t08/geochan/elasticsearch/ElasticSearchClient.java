@@ -75,45 +75,49 @@ public class ElasticSearchClient {
     }
 
     public void postThread(final ThreadComment thread) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                String json = gson.toJson(thread);
-                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_THREAD)
-                        .id(thread.getId()).build();
-                try {
-                    client.execute(index);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
+        post(gson.toJson(thread), TYPE_THREAD, thread.getId());
     }
 
     public void postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
+        post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
+    }
+
+    public int getThreadCount() {
+        return count(TYPE_THREAD);
+    }
+
+    public int getCommentCount() {
+        return count(TYPE_COMMENT);
+    }
+
+    public ArrayList<ThreadComment> getThreads() {
+        return get(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD);
+    }
+
+    public ArrayList<Comment> getComments(String id) {
+        return get(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT);
+    }
+    
+    private void post(final String json, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
-                String json = gson.toJson(comment);
-                Index index = new Index.Builder(json).index(URL_INDEX).type(TYPE_COMMENT)
-                        .id(comment.getId()).build();
+                Index index = new Index.Builder(json).index(URL_INDEX).type(type)
+                        .id(id).build();
                 try {
                     client.execute(index);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
             }
         };
         t.start();
     }
-
-    public int getThreadCount() {
-        Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+    
+    private int count(final String type) {
+        Count count = new Count.Builder().addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
             result = client.execute(count);
@@ -129,80 +133,36 @@ public class ElasticSearchClient {
             return 0;
         }
     }
-
-    public int getCommentCount() {
-        Count count = new Count.Builder().addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
-        JestResult result = null;
-        try {
-            result = client.execute(count);
-            String json = result.getJsonString();
-            Type elasticSearchCountResponseType = new TypeToken<ElasticSearchCountResponse>() {
-            }.getType();
-            ElasticSearchCountResponse esResponse = gson.fromJson(json,
-                    elasticSearchCountResponseType);
-            return esResponse.getCount();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    public ArrayList<ThreadComment> getThreads() {
-        String query = "{\n" + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n"
-                + "}";
-        Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(TYPE_THREAD).build();
+    
+    private <T> ArrayList<T> get(final String query, final String type) {
+        Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
             result = client.execute(search);
             String json = result.getJsonString();
-            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
+            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<T>>() {
             }.getType();
-            ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(json,
+            ElasticSearchSearchResponse<T> esResponse = gson.fromJson(json,
                     elasticSearchSearchResponseType);
-            ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
-            for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
-                ThreadComment comment = r.getSource();
-                list.add(comment);
+            ArrayList<T> list = new ArrayList<T>();
+            for (ElasticSearchResponse<T> r : esResponse.getHits()) {
+                T object = r.getSource();
+                list.add(object);
+            }
+            if (type == TYPE_COMMENT) {
+                for (T object : list) {
+                    getChildComments((Comment) object);
+                }
             }
             return list;
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return new ArrayList<ThreadComment>();
+            return new ArrayList<T>();
         }
-
     }
-
-    public ArrayList<Comment> getComments(String id) {
-        Search search = new Search.Builder(ElasticSearchQueries.getMatchParent(id))
-                .addIndex(URL_INDEX).addType(TYPE_COMMENT).build();
-        JestResult result = null;
-        try {
-            result = client.execute(search);
-            String json = result.getJsonString();
-            Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>() {
-            }.getType();
-            ElasticSearchSearchResponse<Comment> esResponse = gson.fromJson(json,
-                    elasticSearchSearchResponseType);
-            ArrayList<Comment> list = new ArrayList<Comment>();
-            for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
-                Comment comment = r.getSource();
-                list.add(comment);
-            }
-            for (Comment c : list) {
-                getChildComments(c);
-            }
-            return list;
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return new ArrayList<Comment>();
-        }
-
-    }
-
-    public void getChildComments(Comment comment) {
+    
+    private void getChildComments(Comment comment) {
         ArrayList<Comment> children = getComments(comment.getId());
         for (Comment child : children) {
             getChildComments(child);
