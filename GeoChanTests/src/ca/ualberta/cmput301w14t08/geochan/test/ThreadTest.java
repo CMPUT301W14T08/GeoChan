@@ -2,6 +2,11 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
+<<<<<<< HEAD
+import junit.framework.TestCase;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+=======
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
@@ -12,6 +17,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+>>>>>>> master
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -59,7 +65,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments(SortComparators.SORT_DATE_NEWEST);
+        thread.sortComments(SortTypes.SORT_DATE_NEWEST);
 
         assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
         assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
@@ -93,7 +99,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         thread.addComment(c3);
         thread.addComment(c5);
         thread.addComment(c2);
-        thread.sortComments(SortComparators.SORT_DATE_OLDEST);
+        thread.sortComments(SortTypes.SORT_DATE_OLDEST);
 
         assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
         assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);

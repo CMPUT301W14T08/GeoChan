@@ -23,7 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
@@ -80,27 +80,29 @@ public class ThreadList {
     }
 
     /**
-     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the
-     * most recent threads to the top. "DATE_OLDEST" pushes the oldest
-     * threads to the top.
-     * @param tag Sets the sorting method to use
+     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the most
+     * recent threads to the top. "DATE_OLDEST" pushes the oldest threads to the
+     * top.
+     * 
+     * @param tag
+     *            Sets the sorting method to use
      */
     public static void sortThreads(int tag) {
-        switch(tag) {
-        case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(threads, SortComparators.sortThreadsByDateNewest());
+        switch (tag) {
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(threads, SortTypes.sortThreadsByDateNewest());
             break;
-        case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(threads, SortComparators.sortThreadsByDateOldest());
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(threads, SortTypes.sortThreadsByDateOldest());
             break;
-        case SortComparators.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(threads, SortComparators.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
+        case SortTypes.SORT_USER_SCORE_HIGHEST:
+            Collections.sort(threads, SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
             break;
-        case SortComparators.SORT_USER_SCORE_LOWEST:
-            Collections.sort(threads,SortComparators.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
+        case SortTypes.SORT_USER_SCORE_LOWEST:
+            Collections.sort(threads, SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
             break;
-        case SortComparators.SORT_LOCATION_MISC:
-            Collections.sort(threads, SortComparators.sortThreadsByLocation(sortLoc));
+        case SortTypes.SORT_LOCATION_MISC:
+            Collections.sort(threads, SortTypes.sortThreadsByLocation(sortLoc));
             break;
         }
     }

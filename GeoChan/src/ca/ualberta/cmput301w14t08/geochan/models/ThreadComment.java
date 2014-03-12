@@ -28,13 +28,15 @@ import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 public class ThreadComment {
     private ArrayList<Comment> comments;
     private Comment bodyComment;
-    private Date threadDate;
     private String title;
+    private UserHashManager manager;
+    private long id;
     
     /**
      * A location used for our comment sorting methods.
@@ -47,8 +49,9 @@ public class ThreadComment {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
-        this.threadDate = new Date();
         this.setTitle(title);
+        this.manager = UserHashManager.getInstance();
+        this.id = manager.getCommentIdHash();
     }
 
     /* This constructor is only used for testing. */
@@ -56,7 +59,6 @@ public class ThreadComment {
         super();
         this.comments = new ArrayList<Comment>();
         this.bodyComment = null;
-        this.threadDate = null;
         this.title = null;
     }
 
@@ -64,19 +66,27 @@ public class ThreadComment {
      * Getters and setters
      */
     public Date getThreadDate() {
-        return threadDate;
+        return bodyComment.getCommentDate();
     }
 
     public void setThreadDate(Date threadDate) {
-        this.threadDate = threadDate;
+        bodyComment.setCommentDate(threadDate);
+    }
+
+    public String getId() {
+        return Long.toString(id);
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Comment getBodyComment() {
         return bodyComment;
     }
 
-    public void setTopComment(Comment topComment) {
-        this.bodyComment = topComment;
+    public void setBodyComment(Comment bodyComment) {
+        this.bodyComment = bodyComment;
     }
 
     public ArrayList<Comment> getComments() {
@@ -172,25 +182,20 @@ public class ThreadComment {
      */
     public void sortComments(int tag) {
         switch (tag) {
-        case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortComparators
-                    .sortCommentsByDateNewest());
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateNewest());
             break;
-        case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortComparators
-                    .sortCommentsByDateOldest());
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateOldest());
             break;
-        case SortComparators.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortComparators
-                    .sortCommentsByParentDistance());
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
             break;
-        case SortComparators.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortComparators
-                    .sortCommentsByParentScoreHighest());
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
             break;
-        case SortComparators.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortComparators
-                    .sortCommentsByParentScoreLowest());
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }

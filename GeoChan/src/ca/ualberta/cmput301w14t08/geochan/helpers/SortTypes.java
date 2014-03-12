@@ -23,10 +23,10 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.util.Comparator;
 
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-public class SortComparators {
+public class SortTypes {
 
     public static final int SORT_DATE_NEWEST = 0;
     public static final int SORT_DATE_OLDEST = 1;

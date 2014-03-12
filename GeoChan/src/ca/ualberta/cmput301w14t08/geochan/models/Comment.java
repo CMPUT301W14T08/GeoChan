@@ -29,36 +29,43 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.graphics.Picture;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
-public class Comment {
+public class Comment implements Parcelable {
     private String textPost;
     private Date commentDate;
     private Picture image;
+    private Picture imageThumb;
     private GeoLocation location;
     private String user;
-    /**
-     * parent is the comment this comment is replying to
-     */
+    private String hash;
+    private int depth;
     private Comment parent;
-    /**
-     * child is a reply to this comment
-     */
     private ArrayList<Comment> children;
+    private UserHashManager manager;
+    private long id;
 
     /**
      * a comment without an image and without a parent
      */
     public Comment(String textPost, GeoLocation location) {
         super();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
+        this.setImageThumb(null);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getHash());
+        this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -66,13 +73,18 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location) {
         super();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
+        this.setImageThumb(image);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getHash());
+        this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -80,14 +92,18 @@ public class Comment {
      */
     public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
         super();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
+        this.setImageThumb(image);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getHash());
+        this.depth = parent.depth + 1;
         this.setParent(parent);
-        parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -95,14 +111,18 @@ public class Comment {
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
+        this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
+        this.setImageThumb(null);
         this.setLocation(location);
+        this.setUser(manager.getUser());
+        this.setHash(manager.getHash());
+        this.depth = parent.depth + 1;
         this.setParent(parent);
-        parent.addChild(this);
         this.setChildren(new ArrayList<Comment>());
-        this.setUser(new String());
+        this.id = manager.getCommentIdHash();
     }
 
     /**
@@ -117,6 +137,11 @@ public class Comment {
         this.parent = null;
         this.children = new ArrayList<Comment>();
         this.setUser(new String());
+        this.setHash(new String());
+        this.depth = -1;
+        this.setParent(null);
+        this.setChildren(new ArrayList<Comment>());
+        this.id = -1;
     }
 
     public boolean hasImage() {
@@ -186,6 +211,14 @@ public class Comment {
         this.user = user;
     }
 
+    public String getId() {
+        return Long.toString(id);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     /**
      * Sorts child comments according to the tag passed.
      * 
@@ -194,25 +227,20 @@ public class Comment {
      */
     public void sortChildren(int tag) {
         switch (tag) {
-        case SortComparators.SORT_DATE_NEWEST:
-            Collections.sort(this.getChildren(), SortComparators
-                    .sortCommentsByDateNewest());
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateNewest());
             break;
-        case SortComparators.SORT_DATE_OLDEST:
-            Collections.sort(this.getChildren(), SortComparators
-                    .sortCommentsByDateOldest());
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateOldest());
             break;
-        case SortComparators.SORT_LOCATION_OP:
-            Collections.sort(this.getChildren(), SortComparators
-                    .sortCommentsByParentDistance());
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentDistance());
             break;
-        case SortComparators.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getChildren(), SortComparators
-                    .sortCommentsByParentScoreHighest());
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreHighest());
             break;
-        case SortComparators.SORT_SCORE_LOWEST:
-            Collections.sort(this.getChildren(), SortComparators
-                    .sortCommentsByParentScoreLowest());
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }
@@ -314,6 +342,98 @@ public class Comment {
     public String getCommentDateString() {
         SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-        return "on " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
+        return "On " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
     }
+
+    /**
+     * @return the imageThumb
+     */
+    public Picture getImageThumb() {
+        return imageThumb;
+    }
+
+    /**
+     * @param imageThumb
+     *            the imageThumb to set
+     */
+    public void setImageThumb(Picture imageThumb) {
+        this.imageThumb = imageThumb;
+    }
+
+    /**
+     * @return the hash
+     */
+    public String getHash() {
+        return hash;
+    }
+
+    /**
+     * @param hash
+     *            the hash to set
+     */
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    /**
+     * @return the depth
+     */
+    public int getDepth() {
+        return depth;
+    }
+
+    /**
+     * @param depth
+     *            the depth to set
+     */
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.os.Parcelable#describeContents()
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(textPost);
+        dest.writeValue(commentDate);
+        dest.writeValue(image);
+        dest.writeValue(location);
+        dest.writeValue(user);
+        dest.writeParcelable(parent, flags);
+        dest.writeTypedList(children);
+    }
+
+    public Comment(Parcel in) {
+        super();
+        this.setTextPost((String) in.readValue(getClass().getClassLoader()));
+        this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
+        this.setImage((Picture) in.readValue(getClass().getClassLoader()));
+        this.setLocation((GeoLocation) in.readValue(getClass().getClassLoader()));
+        this.setUser((String) in.readValue(getClass().getClassLoader()));
+        this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
+        in.readTypedList(children, Comment.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 }

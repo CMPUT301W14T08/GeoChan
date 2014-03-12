@@ -70,10 +70,10 @@ public class CustomLocationFragment extends Fragment {
 
     public void onStart() {
         super.onStart();
-        GeoLocationLog log = GeoLocationLog.getInstance();
-        logArray = log.getLogEntries();
+        //GeoLocationLog log = GeoLocationLog.getInstance();
+        logArray = GeoLocationLog.getLogEntries();
         latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
-        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
+        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);;
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener () {
             @Override
@@ -81,7 +81,7 @@ public class CustomLocationFragment extends Fragment {
                 setArgsForPreviousLocation((LogEntry) parent.getItemAtPosition(position));
             }
         });
-        customLocationAdapter = new CustomLocationAdapter(logArray);
+        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
     }
 
@@ -132,7 +132,7 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
         }
     }
-    
+
     public void resetToCurrentLocation() {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");

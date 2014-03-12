@@ -3,10 +3,12 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import android.graphics.Picture;
+<<<<<<< HEAD
+=======
 import android.location.Location;
 import android.location.LocationManager;
+>>>>>>> master
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;

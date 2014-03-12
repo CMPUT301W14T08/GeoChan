@@ -27,36 +27,24 @@
         android:text="@string/lorem_ipsum" />
 
     <TextView
-        android:id="@+id/thread_view_op_commentDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/thread_view_op_commentBy"
-        android:layout_alignBottom="@+id/thread_view_op_commentBy"
-        android:layout_toRightOf="@+id/thread_view_op_commentBy"
-        android:alpha="0.7"
-        android:paddingRight="5dp"
-        android:text="@string/placeholder_date"
-        android:textColor="#f00" />
-
-    <ImageButton
-        android:id="@+id/thread_view_op_reply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/thread_view_op_commentBy"
-        android:contentDescription="@string/thread_view_op_reply"
-        android:onClick="postReplyToOp"
-        android:src="@drawable/ic_action_reply" />
-
-    <TextView
         android:id="@+id/thread_view_op_commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/thread_view_op_commentBody"
-        android:alpha="0.7"
         android:paddingLeft="5dp"
         android:text="@string/placeholder_postby"
+        android:textColor="#f00" />
+
+    <TextView
+        android:id="@+id/thread_view_op_commentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_commentBy"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_date"
         android:textColor="#f00" />
 
     <TextView
@@ -64,9 +52,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_commentDate"
         android:paddingLeft="5dp"
-        android:textColor="#2E8B57"
-        android:layout_below="@+id/thread_view_op_commentBy"
-        android:text="@string/placeholder_location" />
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_location"
+        android:textColor="#2E8B57" />
+
+    <ImageButton
+        android:id="@+id/thread_view_op_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/thread_view_op_reply"
+        android:onClick="postReplyToOp"
+        android:src="@drawable/ic_action_reply" />
 
 </RelativeLayout>

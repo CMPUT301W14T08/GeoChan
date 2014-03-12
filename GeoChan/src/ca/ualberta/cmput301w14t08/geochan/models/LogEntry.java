@@ -21,11 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.models;
 
 
-/**
- * An entry in GeoLocationLog. Records a previously used
- * GeoLocation and the title of the ThreadComment in which
- * it was used.
- */
 public class LogEntry {
 
     private String threadTitle;
@@ -47,7 +42,7 @@ public class LogEntry {
     public GeoLocation getGeoLocation() {
         return geoLocation;
     }
-    
+
     public void setGeoLocation(GeoLocation geoLocation) {
         this.geoLocation = geoLocation;
     }

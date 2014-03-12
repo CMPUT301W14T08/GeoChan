@@ -29,12 +29,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
@@ -44,6 +47,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         if (savedInstanceState != null) {
             return;
         }
+        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
+        ElasticSearchClient.generateInstance();
+        UserHashManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         getFragmentManager().addOnBackStackChangedListener(this);
@@ -106,7 +112,13 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .findFragmentByTag("comFrag");
         fragment.postComment(v);
     }
-    
+
+    public void postReply(View v) {
+        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(
+                "repFrag");
+        fragment.postReply(v);
+    }
+
     public void postReplyToOp(View v) {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
                 "thread_view_fragment");

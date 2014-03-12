@@ -24,6 +24,8 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +35,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashGenerator;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -44,7 +46,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Responsible for the UI fragment that allows a user to post a reply to a
- * comment.
+ * thread.
  */
 public class PostCommentFragment extends Fragment {
 
@@ -61,7 +63,6 @@ public class PostCommentFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        // inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
@@ -73,6 +74,7 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
         TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
+        bodyView.setMovementMethod(new ScrollingMovementMethod());
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
         locationListenerService = new LocationListenerService(getActivity());
@@ -96,19 +98,21 @@ public class PostCommentFragment extends Fragment {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
             if (geoLocation.getLocation() == null) {
-                ErrorDialog.show(getActivity(), "Could not obtain location.");
+                // ErrorDialog.show(getActivity(),
+                // "Could not obtain location.");
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, null);
-                newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                Comment newComment = new Comment(comment, null, thread.getBodyComment());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, thread.getBodyComment(), newComment);
             } else {
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, geoLocation);
-                newComment.setUser(retrieveUsername());
-                thread.addComment(newComment);
+                Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, thread.getBodyComment(), newComment);
                 // log the location and thread title
-                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                Log.e("size of locLog:",
+                        Integer.toString(GeoLocationLog.getLogEntries().size()));
             }
             
             /* RIGHT NOW THIS BLOCK CAUSES A CRASH
@@ -124,7 +128,8 @@ public class PostCommentFragment extends Fragment {
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        return preferences.getString("username", "Anon") + "#" + HashGenerator.getHash();
+        UserHashManager manager = UserHashManager.getInstance();
+        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override

@@ -20,7 +20,11 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,22 +35,33 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
  */
-public class ThreadViewFragment extends Fragment {
+public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private ListView threadView;
     private ThreadViewAdapter adapter;
+    private ThreadComment thread = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        final int id = (int) bundle.getLong("id");
+        thread = ThreadList.getThreads().get(id);
+        getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 
     @Override
@@ -65,9 +80,45 @@ public class ThreadViewFragment extends Fragment {
         final int id = (int) bundle.getLong("id");
         ThreadComment thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
-        adapter = new ThreadViewAdapter(getActivity(), thread);
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
+     * android.os.Bundle)
+     */
+    @Override
+    public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
+        return new CommentLoader(getActivity(), thread.getId());
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
+     * .Loader, java.lang.Object)
+     */
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
+        thread.setComments(list);
+        adapter.setThread(thread);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
+     * .Loader)
+     */
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
+        //
     }
 }

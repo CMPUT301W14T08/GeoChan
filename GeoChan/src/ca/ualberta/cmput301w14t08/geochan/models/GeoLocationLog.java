@@ -23,44 +23,47 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 
 
-/**
- * Records previously used GeoLocations and the ThreadComments
- * in which they were used in LogEntry objects.
- */
-public class GeoLocationLog {
-    
-    private static GeoLocationLog instance = null;
-    private static ArrayList<LogEntry> entries; 
-    
-    private GeoLocationLog() {
-        entries = new ArrayList<LogEntry>(); 
-    }
+public class GeoLocationLog {    
 
-    public static GeoLocationLog getInstance() {
-        if (instance == null) {
-            instance = new GeoLocationLog();
-        }
-        return instance;
+    private static ArrayList<LogEntry> entries;
+
+    private GeoLocationLog() {
+        entries = new ArrayList<LogEntry>();
     }
    
-    public void addLogEntry(String threadTitle,GeoLocation geoLocation) {
+    public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
+        if(entries == null) {
+            entries = new ArrayList<LogEntry>();
+        }
         LogEntry logEntry = new LogEntry(threadTitle,geoLocation);
         entries.add(logEntry);
     }
     
-    public ArrayList<LogEntry> getLogEntries() {
+    public static ArrayList<LogEntry> getLogEntries() {
+        if(entries == null) {
+            entries = new ArrayList<LogEntry>();
+        }
         return entries;
     }
-    
+
     public boolean isEmpty() {
+        if(entries == null) {
+            entries = new ArrayList<LogEntry>();
+        }
         return entries.size() == 0;
     }
-    
+
     public void clearLog() {
+        if(entries == null) {
+            entries = new ArrayList<LogEntry>();
+        }
         entries.clear();
     }
-    
+
     public int size() {
+        if(entries == null) {
+            entries = new ArrayList<LogEntry>();
+        }
         return entries.size();
     }
 }
