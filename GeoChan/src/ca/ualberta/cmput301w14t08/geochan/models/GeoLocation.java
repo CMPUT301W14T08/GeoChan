@@ -41,8 +41,7 @@ public class GeoLocation {
     
     public GeoLocation(double latitude, double longitude) {
         this.location = new Location(LocationManager.GPS_PROVIDER);
-        setLatitude(latitude);
-        setLongitude(longitude);
+        setCoordinates(latitude, longitude);
     }
 
     /**
@@ -88,40 +87,6 @@ public class GeoLocation {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
         newLocation.setLatitude(newLat);
         newLocation.setLongitude(newLong);
-        this.location = newLocation;
-    }
-    
-    /**
-     * Changes the latitude in the GeoLocation to the passed latitude.
-     * @param newLat The new value for the latitude.
-     */
-    public void setLatitude(double newLat) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(newLat);
-        
-        if (location != null) {
-            newLocation.setLongitude(this.getLongitude());
-        } else {
-            newLocation.setLongitude(0);
-        }
-       
-        this.location = newLocation;
-    }
-
-    /**
-     * Changes the longitude in the GeoLocation to the passed longitude.
-     * @param newLong The new value for the longitude.
-     */
-    public void setLongitude(double newLong) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(newLong);
-        
-        if (location != null) {
-            newLocation.setLatitude(this.getLatitude());
-        } else {
-            newLocation.setLatitude(0);
-        }
-       
         this.location = newLocation;
     }
 }
