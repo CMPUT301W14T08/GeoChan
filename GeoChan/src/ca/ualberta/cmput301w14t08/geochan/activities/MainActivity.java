@@ -135,6 +135,11 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     
     public void submitLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
-        fragment.submitLocation(v);
+        fragment.submitNewLocationFromCoordinates(v);
+    }
+    
+    public void submitCurrentLocation(View v) {
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        fragment.submitCurrentLocation(v);
     }
 }

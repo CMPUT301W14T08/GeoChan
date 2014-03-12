@@ -37,6 +37,8 @@ import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -83,22 +85,22 @@ public class CustomLocationFragment extends Fragment {
         lv.setAdapter(customLocationAdapter);
     }
 
-    public void submitLocation(View v) {
-        if (v.getId() == R.id.new_location_button) {
-
+    public void submitNewLocationFromCoordinates(View v) {
+        //if (v.getId() == R.id.new_location_button) {
             if (latitudeEditText.getText().toString().equals("") && longitudeEditText.getText().toString().equals("")) {
                 ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
             } else {
                 setArgsForCustomCoordinates();
                 this.getFragmentManager().popBackStackImmediate();
             }
-        }
-
-        else if (v.getId() == R.id.current_location_button) {
-            this.getFragmentManager().popBackStackImmediate();
-        }
+        //}
     }
     
+    public void submitCurrentLocation(View v) {
+        resetToCurrentLocation();
+        this.getFragmentManager().popBackStackImmediate();
+    }
+
     public void setArgsForCustomCoordinates() {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
@@ -114,7 +116,7 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
         }
     }
-    
+
     public void setArgsForPreviousLocation(LogEntry clickedEntry) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
@@ -128,6 +130,24 @@ public class CustomLocationFragment extends Fragment {
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
+        }
+    }
+    
+    public void resetToCurrentLocation() {
+        Bundle bundle = getArguments();
+        postType = bundle.getInt("postType");
+        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        GeoLocation geoLocation = new GeoLocation(locationListenerService);
+        if (postType == THREAD) {
+            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+            Bundle args = fragment.getArguments();
+            args.putDouble("LATITUDE", geoLocation.getLatitude());
+            args.putDouble("LONGITUDE", geoLocation.getLongitude());
+        } else if (postType == COMMENT) {
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+            Bundle args = fragment.getArguments();
+            args.putDouble("LATITUDE", geoLocation.getLatitude());
+            args.putDouble("LONGITUDE", geoLocation.getLongitude());
         }
     }
 }
