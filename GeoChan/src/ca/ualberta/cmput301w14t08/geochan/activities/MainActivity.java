@@ -134,11 +134,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-
+    
     public void changeLocation(View v) {
-        Log.e("clicked", "changeLocationButton");
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
+        Log.e("clicked","changeLocationButton");
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomLocationFragment(), "customLocFrag")
                 .addToBackStack(null).commit();
     }
 }
