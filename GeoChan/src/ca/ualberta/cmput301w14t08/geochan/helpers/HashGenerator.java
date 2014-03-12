@@ -23,6 +23,11 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import android.content.Context;
 import android.provider.Settings.Secure;
 
+/**
+ * Generates a hash based on the device ID for the purposes
+ * of identifying users after they change their username.
+ * UNDER DEVELOPMENT
+ */
 public class HashGenerator {
     private Context context;
     private String android_id;

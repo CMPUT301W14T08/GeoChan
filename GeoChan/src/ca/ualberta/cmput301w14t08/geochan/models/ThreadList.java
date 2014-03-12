@@ -27,6 +27,13 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
 
 public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
+    
+    /**
+     * A GeoLocation used for our thread sorting methods, should be set
+     * by the fragment whenever the user decides to sort Threads by relevance
+     * or location.
+     */
+    private static GeoLocation sortLoc;
 
     /**
      * Getters and setters
@@ -41,6 +48,14 @@ public class ThreadList {
     public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
         threads = listOfThreads;
     }
+    
+    public static void setSortLoc(GeoLocation g){
+        sortLoc = g;
+    }
+    
+    public static GeoLocation getSortLoc(){
+        return sortLoc;
+    }
 
     public static void addThread(Comment comment, String title) {
         if (threads == null) {
@@ -48,9 +63,20 @@ public class ThreadList {
         }
         threads.add(new ThreadComment(comment, title));
     }
-
+    
+    /**
+     * Adds a new ThreadComment to the ThreadList.
+     * @param t The ThreadComment to be added.
+     */
     public static void addThread(ThreadComment t) {
+        if (threads == null) {
+            threads = new ArrayList<ThreadComment>();
+        }
         threads.add(t);
+    }
+    
+    public static void clearThreads(){
+        threads.clear();
     }
 
     /**
@@ -66,6 +92,15 @@ public class ThreadList {
             break;
         case SortComparators.SORT_DATE_OLDEST:
             Collections.sort(threads, SortComparators.sortThreadsByDateOldest());
+            break;
+        case SortComparators.SORT_USER_SCORE_HIGHEST:
+            Collections.sort(threads, SortComparators.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
+            break;
+        case SortComparators.SORT_USER_SCORE_LOWEST:
+            Collections.sort(threads,SortComparators.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
+            break;
+        case SortComparators.SORT_LOCATION_MISC:
+            Collections.sort(threads, SortComparators.sortThreadsByLocation(sortLoc));
             break;
         }
     }
