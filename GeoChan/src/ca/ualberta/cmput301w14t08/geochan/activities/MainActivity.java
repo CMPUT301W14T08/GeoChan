@@ -138,6 +138,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         else if (v.getId() == R.id.comment_location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
         }
+        else if (v.getId() == R.id.reply_location_button){
+            args.putInt("postType", CustomLocationFragment.REPLY);
+        }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, frag, "customLocFrag")
