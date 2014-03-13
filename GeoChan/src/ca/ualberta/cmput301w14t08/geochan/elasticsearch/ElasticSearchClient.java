@@ -73,6 +73,9 @@ public class ElasticSearchClient {
             instance = new ElasticSearchClient();
         }
     }
+    public Gson getGson() {
+        return gson;
+    }
 
     public void postThread(final ThreadComment thread) {
         post(gson.toJson(thread), TYPE_THREAD, thread.getId());

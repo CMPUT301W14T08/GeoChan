@@ -21,19 +21,23 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 
 public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment> {
 
@@ -48,31 +52,43 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
     public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
+        
         String title = object.get("title").getAsString();
         long threadDate = object.get("threadDate").getAsLong();
         boolean hasImage = object.get("hasImage").getAsBoolean();
         String locationString = object.get("location").getAsString();
-        List<String> locationEntries = Arrays.asList(locationString.split(","));
-        double latitude = Double.parseDouble(locationEntries.get(0));
-        double longitude = Double.parseDouble(locationEntries.get(1));
         String user = object.get("user").getAsString();
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        String jsonComments = object.get("comments").getAsString();
+        
+        Gson gson = ElasticSearchClient.getInstance().getGson();
+        Type t = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> comments = gson.fromJson(jsonComments, t);
+        
         if (hasImage) {
             // TODO: Implement decoding of images
         }
+        
+        List<String> locationEntries = Arrays.asList(locationString.split(","));
+        double latitude = Double.parseDouble(locationEntries.get(0));
+        double longitude = Double.parseDouble(locationEntries.get(1));
         GeoLocation location = new GeoLocation(latitude, longitude);
+        
         final Comment c = new Comment(textPost, location);
         c.getCommentDate().setTime(threadDate);
         c.setUser(user);
         c.setHash(hash);
         c.setId(Long.parseLong(id));
+        
         final ThreadComment comment = new ThreadComment(c, title);
         comment.setThreadDate(new Date(threadDate));
         comment.setId(Long.parseLong(id));
+        comment.setCommentIds(comments);
+        
         // TODO: Set image
+        
         return comment;
     }
-
 }
