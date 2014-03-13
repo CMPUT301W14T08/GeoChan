@@ -40,8 +40,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * Adapter used for displaying a ThreadComment in the
- * ThreadViewFragment. It inflates layouts for OP, op level comments and comment replies.
+ * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
+ * inflates layouts for OP, op level comments and comment replies.
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
@@ -71,13 +71,37 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        int size = thread.getComments().size() + 2; // OP + separator + top
-                                                    // comments
-        for (Comment c : comments) {
-            size = size + c.getChildren().size();
+        int size = getCountChildren(thread.getBodyComment());
+        return size + 2; // The +2 is for OP + Separator
+    }
+    
+    
+    /**
+     * This method recursively counts the amount of children a comment object has
+     * using depth first traversal.
+     * @param comment
+     * @return
+     */
+    private int getCountChildren(Comment comment) {
+        if(comment.getChildren().size() == 0) {
+            return 0;
         }
+        
+        int size = 0;
+        
+        for(Comment c : comment.getChildren()) {
+            ++size;
+            size += getCountChildren(c);
+        }
+        
         return size;
     }
+
+    /*
+     * @Override public int getCount() { int size = thread.getComments().size()
+     * + 2; // OP + separator + top // comments for (Comment c : comments) {
+     * size = size + c.getChildren().size(); } return size; }
+     */
 
     @Override
     public Object getItem(int position) {
@@ -88,10 +112,10 @@ public class ThreadViewAdapter extends BaseAdapter {
             return null;
         } else {
             int TCindex = getItemGetTC(position - 2);
-            //Log.e("TCindex", Integer.toString(TCindex));
+            // Log.e("TCindex", Integer.toString(TCindex));
 
             int Cindex = getItemGetChild(TCindex, position - 2);
-            //Log.e("Cindex", Integer.toString(Cindex));
+            // Log.e("Cindex", Integer.toString(Cindex));
 
             if (Cindex == -1) {
                 return comments.get(TCindex);
@@ -301,8 +325,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText("Posted by " + reply.getUser() + "#"
-                + thread.getBodyComment().getHash());
+        replyBy.setText("Posted by " + reply.getUser() + "#" + thread.getBodyComment().getHash());
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
