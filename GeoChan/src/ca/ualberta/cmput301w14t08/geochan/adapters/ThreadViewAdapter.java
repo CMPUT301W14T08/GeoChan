@@ -60,12 +60,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         this.context = context;
         this.thread = thread;
         this.manager = manager;
-        this.comments = this.thread.getComments();
+        this.comments = this.thread.getBodyComment().getChildren();
     }
 
     public void setThread(ThreadComment thread) {
         this.thread = thread;
-        this.comments = this.thread.getComments();
+        this.comments = this.thread.getBodyComment().getChildren();
         this.notifyDataSetChanged();
     }
 
