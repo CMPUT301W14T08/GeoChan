@@ -24,6 +24,12 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Picture;
+import android.graphics.RectF;
+import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
@@ -56,8 +62,25 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         String hash = object.get("hash").getAsString();
         String textPost = object.get("textPost").getAsString();
         String id = object.get("id").getAsString();
+        Picture image = new Picture();
+        Picture thumbnail = new Picture();
         if (hasImage) {
-            // TODO: Implement decoding of images
+            /* 
+             * http://stackoverflow.com/questions/20594833/convert-byte-array-or-bitmap-to-picture
+             */
+            String encodedImage = object.get("image").getAsString();
+            byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            Canvas canvas = image.beginRecording(bitmap.getWidth(), bitmap.getHeight());
+            canvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), null);
+            image.endRecording();
+            
+            String encodedThumb = object.get("imageThumbnail").getAsString();
+            byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);
+            Bitmap thumbBitmap = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
+            Canvas thumbCanvas = thumbnail.beginRecording(thumbBitmap.getWidth(), thumbBitmap.getHeight());
+            thumbCanvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) thumbBitmap.getWidth(), (float) thumbBitmap.getHeight()), null);
+            thumbnail.endRecording();
         }
         int depth = object.get("depth").getAsInt();
         // String parent = object.get("parent").getAsString();
@@ -68,7 +91,11 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         comment.setHash(hash);
         comment.setDepth(depth);
         comment.setId(Long.parseLong(id));
-        // TODO: Set image
+        if (hasImage) {
+            comment.setImage(image);
+            comment.setImageThumb(thumbnail);
+        }
+        
         return comment;
     }
 }
