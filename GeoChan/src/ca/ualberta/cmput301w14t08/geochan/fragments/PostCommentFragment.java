@@ -105,14 +105,14 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
-                client.updateThreadComments(thread, newComment);
+                client.updateThreadComments(commentToReplyTo, newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
-                client.updateThreadComments(thread, newComment);
+                client.updateThreadComments(commentToReplyTo, newComment);
             }
             /*
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
