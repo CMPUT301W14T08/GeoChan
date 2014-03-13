@@ -150,7 +150,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         getFragmentManager().executePendingTransactions();
     }
     
-    /*
+    
     public void submitLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(v);
@@ -160,5 +160,5 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
-    */
+    
 }

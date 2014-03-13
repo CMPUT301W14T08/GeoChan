@@ -51,6 +51,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;
     Comment commentToReplyTo;
+    private GeoLocation geoLocation;
     private LocationListenerService locationListenerService;
 
     @Override
@@ -79,13 +80,25 @@ public class PostCommentFragment extends Fragment {
         replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        geoLocation = new GeoLocation(locationListenerService);
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+            }
+        }
     }
 
     public void postReply(View v) {
         if (v.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
-            GeoLocation geoLocation = new GeoLocation(locationListenerService);
+            //GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
@@ -101,10 +114,12 @@ public class PostCommentFragment extends Fragment {
                 client.postComment(thread, commentToReplyTo, newComment);
                 client.updateThreadComments(thread, newComment);
             }
+            /*
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
+                    */
             this.getFragmentManager().popBackStackImmediate();
         }
     }
