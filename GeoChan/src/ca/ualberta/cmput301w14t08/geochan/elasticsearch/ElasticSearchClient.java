@@ -27,10 +27,12 @@ import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Count;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
+import io.searchbox.core.Update;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -92,6 +94,16 @@ public class ElasticSearchClient {
 
     public int getCommentCount() {
         return count(TYPE_COMMENT);
+    }
+    
+    public void updateThreadComments(ThreadComment thread, Comment comment) {
+        String threadId = thread.getId();
+        String commentId = comment.getId();
+        ArrayList<String> comments = thread.getCommentIds();
+        comments.add(commentId);
+        String json = gson.toJson(comments);
+        String query = ElasticSearchQueries.getUpdate("comments", json);
+        update(query, TYPE_THREAD, threadId);
     }
 
     public ArrayList<ThreadComment> getThreads() {
@@ -158,6 +170,21 @@ public class ElasticSearchClient {
             e.printStackTrace();
             return 0;
         }
+    }
+    
+    private void update(final String query, final String type, final String id) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
+                try {
+                    Log.e("WAT", client.execute(update).getErrorMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
     }
     
     private String get(final String query, final String type) {

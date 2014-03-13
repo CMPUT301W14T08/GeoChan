@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,17 +31,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Responsible for the UI fragment that allows a user to post a reply to a
@@ -72,6 +70,7 @@ public class PostCommentFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         commentToReplyTo = (Comment) bundle.getParcelable("cmt");
+        thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
         bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
@@ -106,12 +105,14 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                client.updateThreadComments(thread, newComment);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                client.updateThreadComments(thread, newComment);
             }
             /*
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(

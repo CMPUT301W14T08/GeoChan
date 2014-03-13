@@ -125,10 +125,11 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 "thread_view_fragment");
         Bundle bundle = fragment.getArguments();
         ThreadComment thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-        bundle = new Bundle();
-        bundle.putParcelable("cmt", thread.getBodyComment());
+        Bundle bundle2 = new Bundle();
+        bundle2.putParcelable("cmt", thread.getBodyComment());
+        bundle2.putLong("id", bundle.getLong("id"));
         Fragment f = new PostCommentFragment();
-        f.setArguments(bundle);
+        f.setArguments(bundle2);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "repFrag")
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
