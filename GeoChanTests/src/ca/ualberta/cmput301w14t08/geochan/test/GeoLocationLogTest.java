@@ -16,12 +16,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
     }
     
     public void testConstruction() {
-<<<<<<< HEAD
         assertNotNull(GeoLocationLog.getLogEntries());
-=======
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        assertNotNull(geoLocationLog.getLogEntries());
->>>>>>> master
     }
     
     public void testAddLogEntry() {
@@ -31,35 +26,31 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         
         String threadTitle = "TestThread";
         
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
+        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
+        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
+        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
         
-        for (LogEntry entry : geoLocationLog.getLogEntries()) {
+        for (LogEntry entry : GeoLocationLog.getLogEntries()) {
             assertEquals("threadTitles should be equal", threadTitle, entry.getThreadTitle());
             assertEquals("geoLocations should be equal", geoLocation, entry.getGeoLocation());
         }
     }
     
     public void testIsLogEmpty() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        geoLocationLog.clearLog();
-        assertEquals("Entries array should be empty",true, geoLocationLog.isEmpty());
+        GeoLocationLog.clearLog();
+        assertEquals("Entries array should be empty",true, GeoLocationLog.isEmpty());
     }
     
-    public void testSizeOfLog() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        
+    public void testSizeOfLog() {        
         locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
         
-        geoLocationLog.addLogEntry("thread1", geoLocation1);
-        geoLocationLog.addLogEntry("thread2", geoLocation2);
-        geoLocationLog.addLogEntry("thread3", geoLocation3);
+        GeoLocationLog.addLogEntry("thread1", geoLocation1);
+        GeoLocationLog.addLogEntry("thread2", geoLocation2);
+        GeoLocationLog.addLogEntry("thread3", geoLocation3);
         
-        assertEquals("Size of entries should be 3", 3, geoLocationLog.size());
+        assertEquals("Size of entries should be 3", 3, GeoLocationLog.size());
     }
 }

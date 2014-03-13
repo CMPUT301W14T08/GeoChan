@@ -46,21 +46,21 @@ public class GeoLocationLog {
         return entries;
     }
 
-    public boolean isEmpty() {
+    public static boolean isEmpty() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size() == 0;
     }
 
-    public void clearLog() {
+    public static void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         entries.clear();
     }
 
-    public int size() {
+    public static int size() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
