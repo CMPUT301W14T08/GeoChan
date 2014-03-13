@@ -198,7 +198,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
             setOPFields(convertView);
             break;
-
+        
         case TYPE_COMMENT:
             final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
@@ -254,6 +254,9 @@ public class ThreadViewAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /*
+     * This method sets the fields of a top level comment
+     */
     private void setTopCommentFields(View convertView, Comment comment) {
         // Comment body
         TextView commentBody = (TextView) convertView
