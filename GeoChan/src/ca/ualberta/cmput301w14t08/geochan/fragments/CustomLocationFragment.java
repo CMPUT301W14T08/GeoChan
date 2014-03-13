@@ -59,6 +59,7 @@ public class CustomLocationFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
+    /*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,6 +102,7 @@ public class CustomLocationFragment extends Fragment {
         this.getFragmentManager().popBackStackImmediate();
     }
 
+    
     public void setArgsForCustomCoordinates() {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
@@ -150,4 +152,5 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         }
     }
+    */
 }

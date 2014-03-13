@@ -32,12 +32,13 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
@@ -108,13 +109,13 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     }
 
     public void postComment(View v) {
-        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                .findFragmentByTag("comFrag");
-        fragment.postComment(v);
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag(
+                "repFrag");
+        fragment.postReply(v);
     }
 
     public void postReply(View v) {
-        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag(
                 "repFrag");
         fragment.postReply(v);
     }
@@ -123,9 +124,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
                 "thread_view_fragment");
         Bundle bundle = fragment.getArguments();
+        ThreadComment thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
+        bundle = new Bundle();
+        bundle.putParcelable("cmt", thread.getBodyComment());
         Fragment f = new PostCommentFragment();
         f.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "comFrag")
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "repFrag")
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
@@ -145,6 +149,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         getFragmentManager().executePendingTransactions();
     }
     
+    /*
     public void submitLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(v);
@@ -154,4 +159,5 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
+    */
 }

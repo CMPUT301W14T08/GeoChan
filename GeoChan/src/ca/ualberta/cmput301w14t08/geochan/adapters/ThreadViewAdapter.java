@@ -34,7 +34,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -224,7 +224,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     // Perform action on click
                     Log.e("ButtonClick", "click");
                     Log.e("Comment being replied:", comment.getTextPost());
-                    Fragment fragment = new PostReplyFragment();
+                    Fragment fragment = new PostCommentFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("cmt", comment);
                     fragment.setArguments(bundle);

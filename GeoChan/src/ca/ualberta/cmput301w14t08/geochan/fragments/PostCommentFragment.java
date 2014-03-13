@@ -21,17 +21,18 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -40,24 +41,21 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Responsible for the UI fragment that allows a user to post a reply to a
  * thread.
  */
 public class PostCommentFragment extends Fragment {
-
-    private ThreadComment thread;
+    ThreadComment thread;
+    Comment commentToReplyTo;
     private LocationListenerService locationListenerService;
-    private GeoLocation geoLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        return inflater.inflate(R.layout.fragment_post_comment, container, false);
+        return inflater.inflate(R.layout.fragment_post_reply, container, false);
     }
 
     @Override
@@ -71,56 +69,39 @@ public class PostCommentFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
-        thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-        TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
-        TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        bodyView.setMovementMethod(new ScrollingMovementMethod());
-        titleView.setText(thread.getTitle());
-        bodyView.setText(thread.getBodyComment().getTextPost());
+        commentToReplyTo = (Comment) bundle.getParcelable("cmt");
+
+        TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
+        TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
+        bodyReplyTo.setText(commentToReplyTo.getTextPost());
+        replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        geoLocation = new GeoLocation(locationListenerService);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Bundle args = getArguments();
-        if (args != null) {
-            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
-            }
-        }
-    }
-
-    public void postComment(View v) {
-        if (v.getId() == R.id.post_comment_button) {
-            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+    public void postReply(View v) {
+        if (v.getId() == R.id.post_reply_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
+            GeoLocation geoLocation = new GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, null, thread.getBodyComment());
+                Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                client.postComment(thread, thread.getBodyComment(), newComment);
+                client.postComment(thread, commentToReplyTo, newComment);
             } else {
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
+                Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                client.postComment(thread, thread.getBodyComment(), newComment);
-                // log the location and thread title
-                GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
-                Log.e("size of locLog:",
-                        Integer.toString(GeoLocationLog.getLogEntries().size()));
+                client.postComment(thread, commentToReplyTo, newComment);
             }
-            
-            /* RIGHT NOW THIS BLOCK CAUSES A CRASH
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);*/
-            
+                    InputMethodManager.HIDE_NOT_ALWAYS);
             this.getFragmentManager().popBackStackImmediate();
         }
     }
