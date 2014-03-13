@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class ThreadComment {
     private String title;
     private UserHashManager manager;
     private long id;
+    private ArrayList<String> commentIds;
     
     /**
      * A location used for our comment sorting methods.
@@ -48,6 +50,7 @@ public class ThreadComment {
         this.setTitle(title);
         this.manager = UserHashManager.getInstance();
         this.id = manager.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /* This constructor is only used for testing. */
@@ -55,11 +58,21 @@ public class ThreadComment {
         super();
         this.bodyComment = null;
         this.title = null;
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
      * Getters and setters
      */
+    
+    public ArrayList<String> getCommentIds() {
+        return commentIds;
+    }
+    
+    public void setCommentIds(ArrayList<String> commentIds) {
+        this.commentIds = commentIds;
+    }
+    
     public Date getThreadDate() {
         return bodyComment.getCommentDate();
     }
