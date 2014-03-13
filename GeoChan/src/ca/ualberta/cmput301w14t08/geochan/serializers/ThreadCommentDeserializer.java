@@ -61,7 +61,7 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
-        String jsonComments = object.get("comments").getAsString();
+        JsonElement jsonComments = object.get("comments");
         
         Gson gson = ElasticSearchClient.getInstance().getGson();
         Type t = new TypeToken<ArrayList<String>>() {}.getType();

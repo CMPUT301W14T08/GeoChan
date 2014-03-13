@@ -110,7 +110,7 @@ public class ElasticSearchClient {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
         }.getType();
         ElasticSearchSearchResponse<ThreadComment> esResponse = gson
-                .fromJson(get(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
+                .fromJson(getList(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
                 elasticSearchSearchResponseType);
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
@@ -124,7 +124,7 @@ public class ElasticSearchClient {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>() {
         }.getType();
         ElasticSearchSearchResponse<Comment> esResponse = gson
-                .fromJson(get(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT),
+                .fromJson(getList(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT),
                 elasticSearchSearchResponseType);
         ArrayList<Comment> list = new ArrayList<Comment>();
         for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
@@ -187,7 +187,7 @@ public class ElasticSearchClient {
         t.start();
     }
     
-    private String get(final String query, final String type) {
+    private String getList(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
