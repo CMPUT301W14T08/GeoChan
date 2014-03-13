@@ -2,28 +2,20 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
-<<<<<<< HEAD
-import junit.framework.TestCase;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-=======
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
->>>>>>> master
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
-    private Location location;
     private LocationListenerService locationListenerService;
     
     public ThreadTest(){
@@ -149,17 +141,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c5.getLocation().setLocation(location5);
         t.getSortLoc().setLocation(locationT);
         
-        
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(5,5);
+        c3.getLocation().setCoordinates(10,10);
+        c4.getLocation().setCoordinates(15,15);
+        c5.getLocation().setCoordinates(20,20);
         
         Date currentDate = new Date();
         
@@ -175,7 +161,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         t.addComment(c5);
         t.addComment(c1);
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
+        t.sortComments(SortTypes.SORT_USER_SCORE_HIGHEST);
         
         assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
         assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
@@ -195,10 +181,9 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
         c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
         
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
+        t.getSortLoc().setCoordinates(20,20);
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
+        t.sortComments(SortTypes.SORT_USER_SCORE_HIGHEST);
         
         assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
         assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
@@ -249,16 +234,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c5.getLocation().setLocation(location5);
         t.getSortLoc().setLocation(locationT);
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(5,5);
+        c3.getLocation().setCoordinates(10,10);
+        c4.getLocation().setCoordinates(15,15);
+        c5.getLocation().setCoordinates(20,20);
         
         Date currentDate = new Date();
         
@@ -274,7 +254,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         t.addComment(c5);
         t.addComment(c1);
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
+        t.sortComments(SortTypes.SORT_USER_SCORE_LOWEST);
         
         assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
         assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
@@ -288,10 +268,9 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
         c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
         
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
+        t.getSortLoc().setCoordinates(20,20);
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
+        t.sortComments(SortTypes.SORT_USER_SCORE_LOWEST);
         
         assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
         assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
@@ -341,18 +320,12 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         c5.getLocation().setLocation(location5);
         t.getSortLoc().setLocation(locationT);
         
-        t.getSortLoc().setLatitude(0);
-        t.getSortLoc().setLongitude(0);
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        t.getSortLoc().setCoordinates(0,0);
+        c1.getLocation().setCoordinates(0,0);
+        c2.getLocation().setCoordinates(5,5);
+        c3.getLocation().setCoordinates(10,10);
+        c4.getLocation().setCoordinates(15,15);
+        c5.getLocation().setCoordinates(20,20);
         
         t.addComment(c3);
         t.addComment(c2);
@@ -360,7 +333,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         t.addComment(c5);
         t.addComment(c1);
         
-        t.sortComments(SortComparators.SORT_LOCATION_MISC);
+        t.sortComments(SortTypes.SORT_LOCATION_MISC);
         
         assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
         assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
@@ -368,10 +341,9 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
         assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
         
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
+        t.getSortLoc().setCoordinates(20,20);
         
-        t.sortComments(SortComparators.SORT_LOCATION_MISC);
+        t.sortComments(SortTypes.SORT_LOCATION_MISC);
         
         assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
         assertTrue("c4 is at location 1", t.getComments().get(1) == c4);

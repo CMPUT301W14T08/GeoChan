@@ -51,6 +51,7 @@ public class PostReplyFragment extends Fragment {
     ThreadComment thread;
     Comment commentToReplyTo;
     private LocationListenerService locationListenerService;
+    private GeoLocation geoLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +79,17 @@ public class PostReplyFragment extends Fragment {
         replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+            }
+        }
     }
 
     public void postReply(View v) {

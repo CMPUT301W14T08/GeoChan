@@ -6,17 +6,11 @@ import java.util.Date;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-
-import junit.framework.TestCase;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-<<<<<<< HEAD
-=======
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
->>>>>>> master
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -63,7 +57,7 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         tm.addThread(t3);
         tm.addThread(t4);
         
-        tm.sortThreads(SortComparators.SORT_DATE_NEWEST);
+        tm.sortThreads(SortTypes.SORT_DATE_NEWEST);
         
         assertTrue("t5 is at index 0", tm.getThreads().get(0) == t5);
         assertTrue("t4 is at index 1", tm.getThreads().get(1) == t4);
@@ -101,7 +95,7 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         tm.addThread(t3);
         tm.addThread(t4);
         
-        tm.sortThreads(SortComparators.SORT_DATE_OLDEST);
+        tm.sortThreads(SortTypes.SORT_DATE_OLDEST);
         
         assertTrue("t1 is at index 0", tm.getThreads().get(0) == t1);
         assertTrue("t2 is at index 1", tm.getThreads().get(1) == t2);
@@ -168,23 +162,18 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        
+        /*
         t1.setTopComment(c1);
         t2.setTopComment(c2);
         t3.setTopComment(c3);
         t4.setTopComment(c4);
         t5.setTopComment(c5);
-        
-        t1.getBodyComment().getLocation().setLatitude(1);
-        t1.getBodyComment().getLocation().setLongitude(1);
-        t2.getBodyComment().getLocation().setLatitude(2);
-        t2.getBodyComment().getLocation().setLongitude(2);
-        t3.getBodyComment().getLocation().setLatitude(3);
-        t3.getBodyComment().getLocation().setLongitude(3);
-        t4.getBodyComment().getLocation().setLatitude(4);
-        t4.getBodyComment().getLocation().setLongitude(4);
-        t5.getBodyComment().getLocation().setLatitude(5);
-        t5.getBodyComment().getLocation().setLongitude(5);
+        */
+        t1.getBodyComment().getLocation().setCoordinates(1,1);
+        t2.getBodyComment().getLocation().setCoordinates(2,2);
+        t3.getBodyComment().getLocation().setCoordinates(3,3);
+        t4.getBodyComment().getLocation().setCoordinates(4,4);
+        t5.getBodyComment().getLocation().setCoordinates(5,5);
         
         t1.setThreadDate(new Date(currentDate.getTime() + extraTime * 1));
         t2.setThreadDate(new Date(currentDate.getTime() + extraTime * 2));
@@ -198,10 +187,9 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         T.addThread(t5);
         T.addThread(t4);
         
-        T.getSortLoc().setLatitude(0);
-        T.getSortLoc().setLongitude(0);
+        T.getSortLoc().setCoordinates(0,0);
         
-        T.sortThreads(SortComparators.SORT_USER_SCORE_HIGHEST);
+        T.sortThreads(SortTypes.SORT_USER_SCORE_HIGHEST);
         
         assertEquals("t1 is at index 0:", t1, T.getThreads().get(0));
         assertEquals("t2 is at index 1:", t2, T.getThreads().get(1));
@@ -268,23 +256,18 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        
+        /*
         t1.setTopComment(c1);
         t2.setTopComment(c2);
         t3.setTopComment(c3);
         t4.setTopComment(c4);
         t5.setTopComment(c5);
-        
-        t1.getBodyComment().getLocation().setLatitude(1);
-        t1.getBodyComment().getLocation().setLongitude(1);
-        t2.getBodyComment().getLocation().setLatitude(2);
-        t2.getBodyComment().getLocation().setLongitude(2);
-        t3.getBodyComment().getLocation().setLatitude(3);
-        t3.getBodyComment().getLocation().setLongitude(3);
-        t4.getBodyComment().getLocation().setLatitude(4);
-        t4.getBodyComment().getLocation().setLongitude(4);
-        t5.getBodyComment().getLocation().setLatitude(5);
-        t5.getBodyComment().getLocation().setLongitude(5);
+        */
+        t1.getBodyComment().getLocation().setCoordinates(1,1);
+        t2.getBodyComment().getLocation().setCoordinates(2,2);
+        t3.getBodyComment().getLocation().setCoordinates(3,3);
+        t4.getBodyComment().getLocation().setCoordinates(4,4);
+        t5.getBodyComment().getLocation().setCoordinates(5,5);
         
         t1.setThreadDate(new Date(currentDate.getTime() + extraTime * 1));
         t2.setThreadDate(new Date(currentDate.getTime() + extraTime * 2));
@@ -298,10 +281,9 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         T.addThread(t5);
         T.addThread(t4);
         
-        T.getSortLoc().setLatitude(0);
-        T.getSortLoc().setLongitude(0);
+        T.getSortLoc().setCoordinates(0,0);
         
-        T.sortThreads(SortComparators.SORT_USER_SCORE_LOWEST);
+        T.sortThreads(SortTypes.SORT_USER_SCORE_LOWEST);
         
         assertEquals("t5 is at index 0:", t5, T.getThreads().get(0));
         assertEquals("t4 is at index 1:", t4, T.getThreads().get(1));
@@ -368,23 +350,18 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         c3.setTextPost("c3");
         c4.setTextPost("c4");
         c5.setTextPost("c5");
-        
+        /*
         t1.setTopComment(c1);
         t2.setTopComment(c2);
         t3.setTopComment(c3);
         t4.setTopComment(c4);
         t5.setTopComment(c5);
-        
-        t1.getBodyComment().getLocation().setLatitude(1);
-        t1.getBodyComment().getLocation().setLongitude(1);
-        t2.getBodyComment().getLocation().setLatitude(2);
-        t2.getBodyComment().getLocation().setLongitude(2);
-        t3.getBodyComment().getLocation().setLatitude(3);
-        t3.getBodyComment().getLocation().setLongitude(3);
-        t4.getBodyComment().getLocation().setLatitude(4);
-        t4.getBodyComment().getLocation().setLongitude(4);
-        t5.getBodyComment().getLocation().setLatitude(5);
-        t5.getBodyComment().getLocation().setLongitude(5);
+        */
+        t1.getBodyComment().getLocation().setCoordinates(1,1);
+        t2.getBodyComment().getLocation().setCoordinates(2,2);
+        t3.getBodyComment().getLocation().setCoordinates(3,3);
+        t4.getBodyComment().getLocation().setCoordinates(4,4);
+        t5.getBodyComment().getLocation().setCoordinates(5,5);
         
         t1.setThreadDate(new Date(currentDate.getTime() + extraTime * 1));
         t2.setThreadDate(new Date(currentDate.getTime() + extraTime * 2));
@@ -398,10 +375,9 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         T.addThread(t5);
         T.addThread(t4);
         
-        T.getSortLoc().setLatitude(0);
-        T.getSortLoc().setLongitude(0);
+        T.getSortLoc().setCoordinates(0,0);
         
-        T.sortThreads(SortComparators.SORT_LOCATION_MISC);
+        T.sortThreads(SortTypes.SORT_LOCATION_MISC);
         
         assertEquals("t1 is at index 0:", t1, T.getThreads().get(0));
         assertEquals("t2 is at index 1:", t2, T.getThreads().get(1));

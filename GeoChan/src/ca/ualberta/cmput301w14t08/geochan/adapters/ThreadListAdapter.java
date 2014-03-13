@@ -33,7 +33,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * This is a custom adapter, used to display Thread objects in a list
+ * This is a custom adapter, used to display Thread objects in a list.
  */
 public class ThreadListAdapter extends BaseAdapter {
 

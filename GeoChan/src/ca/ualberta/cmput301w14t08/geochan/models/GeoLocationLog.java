@@ -54,17 +54,19 @@ public class GeoLocationLog {
         return entries;
     }
 
-    public boolean isEmpty() {
+    public static boolean isEmpty() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size() == 0;
     }
 
+
     /**
      * Removes all LogEntry objects from entries.
      */
-    public void clearLog() {
+
+    public static void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
@@ -75,7 +77,7 @@ public class GeoLocationLog {
      * Returns the number of LogEntry objects stored in entries.
      * @return Number of LogEntry objects.
      */
-    public int size() {
+    public static int size() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
