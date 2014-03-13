@@ -41,6 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
@@ -71,7 +72,6 @@ public class PostCommentFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         commentToReplyTo = (Comment) bundle.getParcelable("cmt");
-
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
         bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
@@ -105,11 +105,13 @@ public class PostCommentFragment extends Fragment {
                 Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
+                //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
+                //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
             /*
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
