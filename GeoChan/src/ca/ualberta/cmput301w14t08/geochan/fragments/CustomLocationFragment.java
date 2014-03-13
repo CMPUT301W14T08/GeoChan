@@ -59,7 +59,7 @@ public class CustomLocationFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
-    /*
+    
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -112,7 +112,7 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
             args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
             args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
@@ -128,7 +128,7 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
@@ -146,11 +146,11 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("comFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         }
     }
-    */
+    
 }

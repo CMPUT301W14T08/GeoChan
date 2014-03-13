@@ -86,22 +86,14 @@ public class ThreadViewAdapter extends BaseAdapter {
         if(comment.getChildren().size() == 0) {
             return 0;
         }
-        
         int size = 0;
         
         for(Comment c : comment.getChildren()) {
             ++size;
             size += getCountChildren(c);
         }
-        
         return size;
     }
-
-    /*
-     * @Override public int getCount() { int size = thread.getComments().size()
-     * + 2; // OP + separator + top // comments for (Comment c : comments) {
-     * size = size + c.getChildren().size(); } return size; }
-     */
 
     @Override
     public Object getItem(int position) {
