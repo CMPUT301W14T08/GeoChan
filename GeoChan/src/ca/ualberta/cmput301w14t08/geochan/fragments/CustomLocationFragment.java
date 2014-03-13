@@ -105,7 +105,7 @@ public class CustomLocationFragment extends Fragment {
         fm.popBackStackImmediate();
     }
 
-    // the next 3 methods need to be re-factored together as their is significant overlap
+    // the next 3 methods need to be re-factored together as there is significant overlap
     
     public void setArgsForCustomCoordinates() {
         Bundle bundle = getArguments();

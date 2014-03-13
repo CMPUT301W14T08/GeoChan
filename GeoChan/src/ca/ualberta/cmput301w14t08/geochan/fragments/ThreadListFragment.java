@@ -44,6 +44,11 @@ import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/**
+ * Responsible for the UI fragment that displays multiple ThreadComments to
+ * the user.
+ *
+ */
 public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
     private ListView threadListView;

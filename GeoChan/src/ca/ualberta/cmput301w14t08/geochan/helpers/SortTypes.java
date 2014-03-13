@@ -26,6 +26,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * Helper class. Manages Comparators for sorting across multiple classes.
+ *
+ */
 public class SortTypes {
 
     public static final int SORT_DATE_NEWEST = 0;
@@ -274,6 +278,12 @@ public class SortTypes {
         };
     }
     
+    /**
+     * Comparator for pushing ThreadComments closer to the provided location
+     * to the top.
+     * @param g The GeoLocation to be compared against.
+     * @return A Comparator used to sort ThreadComments according to location.
+     */
     public static Comparator<ThreadComment> sortThreadsByLocation(final GeoLocation g){
         return new Comparator<ThreadComment>(){
             public int compare(ThreadComment t1, ThreadComment t2){
