@@ -33,6 +33,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Handles the serialization of Comment objects into JSON format.
+ *
+ */
 public class CommentSerializer implements JsonSerializer<Comment> {
 
     /*
@@ -40,6 +44,9 @@ public class CommentSerializer implements JsonSerializer<Comment> {
      * 
      * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
      * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+     */
+    /**
+     * Serializes a Comment object into JSON format.
      */
     @Override
     public JsonElement serialize(Comment comment, Type type, JsonSerializationContext context) {

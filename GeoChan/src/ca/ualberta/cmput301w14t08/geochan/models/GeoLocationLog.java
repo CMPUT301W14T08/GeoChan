@@ -22,7 +22,10 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
-
+/**
+ * Stores the history of locations and related thread titles used in the app.
+ *
+ */
 public class GeoLocationLog {    
 
     private static ArrayList<LogEntry> entries;
@@ -31,6 +34,11 @@ public class GeoLocationLog {
         entries = new ArrayList<LogEntry>();
     }
    
+    /**
+     * Adds a new LogEntry to the GeoLocationLog.
+     * @param threadTitle Title to be stored in the new LogEntry.
+     * @param geoLocation GeoLocation to be stored in the new LogEntry.
+     */
     public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
@@ -53,6 +61,9 @@ public class GeoLocationLog {
         return entries.size() == 0;
     }
 
+    /**
+     * Removes all LogEntry objects from entries.
+     */
     public void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
@@ -60,6 +71,10 @@ public class GeoLocationLog {
         entries.clear();
     }
 
+    /**
+     * Returns the number of LogEntry objects stored in entries.
+     * @return Number of LogEntry objects.
+     */
     public int size() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();

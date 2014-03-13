@@ -83,6 +83,11 @@ public class GeoLocation {
 
     // create a new location so we do not affect the LocationListenerService's
     // lastKnownLocation
+    /**
+     * Sets both the longitude and latitude of the GeoLocation to new values.
+     * @param newLat The new latitude to be assigned.
+     * @param newLong The new longitude to be assigned.
+     */
     public void setCoordinates(double newLat, double newLong) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
         newLocation.setLatitude(newLat);

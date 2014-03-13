@@ -25,6 +25,10 @@ import java.util.Collections;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
+/**
+ * Utility class that stores and manages an arraylist of ThreadComment objects.
+ *
+ */
 public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
     
@@ -57,6 +61,11 @@ public class ThreadList {
         return sortLoc;
     }
 
+    /**
+     * Creates a new ThreadComment and adds it to to the ThreadList.
+     * @param comment The bodyComment of the ThreadComment to be created.
+     * @param title The title of the ThreadComment to be created.
+     */
     public static void addThread(Comment comment, String title) {
         if (threads == null) {
             threads = new ArrayList<ThreadComment>();

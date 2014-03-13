@@ -3,15 +3,12 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.Date;
 
 import android.graphics.Picture;
-<<<<<<< HEAD
-=======
 import android.location.Location;
 import android.location.LocationManager;
->>>>>>> master
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
@@ -72,7 +69,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);
         
-        c1.sortChildren(SortComparators.SORT_DATE_NEWEST);
+        c1.sortChildren(SortTypes.SORT_DATE_NEWEST);
 
         assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
         assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
@@ -102,7 +99,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c4);
         c1.addChild(c2);
         
-        c1.sortChildren(SortComparators.SORT_DATE_OLDEST);
+        c1.sortChildren(SortTypes.SORT_DATE_OLDEST);
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);

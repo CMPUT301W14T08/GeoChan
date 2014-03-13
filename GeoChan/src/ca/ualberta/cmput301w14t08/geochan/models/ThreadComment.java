@@ -31,6 +31,10 @@ import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
+/**
+ * A body Comment and the nested replies. Provides some utility for managing comments.
+ *
+ */
 public class ThreadComment {
     private ArrayList<Comment> comments;
     private Comment bodyComment;
