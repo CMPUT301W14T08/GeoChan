@@ -41,7 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * Adapter used for displaying a ThreadComment in the
- * ThreadViewFragment.
+ * ThreadViewFragment. It inflates layouts for OP, op level comments and comment replies.
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
@@ -293,6 +293,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 
+    // This method sets all the equired views for a comment reply
     private void setCommentReplyFields(View convertView, Comment reply) {
         // Comment body
         TextView replyBody = (TextView) convertView
