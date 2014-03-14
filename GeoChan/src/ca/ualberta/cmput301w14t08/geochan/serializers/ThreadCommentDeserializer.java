@@ -21,19 +21,23 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 
 public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment> {
 
@@ -57,6 +61,14 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        String jsonComments = object.get("comments").getAsString();
+        
+        Gson gson = ElasticSearchClient.getInstance().getGson();
+        Type t = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> comments = gson.fromJson(jsonComments, t);
+        if (comments == null) {
+            comments = new ArrayList<String>();
+        }
         
         if (hasImage) {
             // TODO: Implement decoding of images
@@ -72,11 +84,11 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         c.setUser(user);
         c.setHash(hash);
         c.setId(Long.parseLong(id));
-        
+        c.setCommentIds(comments);
+
         final ThreadComment comment = new ThreadComment(c, title);
         comment.setThreadDate(new Date(threadDate));
         comment.setId(Long.parseLong(id));
-        
         // TODO: Set image
         
         return comment;

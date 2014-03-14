@@ -60,12 +60,14 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         String hash = object.get("hash").getAsString();
         String textPost = object.get("textPost").getAsString();
         String id = object.get("id").getAsString();
-        JsonElement jsonComments = object.get("comments");
+        String jsonComments = object.get("comments").getAsString();
         
         Gson gson = ElasticSearchClient.getInstance().getGson();
         Type t = new TypeToken<ArrayList<String>>() {}.getType();
         ArrayList<String> comments = gson.fromJson(jsonComments, t);
-        
+        if (comments == null) {
+            comments = new ArrayList<String>();
+        }
         if (hasImage) {
             // TODO: Implement decoding of images
         }

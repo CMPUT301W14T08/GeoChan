@@ -10,7 +10,8 @@
 			"textPost" : {"type" : "string", "store" : true},
 			"image" : {"type" : "binary"},
 			"imageThumbnail" : {"type" : "binary"},
-			"id" : {"type" : "string"}
+			"id" : {"type" : "string"},
+			"comments" : {"type" : "string", "index" : "not_analyzed"}
 		}
 	}
 }

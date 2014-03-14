@@ -26,8 +26,10 @@ import java.lang.reflect.Type;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.util.Base64;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -72,7 +74,9 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encoded);
         }
-        
+        Gson gson = ElasticSearchClient.getInstance().getGson();
+        String c = gson.toJson(thread.getBodyComment().getCommentIds());
+        object.addProperty("comments", c);
         return object;
     }
 

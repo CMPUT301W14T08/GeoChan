@@ -87,6 +87,7 @@ public class ElasticSearchClient {
     public void postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
         post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
+        updateThreadComments(commentToReplyTo, comment);
     }
 
     public int getThreadCount() {
@@ -139,9 +140,9 @@ public class ElasticSearchClient {
     public ArrayList<Comment> getComments(Comment comment) {
         ArrayList<Comment> comments = new ArrayList<Comment>();
         for (String id : comment.getCommentIds()) {
-            Comment temp = getComment(id);
-            temp.setParent(comment);
-            comments.add(getComment(id));
+            Comment c = getComment(id);
+            c.setParent(comment);
+            comments.add(c);
         }
         for (Comment c : comments) {
             comment.setChildren(getComments(c));
@@ -208,7 +209,7 @@ public class ElasticSearchClient {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return result.getSourceAsObject(Comment.class);
+        return gson.fromJson(result.getJsonString(), Comment.class);
     }
     
     private String getList(final String query, final String type) {
