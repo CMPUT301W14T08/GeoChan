@@ -29,6 +29,9 @@ public class GeoLocationLog {
 
     private static ArrayList<LogEntry> entries;
 
+    /**
+     * Private constructor. Is called only if static array is null.
+     */
     private GeoLocationLog() {
         entries = new ArrayList<LogEntry>();
     }
