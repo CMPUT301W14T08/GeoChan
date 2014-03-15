@@ -17,6 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+  
+ /*
+  * Reused from https://github.com/rayzhangcl/ESDemo/
+  */
 
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
