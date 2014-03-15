@@ -111,6 +111,12 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Comment c4 = new Comment();
         Comment c5 = new Comment();
         
+        c1.setTextPost("c1");
+        c2.setTextPost("c2");
+        c3.setTextPost("c3");
+        c4.setTextPost("c4");
+        c5.setTextPost("c5");
+        
         Location location1 = new Location(LocationManager.GPS_PROVIDER);
         Location location2 = new Location(LocationManager.GPS_PROVIDER);
         Location location3 = new Location(LocationManager.GPS_PROVIDER);
@@ -168,12 +174,6 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
         assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
         assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
-        
-        Log.i("Score of c1:", String.valueOf(c1.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c2:", String.valueOf(c2.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c3:", String.valueOf(c3.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c4:", String.valueOf(c4.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c5:", String.valueOf(c5.getScoreFromUser(t.getSortLoc())));
         
         c5.setCommentDate(currentDate);
         c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
@@ -280,7 +280,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     }
     
     /**
-     * Tests the sorting of comments in a thread by the score relative to the user.
+     * Tests the sorting of comments in a thread by the thread's sortLoc.
      */
     public void testSortByLocation(){
         ThreadComment t = new ThreadComment();
@@ -289,6 +289,12 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        
+        c1.setTextPost("c1");
+        c2.setTextPost("c2");
+        c3.setTextPost("c3");
+        c4.setTextPost("c4");
+        c5.setTextPost("c5");
         
         Location location1 = new Location(LocationManager.GPS_PROVIDER);
         Location location2 = new Location(LocationManager.GPS_PROVIDER);
@@ -333,7 +339,20 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         t.addComment(c5);
         t.addComment(c1);
         
+        
         t.sortComments(SortTypes.SORT_LOCATION_MISC);
+        
+        Log.i("Comment at index 0:", t.getComments().get(0).getTextPost());
+        Log.i("Comment at index 1:", t.getComments().get(1).getTextPost());
+        Log.i("Comment at index 2:", t.getComments().get(2).getTextPost());
+        Log.i("Comment at index 3:", t.getComments().get(3).getTextPost());
+        Log.i("Comment at index 4:", t.getComments().get(4).getTextPost());
+        
+        Log.i("Lat of c1:", String.valueOf(c1.getLocation().getLatitude()));
+        Log.i("Lat of c2:", String.valueOf(c2.getLocation().getLatitude()));
+        Log.i("Lat of c3:", String.valueOf(c3.getLocation().getLatitude()));
+        Log.i("Lat of c4:", String.valueOf(c4.getLocation().getLatitude()));
+        Log.i("Lat of c5:", String.valueOf(c5.getLocation().getLatitude()));
         
         assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
         assertTrue("c2 is at location 1", t.getComments().get(1) == c2);

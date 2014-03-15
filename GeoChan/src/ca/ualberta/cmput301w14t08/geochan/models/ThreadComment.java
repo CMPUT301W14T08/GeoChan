@@ -195,11 +195,23 @@ public class ThreadComment {
         case SortTypes.SORT_LOCATION_OP:
             Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
             break;
+        case SortTypes.SORT_LOCATION_MISC:
+            Collections.sort(this.getComments(), 
+                             SortTypes.sortCommentsByLocationDistance(getSortLoc()));
+            break;
         case SortTypes.SORT_SCORE_HIGHEST:
             Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
             Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
+            break;
+        case SortTypes.SORT_USER_SCORE_HIGHEST:
+            Collections.sort(this.getComments(), 
+                            SortTypes.sortCommentsByUserScoreHighest(getSortLoc()));
+            break;
+        case SortTypes.SORT_USER_SCORE_LOWEST:
+            Collections.sort(this.getComments(),
+                            SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
             break;
         }
     }
