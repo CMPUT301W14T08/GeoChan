@@ -3,8 +3,10 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.Activity;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -21,8 +23,33 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
         super(MainActivity.class);
     }
     
+    protected void setUp() throws Exception{
+        super.setUp();
+        MainActivity a = (MainActivity) waitForActivity(5000);
+        assertNotNull("fragment not initialized",a);
+    }
+    
+    /**
+     * http://stackoverflow.com/a/17789933
+     * Sometimes the emulator is too slow.
+     */
+    protected Activity waitForActivity(int timeout) {
+        long endTime = SystemClock.uptimeMillis() + timeout;
+        while (SystemClock.uptimeMillis() <= endTime) {
+
+            Activity a = getActivity();
+            if (a != null) {
+                return a;
+            }
+        }
+        return null;
+    }
+    
 
     public void testAddThread() {
+        //Null pointer exception being raised in this test because MainActivity
+        //doesn't have time to finished calling onCreate before the test is run.
+        //UserHashManager instance is still null.
         //Comment comment = new Comment("Test", null);
         Comment comment = new Comment();
         ThreadList.addThread(comment, "Test title");
