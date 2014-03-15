@@ -62,8 +62,8 @@ public class ThreadComment {
     public ThreadComment() {
         super();
         this.comments = new ArrayList<Comment>();
-        this.bodyComment = null;
-        this.title = null;
+        this.bodyComment = new Comment();
+        this.title = "This thread is being used to test!";
     }
 
     /**

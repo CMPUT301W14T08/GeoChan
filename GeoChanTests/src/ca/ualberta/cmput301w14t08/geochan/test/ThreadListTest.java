@@ -23,7 +23,8 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
     
 
     public void testAddThread() {
-        Comment comment = new Comment("Test", null);
+        //Comment comment = new Comment("Test", null);
+        Comment comment = new Comment();
         ThreadList.addThread(comment, "Test title");
         assertTrue(ThreadList.getThreads().size() == 1);
     }

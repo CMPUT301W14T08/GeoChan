@@ -138,7 +138,7 @@ public class Comment implements Parcelable {
         this.textPost = "This is a test comment.";
         this.commentDate = new Date();
         this.image = null;
-        this.location = null;
+        this.location = new GeoLocation(0,0);
         this.parent = null;
         this.children = new ArrayList<Comment>();
         this.setUser(new String());

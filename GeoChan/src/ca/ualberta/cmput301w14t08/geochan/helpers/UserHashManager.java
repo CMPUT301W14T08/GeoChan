@@ -30,7 +30,6 @@ import android.provider.Settings.Secure;
 
 /**
  * Helper class. Generates hashes used in identifying Comments and users.
- * @author hpabst
  *
  */
 public class UserHashManager {
