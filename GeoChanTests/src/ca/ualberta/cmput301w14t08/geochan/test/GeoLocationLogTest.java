@@ -15,11 +15,11 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         super(MainActivity.class);
     }
     
-    public void testConstruction() {
+   /* public void testConstruction() {
         assertNotNull(GeoLocationLog.getLogEntries());
         GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
         assertNotNull(geoLocationLog.getLogEntries());
-    }
+    }*/
     
     public void testAddLogEntry() {
         locationListenerService = new LocationListenerService(getActivity());
