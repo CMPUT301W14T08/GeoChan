@@ -38,6 +38,9 @@ public class GeoLocation {
      */
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
+        if (this.location == null) {
+            this.location = locationListenerService.getLastKnownLocation();
+        }
     }
     
     /**
