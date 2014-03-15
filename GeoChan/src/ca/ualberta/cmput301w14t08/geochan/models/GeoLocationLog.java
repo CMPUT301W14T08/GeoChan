@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 /**
  * Stores the history of locations and related thread titles used in the app.
- *
  */
 public class GeoLocationLog {    
 
@@ -47,6 +46,10 @@ public class GeoLocationLog {
         entries.add(logEntry);
     }
     
+    /**
+     * Return the log entries array, if null create one
+     * @return entries
+     */
     public static ArrayList<LogEntry> getLogEntries() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
@@ -54,18 +57,20 @@ public class GeoLocationLog {
         return entries;
     }
 
+    /**
+     * Return true if log is empty, else false. If null create one
+     * @return entries
+     */
     public static boolean isEmpty() {
-        if(entries == null) {
+        if (entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size() == 0;
     }
 
-
     /**
      * Removes all LogEntry objects from entries.
      */
-
     public static void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();

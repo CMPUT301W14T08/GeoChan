@@ -15,11 +15,9 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         super(MainActivity.class);
     }
     
-   /* public void testConstruction() {
+    public void testConstruction() {
         assertNotNull(GeoLocationLog.getLogEntries());
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        assertNotNull(geoLocationLog.getLogEntries());
-    }*/
+    }
     
     public void testAddLogEntry() {
         locationListenerService = new LocationListenerService(getActivity());
@@ -38,7 +36,10 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         }
     }
     
-    public void testIsLogEmpty() {
+    public void testClearLogAndCheckIsLogEmpty() {
+        GeoLocationLog.addLogEntry("TestThreadTitle", new GeoLocation(1.0,2.0));
+        assertEquals("Entries array should NOT be empty", false, GeoLocationLog.isEmpty());
+        
         GeoLocationLog.clearLog();
         assertEquals("Entries array should be empty",true, GeoLocationLog.isEmpty());
     }
