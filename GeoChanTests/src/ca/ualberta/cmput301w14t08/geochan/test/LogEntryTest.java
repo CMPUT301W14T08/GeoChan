@@ -20,7 +20,7 @@ public class LogEntryTest extends TestCase {
         assertEquals("geoLocation should be the same", geoLocation, entry.getGeoLocation());
     }
 
-    public void testSetTitleAndGeoLocation() {
+    public void testGetAndSetTitleAndGeoLocation() {
         Location location = new Location(LocationManager.GPS_PROVIDER);
         GeoLocation geoLocation1 = new GeoLocation(location);
 
