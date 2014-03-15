@@ -26,6 +26,11 @@ public class LogEntry {
     private String threadTitle;
     private GeoLocation geoLocation;
 
+    /**
+     * Constructor using a string and a GeoLocation object
+     * @param title
+     * @param geoLocation
+     */
     public LogEntry(String title, GeoLocation geoLocation) {
         this.threadTitle = title;
         this.geoLocation = geoLocation;
