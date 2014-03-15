@@ -31,14 +31,29 @@ public class GeoLocation {
 
     private Location location;
 
+    /**
+     * Constructs a new GeoLocation object when supplied a 
+     * locationListenerService object
+     * @param locationListenerService
+     */
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
     }
     
+    /**
+     * Construcs a new GeoLocation object with a supplied location object
+     * @param location
+     */
     public GeoLocation(Location location) {
         this.location = location;
     }
     
+    /**
+     * Construct a new GeoLocation object with a supplied latitude
+     * and longitude
+     * @param latitude
+     * @param longitude
+     */
     public GeoLocation(double latitude, double longitude) {
         this.location = new Location(LocationManager.GPS_PROVIDER);
         setCoordinates(latitude, longitude);
@@ -57,14 +72,54 @@ public class GeoLocation {
         return Math.sqrt(Math.pow(latDist, 2) + Math.pow(longDist, 2));
     }
 
-    public Location getLocation() {
-        return location;
+    /**
+     * Sets both the longitude and latitude of the GeoLocation to new values.
+     * Creates a new location object so that the LocationListenerServices's
+     * lastKnownLocation attribute is not affected.
+     * @param newLat The new latitude to be assigned.
+     * @param newLong The new longitude to be assigned.
+     */
+    public void setCoordinates(double newLat, double newLong) {
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLatitude(newLat);
+        newLocation.setLongitude(newLong);
+        this.location = newLocation;
     }
-
-    public void setLocation(Location location) {
-        this.location = location;
+    
+    /**
+     * Sets new latitude value. A new location object is created so that 
+     * the LocationListnerService's lastKnownLocation attribute is not
+     * affected
+     * @param newLat
+     */
+    public void setLatitude(double newLat) {
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLatitude(newLat);
+        if (location != null) {
+            newLocation.setLongitude(location.getLongitude());
+        } else {
+            newLocation.setLongitude(0);
+        }
+        this.location = newLocation;
     }
-
+    
+    /**
+     * Sets new longitude value. A new location object is created so that 
+     * the LocationListnerService's lastKnownLocation attribute is not
+     * affected
+     * @param newLong
+     */
+    public void setLongitude(double newLong) {
+        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
+        newLocation.setLongitude(newLong);
+        if (location != null) {
+            newLocation.setLatitude(location.getLatitude());
+        } else {
+            newLocation.setLatitude(0);
+        }
+        this.location = newLocation;
+    }
+    
     /**
      * Returns the latitude of the GeoLocation.
      * @return Latitude of the GeoLocation.
@@ -80,40 +135,20 @@ public class GeoLocation {
     public double getLongitude() {
         return location.getLongitude();
     }
-
-    // create a new location so we do not affect the LocationListenerService's
-    // lastKnownLocation
+    
     /**
-     * Sets both the longitude and latitude of the GeoLocation to new values.
-     * @param newLat The new latitude to be assigned.
-     * @param newLong The new longitude to be assigned.
+     * gets Location
+     * @return location
      */
-    public void setCoordinates(double newLat, double newLong) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(newLat);
-        newLocation.setLongitude(newLong);
-        this.location = newLocation;
+    public Location getLocation() {
+        return location;
     }
-    
-    public void setLatitude(double newLat) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(newLat);
-        if (location != null) {
-            newLocation.setLongitude(location.getLongitude());
-        } else {
-            newLocation.setLongitude(0);
-        }
-        this.location = newLocation;
-    }
-    
-    public void setLongitude(double newLong) {
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLongitude(newLong);
-        if (location != null) {
-            newLocation.setLatitude(location.getLatitude());
-        } else {
-            newLocation.setLatitude(0);
-        }
-        this.location = newLocation;
+
+    /**
+     * Replaces the location attribute with a new supplied locatoin
+     * @param location
+     */
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
