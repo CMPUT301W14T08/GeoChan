@@ -4,13 +4,13 @@
  * Copyright 2014 Tom Krywitsky
  * Copyright 2014 Henry Pabst
  * Copyright 2014 Bradley Simons
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -74,10 +74,10 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
         }
     }
-    
+
     /**
      * This method is called once the comments of a thread loaded.
-     * 
+     *
      * @param thread
      */
     public void setThread(ThreadComment thread) {
@@ -96,7 +96,7 @@ public class ThreadViewAdapter extends BaseAdapter {
     /**
      * This method recursively counts the amount of children a comment object
      * has
-     * 
+     *
      * @param comment
      * @return size
      */
@@ -124,51 +124,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             return comments.get(position-2);
         }
     }
-
-    /*
-    private int getItemGetTC(int position) {
-        int count = 0;
-        if (position == 0) {
-            return count;
-        }
-        for (int i = 0; i < comments.size(); ++i) {
-            Comment topComment = comments.get(i);
-            ++count;
-            count += getCountChildren(topComment);
-            if (count > position) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private Comment getItemGetComment(int TCindex, int position) {
-        int count = 0;
-        Comment topComment = comments.get(TCindex);
-        // Count all the comments up to the Top Comment in question
-        for (int i = 0; i < TCindex; ++i) {
-            count += 1;
-            count += getCountChildren(comments.get(i));
-        }
-        // Case where the item at position is a top comment
-        if (count == position) {
-            return topComment;
-        } else {
-            int index = position - count;
-            return recursiveSearch(topComment, index);
-        }
-    }
-    
-    private Comment recursiveSearch(Comment parent, int index) {
-        if(index == 0) {
-            return parent;
-        } else {
-            
-        }
-        return null;
-    }
-    
-    */
 
     @Override
     public int getItemViewType(int position) {
@@ -287,7 +242,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method sets all the required fields for the OP
-     * 
+     *
      * @param convertView
      */
     private void setOPFields(View convertView) {
@@ -320,7 +275,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method sets all the equired views for a comment reply
-     * 
+     *
      * @param convertView
      * @param reply
      */
