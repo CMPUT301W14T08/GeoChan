@@ -10,17 +10,21 @@ public class ElasticSearchQueries {
     private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n"
             + "}";
     
-    private static final String UPDATE_SIMPLE_BEGIN = "{\n " + "\"script\" : \"ctx._source.";
-    
-    private static final String UPDATE_SIMPLE_MIDDLE = "\",\n" + "\"params\" : {\n" + "\"";
-    
-    private static final String UPDATE_SIMPLE_END = "\n" + "}\n" + "}";
+    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" + "    \"upsert\" : {\n"
+            + "        \"comments\" : [\"";
+            
+    private static final String UPDATE_COMMENT_LIST_MIDDLE = "\"]\n" + "    }\n" 
+            + "    \"script\": \"ctx._source.comments += comment\",\n"
+            + "    \"params\" : {\n" + "        \"comment\" : \"";
+            
+    private static final String UPDATE_COMMENT_LIST_END = "\"\n" + "    }\n" + "}";
 
     public static String getMatchParent(String id) {
         return SEARCH_MATCH_PARENT_BEGIN + id + SEARCH_MATCH_PARENT_END;
     }
     
-    public static String getUpdate(String field, String content) {
-        return UPDATE_SIMPLE_BEGIN + field + " = " + field + UPDATE_SIMPLE_MIDDLE + field + "\" : " + content + UPDATE_SIMPLE_END;
+    public static String commentListScript(String id) {
+        return UPDATE_COMMENT_LIST_BEGIN + id + UPDATE_COMMENT_LIST_MIDDLE
+                + id + UPDATE_COMMENT_LIST_END;
     }
 }
