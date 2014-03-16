@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -210,6 +211,19 @@ public class ThreadViewAdapter extends BaseAdapter {
             final ImageButton replyButton = (ImageButton) convertView
                     .findViewById(R.id.comment_reply_button);
 
+            final ImageButton starButton = (ImageButton) convertView
+                    .findViewById(R.id.comment_star_button);
+
+            if (starButton != null) {
+                starButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Perform action on click
+                        Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
+                        //Add code here to save the comment/thread;
+                        
+                    }
+                });
+            }
             // This if condition will be removed once every comment has its own
             // reply button.
             if (replyButton != null) {
