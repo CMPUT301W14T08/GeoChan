@@ -7,7 +7,7 @@
         android:id="@+id/thread_view_comment_commentBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/imageView2"
+        android:layout_toRightOf="@+id/imageView5"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:text="@string/lorem_ipsum" />
@@ -31,16 +31,36 @@
         android:layout_toRightOf="@+id/imageView1"
         android:contentDescription="@+id/imageView2"
         android:src="@drawable/rect2" />
-
-    <TextView
-        android:id="@+id/thread_view_comment_commentBy"
-        android:layout_width="wrap_content"
+    
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_view_comment_commentBody"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView2"
-        android:text="@string/placeholder_postby"
-        android:paddingLeft="5dp"
-        android:textColor="#00f" />
+        android:contentDescription="@+id/imageView3"
+        android:src="@drawable/rect3" />
+    
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView3"
+        android:contentDescription="@+id/imageView4"
+        android:src="@drawable/rect4" />
+    
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView4"
+        android:contentDescription="@+id/imageView5"
+        android:src="@drawable/rect5" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentDate"
@@ -61,6 +81,16 @@
         android:text="@string/placeholder_location"
         android:paddingLeft="5dp"
         android:textColor="#2E8B57" />
+
+    <TextView
+        android:id="@+id/thread_view_comment_commentBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/thread_view_comment_commentBody"
+        android:layout_below="@+id/thread_view_comment_commentBody"
+        android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
+        android:textColor="#00f" />
     
     <ImageButton
         android:id="@+id/comment_reply_button"

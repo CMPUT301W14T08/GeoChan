@@ -62,11 +62,13 @@ public class ThreadViewAdapter extends BaseAdapter {
         this.comments = this.thread.getBodyComment().getChildren();
     }
 
+    
     public void setThread(ThreadComment thread) {
         this.thread = thread;
         this.comments = this.thread.getBodyComment().getChildren();
         this.notifyDataSetChanged();
     }
+    
 
     @Override
     public int getCount() {
@@ -74,10 +76,8 @@ public class ThreadViewAdapter extends BaseAdapter {
         return size + 2; // The +2 is for OP + Separator
     }
     
-    
     /**
      * This method recursively counts the amount of children a comment object has
-     * using depth first traversal.
      * @param comment
      * @return size
      */
@@ -103,7 +103,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             return null;
         } else {
             int TCindex = getItemGetTC(position - 2);
-            // Log.e("TCindex", Integer.toString(TCindex));
+            Log.e("TCindex", Integer.toString(TCindex));
 
             int Cindex = getItemGetChild(TCindex, position - 2);
             // Log.e("Cindex", Integer.toString(Cindex));
@@ -116,27 +116,28 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 
-    // Get top comment related to the position.
+    /**
+     * Get the top comment associated with the position to narrow down the search. 
+     * @param position
+     * @return
+     */
     private int getItemGetTC(int position) {
         int count = 0;
-        if (position == 0) {
-            return 0;
+        if(position == 0) {
+            return count;
         }
-
-        for (int i = 0; i < comments.size(); ++i) {
+        for(int i = 0; i < comments.size(); ++i) {
             Comment topComment = comments.get(i);
             ++count;
-            count = count + topComment.getChildren().size();
-            if (count > position) {
+            count += getCountChildren(topComment);
+            if(count > position) {
                 return i;
             }
         }
-        // Return which top comment this item belongs to, -1 for index
-        // compensation
-        // i.e. if it's the first top comment, we want index 0.
         return 0;
     }
 
+    /*
     private int getItemGetChild(int TCindex, int position) {
         // int childIndex = 0;
         int count = 0;
@@ -152,6 +153,14 @@ public class ThreadViewAdapter extends BaseAdapter {
             return position - count - 1;
         }
     }
+    */
+    
+    private Comment getItemGetChild(int position) {
+        
+        
+        
+        return null;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -159,18 +168,10 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 0) {
             type = TYPE_OP;
         }
-
         else if (position == 1) {
             type = TYPE_SEPARATOR;
-        }
-
-        else if (position > 1) {
-            int Cindex = getItemGetChild(getItemGetTC(position - 2), position - 2);
-            if (Cindex == -1) {
-                type = TYPE_COMMENT;
-            } else {
-                type = TYPE_COMMENT;
-            }
+        } else {
+            type = TYPE_COMMENT;
         }
         return type;
     }

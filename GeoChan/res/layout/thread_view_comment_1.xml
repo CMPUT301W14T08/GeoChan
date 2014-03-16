@@ -9,17 +9,18 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/imageView1"
         android:paddingRight="5dp"
+        android:paddingLeft="5dp"
         android:text="@string/lorem_ipsum" />
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="30dp"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/thread_view_comment_locationText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@+id/imageView1"
-        android:src="@drawable/ic_lvl_1" />
+        android:src="@drawable/rect1" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentBy"
@@ -28,6 +29,7 @@
         android:layout_alignLeft="@+id/thread_view_comment_commentBody"
         android:layout_below="@+id/thread_view_comment_commentBody"
         android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
         android:textColor="#00f" />
 
     <TextView
@@ -37,6 +39,7 @@
         android:layout_alignLeft="@+id/thread_view_comment_commentBody"
         android:layout_below="@+id/thread_view_comment_commentDate"
         android:text="@string/placeholder_location"
+        android:paddingLeft="5dp"
         android:textColor="#2E8B57" />
 
     <TextView
@@ -46,6 +49,16 @@
         android:layout_alignLeft="@+id/thread_view_comment_commentBody"
         android:layout_below="@+id/thread_view_comment_commentBy"
         android:text="@string/placeholder_date"
+        android:paddingLeft="5dp"
         android:textColor="#00f" />
+    
+    <ImageButton
+        android:id="@+id/comment_reply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/thread_view_comment_commentBody"
+        android:contentDescription="@string/comment_reply_button"
+        android:src="@drawable/ic_action_reply" />
 
 </RelativeLayout>
