@@ -59,35 +59,54 @@ public class ThreadViewAdapter extends BaseAdapter {
         this.context = context;
         this.thread = thread;
         this.manager = manager;
-        this.comments = this.thread.getBodyComment().getChildren();
+        this.comments = new ArrayList<Comment>();
+        buildAList(thread.getBodyComment());
     }
 
-    
-    public void setThread(ThreadComment thread) {
-        this.thread = thread;
-        this.comments = this.thread.getBodyComment().getChildren();
-        this.notifyDataSetChanged();
+    private void buildAList(Comment comment) {
+        ArrayList<Comment> children = comment.getChildren();
+        if(children.size() == 0) {
+            return;
+        } else {
+            for(Comment c : children) {
+                comments.add(c);
+                buildAList(c);
+            }
+        }
     }
     
+    /**
+     * This method is called once the comments of a thread loaded.
+     * 
+     * @param thread
+     */
+    public void setThread(ThreadComment thread) {
+        this.thread = thread;
+        //this.comments = new ArrayList<Comment>();
+        buildAList(thread.getBodyComment());
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {
         int size = getCountChildren(thread.getBodyComment());
         return size + 2; // The +2 is for OP + Separator
     }
-    
+
     /**
-     * This method recursively counts the amount of children a comment object has
+     * This method recursively counts the amount of children a comment object
+     * has
+     * 
      * @param comment
      * @return size
      */
     private int getCountChildren(Comment comment) {
-        if(comment.getChildren().size() == 0) {
+        if (comment.getChildren().size() == 0) {
             return 0;
         }
         int size = 0;
-        
-        for(Comment c : comment.getChildren()) {
+
+        for (Comment c : comment.getChildren()) {
             ++size;
             size += getCountChildren(c);
         }
@@ -102,67 +121,61 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 1) {
             return null;
         } else {
-            int TCindex = getItemGetTC(position - 2);
-            Log.e("TCindex", Integer.toString(TCindex));
-            
+            return comments.get(position-2);
         }
-        return null;
     }
 
-    /**
-     * Get the top comment associated with the position to narrow down the search. 
-     * @param position
-     * @return
-     */
+    /*
     private int getItemGetTC(int position) {
         int count = 0;
-        if(position == 0) {
+        if (position == 0) {
             return count;
         }
-        for(int i = 0; i < comments.size(); ++i) {
+        for (int i = 0; i < comments.size(); ++i) {
             Comment topComment = comments.get(i);
             ++count;
             count += getCountChildren(topComment);
-            if(count > position) {
+            if (count > position) {
                 return i;
             }
         }
         return 0;
     }
 
-    /*
-    private int getItemGetChild(int TCindex, int position) {
-        // int childIndex = 0;
+    private Comment getItemGetComment(int TCindex, int position) {
         int count = 0;
+        Comment topComment = comments.get(TCindex);
         // Count all the comments up to the Top Comment in question
         for (int i = 0; i < TCindex; ++i) {
             count += 1;
-            count += comments.get(i).getChildren().size();
+            count += getCountChildren(comments.get(i));
         }
         // Case where the item at position is a top comment
         if (count == position) {
-            return -1;
+            return topComment;
         } else {
-            return position - count - 1;
+            int index = position - count;
+            return recursiveSearch(topComment, index);
         }
     }
-    */
     
-    /**
-     * This method takes in the index of the top comment that owns item
-     * and osition in the list nad returns exactly which object it is.
-     * @param TCindex
-     * @param position
-     * @return
-     */
+    private Comment recursiveSearch(Comment parent, int index) {
+        if(index == 0) {
+            return parent;
+        } else {
+            
+        }
+        return null;
+    }
+    
+    */
 
     @Override
     public int getItemViewType(int position) {
         int type = 0;
         if (position == 0) {
             type = TYPE_OP;
-        }
-        else if (position == 1) {
+        } else if (position == 1) {
             type = TYPE_SEPARATOR;
         } else {
             type = TYPE_COMMENT;
@@ -192,35 +205,53 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
             setOPFields(convertView);
             break;
-        
+
         case TYPE_COMMENT:
             final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                switch(comment.getDepth()) {
+                // This switch inflates the correct layout for comment's "depth"
+                // in the tree, where thread body comment is root.
+                switch (comment.getDepth()) {
                 case 0:
-                    convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
                     break;
                 case 1:
                     convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
                     break;
-                default:
-                    convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                case 2:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
                     break;
-                } 
-                
+                case 3:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
+                    break;
+                case 4:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
+                    break;
+                case 5:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
+                    break;
+                case 6:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
+                    break;
+                case 7:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
+                    break;
+                default:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
+                    break;
+                }
             }
-            
             setCommentFields(convertView, comment);
+
             // Here handle button presses
-            
-            
             final ImageButton replyButton = (ImageButton) convertView
                     .findViewById(R.id.comment_reply_button);
-            
-            // This if condition will be removed once every comment has its own reply button.
-            if(replyButton != null) {
+
+            // This if condition will be removed once every comment has its own
+            // reply button.
+            if (replyButton != null) {
                 replyButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         // Perform action on click
@@ -253,9 +284,10 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    
+
     /**
      * This method sets all the required fields for the OP
+     * 
      * @param convertView
      */
     private void setOPFields(View convertView) {
@@ -287,7 +319,8 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     *  This method sets all the equired views for a comment reply
+     * This method sets all the equired views for a comment reply
+     * 
      * @param convertView
      * @param reply
      */
