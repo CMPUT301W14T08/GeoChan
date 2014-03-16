@@ -47,13 +47,26 @@ public class ThreadListTest extends ActivityInstrumentationTestCase2<MainActivit
     
 
     public void testAddThread() {
-        //Null pointer exception being raised in this test because MainActivity
-        //doesn't have time to finished calling onCreate before the test is run.
-        //UserHashManager instance is still null.
-        //Comment comment = new Comment("Test", null);
         Comment comment = new Comment();
         ThreadList.addThread(comment, "Test title");
         assertTrue(ThreadList.getThreads().size() == 1);
+    }
+    
+    public void testClearThreads(){
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        
+        ThreadList.addThread(t1);
+        ThreadList.addThread(t2);
+        ThreadList.addThread(t3);
+        assertTrue("Our initialization passed.", 
+                    ThreadList.getThreads().size() != 0);
+        
+        ThreadList.clearThreads();
+        
+        assertTrue("Clearing threads succeeded.",
+                    ThreadList.getThreads().size() == 0);
     }
     
     @SuppressWarnings("static-access")

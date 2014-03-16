@@ -64,6 +64,8 @@ public class ThreadComment {
         this.comments = new ArrayList<Comment>();
         this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
+        this.manager = UserHashManager.getInstance();
+        this.id = manager.getCommentIdHash();
     }
 
     /**

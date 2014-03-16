@@ -162,11 +162,6 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c1.addChild(c2);
         
         c1.sortChildren(SortTypes.SORT_LOCATION_OP);
-        
-        Log.i("Val of child at 0:", String.valueOf(c1.getChildren().get(0).getLocation().getLatitude()));
-        Log.i("Val of child at 1:", String.valueOf(c1.getChildren().get(1).getLocation().getLatitude()));
-        Log.i("Val of child at 2:", String.valueOf(c1.getChildren().get(2).getLocation().getLatitude()));
-        Log.i("Val of child at 3:", String.valueOf(c1.getChildren().get(3).getLocation().getLatitude()));
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -236,11 +231,6 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
         
         c1.sortChildren(SortTypes.SORT_SCORE_HIGHEST);
-        
-        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
-        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
-        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
-        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
 
         assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
         assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
@@ -316,11 +306,6 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
         
         c1.sortChildren(SortTypes.SORT_SCORE_LOWEST);
-        
-        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
-        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
-        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
-        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
 
         assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
         assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
@@ -391,15 +376,45 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
-        
-        Log.i("Score of c2:", String.valueOf(c2.getScoreFromParent()));
-        Log.i("Score of c3:", String.valueOf(c3.getScoreFromParent()));
-        Log.i("Score of c4:", String.valueOf(c4.getScoreFromParent()));
-        Log.i("Score of c5:", String.valueOf(c5.getScoreFromParent()));
 
         assertTrue("c5 is > 0", c5.getScoreFromParent() > 0);
         assertTrue("c4 is > 0", c4.getScoreFromParent() > 0);
         assertTrue("c3 is > 0", c3.getScoreFromParent() > 0);
         assertTrue("c2 is > 0", c2.getScoreFromParent() > 0);
+    }
+    
+    public void testGetUserScore(){
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        GeoLocation g1 = new GeoLocation(0,0);
+        
+        c1.getLocation().setCoordinates(0, 0);
+        c2.getLocation().setCoordinates(5, 5);
+        
+        assertTrue("Scores are correct relatively.", 
+                    c1.getScoreFromUser(g1) > c2.getScoreFromUser(g1));
+    }
+    
+    public void testGetDistanceFrom(){
+        Comment c1 = new Comment();
+        GeoLocation g1 = new GeoLocation(5,5);
+        
+        c1.getLocation().setCoordinates(0,0);
+        
+        double dist = c1.getDistanceFrom(g1);
+        
+        Log.e("Value of dist:", String.valueOf(dist));
+        assertTrue("Distance calculated correctly.", dist == Math.sqrt(50));
+    }
+    
+    public void testGetTimeFrom(){
+        Comment c1 = new Comment();
+        Date d1 = new Date();
+        
+        assertEquals("Returns minimum 0.5:", c1.getTimeFrom(d1), 0.5);
+        
+        d1 = new Date(c1.getCommentDate().getTime() + 3600000);
+        
+        assertEquals("Returns correct hour amount.", c1.getTimeFrom(d1), 1.0);
     }
 }

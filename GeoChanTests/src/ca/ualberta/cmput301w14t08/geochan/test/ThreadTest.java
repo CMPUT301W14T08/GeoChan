@@ -31,6 +31,54 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         locationListenerService.startListening();
     }
     
+    public void testAddComment(){
+        ThreadComment t1 = new ThreadComment();
+        Comment c1 = new Comment();
+        
+        t1.addComment(c1);
+        
+        assertTrue("Comment added successfuly.", t1.getComments().contains(c1));
+    }
+    
+    public void testGetDistanceFrom(){
+        ThreadComment t1 = new ThreadComment();
+        GeoLocation g1 = new GeoLocation(5,5);
+        
+        t1.getBodyComment().getLocation().setCoordinates(0, 0);
+        
+        assertEquals("Distance calculated correctly.", t1.getDistanceFrom(g1),
+                      Math.sqrt(50));
+    }
+    
+    public void testGetTimeFrom(){
+        ThreadComment t1 = new ThreadComment();
+        Date d1 = new Date();
+        
+        assertEquals("Minimum time value calculated correctly.",t1.getTimeFrom(d1),
+                    0.5);
+        
+        d1 = new Date(t1.getThreadDate().getTime() + 3600000);
+        
+        assertEquals("Time calculated correctly.", t1.getTimeFrom(d1),
+                    1.0);
+    }
+    
+    public void testGetScoreFromUser(){
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        
+        t1.getBodyComment().getLocation().setCoordinates(0,0);
+        t2.getBodyComment().getLocation().setCoordinates(5, 5);
+        
+        t1.setSortLoc(new GeoLocation(0,0));
+        t2.setSortLoc(new GeoLocation(0,0));
+        
+        assertTrue("Scores calculated relatively correctly.",
+                    t1.getScoreFromUser(t1.getSortLoc()) >
+                    t2.getScoreFromUser(t2.getSortLoc()));
+        
+    }
+    
     public void testSortByDateNewest(){
         /*
          * Tests the implementation of Thread.sortComments("DATE_NEWEST");
