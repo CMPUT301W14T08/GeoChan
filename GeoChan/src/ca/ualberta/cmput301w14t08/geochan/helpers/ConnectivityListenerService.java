@@ -10,6 +10,10 @@ public class ConnectivityListenerService extends BroadcastReceiver {
 
     private ConnectivityManager connectivityManager;
 
+    /**
+     * Constructor. Gets the system service Connectivity Service
+     * @param context
+     */
     public ConnectivityListenerService(Context context) {
         connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
@@ -19,20 +23,33 @@ public class ConnectivityListenerService extends BroadcastReceiver {
         // TODO -> Implement :)
     }
     
+    /**
+     * Returns true if device is connected to internet
+     * @return isConnected
+     */
     public boolean isConnected() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
+    /**
+     * Returns true if device is connected via WiFi
+     * @return isConnectedToWifi
+     */
     public boolean isWifi() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        boolean isConnectedToWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        return isConnectedToWifi;
     }
 
+    /**
+     * Returns true if device is connected via Mobile
+     * @return isConnectedToMobile
+     */
     public boolean isMobile() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnectedToMobile = activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
-        
         return isConnectedToMobile;
     }
 
