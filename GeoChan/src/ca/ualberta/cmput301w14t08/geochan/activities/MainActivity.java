@@ -39,7 +39,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener {
+public class MainActivity extends Activity implements OnBackStackChangedListener {   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
