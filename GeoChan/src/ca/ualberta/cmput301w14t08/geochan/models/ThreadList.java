@@ -25,6 +25,9 @@ import java.util.Collections;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
+/**
+ * This is a model container class, it hosts a list of ThreadComment objects
+ */
 public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
     

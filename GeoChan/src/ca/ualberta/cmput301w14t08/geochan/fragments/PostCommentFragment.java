@@ -43,8 +43,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * Responsible for the UI fragment that allows a user to post a reply to a
- * thread.
+ * This class is responsible for the fragment that allows user to post a reply to an existing
+ * comment.
  */
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;

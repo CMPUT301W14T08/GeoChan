@@ -40,6 +40,11 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/** 
+ * This is the main and, so far, only activity in the application.
+ * It inflates the default fragment and handles some of the crucial controller methods
+ *
+ */
 public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         }
     }
 
+    // Do not display the back arrow in threadListFragment
     @Override
     public void onBackStackChanged() {
         int count = getFragmentManager().getBackStackEntryCount();

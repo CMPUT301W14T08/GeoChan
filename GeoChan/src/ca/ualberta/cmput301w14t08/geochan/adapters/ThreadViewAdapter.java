@@ -41,7 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
- * inflates layouts for OP, op level comments and comment replies.
+ * inflates layouts for OP, top level comments and comment replies.
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
@@ -63,12 +63,18 @@ public class ThreadViewAdapter extends BaseAdapter {
         buildAList(thread.getBodyComment());
     }
 
+    /**
+     * This method takes a comment and recursively builds a list of comment
+     * objects from the Comment's children tree.
+     * 
+     * @param comment
+     */
     private void buildAList(Comment comment) {
         ArrayList<Comment> children = comment.getChildren();
-        if(children.size() == 0) {
+        if (children.size() == 0) {
             return;
         } else {
-            for(Comment c : children) {
+            for (Comment c : children) {
                 comments.add(c);
                 buildAList(c);
             }
@@ -77,12 +83,12 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method is called once the comments of a thread loaded.
-     *
+     * 
      * @param thread
      */
     public void setThread(ThreadComment thread) {
         this.thread = thread;
-        //this.comments = new ArrayList<Comment>();
+        // this.comments = new ArrayList<Comment>();
         buildAList(thread.getBodyComment());
         this.notifyDataSetChanged();
     }
@@ -94,9 +100,9 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method recursively counts the amount of children a comment object
-     * has
-     *
+     * This method recursively counts the total amount of children a comment
+     * object has.
+     * 
      * @param comment
      * @return size
      */
@@ -121,7 +127,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 1) {
             return null;
         } else {
-            return comments.get(position-2);
+            return comments.get(position - 2);
         }
     }
 
@@ -224,7 +230,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                     }
                 });
             }
-
             break;
 
         case TYPE_SEPARATOR:
@@ -242,7 +247,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method sets all the required fields for the OP
-     *
+     * 
      * @param convertView
      */
     private void setOPFields(View convertView) {
@@ -275,7 +280,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method sets all the equired views for a comment reply
-     *
+     * 
      * @param convertView
      * @param reply
      */

@@ -28,6 +28,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
+/**
+ * This class manages user's username as well as the unique hashcode
+ */
 public class UserHashManager {
     private static Context context;
     private static UserHashManager instance;
@@ -62,6 +65,10 @@ public class UserHashManager {
         return user;
     }
 
+    /**
+     * This method generates a hash hex string from the username and android_id
+     * @param string
+     */
     public static String getHash(String string) {
         int id = android_id.hashCode();
         int temp = (id + id + id * 3 + string.hashCode()) / 42;

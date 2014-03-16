@@ -22,7 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
-
+/**
+ * This model class handles all operations involved in logging used locations.
+ */
 public class GeoLocationLog {    
 
     private static ArrayList<LogEntry> entries;

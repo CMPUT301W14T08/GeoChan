@@ -35,6 +35,10 @@ import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
+/**
+ * This is a model class that represents a comment object,
+ * it handles all things a comment object can do.
+ */
 public class Comment implements Parcelable {
     private String textPost;
     private Date commentDate;
@@ -166,9 +170,7 @@ public class Comment implements Parcelable {
         children.add(comment);
     }
 
-    /**
-     * Getters and setters
-     */
+    //Getters and setters.
     public String getTextPost() {
         return textPost;
     }
@@ -430,6 +432,10 @@ public class Comment implements Parcelable {
         dest.writeTypedList(children);
     }
 
+    /**
+     * This is the Comment constructor to build the object from a parcel.
+     * @param in
+     */
     public Comment(Parcel in) {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));

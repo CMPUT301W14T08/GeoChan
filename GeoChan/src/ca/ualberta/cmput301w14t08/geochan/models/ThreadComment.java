@@ -29,6 +29,10 @@ import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
+/**
+ * ThreadComment is a model class that handles all operations of threads in the application.
+ * It aggregates a Comment object and adds thread specific fields: title, id
+ */
 public class ThreadComment {
     private Comment bodyComment;
     private String title;
