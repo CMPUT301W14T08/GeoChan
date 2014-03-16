@@ -32,7 +32,7 @@ public class LocationListenerService {
     private static Location location;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private static final int TWO_MINUTES = 1000 * 60 * 2; // taken from Android Location Strategy
 
     /**
      * Constructs a new service object. Creates a locationListener
