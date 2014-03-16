@@ -22,6 +22,7 @@ public class Favourites {
         FavouritesIOManager.serializeComments();
     }
     
+    
     // Getters and Setters
     public ArrayList<ThreadComment> getThreads() {
         return threads;
