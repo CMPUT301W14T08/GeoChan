@@ -20,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@+id/imageView1"
-        android:src="@drawable/rect1" />
+        android:src="@drawable/rect" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -30,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView1"
         android:contentDescription="@+id/imageView2"
-        android:src="@drawable/rect2" />
+        android:src="@drawable/rect" />
     
     <ImageView
         android:id="@+id/imageView3"
@@ -40,7 +40,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView2"
         android:contentDescription="@+id/imageView3"
-        android:src="@drawable/rect3" />
+        android:src="@drawable/rect" />
     
     <ImageView
         android:id="@+id/imageView4"

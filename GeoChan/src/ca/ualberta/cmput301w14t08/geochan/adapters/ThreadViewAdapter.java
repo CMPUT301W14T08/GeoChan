@@ -104,16 +104,9 @@ public class ThreadViewAdapter extends BaseAdapter {
         } else {
             int TCindex = getItemGetTC(position - 2);
             Log.e("TCindex", Integer.toString(TCindex));
-
-            int Cindex = getItemGetChild(TCindex, position - 2);
-            // Log.e("Cindex", Integer.toString(Cindex));
-
-            if (Cindex == -1) {
-                return comments.get(TCindex);
-            } else {
-                return comments.get(TCindex).getChildren().get(Cindex);
-            }
+            
         }
+        return null;
     }
 
     /**
@@ -155,12 +148,13 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
     */
     
-    private Comment getItemGetChild(int position) {
-        
-        
-        
-        return null;
-    }
+    /**
+     * This method takes in the index of the top comment that owns item
+     * and osition in the list nad returns exactly which object it is.
+     * @param TCindex
+     * @param position
+     * @return
+     */
 
     @Override
     public int getItemViewType(int position) {
