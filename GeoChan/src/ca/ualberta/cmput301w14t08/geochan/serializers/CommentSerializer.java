@@ -26,15 +26,17 @@ import java.lang.reflect.Type;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.util.Base64;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Handles the serialization of Comment objects into JSON format.
+ *
+ */
 public class CommentSerializer implements JsonSerializer<Comment> {
 
     /*
@@ -42,6 +44,9 @@ public class CommentSerializer implements JsonSerializer<Comment> {
      * 
      * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
      * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+     */
+    /**
+     * Serializes a Comment object into JSON format.
      */
     @Override
     public JsonElement serialize(Comment comment, Type type, JsonSerializationContext context) {
@@ -77,11 +82,6 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         if (comment.getParent() != null) {
             object.addProperty("parent", comment.getParent().getId());
         }
-        
-        Gson gson = ElasticSearchClient.getInstance().getGson();
-        String c = gson.toJson(comment.getCommentIds());
-        object.addProperty("comments", c);
-        
         return object;
     }
 

@@ -21,22 +21,22 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 
+/**
+ * Handles the deserialization of Comments from JSON.
+ *
+ */
 public class CommentDeserializer implements JsonDeserializer<Comment> {
 
     /*
@@ -45,6 +45,9 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
      * @see
      * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
      * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+     */
+    /**
+     * Deserializes a Comment object from JSON format.
      */
     @Override
     public Comment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
@@ -60,14 +63,6 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         String hash = object.get("hash").getAsString();
         String textPost = object.get("textPost").getAsString();
         String id = object.get("id").getAsString();
-        String jsonComments = object.get("comments").getAsString();
-        
-        Gson gson = ElasticSearchClient.getInstance().getGson();
-        Type t = new TypeToken<ArrayList<String>>() {}.getType();
-        ArrayList<String> comments = gson.fromJson(jsonComments, t);
-        if (comments == null) {
-            comments = new ArrayList<String>();
-        }
         if (hasImage) {
             // TODO: Implement decoding of images
         }
@@ -80,7 +75,6 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         comment.setHash(hash);
         comment.setDepth(depth);
         comment.setId(Long.parseLong(id));
-        comment.setCommentIds(comments);
         // TODO: Set image
         return comment;
     }

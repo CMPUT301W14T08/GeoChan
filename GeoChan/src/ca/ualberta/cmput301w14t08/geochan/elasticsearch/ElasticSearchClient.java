@@ -25,15 +25,12 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Count;
-import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
-import io.searchbox.core.Update;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -76,18 +73,14 @@ public class ElasticSearchClient {
             instance = new ElasticSearchClient();
         }
     }
-    public Gson getGson() {
-        return gson;
+
+    public Thread postThread(final ThreadComment thread) {
+        return post(gson.toJson(thread), TYPE_THREAD, thread.getId());
     }
 
-    public void postThread(final ThreadComment thread) {
-        post(gson.toJson(thread), TYPE_THREAD, thread.getId());
-    }
-
-    public void postComment(final ThreadComment thread, final Comment commentToReplyTo,
+    public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
-        post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
-        updateThreadComments(commentToReplyTo, comment);
+        return post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
     }
 
     public int getThreadCount() {
@@ -97,20 +90,12 @@ public class ElasticSearchClient {
     public int getCommentCount() {
         return count(TYPE_COMMENT);
     }
-    
-    public void updateThreadComments(Comment parent, Comment child) {
-        ArrayList<String> comments = parent.getCommentIds();
-        comments.add(child.getId());
-        String json = gson.toJson(comments);
-        String query = ElasticSearchQueries.getUpdate("comments", json);
-        update(query, TYPE_COMMENT, parent.getId());
-    }
 
     public ArrayList<ThreadComment> getThreads() {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
         }.getType();
         ElasticSearchSearchResponse<ThreadComment> esResponse = gson
-                .fromJson(getList(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
+                .fromJson(get(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
                 elasticSearchSearchResponseType);
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
@@ -120,11 +105,11 @@ public class ElasticSearchClient {
         return list;
     }
 
-    /*public ArrayList<Comment> getComments(String id) {
+    public ArrayList<Comment> getComments(String id) {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<Comment>>() {
         }.getType();
         ElasticSearchSearchResponse<Comment> esResponse = gson
-                .fromJson(getList(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT),
+                .fromJson(get(ElasticSearchQueries.getMatchParent(id), TYPE_COMMENT),
                 elasticSearchSearchResponseType);
         ArrayList<Comment> list = new ArrayList<Comment>();
         for (ElasticSearchResponse<Comment> r : esResponse.getHits()) {
@@ -135,22 +120,9 @@ public class ElasticSearchClient {
                 getChildComments(object);
         }
         return list;
-    }*/
-    
-    public ArrayList<Comment> getComments(Comment comment) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        for (String id : comment.getCommentIds()) {
-            Comment c = getComment(id);
-            c.setParent(comment);
-            comments.add(c);
-        }
-        for (Comment c : comments) {
-            comment.setChildren(getComments(c));
-        }
-        return comments;
     }
     
-    private void post(final String json, final String type, final String id) {
+    private Thread post(final String json, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -165,6 +137,7 @@ public class ElasticSearchClient {
             }
         };
         t.start();
+        return t;
     }
     
     private int count(final String type) {
@@ -185,34 +158,7 @@ public class ElasticSearchClient {
         }
     }
     
-    private void update(final String query, final String type, final String id) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
-                try {
-                    Log.e("WAT", client.execute(update).getErrorMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
-    }
-    
-    private Comment getComment(final String id) {
-        Get get = new Get.Builder(URL_INDEX, id).type(TYPE_COMMENT).build();
-        JestResult result = null;
-        try {
-            result = client.execute(get);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return gson.fromJson(result.getJsonString(), Comment.class);
-    }
-    
-    private String getList(final String query, final String type) {
+    private String get(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
@@ -225,7 +171,7 @@ public class ElasticSearchClient {
         }
     }
     
-    /*private void getChildComments(Comment comment) {
+    private void getChildComments(Comment comment) {
         ArrayList<Comment> children = getComments(comment.getId());
         for (Comment child : children) {
             getChildComments(child);
@@ -234,5 +180,5 @@ public class ElasticSearchClient {
             child.setParent(comment);
         }
         comment.setChildren(children);
-    }*/
+    }
 }
