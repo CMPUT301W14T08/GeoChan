@@ -10,10 +10,23 @@ public class ConnectivityListenerServiceTest extends ActivityInstrumentationTest
         super(MainActivity.class);
     }
     
-    public void testIsWifi() {
+    public void testConstruction() {
+        ConnectivityListenerService connectivityListenerService = 
+                new ConnectivityListenerService(getActivity().getApplicationContext());
+        assertNotNull(connectivityListenerService);
+        assertNotNull(connectivityListenerService.getConnectivityManager());
+    }
+    
+    public void testIsConnectedToWifi() {
         ConnectivityListenerService connectivityListenerService = 
                 new ConnectivityListenerService(getActivity().getApplicationContext());
         assertEquals("Wifi should be enabled", true, connectivityListenerService.isWifi());        
+    }
+    
+    public void testIsConnectedToMobile() {
+        ConnectivityListenerService connectivityListenerService = 
+                new ConnectivityListenerService(getActivity().getApplicationContext());
+        assertEquals("Mobile should be enabled", true, connectivityListenerService.isMobile());   
     }
     
     public void testIsConnected() {
