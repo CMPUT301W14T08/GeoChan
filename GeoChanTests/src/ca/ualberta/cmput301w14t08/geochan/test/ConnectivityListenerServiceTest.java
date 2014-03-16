@@ -34,5 +34,4 @@ public class ConnectivityListenerServiceTest extends ActivityInstrumentationTest
                 new ConnectivityListenerService(getActivity().getApplicationContext());
         assertEquals("Connection should be active", true, connectivityListenerService.isConnected());
     }
-    
 }
