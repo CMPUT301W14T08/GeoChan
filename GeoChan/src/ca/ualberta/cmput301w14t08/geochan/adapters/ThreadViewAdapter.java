@@ -299,7 +299,13 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
-
+        
+        replyButton.setScaleX((float) 0.6);
+        replyButton.setScaleY((float) 0.6);
+        starButton.setScaleX((float) 0.6);
+        starButton.setScaleY((float) 0.6);
+        starButton.setX(starButton.getX() + 35);
+        
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
