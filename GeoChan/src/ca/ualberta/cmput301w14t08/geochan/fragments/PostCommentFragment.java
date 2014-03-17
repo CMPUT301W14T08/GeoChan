@@ -20,6 +20,9 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -92,7 +95,12 @@ public class PostCommentFragment extends Fragment {
                 Double lon = args.getDouble("LONGITUDE");
                 geoLocation.setCoordinates(lat, lon);
                 Button locButton = (Button) getActivity().findViewById(R.id.location_button);
-                locButton.setText("Location:" + "Lat:" + Double.toString(lat) + ", Lon:" + Double.toString(lon));
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
+
+                locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
             }
         }
     }

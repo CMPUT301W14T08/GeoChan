@@ -20,6 +20,9 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
@@ -65,7 +69,16 @@ public class PostThreadFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"), args.getDouble("LONGITUDE"));
+                Double lat = args.getDouble("LATITUDE");
+                Double lon = args.getDouble("LONGITUDE");
+                Button locButton = (Button) getActivity().findViewById(R.id.thread_location_button);
+                geoLocation.setCoordinates(lat, lon);
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
+
+                locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
             }
         }
     }
