@@ -26,6 +26,10 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import java.util.Collection;
 
+/**
+ * Represents a hit within a response served by ElasticSearch
+ *
+ */
 public class ElasticSearchHits<T> {
     int total;
     double max_score;

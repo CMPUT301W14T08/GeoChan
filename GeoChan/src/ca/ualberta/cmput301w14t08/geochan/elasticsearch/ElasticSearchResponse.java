@@ -24,6 +24,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
+/**
+ * Represents a response served by ElasticSearch
+ *
+ */
 public class ElasticSearchResponse<T> {
     String _index;
     String _type;

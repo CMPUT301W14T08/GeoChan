@@ -79,7 +79,7 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
             }
         }, 5000, 60000);
 
-        if (list == null) {
+        if (list == null && this.isStarted()) {
             forceLoad();
         }
     }

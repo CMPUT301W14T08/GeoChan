@@ -27,6 +27,10 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents a search response served by ElasticSearch
+ *
+ */
 public class ElasticSearchSearchResponse<T> {
     int took;
     boolean timed_out;

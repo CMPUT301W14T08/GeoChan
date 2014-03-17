@@ -48,6 +48,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * This class is responsible for all ElasticSearch operations.
+ * 
+ */
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static Gson gson;
@@ -71,16 +75,22 @@ public class ElasticSearchClient {
         client = factory.getObject();
     }
 
+    /**
+     * Returns a single instance of the ElasticSearchClient.
+     * @return the instance
+     */
     public static ElasticSearchClient getInstance() {
-        return instance;
-    }
-
-    public static void generateInstance() {
         if (instance == null) {
             instance = new ElasticSearchClient();
         }
+        return instance;
     }
 
+    /**
+     * Posts a ThreadComment to the ElasticSearch server.
+     * @param thread the ThreadComment
+     * @return the Thread for the work for monitoring purposes
+     */
     public Thread postThread(final ThreadComment thread) {
         Thread t = new Thread() {
             @Override
@@ -92,6 +102,11 @@ public class ElasticSearchClient {
         return t;
     }
 
+    /**
+     * Posts a Comment to the ElasticSearch server.
+     * @param thread the ThreadComment
+     * @return the Thread for the work for monitoring purposes
+     */
     public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
         Thread t = new Thread() {
@@ -106,14 +121,26 @@ public class ElasticSearchClient {
         return t;
     }
 
+    /**
+     * Returns the total number of ThreadComments on the server
+     * @return number of ThreadComments
+     */
     public int getThreadCount() {
         return count(TYPE_THREAD);
     }
 
+    /**
+     * Returns the total number of Comments on the server
+     * @return number of Comments
+     */
     public int getCommentCount() {
         return count(TYPE_COMMENT);
     }
 
+    /**
+     * Gets an ArrayList of ThreadComments from the server
+     * @return the ThreadComments
+     */
     public ArrayList<ThreadComment> getThreads() {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
         }.getType();
@@ -128,6 +155,11 @@ public class ElasticSearchClient {
         return list;
     }
     
+    /**
+     * Gets a list of comments for a specified parent comment
+     * @param topComment the parent comment
+     * @return the Comments
+     */
     public ArrayList<Comment> getComments(Comment topComment) {
         ArrayList<Comment> comments = new ArrayList<Comment>();
         Get get = new Get.Builder(URL_INDEX, topComment.getId()).type(TYPE_INDEX).build();
@@ -158,6 +190,11 @@ public class ElasticSearchClient {
         return comments;
     }
     
+    /**
+     * Gets a Comment, specified by its id
+     * @param id the id
+     * @return the Comment
+     */
     private Comment get(final String id) {
         Get get = new Get.Builder(URL_INDEX, id).type(TYPE_COMMENT).build();
         JestResult result = null;
@@ -173,6 +210,12 @@ public class ElasticSearchClient {
         }
     }
     
+    /**
+     * Posts a JSON string request to the ElasticSearch server
+     * @param json the JSON query string
+     * @param type the ElasticSearch type
+     * @param id the record ID
+     */
     private void post(final String json, final String type, final String id) {
         Index index = new Index.Builder(json).index(URL_INDEX).type(type)
                 .id(id).build();
@@ -184,6 +227,12 @@ public class ElasticSearchClient {
         }
     }
     
+    /**
+     * Updates a record on the ElasticSearch server
+     * @param query the JSON query string
+     * @param type the ElasticSearch type
+     * @param id the record ID
+     */
     private void update(final String query, final String type, final String id) {
         Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
         try {
@@ -194,6 +243,11 @@ public class ElasticSearchClient {
         }
     }
     
+    /**
+     * Counts the number of records on the ElasticSearch server
+     * @param type the ElasticSearch type
+     * @return the count
+     */
     private int count(final String type) {
         Count count = new Count.Builder().addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
@@ -211,6 +265,12 @@ public class ElasticSearchClient {
         }
     }
     
+    /**
+     * Searches the ElasticSearch server for all results for a specific type
+     * @param query the JSON query string
+     * @param type the ElasticSearch type
+     * @return the JSON result string
+     */
     private String searchAll(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
