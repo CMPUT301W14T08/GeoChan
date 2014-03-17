@@ -15,13 +15,10 @@ public class FavouritesIOManager {
         FavouritesIOManager.context = context;
     }
 
-    public static void generateInstance(Context context) {
+    public static FavouritesIOManager getInstance(Context context) {
         if (instance == null) {
             instance = new FavouritesIOManager(context);
         }
-    }
-
-    public static FavouritesIOManager getInstance() {
         return instance;
     }
 

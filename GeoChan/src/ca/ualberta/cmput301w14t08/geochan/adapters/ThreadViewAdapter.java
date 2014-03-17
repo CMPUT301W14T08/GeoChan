@@ -165,11 +165,14 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /*
      * (non-Javadoc)
-     * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
      * 
-     * This getView method, depending on the item type, inflates the correct layout. Currently,
-     * it is a switch with each of 10 possible layouts having its own case. The code is 
-     * cumbersome, given sufficient time, I will try to find a more elegant solution. 
+     * @see android.widget.Adapter#getView(int, android.view.View,
+     * android.view.ViewGroup)
+     * 
+     * This getView method, depending on the item type, inflates the correct
+     * layout. Currently, it is a switch with each of 10 possible layouts having
+     * its own case. The code is cumbersome, given sufficient time, I will try
+     * to find a more elegant solution.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -305,8 +308,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 }
             });
         }
-        // This if condition will be removed once every comment has its own
-        // reply button.
         if (replyButton != null) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -374,7 +375,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText("Posted by " + reply.getUser() + "#" + thread.getBodyComment().getHash());
+        replyBy.setText("Posted by " + reply.getUser() + "#" + reply.getHash());
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
@@ -393,21 +394,3 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 }
-
-/*
- * //This switch inflates the correct layout for comment's "depth" // in the
- * tree, where thread body comment is root. switch (comment.getDepth()) { case
- * 0: convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
- * break; case 1: convertView = inflater.inflate(R.layout.thread_view_comment_1,
- * null); break; case 2: convertView =
- * inflater.inflate(R.layout.thread_view_comment_2, null); break; case 3:
- * convertView = inflater.inflate(R.layout.thread_view_comment_3, null); break;
- * case 4: convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
- * break; case 5: convertView = inflater.inflate(R.layout.thread_view_comment_5,
- * null); break; case 6: convertView =
- * inflater.inflate(R.layout.thread_view_comment_6, null); break; case 7:
- * convertView = inflater.inflate(R.layout.thread_view_comment_7, null); break;
- * default: convertView = inflater.inflate(R.layout.thread_view_comment_0,
- * null); break; }
- */
-

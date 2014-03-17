@@ -33,7 +33,7 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Ma
                 listView.performItemClick(listView.getAdapter().getView(0, null, null), 0, 0);
                 Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 2000);
                 assertNotNull("threadViewFragment is null", fragment);
-                ImageButton reply = (ImageButton) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_op_reply);
+                ImageButton reply = (ImageButton) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_reply_button);
                 assertNotNull("reply button is null", reply);
                 //reply.performClick();
             }

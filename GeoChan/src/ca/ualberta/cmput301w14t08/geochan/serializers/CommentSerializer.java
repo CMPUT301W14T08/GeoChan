@@ -35,7 +35,7 @@ import com.google.gson.JsonSerializer;
 
 /**
  * Handles the serialization of Comment objects into JSON format.
- *
+ * 
  */
 public class CommentSerializer implements JsonSerializer<Comment> {
 

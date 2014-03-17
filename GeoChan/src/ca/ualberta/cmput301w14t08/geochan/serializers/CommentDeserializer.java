@@ -35,7 +35,7 @@ import com.google.gson.JsonParseException;
 
 /**
  * Handles the deserialization of Comments from JSON.
- *
+ * 
  */
 public class CommentDeserializer implements JsonDeserializer<Comment> {
 

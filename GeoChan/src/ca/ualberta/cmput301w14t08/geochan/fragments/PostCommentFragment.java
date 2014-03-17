@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -113,13 +115,12 @@ public class PostCommentFragment extends Fragment {
                 client.postComment(thread, commentToReplyTo, newComment);
                 // GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
-            /*
-             * InputMethodManager inputManager = (InputMethodManager)
-             * getActivity().getSystemService( Context.INPUT_METHOD_SERVICE);
-             * inputManager
-             * .hideSoftInputFromWindow(getActivity().getCurrentFocus
-             * ().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-             */
+
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+
             this.getFragmentManager().popBackStackImmediate();
         }
     }
