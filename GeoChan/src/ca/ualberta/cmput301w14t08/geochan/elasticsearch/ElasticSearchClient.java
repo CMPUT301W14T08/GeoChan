@@ -33,9 +33,6 @@ import io.searchbox.core.Update;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import org.json.JSONException;
-
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -92,14 +89,7 @@ public class ElasticSearchClient {
      * @return the Thread for the work for monitoring purposes
      */
     public Thread postThread(final ThreadComment thread) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                post(gson.toJson(thread), TYPE_THREAD, thread.getId());
-            }
-        };
-        t.start();
-        return t;
+        return post(gson.toJson(thread), TYPE_THREAD, thread.getId());
     }
 
     /**
@@ -109,16 +99,9 @@ public class ElasticSearchClient {
      */
     public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
-                String query = ElasticSearchQueries.commentListScript(comment.getId());
-                update(query, TYPE_INDEX, commentToReplyTo.getId());
-            }
-        };
-        t.start();
-        return t;
+        String query = ElasticSearchQueries.commentListScript(comment.getId());
+        update(query, TYPE_INDEX, commentToReplyTo.getId());
+        return post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
     }
 
     /**
@@ -181,8 +164,6 @@ public class ElasticSearchClient {
                     comment.setChildren(children);
                 }
             }
-        } catch (JSONException e) {
-            Log.e("???", "WHAt the fuck.");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -215,16 +196,24 @@ public class ElasticSearchClient {
      * @param json the JSON query string
      * @param type the ElasticSearch type
      * @param id the record ID
+     * @return the network Thread (for monitoring purposes)
      */
-    private void post(final String json, final String type, final String id) {
-        Index index = new Index.Builder(json).index(URL_INDEX).type(type)
-                .id(id).build();
-        try {
-            client.execute(index);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    private Thread post(final String json, final String type, final String id) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                Index index = new Index.Builder(json).index(URL_INDEX).type(type)
+                        .id(id).build();
+                try {
+                    client.execute(index);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+        return t;
     }
     
     /**
@@ -232,15 +221,23 @@ public class ElasticSearchClient {
      * @param query the JSON query string
      * @param type the ElasticSearch type
      * @param id the record ID
+     * @return the network Thread (for monitoring purposes)
      */
-    private void update(final String query, final String type, final String id) {
-        Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
-        try {
-            client.execute(update);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    private Thread update(final String query, final String type, final String id) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
+                try {
+                    client.execute(update);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+        return t;
     }
     
     /**
