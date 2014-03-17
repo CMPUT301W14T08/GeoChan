@@ -163,6 +163,14 @@ public class ThreadViewAdapter extends BaseAdapter {
         return TYPE_MAX_COUNT;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+     * 
+     * This getView method, depending on the item type, inflates the correct layout. Currently,
+     * it is a switch with each of 10 possible layouts having its own case. The code is 
+     * cumbersome, given sufficient time, I will try to find a more elegant solution. 
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
@@ -174,6 +182,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_op, null);
             }
             setOPFields(convertView);
+            listenForButtons(convertView, thread.getBodyComment());
             break;
 
         case TYPE_COMMENT0:

@@ -34,10 +34,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates
@@ -127,27 +124,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
                 .findFragmentByTag("repFrag");
         fragment.postReply(v);
-    }
-
-    /**
-     * Calls the respective post reply method in the fragment.
-     * 
-     * @param v
-     *            View passed to the activity to check which button was pressed
-     */
-    public void postReplyToOp(View v) {
-        ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
-                "thread_view_fragment");
-        Bundle bundle = fragment.getArguments();
-        ThreadComment thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-        Bundle bundle2 = new Bundle();
-        bundle2.putParcelable("cmt", thread.getBodyComment());
-        bundle2.putLong("id", bundle.getLong("id"));
-        Fragment f = new PostCommentFragment();
-        f.setArguments(bundle2);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "repFrag")
-                .addToBackStack(null).commit();
-        getFragmentManager().executePendingTransactions();
     }
 
     /**
