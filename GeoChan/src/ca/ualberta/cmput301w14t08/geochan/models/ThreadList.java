@@ -123,6 +123,14 @@ public class ThreadList {
         }
     }
     
+    /**
+     * Sorts a thread list according to the tag passed.
+     * This will be moved into its own class, this is temporary.
+     * @param threadList
+     *            Comment list to sort
+     * @param tag
+     *            Tag to sort comments by
+     */
     public static void sortThreads(ArrayList<ThreadComment> threadList, int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:

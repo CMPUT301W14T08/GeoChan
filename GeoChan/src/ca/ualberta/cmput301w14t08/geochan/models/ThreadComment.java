@@ -220,7 +220,9 @@ public class ThreadComment {
     
     /**
      * Sorts a thread's comments according to the tag passed.
-     * 
+     * This will be moved into its own class, this is temporary.
+     * @param comments
+     *            Comment list to sort
      * @param tag
      *            Tag to sort comments by
      */
