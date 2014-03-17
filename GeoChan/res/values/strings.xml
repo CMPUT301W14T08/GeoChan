@@ -30,5 +30,7 @@
     <string name="location_log">Your previously used locations:</string>
     <string name="reply">Reply</string>
     <string name="comment_reply_button">Reply</string>
+    <string name="comment_star_button">Favourite</string>
+    <string name="action_refresh">Refresh from Server</string>
 
 </resources>

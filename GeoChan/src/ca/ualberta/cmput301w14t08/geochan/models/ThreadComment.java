@@ -20,23 +20,21 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
-
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 /**
- * A body Comment and the nested replies. Provides some utility for managing comments.
- *
+ * ThreadComment is a model class that handles all operations of threads in the application.
+ * It aggregates a Comment object and adds thread specific fields: title, id
+ * 
  */
 public class ThreadComment {
-    private ArrayList<Comment> comments;
     private Comment bodyComment;
     private String title;
     private UserHashManager manager;
@@ -51,7 +49,6 @@ public class ThreadComment {
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
-        this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
         this.setTitle(title);
         this.manager = UserHashManager.getInstance();
@@ -61,7 +58,6 @@ public class ThreadComment {
     /* This constructor is only used for testing. */
     public ThreadComment() {
         super();
-        this.comments = new ArrayList<Comment>();
         this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
         this.manager = UserHashManager.getInstance();
@@ -71,6 +67,7 @@ public class ThreadComment {
     /**
      * Getters and setters
      */
+    
     public Date getThreadDate() {
         return bodyComment.getCommentDate();
     }
@@ -95,14 +92,6 @@ public class ThreadComment {
         this.bodyComment = bodyComment;
     }
 
-    public ArrayList<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -120,7 +109,7 @@ public class ThreadComment {
     }
 
     public void addComment(Comment c) {
-        this.comments.add(c);
+        this.bodyComment.addChild(c);
     }
     
     /**
@@ -189,30 +178,30 @@ public class ThreadComment {
     public void sortComments(int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateNewest());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByDateNewest());
             break;
         case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateOldest());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByDateOldest());
             break;
         case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentDistance());
             break;
         case SortTypes.SORT_LOCATION_MISC:
-            Collections.sort(this.getComments(), 
+            Collections.sort(this.getBodyComment().getChildren(), 
                              SortTypes.sortCommentsByLocationDistance(getSortLoc()));
             break;
         case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentScoreLowest());
             break;
         case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), 
+            Collections.sort(this.getBodyComment().getChildren(), 
                             SortTypes.sortCommentsByUserScoreHighest(getSortLoc()));
             break;
         case SortTypes.SORT_USER_SCORE_LOWEST:
-            Collections.sort(this.getComments(),
+            Collections.sort(this.getBodyComment().getChildren(),
                             SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
             break;
         }

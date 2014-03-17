@@ -4,13 +4,13 @@
  * Copyright 2014 Tom Krywitsky
  * Copyright 2014 Henry Pabst
  * Copyright 2014 Bradley Simons
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,22 +33,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * Adapter used for displaying a ThreadComment in the
- * ThreadViewFragment. It inflates layouts for OP, op level comments and comment replies.
+ * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
+ * inflates layouts for OP, top level comments and comment replies.
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT = 0;
     private static final int TYPE_OP = 1;
     private static final int TYPE_SEPARATOR = 2;
-    private static final int TYPE_COMMENT_REPLY = 3;
-    private static final int TYPE_MAX_COUNT = 4;
+    private static final int TYPE_MAX_COUNT = 3;
 
     private Context context;
     private ThreadComment thread;
@@ -60,21 +60,62 @@ public class ThreadViewAdapter extends BaseAdapter {
         this.context = context;
         this.thread = thread;
         this.manager = manager;
-        this.comments = this.thread.getComments();
+        this.comments = new ArrayList<Comment>();
+        buildAList(thread.getBodyComment());
     }
 
+    /**
+     * This method takes a comment and recursively builds a list of comment
+     * objects from the Comment's children tree.
+     * 
+     * @param comment
+     */
+    private void buildAList(Comment comment) {
+        ArrayList<Comment> children = comment.getChildren();
+        if (children.size() == 0) {
+            return;
+        } else {
+            for (Comment c : children) {
+                comments.add(c);
+                buildAList(c);
+            }
+        }
+    }
+
+    /**
+     * This method is called once the comments of a thread loaded.
+     * 
+     * @param thread
+     */
     public void setThread(ThreadComment thread) {
         this.thread = thread;
-        this.comments = this.thread.getComments();
+        // this.comments = new ArrayList<Comment>();
+        buildAList(thread.getBodyComment());
         this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        int size = thread.getComments().size() + 2; // OP + separator + top
-                                                    // comments
-        for (Comment c : comments) {
-            size = size + c.getChildren().size();
+        int size = getCountChildren(thread.getBodyComment());
+        return size + 2; // The +2 is for OP + Separator
+    }
+
+    /**
+     * This method recursively counts the total amount of children a comment
+     * object has.
+     * 
+     * @param comment
+     * @return size
+     */
+    private int getCountChildren(Comment comment) {
+        if (comment.getChildren().size() == 0) {
+            return 0;
+        }
+        int size = 0;
+
+        for (Comment c : comment.getChildren()) {
+            ++size;
+            size += getCountChildren(c);
         }
         return size;
     }
@@ -87,54 +128,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 1) {
             return null;
         } else {
-            int TCindex = getItemGetTC(position - 2);
-            //Log.e("TCindex", Integer.toString(TCindex));
-
-            int Cindex = getItemGetChild(TCindex, position - 2);
-            //Log.e("Cindex", Integer.toString(Cindex));
-
-            if (Cindex == -1) {
-                return comments.get(TCindex);
-            } else {
-                return comments.get(TCindex).getChildren().get(Cindex);
-            }
-        }
-    }
-
-    // Get top comment related to the position.
-    private int getItemGetTC(int position) {
-        int count = 0;
-        if (position == 0) {
-            return 0;
-        }
-
-        for (int i = 0; i < comments.size(); ++i) {
-            Comment topComment = comments.get(i);
-            ++count;
-            count = count + topComment.getChildren().size();
-            if (count > position) {
-                return i;
-            }
-        }
-        // Return which top comment this item belongs to, -1 for index
-        // compensation
-        // i.e. if it's the first top comment, we want index 0.
-        return 0;
-    }
-
-    private int getItemGetChild(int TCindex, int position) {
-        // int childIndex = 0;
-        int count = 0;
-        // Count all the comments up to the Top Comment in question
-        for (int i = 0; i < TCindex; ++i) {
-            count += 1;
-            count += comments.get(i).getChildren().size();
-        }
-        // Case where the item at position is a top comment
-        if (count == position) {
-            return -1;
-        } else {
-            return position - count - 1;
+            return comments.get(position - 2);
         }
     }
 
@@ -143,19 +137,10 @@ public class ThreadViewAdapter extends BaseAdapter {
         int type = 0;
         if (position == 0) {
             type = TYPE_OP;
-        }
-
-        else if (position == 1) {
+        } else if (position == 1) {
             type = TYPE_SEPARATOR;
-        }
-
-        else if (position > 1) {
-            int Cindex = getItemGetChild(getItemGetTC(position - 2), position - 2);
-            if (Cindex == -1) {
-                type = TYPE_COMMENT;
-            } else {
-                type = TYPE_COMMENT_REPLY;
-            }
+        } else {
+            type = TYPE_COMMENT;
         }
         return type;
     }
@@ -188,41 +173,77 @@ public class ThreadViewAdapter extends BaseAdapter {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                // This switch inflates the correct layout for comment's "depth"
+                // in the tree, where thread body comment is root.
+                switch (comment.getDepth()) {
+                case 0:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
+                    break;
+                case 1:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+                    break;
+                case 2:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
+                    break;
+                case 3:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
+                    break;
+                case 4:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
+                    break;
+                case 5:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
+                    break;
+                case 6:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
+                    break;
+                case 7:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
+                    break;
+                default:
+                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
+                    break;
+                }
             }
+            setCommentFields(convertView, comment);
 
-            setTopCommentFields(convertView, comment);
             // Here handle button presses
             final ImageButton replyButton = (ImageButton) convertView
                     .findViewById(R.id.comment_reply_button);
-            replyButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-                    Log.e("ButtonClick", "click");
-                    Log.e("Comment being replied:", comment.getTextPost());
-                    Fragment fragment = new PostReplyFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("cmt", comment);
-                    fragment.setArguments(bundle);
 
-                    manager.beginTransaction()
-                            .replace(R.id.fragment_container, fragment, "repFrag")
-                            .addToBackStack(null).commit();
-                    manager.executePendingTransactions();
-                }
-            });
-            break;
+            final ImageButton starButton = (ImageButton) convertView
+                    .findViewById(R.id.comment_star_button);
 
-        case TYPE_COMMENT_REPLY:
-            Comment reply = (Comment) getItem(position);
-            if (convertView == null) {
-                /** Code here will choose depth of reply layout */
-
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+            if (starButton != null) {
+                starButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Perform action on click
+                        Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
+                        //Add code here to save the comment/thread;
+                        
+                    }
+                });
             }
-            setCommentReplyFields(convertView, reply);
+            // This if condition will be removed once every comment has its own
+            // reply button.
+            if (replyButton != null) {
+                replyButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Perform action on click
+                        Log.e("ButtonClick", "click");
+                        Log.e("Comment being replied:", comment.getTextPost());
+                        Fragment fragment = new PostCommentFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("cmt", comment);
+                        fragment.setArguments(bundle);
+
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment, "repFrag")
+                                .addToBackStack(null).commit();
+                        manager.executePendingTransactions();
+                    }
+                });
+            }
             break;
 
         case TYPE_SEPARATOR:
@@ -238,33 +259,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void setTopCommentFields(View convertView, Comment comment) {
-        // Comment body
-        TextView commentBody = (TextView) convertView
-                .findViewById(R.id.thread_view_top_comment_commentBody);
-        commentBody.setText(comment.getTextPost());
-        // Comment creator
-        TextView commentBy = (TextView) convertView
-                .findViewById(R.id.thread_view_top_comment_commentBy);
-        commentBy.setText("posted by " + comment.getUser() + "#" + comment.getHash());
-        // Comment timestamp
-        TextView commentTime = (TextView) convertView
-                .findViewById(R.id.thread_view_top_comment_commentDate);
-        commentTime.setText(comment.getCommentDateString());
-        // Comment location
-        TextView commentLocationText = (TextView) convertView
-                .findViewById(R.id.thread_view_top_comment_locationText);
-        GeoLocation locCom = comment.getLocation();
-        if (locCom != null) {
-            double commentLat = Math.round(locCom.getLatitude() * 100) / 100;
-            double commentLong = Math.round(locCom.getLongitude() * 100) / 100;
-            commentLocationText.setText("Latitude: " + Double.toString(commentLat) + " Longitude: "
-                    + Double.toString(commentLong));
-        } else {
-            commentLocationText.setText("Error: No location found");
-        }
-    }
-
+    /**
+     * This method sets all the required fields for the OP
+     * 
+     * @param convertView
+     */
     private void setOPFields(View convertView) {
         // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
@@ -293,16 +292,20 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 
-    // This method sets all the equired views for a comment reply
-    private void setCommentReplyFields(View convertView, Comment reply) {
+    /**
+     * This method sets all the equired views for a comment reply
+     * 
+     * @param convertView
+     * @param reply
+     */
+    private void setCommentFields(View convertView, Comment reply) {
         // Comment body
         TextView replyBody = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentBody);
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText("Posted by " + reply.getUser() + "#"
-                + thread.getBodyComment().getHash());
+        replyBy.setText("Posted by " + reply.getUser() + "#" + thread.getBodyComment().getHash());
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
@@ -319,11 +322,5 @@ public class ThreadViewAdapter extends BaseAdapter {
         } else {
             replyLocationText.setText("Error: No location found");
         }
-    }
-
-    // TODO
-    public void addTopComment() {
-
-        notifyDataSetChanged();
     }
 }

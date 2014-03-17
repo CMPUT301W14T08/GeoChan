@@ -51,6 +51,7 @@ public class Comment implements Parcelable {
     private int depth;
     private Comment parent;
     private ArrayList<Comment> children;
+    private ArrayList<String> commentIds;
     private UserHashManager manager;
     private long id;
 
@@ -71,6 +72,7 @@ public class Comment implements Parcelable {
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -90,6 +92,7 @@ public class Comment implements Parcelable {
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -109,6 +112,7 @@ public class Comment implements Parcelable {
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -128,6 +132,7 @@ public class Comment implements Parcelable {
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
         this.id = manager.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -147,8 +152,17 @@ public class Comment implements Parcelable {
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
         this.id = -1;
+        this.commentIds = new ArrayList<String>();
     }
 
+    public ArrayList<String> getCommentIds() {
+        return commentIds;
+    }
+    
+    public void setCommentIds(ArrayList<String> commentIds) {
+        this.commentIds = commentIds;
+    }
+    
     public boolean hasImage() {
         return !(image == null);
     }
@@ -157,9 +171,7 @@ public class Comment implements Parcelable {
         children.add(comment);
     }
 
-    /**
-     * Getters and setters
-     */
+    //Getters and setters.
     public String getTextPost() {
         return textPost;
     }
@@ -421,6 +433,10 @@ public class Comment implements Parcelable {
         dest.writeTypedList(children);
     }
 
+    /**
+     * This is the Comment constructor to build the object from a parcel.
+     * @param in
+     */
     public Comment(Parcel in) {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));

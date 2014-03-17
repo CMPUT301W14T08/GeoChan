@@ -28,18 +28,19 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     ArrayList<Comment> list = null;
     ElasticSearchClient client;
-    String id;
+    ThreadComment thread;
 
     public static final int LOADER_ID = 1;
 
-    public CommentLoader(Context context, String id) {
+    public CommentLoader(Context context, ThreadComment thread) {
         super(context);
         client = ElasticSearchClient.getInstance();
-        this.id = id;
+        this.thread = thread;
     }
 
     /*
@@ -52,7 +53,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list == null) {
             list = new ArrayList<Comment>();
         }
-        return client.getComments(id);
+        return client.getComments(thread.getBodyComment());
     }
 
     @Override

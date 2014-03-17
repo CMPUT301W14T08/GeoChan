@@ -81,5 +81,4 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         }
         return object;
     }
-
 }

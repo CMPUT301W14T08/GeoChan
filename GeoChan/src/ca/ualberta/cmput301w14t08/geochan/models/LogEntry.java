@@ -20,7 +20,11 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-
+/**
+ * This is a container class for one GeoLocationLog entry,
+ * it contains a String and a geolocation objects. 
+ * The string is the title of the thread, where the location object was used.
+ */
 public class LogEntry {
 
     private String threadTitle;

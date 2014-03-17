@@ -52,6 +52,10 @@ public class UserHashManager {
         return instance;
     }
 
+    /**
+     * Returns a hashcode calculated based on the user's Android ID and username.
+     * @return the hashcode
+     */
     public String getHash() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = pref.getString("username", "Anon");
@@ -60,18 +64,30 @@ public class UserHashManager {
         return Integer.toHexString(temp + id);
     }
 
+    /**
+     * Returns the user's username.
+     * @return the username
+     */
     public String getUser() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = pref.getString("username", "Anon");
         return user;
     }
 
+    /**
+     * This method generates a hash hex string from the username and android_id
+     * @param string the username
+     */
     public static String getHash(String string) {
         int id = android_id.hashCode();
         int temp = (id + id + id * 3 + string.hashCode()) / 42;
         return Integer.toHexString(temp + id);
     }
 
+    /**
+     * Generates an ID for a Comment.
+     * @return the ID
+     */
     public long getCommentIdHash() {
         Date date = new Date();
         Random random = new Random();
@@ -79,6 +95,10 @@ public class UserHashManager {
         return (date.getTime() + random.nextLong());
     }
 
+    /**
+     * Returns the user's Android ID
+     * @return the ID
+     */
     public String getAndroid_id() {
         return android_id;
     }

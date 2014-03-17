@@ -29,17 +29,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
-public class MainActivity extends Activity implements OnBackStackChangedListener {   
+/** 
+ * This is the main and, so far, only activity in the application.
+ * It inflates the default fragment and handles some of the crucial controller methods
+ */
+public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +51,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         if (savedInstanceState != null) {
             return;
         }
-        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE
-        ElasticSearchClient.generateInstance();
+        // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
         UserHashManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
@@ -91,6 +94,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         }
     }
 
+    // Do not display the back arrow in threadListFragment
     @Override
     public void onBackStackChanged() {
         int count = getFragmentManager().getBackStackEntryCount();
@@ -101,45 +105,56 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         }
     }
 
+    /**
+     * Calls the respective post new thread method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void postNewThread(View v) {
         PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag(
                 "postThreadFrag");
         fragment.postNewThread(v);
     }
 
-    public void postComment(View v) {
-        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                .findFragmentByTag("comFrag");
-        fragment.postComment(v);
-    }
-
+    /**
+     * Calls the respective post reply method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void postReply(View v) {
-        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag(
                 "repFrag");
         fragment.postReply(v);
     }
 
+    /**
+     * Calls the respective post reply method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void postReplyToOp(View v) {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
                 "thread_view_fragment");
         Bundle bundle = fragment.getArguments();
+        ThreadComment thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
+        Bundle bundle2 = new Bundle();
+        bundle2.putParcelable("cmt", thread.getBodyComment());
+        bundle2.putLong("id", bundle.getLong("id"));
         Fragment f = new PostCommentFragment();
-        f.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "comFrag")
+        f.setArguments(bundle2);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, f, "repFrag")
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
     
+    /**
+     * Calls the respective change location method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void changeLocation(View v) {
         Bundle args = new Bundle();
         if (v.getId() == R.id.thread_location_button) {
             args.putInt("postType", CustomLocationFragment.THREAD);
         } 
-        else if (v.getId() == R.id.comment_location_button) {
+        else if (v.getId() == R.id.location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
-        }
-        else if (v.getId() == R.id.reply_location_button){
-            args.putInt("postType", CustomLocationFragment.REPLY);
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
@@ -148,13 +163,22 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         getFragmentManager().executePendingTransactions();
     }
     
+    /**
+     * Calls the respective submit location method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void submitLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(v);
     }
     
+    /**
+     * Calls the respective submit location method in the fragment.
+     * @param v View passed to the activity to check which button was pressed
+     */
     public void submitCurrentLocation(View v) {
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
+    
 }

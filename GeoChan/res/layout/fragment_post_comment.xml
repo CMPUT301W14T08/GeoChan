@@ -5,27 +5,17 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/op_replyingTo"
+        android:id="@+id/comment_replyingTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:text="@string/op_replyingTo"
         android:paddingRight="5dp"
-        android:paddingLeft="5dp" />
-    
-    <TextView
-        android:id="@+id/op_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/op_replyingTo"
-        android:maxLength="45"
-        android:text="@string/hello_world"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
         android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:paddingLeft="5dp" />
+
     
     <TextView
-        android:id="@+id/op_body"
+        android:id="@+id/reply_to_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:text="@string/hello_world"
@@ -33,22 +23,22 @@
         android:paddingLeft="5dp"
         android:maxLines ="5"
 		android:scrollbars = "vertical"
-        android:layout_below="@+id/op_title" />
+        android:layout_below="@+id/comment_replyingTo" />
 
     <EditText
-        android:id="@+id/commentBody"
+        android:id="@+id/replyBody"
         android:layout_width="match_parent"
         android:layout_height="300sp"
-        android:scrollbars="vertical"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_body"
+        android:layout_below="@+id/reply_to_body"
         android:background="@android:drawable/editbox_background"
         android:ems="10"
-        android:hint="@string/commentHint" />
+        android:hint="@string/commentHint"
+        android:scrollbars="vertical" />
 
     <Button
-        android:id="@+id/comment_location_button"
+        android:id="@+id/location_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -61,7 +51,7 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/comment_location_button"
+        android:layout_above="@+id/location_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
 
@@ -75,12 +65,12 @@
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/post_comment_button"
+            android:id="@+id/post_reply_button"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:onClick="postComment"
+            android:onClick="postReply"
             android:text="@string/post"
             android:textSize="12sp" />
     </LinearLayout>

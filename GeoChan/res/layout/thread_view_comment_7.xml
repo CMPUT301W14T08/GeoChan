@@ -7,7 +7,7 @@
         android:id="@+id/thread_view_comment_commentBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/imageView3"
+        android:layout_toRightOf="@+id/imageView7"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:text="@string/lorem_ipsum" />
@@ -40,7 +40,47 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView2"
         android:contentDescription="@+id/imageView3"
-        android:src="@drawable/rect3" />
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView3"
+        android:contentDescription="@+id/imageView4"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView4"
+        android:contentDescription="@+id/imageView5"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView5"
+        android:contentDescription="@+id/imageView6"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView6"
+        android:contentDescription="@+id/imageView7"
+        android:src="@drawable/rect7" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentDate"
@@ -82,7 +122,7 @@
         android:paddingRight="5dp"
         android:contentDescription="@string/comment_reply_button"
         android:src="@drawable/ic_reply" />
-    
+
     <ImageButton
         android:id="@+id/comment_star_button"
         android:layout_width="wrap_content"

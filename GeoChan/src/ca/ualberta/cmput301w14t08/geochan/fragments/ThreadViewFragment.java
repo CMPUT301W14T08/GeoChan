@@ -94,7 +94,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
-        return new CommentLoader(getActivity(), thread.getId());
+        return new CommentLoader(getActivity(), thread);
     }
 
     /*
@@ -106,7 +106,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
-        thread.setComments(list);
+        thread.getBodyComment().setChildren(list);
         adapter.setThread(thread);
     }
 

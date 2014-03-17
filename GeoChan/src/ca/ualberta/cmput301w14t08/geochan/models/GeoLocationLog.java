@@ -23,7 +23,8 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 
 /**
- * Stores the history of locations and related thread titles used in the app.
+ * This model class handles all operations involved in logging used locations.
+ *
  */
 public class GeoLocationLog {    
 

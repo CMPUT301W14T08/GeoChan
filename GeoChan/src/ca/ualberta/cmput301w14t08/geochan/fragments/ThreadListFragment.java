@@ -20,6 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+/**
+ * This fragment is used to display a list of threads,
+ * which is the main view the user sees when they open the app. 
+ */
 import java.util.ArrayList;
 
 import android.app.Fragment;
