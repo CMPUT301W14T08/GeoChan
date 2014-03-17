@@ -134,6 +134,7 @@ public class CustomLocationFragment extends Fragment {
         fm.popBackStackImmediate();
     }
 
+    
     public void setArgsForCustomCoordinates() {
         Double customLat = Double.valueOf(latitudeEditText.getText().toString());
         Double customLong = Double.valueOf(longitudeEditText.getText().toString());
