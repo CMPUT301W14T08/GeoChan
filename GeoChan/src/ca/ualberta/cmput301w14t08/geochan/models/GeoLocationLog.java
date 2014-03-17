@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 /**
  * This model class handles all operations involved in logging used locations.
+ *
  */
 public class GeoLocationLog {    
 
@@ -33,6 +34,11 @@ public class GeoLocationLog {
         entries = new ArrayList<LogEntry>();
     }
    
+    /**
+     * Adds a new LogEntry to the GeoLocationLog.
+     * @param threadTitle Title to be stored in the new LogEntry.
+     * @param geoLocation GeoLocation to be stored in the new LogEntry.
+     */
     public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
@@ -48,21 +54,30 @@ public class GeoLocationLog {
         return entries;
     }
 
-    public boolean isEmpty() {
+    public static boolean isEmpty() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size() == 0;
     }
 
-    public void clearLog() {
+
+    /**
+     * Removes all LogEntry objects from entries.
+     */
+
+    public static void clearLog() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         entries.clear();
     }
 
-    public int size() {
+    /**
+     * Returns the number of LogEntry objects stored in entries.
+     * @return Number of LogEntry objects.
+     */
+    public static int size() {
         if(entries == null) {
             entries = new ArrayList<LogEntry>();
         }

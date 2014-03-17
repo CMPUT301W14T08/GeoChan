@@ -29,7 +29,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 /**
- * This fragment handles the Application's Preferences.
+ * Responsible for the UI fragment that allows the user to edit
  *
  */
 public class PreferencesFragment extends PreferenceFragment {

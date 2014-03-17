@@ -29,7 +29,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
 /**
- * This class manages user's username as well as the unique hashcode
+ * Helper class. Generates hashes used in identifying Comments and users.
+ *
  */
 public class UserHashManager {
     private static Context context;
