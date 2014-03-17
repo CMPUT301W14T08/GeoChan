@@ -50,6 +50,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
+        <EditText
+            android:id="@+id/latitude_edit_text"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:hint="@string/placeholder_longitude" />
 
         <EditText
             android:id="@+id/longitude_edit_text"
@@ -57,14 +65,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/placeholder_longitude" />
-
-        <EditText
-            android:id="@+id/latitude_edit_text"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:ems="10"
+	  	    android:inputType="numberDecimal"
             android:hint="@string/placeholder_latitude" />
     </LinearLayout>
 

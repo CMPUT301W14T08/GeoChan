@@ -22,10 +22,11 @@ public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<Ma
     
     public void testConstruction() {
         client = ElasticSearchClient.getInstance();
-        assertNotNull(client);
+        assertNotNull(client.getThreadCount());
     }
     
     public void testPostAndGetThread() {
+        client = ElasticSearchClient.getInstance();
         Comment comment = new Comment();
         ThreadComment threadComment = new ThreadComment(comment, "Test");
         
@@ -37,6 +38,7 @@ public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<Ma
     }
     
     public void testPostAndGetComment() {
+        client = ElasticSearchClient.getInstance();
         ArrayList<ThreadComment> list = client.getThreads();
         assertTrue(list.size() > 0);
         
@@ -49,6 +51,7 @@ public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<Ma
     }
     
     public void testCountThreads() {
+        client = ElasticSearchClient.getInstance();
         ArrayList<ThreadComment> list = client.getThreads();
         assertTrue(list.size() > 0);
         
@@ -63,6 +66,7 @@ public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<Ma
     }
     
     public void testCountComments() {
+        client = ElasticSearchClient.getInstance();
         ArrayList<ThreadComment> list = client.getThreads();
         assertTrue(list.size() > 0);
         

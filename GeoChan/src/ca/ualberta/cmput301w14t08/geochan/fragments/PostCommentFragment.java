@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -87,7 +88,11 @@ public class PostCommentFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"), args.getDouble("LONGITUDE"));
+                Double lat = args.getDouble("LATITUDE");
+                Double lon = args.getDouble("LONGITUDE");
+                geoLocation.setCoordinates(lat, lon);
+                Button locButton = (Button) getActivity().findViewById(R.id.location_button);
+                locButton.setText("Location:" + Double.toString(lat) + "," + Double.toString(lon));
             }
         }
     }
