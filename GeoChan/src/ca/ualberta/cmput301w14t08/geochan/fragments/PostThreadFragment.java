@@ -101,8 +101,8 @@ public class PostThreadFragment extends Fragment {
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
                 this.getFragmentManager().popBackStackImmediate();
             }
         }

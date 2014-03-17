@@ -38,6 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -95,8 +96,6 @@ public class PostCommentFragment extends Fragment {
         if (v.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
-            // GeoLocation geoLocation = new
-            // GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
@@ -110,15 +109,15 @@ public class PostCommentFragment extends Fragment {
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
-                // GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
 
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+            inputManager.hideSoftInputFromWindow(v.getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
-
-            this.getFragmentManager().popBackStackImmediate();
+            getFragmentManager().popBackStackImmediate();
         }
     }
 

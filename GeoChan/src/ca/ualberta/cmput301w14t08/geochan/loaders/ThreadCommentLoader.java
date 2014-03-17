@@ -21,14 +21,12 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
