@@ -36,9 +36,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 /**
- * A comment within a thread of comments. Contains the text of the
- * comment, possibly an image, and meta-data relating to the Comment.
- *
+ * A comment within a thread of comments. Contains the text of the comment,
+ * possibly an image, and meta-data relating to the Comment.
+ * 
  */
 public class Comment implements Parcelable {
     private String textPost;
@@ -143,7 +143,7 @@ public class Comment implements Parcelable {
         this.textPost = "This is a test comment.";
         this.commentDate = new Date();
         this.image = null;
-        this.location = new GeoLocation(0,0);
+        this.location = new GeoLocation(0, 0);
         this.parent = null;
         this.children = new ArrayList<Comment>();
         this.setUser(new String());
@@ -158,11 +158,11 @@ public class Comment implements Parcelable {
     public ArrayList<String> getCommentIds() {
         return commentIds;
     }
-    
+
     public void setCommentIds(ArrayList<String> commentIds) {
         this.commentIds = commentIds;
     }
-    
+
     public boolean hasImage() {
         return !(image == null);
     }
@@ -171,7 +171,7 @@ public class Comment implements Parcelable {
         children.add(comment);
     }
 
-    //Getters and setters.
+    // Getters and setters.
     public String getTextPost() {
         return textPost;
     }
@@ -263,23 +263,26 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Determines the distance between a comment and a GeoLocation
-     * in terms of latitude and longitude coordinates.
-     * @param g The GeoLocation to be compared with.
-     * @return The distance between the Comment and the passed
-     * GeoLocation in terms of coordinates.
+     * Determines the distance between a comment and a GeoLocation in terms of
+     * latitude and longitude coordinates.
+     * 
+     * @param g
+     *            The GeoLocation to be compared with.
+     * @return The distance between the Comment and the passed GeoLocation in
+     *         terms of coordinates.
      */
     public double getDistanceFrom(GeoLocation g) {
         return this.getLocation().distance(g);
     }
-    
 
     /**
-     * Determines the amount of time between when the Comment was
-     * posted and the passed date in terms of hours.
-     * @param d The Date to be compared with.
-     * @return The number of hours between when the Comment was
-     * posted and the passed Date.
+     * Determines the amount of time between when the Comment was posted and the
+     * passed date in terms of hours.
+     * 
+     * @param d
+     *            The Date to be compared with.
+     * @return The number of hours between when the Comment was posted and the
+     *         passed Date.
      */
     public double getTimeFrom(Date d) {
         Calendar cal1 = Calendar.getInstance();
@@ -288,7 +291,7 @@ public class Comment implements Parcelable {
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+        if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
             return 0.5;
         } else {
             return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
@@ -296,9 +299,10 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Determines the "score" of the Comment in relation to its
-     * parent. Should never be called on the bodyComment of a
-     * ThreadComment, and will return 0 if it does.
+     * Determines the "score" of the Comment in relation to its parent. Should
+     * never be called on the bodyComment of a ThreadComment, and will return 0
+     * if it does.
+     * 
      * @return The score of the Comment in relation to its parent.
      */
     public double getScoreFromParent() {
@@ -323,28 +327,30 @@ public class Comment implements Parcelable {
             return distScore + timeScore;
         }
     }
-    
+
     /**
-     * Determines the score of a comment in a thread relevant to the user's current location
-     * and time.
-     * @param g The current GeoLocation of the user. In sorting, the Thread.sortLoc GeoLocation
-     * of the sorting thread is used and should be set in the fragment.
-     * @return The score of the comment in relation to the user's location and current time.
+     * Determines the score of a comment in a thread relevant to the user's
+     * current location and time.
+     * 
+     * @param g
+     *            The current GeoLocation of the user. In sorting, the
+     *            Thread.sortLoc GeoLocation of the sorting thread is used and
+     *            should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and
+     *         current time.
      */
-    public double getScoreFromUser(GeoLocation g){
+    public double getScoreFromUser(GeoLocation g) {
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 10000;
-        
-        if(g == null){
+
+        if (g == null) {
             Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst
-                * (1 / Math.sqrt(this.getDistanceFrom(g)));
-        double timeScore = timeConst
-                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
-        if ((distScore + timeScore) > maxScore){
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        if ((distScore + timeScore) > maxScore) {
             return maxScore;
         } else {
             return distScore + timeScore;
@@ -352,8 +358,8 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Converts the Comment's commentDate to an appropriately
-     * formatted string.
+     * Converts the Comment's commentDate to an appropriately formatted string.
+     * 
      * @return The string of the Comment's commentDate.
      */
     public String getCommentDateString() {
@@ -435,6 +441,7 @@ public class Comment implements Parcelable {
 
     /**
      * This is the Comment constructor to build the object from a parcel.
+     * 
      * @param in
      */
     public Comment(Parcel in) {

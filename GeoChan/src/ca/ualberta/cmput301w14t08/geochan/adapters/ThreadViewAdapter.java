@@ -186,7 +186,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment);
             listenForButtons(convertView, comment);
             break;
-            
+
         case TYPE_COMMENT1:
             final Comment comment1 = (Comment) getItem(position);
             if (convertView == null) {
@@ -197,7 +197,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment1);
             listenForButtons(convertView, comment1);
             break;
-            
+
         case TYPE_COMMENT2:
             final Comment comment2 = (Comment) getItem(position);
             if (convertView == null) {
@@ -208,7 +208,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment2);
             listenForButtons(convertView, comment2);
             break;
-            
+
         case TYPE_COMMENT3:
             final Comment comment3 = (Comment) getItem(position);
             if (convertView == null) {
@@ -219,7 +219,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment3);
             listenForButtons(convertView, comment3);
             break;
-            
+
         case TYPE_COMMENT4:
             final Comment comment4 = (Comment) getItem(position);
             if (convertView == null) {
@@ -230,7 +230,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment4);
             listenForButtons(convertView, comment4);
             break;
-            
+
         case TYPE_COMMENT5:
             final Comment comment5 = (Comment) getItem(position);
             if (convertView == null) {
@@ -241,7 +241,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment5);
             listenForButtons(convertView, comment5);
             break;
-            
+
         case TYPE_COMMENT6:
             final Comment comment6 = (Comment) getItem(position);
             if (convertView == null) {
@@ -252,7 +252,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             setCommentFields(convertView, comment6);
             listenForButtons(convertView, comment6);
             break;
-            
+
         case TYPE_COMMENT7:
             final Comment comment7 = (Comment) getItem(position);
             if (convertView == null) {
@@ -291,8 +291,8 @@ public class ThreadViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     // Perform action on click
                     Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                    //Add code here to save the comment/thread;
-                    
+                    // Add code here to save the comment/thread;
+
                 }
             });
         }
@@ -314,11 +314,10 @@ public class ThreadViewAdapter extends BaseAdapter {
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();
                 }
-           
+
             });
         }
     }
-    
 
     /**
      * This method sets all the required fields for the OP

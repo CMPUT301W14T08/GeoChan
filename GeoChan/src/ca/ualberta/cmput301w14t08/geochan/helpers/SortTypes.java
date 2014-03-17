@@ -28,7 +28,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * Helper class. Manages Comparators for sorting across multiple classes.
- *
+ * 
  */
 public class SortTypes {
 
@@ -114,48 +114,54 @@ public class SortTypes {
             }
         };
     }
-    
+
     /**
-     * Comparator for pushing higher scored comments (relative to user provided location)
-     * to the top.
-     * @param g The passed GeoLocation.
-     * @return A comparator for sorting comments by score relative to user provided location.
+     * Comparator for pushing higher scored comments (relative to user provided
+     * location) to the top.
+     * 
+     * @param g
+     *            The passed GeoLocation.
+     * @return A comparator for sorting comments by score relative to user
+     *         provided location.
      */
-    public static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g){
-        return new Comparator<Comment>(){
-          public int compare(Comment c1,Comment c2){
-              double val1 = c1.getScoreFromUser(g);
-              double val2 = c2.getScoreFromUser(g);
-              if (val1 > val2){
-                  return -1;
-              } else if (val1 < val2){
-                  return 1;
-              } else {
-                  return 0;
-              }
-          }
+    public static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g) {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getScoreFromUser(g);
+                double val2 = c2.getScoreFromUser(g);
+                if (val1 > val2) {
+                    return -1;
+                } else if (val1 < val2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
         };
     }
-    
+
     /**
-     * Comparator for pushing lower scored comments (relative to user provided location)
-     * to the top.
-     * @param g The passed GeoLocation.
-     * @return A comparator for sorting comments by score relative to user provided location.
+     * Comparator for pushing lower scored comments (relative to user provided
+     * location) to the top.
+     * 
+     * @param g
+     *            The passed GeoLocation.
+     * @return A comparator for sorting comments by score relative to user
+     *         provided location.
      */
-    public static Comparator<Comment> sortCommentsByUserScoreLowest(final GeoLocation g){
-        return new Comparator<Comment>(){
-          public int compare(Comment c1,Comment c2){
-              double val1 = c1.getScoreFromUser(g);
-              double val2 = c2.getScoreFromUser(g);
-              if (val1 > val2){
-                  return 1;
-              } else if (val1 < val2){
-                  return -1;
-              } else {
-                  return 0;
-              }
-          }
+    public static Comparator<Comment> sortCommentsByUserScoreLowest(final GeoLocation g) {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getScoreFromUser(g);
+                double val2 = c2.getScoreFromUser(g);
+                if (val1 > val2) {
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
         };
     }
 
@@ -177,27 +183,28 @@ public class SortTypes {
             }
         };
     }
-    
+
     /**
-     * Comparator for sorting comments in a thread based on the current GeoLocation of
-     * the Thread's sortLoc member.
+     * Comparator for sorting comments in a thread based on the current
+     * GeoLocation of the Thread's sortLoc member.
+     * 
      * @param g
      * @return
      */
-    public static Comparator<Comment> sortCommentsByLocationDistance(final GeoLocation g){
-        return new Comparator<Comment>(){
-            public int compare(Comment c1,Comment c2){
+    public static Comparator<Comment> sortCommentsByLocationDistance(final GeoLocation g) {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
                 double val1 = c1.getDistanceFrom(g);
                 double val2 = c2.getDistanceFrom(g);
-                if (val1 > val2){
+                if (val1 > val2) {
                     return 1;
-                } else if (val1 < val2){
+                } else if (val1 < val2) {
                     return -1;
                 } else {
                     return 0;
                 }
             }
-          };
+        };
     }
 
     /**
@@ -235,20 +242,22 @@ public class SortTypes {
             }
         };
     }
-    
+
     /**
      * Comparator for passing higher scored Threads to the top.
-     * @param g The current ThreadList.sortLoc
+     * 
+     * @param g
+     *            The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to highest score.
      */
-    public static Comparator<ThreadComment> sortThreadsByUserScoreHighest(final GeoLocation g){
-        return new Comparator<ThreadComment>(){
-            public int compare(ThreadComment t1, ThreadComment t2){
+    public static Comparator<ThreadComment> sortThreadsByUserScoreHighest(final GeoLocation g) {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
                     return -1;
-                } else if (val1 < val2) {//mixed these 2 around
+                } else if (val1 < val2) {// mixed these 2 around
                     return 1;
                 } else {
                     return 0;
@@ -256,15 +265,17 @@ public class SortTypes {
             }
         };
     }
-    
+
     /**
      * Comparator for pushing lower scored Threads to the top.
-     * @param g The current ThreadList.sortLoc
+     * 
+     * @param g
+     *            The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to lowest score.
      */
-    public static Comparator<ThreadComment> sortThreadsByUserScoreLowest(final GeoLocation g){
-        return new Comparator<ThreadComment>(){
-            public int compare(ThreadComment t1, ThreadComment t2){
+    public static Comparator<ThreadComment> sortThreadsByUserScoreLowest(final GeoLocation g) {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 double val1 = t1.getScoreFromUser(g);
                 double val2 = t2.getScoreFromUser(g);
                 if (val1 > val2) {
@@ -277,19 +288,21 @@ public class SortTypes {
             }
         };
     }
-    
+
     /**
-     * Comparator for pushing ThreadComments closer to the provided location
-     * to the top.
-     * @param g The GeoLocation to be compared against.
+     * Comparator for pushing ThreadComments closer to the provided location to
+     * the top.
+     * 
+     * @param g
+     *            The GeoLocation to be compared against.
      * @return A Comparator used to sort ThreadComments according to location.
      */
-    public static Comparator<ThreadComment> sortThreadsByLocation(final GeoLocation g){
-        return new Comparator<ThreadComment>(){
-            public int compare(ThreadComment t1, ThreadComment t2){
+    public static Comparator<ThreadComment> sortThreadsByLocation(final GeoLocation g) {
+        return new Comparator<ThreadComment>() {
+            public int compare(ThreadComment t1, ThreadComment t2) {
                 double val1 = t1.getDistanceFrom(g);
                 double val2 = t2.getDistanceFrom(g);
-                if (val1 > val2){
+                if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
                     return -1;

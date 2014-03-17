@@ -39,9 +39,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
-/** 
- * This is the main and, so far, only activity in the application.
- * It inflates the default fragment and handles some of the crucial controller methods
+/**
+ * This is the main and, so far, only activity in the application. It inflates
+ * the default fragment and handles some of the crucial controller methods
  */
 public class MainActivity extends Activity implements OnBackStackChangedListener {
     @Override
@@ -80,8 +80,8 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             PostThreadFragment frag = new PostThreadFragment();
             frag.setArguments(new Bundle());
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, frag, "postThreadFrag")
-                    .addToBackStack(null).commit();
+                    .replace(R.id.fragment_container, frag, "postThreadFrag").addToBackStack(null)
+                    .commit();
 
             // This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
@@ -107,7 +107,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
     /**
      * Calls the respective post new thread method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void postNewThread(View v) {
         PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag(
@@ -117,17 +119,21 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
     /**
      * Calls the respective post reply method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void postReply(View v) {
-        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag(
-                "repFrag");
+        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                .findFragmentByTag("repFrag");
         fragment.postReply(v);
     }
 
     /**
      * Calls the respective post reply method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void postReplyToOp(View v) {
         ThreadViewFragment fragment = (ThreadViewFragment) getFragmentManager().findFragmentByTag(
@@ -143,42 +149,50 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-    
+
     /**
      * Calls the respective change location method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void changeLocation(View v) {
         Bundle args = new Bundle();
         if (v.getId() == R.id.thread_location_button) {
             args.putInt("postType", CustomLocationFragment.THREAD);
-        } 
-        else if (v.getId() == R.id.location_button) {
+        } else if (v.getId() == R.id.location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, frag, "customLocFrag")
-                .addToBackStack(null).commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .commit();
         getFragmentManager().executePendingTransactions();
     }
-    
+
     /**
      * Calls the respective submit location method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void submitLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+                .findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(v);
     }
-    
+
     /**
      * Calls the respective submit location method in the fragment.
-     * @param v View passed to the activity to check which button was pressed
+     * 
+     * @param v
+     *            View passed to the activity to check which button was pressed
      */
     public void submitCurrentLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
+        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+                .findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
-    
+
 }
