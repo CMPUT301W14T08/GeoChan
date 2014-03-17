@@ -36,7 +36,6 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -120,13 +119,6 @@ public class PostCommentFragment extends Fragment {
                     */
             this.getFragmentManager().popBackStackImmediate();
         }
-    }
-
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        UserHashManager manager = UserHashManager.getInstance();
-        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override
