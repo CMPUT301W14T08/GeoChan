@@ -92,7 +92,7 @@ public class PostCommentFragment extends Fragment {
                 Double lon = args.getDouble("LONGITUDE");
                 geoLocation.setCoordinates(lat, lon);
                 Button locButton = (Button) getActivity().findViewById(R.id.location_button);
-                locButton.setText("Location:" + Double.toString(lat) + "," + Double.toString(lon));
+                locButton.setText("Location:" + "Lat:" + Double.toString(lat) + ", Lon:" + Double.toString(lon));
             }
         }
     }
