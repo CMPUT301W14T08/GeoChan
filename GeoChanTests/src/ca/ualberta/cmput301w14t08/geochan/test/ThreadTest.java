@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.Date;
 
+import android.graphics.Picture;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
@@ -417,5 +418,62 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
         assertTrue("c2 is at location 3", t.getBodyComment().getChildAtIndex(3) == c2);
         assertTrue("c1 is at location 4", t.getBodyComment().getChildAtIndex(4) == c1);
+    }
+    
+    public void testSortByImage(){
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        ThreadComment t1 = new ThreadComment();
+        
+        c1.setImage(new Picture());
+        c3.setImage(new Picture());
+        c4.setImage(new Picture());
+        
+        t1.addComment(c2);
+        t1.addComment(c1);
+        
+        t1.sortComments(SortTypes.SORT_IMAGE);
+        
+        assertTrue("c1 was pushed up", t1.getBodyComment().getChildAtIndex(0) == c1);
+        assertTrue("c2 was pushed down",
+                    t1.getBodyComment().getChildAtIndex(1) == c2);
+        
+        c2.setCommentDate(new Date(c1.getCommentDate().getTime() - 80000));
+        c3.setCommentDate(new Date(c1.getCommentDate().getTime() - 20000));
+        c4.setCommentDate(new Date(c1.getCommentDate().getTime() - 50000));
+        
+        t1.addComment(c3);
+        t1.addComment(c4);
+        t1.addComment(c5);
+        
+        t1.sortComments(SortTypes.SORT_IMAGE);
+        
+        c1.setTextPost("c1");
+        c2.setTextPost("c2");
+        c3.setTextPost("c3");
+        c4.setTextPost("c4");
+        c5.setTextPost("c5");
+        
+        Log.e("Pos 0:", t1.getBodyComment().getChildAtIndex(0).getTextPost());
+        Log.e("Pos 1:", t1.getBodyComment().getChildAtIndex(1).getTextPost());
+        Log.e("Pos 2:", t1.getBodyComment().getChildAtIndex(2).getTextPost());
+        Log.e("Pos 3:", t1.getBodyComment().getChildAtIndex(3).getTextPost());
+        Log.e("Pos 4:", t1.getBodyComment().getChildAtIndex(4).getTextPost());
+        assertTrue("Sort was done correctly.",
+                    t1.getBodyComment().getChildAtIndex(0) == c4);
+        assertTrue("Sort was done correctly.",
+                    t1.getBodyComment().getChildAtIndex(1) == c3);
+        assertTrue("Sort was done correctly.",
+                    t1.getBodyComment().getChildAtIndex(2) == c1);
+        assertTrue("Sort was done correctly.",
+                    t1.getBodyComment().getChildAtIndex(3) == c2);
+        assertTrue("Sort was done correctly.",
+                    t1.getBodyComment().getChildAtIndex(4) == c5);
+        
+        
+        
     }
 }
