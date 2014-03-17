@@ -32,8 +32,10 @@ import io.searchbox.core.Update;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 
+import org.json.JSONException;
+
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
@@ -43,6 +45,7 @@ import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 public class ElasticSearchClient {
@@ -51,7 +54,7 @@ public class ElasticSearchClient {
     private static JestClient client;
     private static final String TYPE_COMMENT = "geoComment";
     private static final String TYPE_THREAD = "geoThread";
-    private static final String TYPE_INDEX = "geoCommentIndex";
+    private static final String TYPE_INDEX = "geoCommentList";
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
     private static final String URL_INDEX = "testing";
 
@@ -94,7 +97,7 @@ public class ElasticSearchClient {
         Thread t = new Thread() {
             @Override
             public void run() {
-                post(gson.toJson(comment), TYPE_COMMENT, thread.getId());
+                post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
                 String query = ElasticSearchQueries.commentListScript(comment.getId());
                 update(query, TYPE_INDEX, commentToReplyTo.getId());
             }
@@ -131,15 +134,23 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(get);
-            Type type = new TypeToken<Collection<String>>() {}.getType();
-            Collection<String> hits = gson.fromJson(result.getJsonString(), type);
+            JsonArray array = result.getJsonObject().get("_source").getAsJsonObject().get("comments").getAsJsonArray();
+            ArrayList<String> hits = new ArrayList<String>();
+            for (int i = 0; i < array.size(); ++i) {
+                hits.add(array.get(i).getAsString());
+            }
             for (String hit : hits) {
                 comments.add(get(hit));
             }
-            for (Comment comment : comments) {
+            /*for (Comment comment : comments) {
                 comment.setParent(topComment);
-                comment.setChildren(getComments(comment));
-            }
+                ArrayList<Comment> children = getComments(comment);
+                if (children != null) { 
+                    comment.setChildren(children);
+                }
+            }*/
+        } catch (JSONException e) {
+            Log.e("???", "WHAt the fuck.");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
