@@ -68,11 +68,11 @@ public class Comment implements Parcelable {
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -88,11 +88,11 @@ public class Comment implements Parcelable {
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -108,11 +108,11 @@ public class Comment implements Parcelable {
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -128,11 +128,11 @@ public class Comment implements Parcelable {
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 

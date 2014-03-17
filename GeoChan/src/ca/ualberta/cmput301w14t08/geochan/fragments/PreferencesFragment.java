@@ -50,12 +50,12 @@ public class PreferencesFragment extends PreferenceFragment {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
                 hash.setSummary((String) newValue + " #"
-                        + HashHelper.getInstance().getHash((String) newValue));
+                        + HashHelper.getHash((String) newValue));
                 return true;
             }
         });
 
         Preference hash = findPreference("device_hash");
-        hash.setSummary(username.getText() + " #" + HashHelper.getInstance().getHash(username.getText()));
+        hash.setSummary(username.getText() + " #" + HashHelper.getHash());
     }
 }

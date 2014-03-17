@@ -30,17 +30,17 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
  * 
  */
 public class HashHelper {
-    private static HashHelper instance = null;
-    
-    protected HashHelper() {
-        super();
-    }
-    
-    public static HashHelper getInstance() {
-        if (instance == null) {
-            instance = new HashHelper();
-        }
-        return instance;
+    /**
+     * Returns a hashcode calculated based on the user's Android ID and
+     * username.
+     * 
+     * @return the hashcode
+     */
+    public static String getHash() {
+        String user = PreferencesManager.getInstance().getUser();
+        int id = PreferencesManager.getInstance().getId().hashCode();
+        int temp = (id + id + id * 3 + user.hashCode()) / 42;
+        return Integer.toHexString(temp + id);
     }
 
     /**
@@ -49,7 +49,7 @@ public class HashHelper {
      * @param string
      *            the username
      */
-    public String getHash(String string) {
+    public static String getHash(String string) {
         int id = PreferencesManager.getInstance().getId().hashCode();
         int temp = (id + id + id * 3 + string.hashCode()) / 42;
         return Integer.toHexString(temp + id);
@@ -60,7 +60,7 @@ public class HashHelper {
      * 
      * @return the ID
      */
-    public long getCommentIdHash() {
+    public static long getCommentIdHash() {
         Date date = new Date();
         Random random = new Random();
         random.setSeed(date.getTime());
