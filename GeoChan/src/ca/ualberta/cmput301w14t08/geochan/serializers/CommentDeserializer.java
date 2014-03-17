@@ -102,7 +102,6 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
             comment.setImage(image);
             comment.setImageThumb(thumbnail);
         }
-        
         return comment;
     }
 }

@@ -85,7 +85,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
 
             @Override
             public void run() {
-                int count = client.getCommentCount();
+                int count = client.getCommentCount(thread.getBodyComment());
                 if (count != list.size()) {
                     forceLoad();
                 }
