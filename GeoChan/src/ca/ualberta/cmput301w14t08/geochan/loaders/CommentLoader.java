@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -36,9 +37,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * 
  */
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
-    ArrayList<Comment> list = null;
-    ElasticSearchClient client;
-    ThreadComment thread;
+    private ArrayList<Comment> list = null;
+    private ElasticSearchClient client;
+    private PreferencesManager manager;
+    private ThreadComment thread;
 
     public static final int LOADER_ID = 1;
 
@@ -46,6 +48,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         super(context);
         client = ElasticSearchClient.getInstance();
         this.thread = thread;
+        this.manager = PreferencesManager.getInstance();
     }
 
     /*
@@ -58,7 +61,9 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list == null) {
             list = new ArrayList<Comment>();
         }
-        return client.getComments(thread.getBodyComment());
+        ArrayList<Comment> result = client.getComments(thread.getBodyComment());
+        ThreadComment.sortComments(result, manager.getCommentSort());
+        return result;
     }
 
     @Override
