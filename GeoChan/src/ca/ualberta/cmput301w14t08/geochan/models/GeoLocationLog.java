@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class GeoLocationLog {
 
     private static GeoLocationLog instance = null;
-    private static ArrayList<LogEntry> entries;
+    private ArrayList<LogEntry> entries;
 
     /**
      * Protected constructor. Is called only if singleton has not been constructed.
@@ -38,6 +38,12 @@ public class GeoLocationLog {
         entries = new ArrayList<LogEntry>();
     }
 
+    
+    /**
+     * Singleton construction method. If instance already exists, return it
+     * Else construct a new one
+     * @return instance
+     */
     public static GeoLocationLog getInstance() {
         if (instance == null) {
             instance = new GeoLocationLog();
@@ -52,10 +58,7 @@ public class GeoLocationLog {
      * @param geoLocation
      *            GeoLocation to be stored in the new LogEntry.
      */
-    public static void addLogEntry(String threadTitle, GeoLocation geoLocation) {
-        if (entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+    public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
         LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
         entries.add(logEntry);
     }
@@ -64,10 +67,7 @@ public class GeoLocationLog {
      * Return the log entries array, if null create one
      * @return entries
      */
-    public static ArrayList<LogEntry> getLogEntries() {
-        if (entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+    public ArrayList<LogEntry> getLogEntries() {
         return entries;
     }
 
@@ -75,20 +75,14 @@ public class GeoLocationLog {
      * Return true if log is empty, else false. If null create one
      * @return entries
      */
-    public static boolean isEmpty() {
-        if (entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+    public boolean isEmpty() {
         return entries.size() == 0;
     }
 
     /**
      * Removes all LogEntry objects from entries.
      */
-    public static void clearLog() {
-        if (entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+    public void clearLog() {
         entries.clear();
     }
 
@@ -96,10 +90,7 @@ public class GeoLocationLog {
      * Returns the number of LogEntry objects stored in entries.
      * @return Number of LogEntry objects.
      */
-    public static int size() {
-        if (entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+    public int size() {
         return entries.size();
     }
 }

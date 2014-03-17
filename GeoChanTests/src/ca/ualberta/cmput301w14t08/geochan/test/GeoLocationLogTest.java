@@ -16,7 +16,8 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
     }
     
     public void testConstruction() {
-        assertNotNull(GeoLocationLog.getLogEntries());
+        GeoLocationLog geoLocationLog =  GeoLocationLog.getInstance();
+        assertNotNull(geoLocationLog.getLogEntries());
     }
     
     public void testAddLogEntry() {
@@ -26,22 +27,26 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         
         String threadTitle = "TestThread";
         
-        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
-        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
-        GeoLocationLog.addLogEntry(threadTitle, geoLocation);
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
         
-        for (LogEntry entry : GeoLocationLog.getLogEntries()) {
+        geoLocationLog.addLogEntry(threadTitle, geoLocation);
+        geoLocationLog.addLogEntry(threadTitle, geoLocation);
+        geoLocationLog.addLogEntry(threadTitle, geoLocation);
+        
+        for (LogEntry entry : geoLocationLog.getLogEntries()) {
             assertEquals("threadTitles should be equal", threadTitle, entry.getThreadTitle());
             assertEquals("geoLocations should be equal", geoLocation, entry.getGeoLocation());
         }
     }
     
     public void testClearLogAndCheckIsLogEmpty() {
-        GeoLocationLog.addLogEntry("TestThreadTitle", new GeoLocation(1.0,2.0));
-        assertEquals("Entries array should NOT be empty", false, GeoLocationLog.isEmpty());
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
         
-        GeoLocationLog.clearLog();
-        assertEquals("Entries array should be empty",true, GeoLocationLog.isEmpty());
+        geoLocationLog.addLogEntry("TestThreadTitle", new GeoLocation(1.0,2.0));
+        assertEquals("Entries array should NOT be empty", false, geoLocationLog.isEmpty());
+        
+        geoLocationLog.clearLog();
+        assertEquals("Entries array should be empty",true, geoLocationLog.isEmpty());
     }
     
     public void testSizeOfLog() {        
@@ -50,10 +55,12 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
         
-        GeoLocationLog.addLogEntry("thread1", geoLocation1);
-        GeoLocationLog.addLogEntry("thread2", geoLocation2);
-        GeoLocationLog.addLogEntry("thread3", geoLocation3);
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
         
-        assertEquals("Size of entries should be 3", 3, GeoLocationLog.size());
+        geoLocationLog.addLogEntry("thread1", geoLocation1);
+        geoLocationLog.addLogEntry("thread2", geoLocation2);
+        geoLocationLog.addLogEntry("thread3", geoLocation3);
+        
+        assertEquals("Size of entries should be 3", 3, geoLocationLog.size());
     }
 }
