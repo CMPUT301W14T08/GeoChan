@@ -99,7 +99,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         checkActionBar();
     }
 
-    // Do not display the back arrow in threadListFragment
+    /**
+     * Checks the back stack for fragments and enables/disables the back button
+     * in the action bar accordingly
+     */
     @Override
     public void onBackStackChanged() {
         checkActionBar();
@@ -174,7 +177,11 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         fragment.submitCurrentLocation(v);
     }
     
-    public void checkActionBar() {
+    /**
+     * Checks the back stack for fragments and enables/disables the back button
+     * in the action bar accordingly
+     */
+    private void checkActionBar() {
         int count = getFragmentManager().getBackStackEntryCount();
         if (count > 0) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
