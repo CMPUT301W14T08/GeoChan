@@ -82,12 +82,12 @@ public class CustomLocationFragment extends Fragment {
         super.onStart();
         GeoLocationLog log = GeoLocationLog.getInstance();
         logArray = log.getLogEntries();
-        
+
         fm = getFragmentManager();
 
         latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
         longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
-     
+
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -97,7 +97,7 @@ public class CustomLocationFragment extends Fragment {
                 fm.popBackStackImmediate();
             }
         });
-        
+
         customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
     }
@@ -120,7 +120,7 @@ public class CustomLocationFragment extends Fragment {
     public void setArgsForCustomCoordinates() {
         Double customLat = Double.valueOf(latitudeEditText.getText().toString());
         Double customLong = Double.valueOf(longitudeEditText.getText().toString());
-        GeoLocation geoLocation = new GeoLocation(customLat,customLong);
+        GeoLocation geoLocation = new GeoLocation(customLat, customLong);
         setBundleArguments(geoLocation);
     }
 
@@ -130,7 +130,7 @@ public class CustomLocationFragment extends Fragment {
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         setBundleArguments(geoLocation);
     }
-    
+
     public void setBundleArguments(GeoLocation geoLocation) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
