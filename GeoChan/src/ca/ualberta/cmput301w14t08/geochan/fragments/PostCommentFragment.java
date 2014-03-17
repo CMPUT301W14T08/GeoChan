@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -40,8 +42,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * This class is responsible for the fragment that allows user to post a reply to an existing
- * comment.
+ * This class is responsible for the fragment that allows user to post a reply
+ * to an existing comment.
  */
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;
@@ -77,14 +79,14 @@ public class PostCommentFragment extends Fragment {
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"), args.getDouble("LONGITUDE"));
             }
         }
     }
@@ -93,7 +95,8 @@ public class PostCommentFragment extends Fragment {
         if (v.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
-            //GeoLocation geoLocation = new GeoLocation(locationListenerService);
+            // GeoLocation geoLocation = new
+            // GeoLocation(locationListenerService);
             if (geoLocation.getLocation() == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
@@ -101,20 +104,20 @@ public class PostCommentFragment extends Fragment {
                 Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
-                //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                // GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
-                //GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
+                // GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
-            /*
+
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
-                    */
+
             this.getFragmentManager().popBackStackImmediate();
         }
     }

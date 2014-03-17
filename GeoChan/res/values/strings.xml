@@ -32,5 +32,6 @@
     <string name="comment_reply_button">Reply</string>
     <string name="comment_star_button">Favourite</string>
     <string name="action_refresh">Refresh from Server</string>
+    <string name="thread_sort">Sorting Method</string>
 
 </resources>

@@ -107,7 +107,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
         thread.getBodyComment().setChildren(list);
-        adapter.setThread(thread);
+        
+        /*
+         *  Have to reset adapter: workaround for a strange issue, for description,
+         *  see : http://stackoverflow.com/questions/20512068/listview-not-updating-properly-cursoradapter-after-swapcursor
+         */
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+        threadView.setAdapter(adapter);
     }
 
     /*
