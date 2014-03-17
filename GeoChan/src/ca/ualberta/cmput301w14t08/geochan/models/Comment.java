@@ -217,6 +217,10 @@ public class Comment implements Parcelable {
     public ArrayList<Comment> getChildren() {
         return children;
     }
+    
+    public Comment getChildAtIndex(int i) {
+        return children.get(i);
+    }
 
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;

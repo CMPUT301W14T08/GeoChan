@@ -28,18 +28,25 @@ import java.util.ArrayList;
  */
 public class GeoLocationLog {
 
+    private static GeoLocationLog instance = null;
     private static ArrayList<LogEntry> entries;
 
     /**
-     * Private constructor. Is called only if static array is null.
+     * Protected constructor. Is called only if singleton has not been constructed.
      */
-    private GeoLocationLog() {
+    protected GeoLocationLog() {
         entries = new ArrayList<LogEntry>();
     }
 
+    public static GeoLocationLog getInstance() {
+        if (instance == null) {
+            instance = new GeoLocationLog();
+        }
+        return instance;
+    }
+    
     /**
      * Adds a new LogEntry to the GeoLocationLog.
-     * 
      * @param threadTitle
      *            Title to be stored in the new LogEntry.
      * @param geoLocation
@@ -55,7 +62,6 @@ public class GeoLocationLog {
 
     /**
      * Return the log entries array, if null create one
-     * 
      * @return entries
      */
     public static ArrayList<LogEntry> getLogEntries() {
@@ -67,7 +73,6 @@ public class GeoLocationLog {
 
     /**
      * Return true if log is empty, else false. If null create one
-     * 
      * @return entries
      */
     public static boolean isEmpty() {
@@ -89,7 +94,6 @@ public class GeoLocationLog {
 
     /**
      * Returns the number of LogEntry objects stored in entries.
-     * 
      * @return Number of LogEntry objects.
      */
     public static int size() {

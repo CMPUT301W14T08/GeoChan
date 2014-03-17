@@ -37,7 +37,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t1.addComment(c1);
         
-        assertTrue("Comment added successfuly.", t1.getComments().contains(c1));
+        assertTrue("Comment added successfuly.", t1.getBodyComment().getChildren().contains(c1));
     }
     
     public void testGetDistanceFrom(){
@@ -107,10 +107,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         thread.addComment(c2);
         thread.sortComments(SortTypes.SORT_DATE_NEWEST);
 
-        assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
-        assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
-        assertTrue("c3 is at index 2", (thread.getComments().get(2)) == c3);
-        assertTrue("c2 is at index 3", (thread.getComments().get(3)) == c2);
+        assertTrue("c5 is at index 0", (thread.getBodyComment().getChildAtIndex(0)) == c5);
+        assertTrue("c4 is at index 1", (thread.getBodyComment().getChildAtIndex(1)) == c4);
+        assertTrue("c3 is at index 2", (thread.getBodyComment().getChildAtIndex(2)) == c3);
+        assertTrue("c2 is at index 3", (thread.getBodyComment().getChildAtIndex(3)) == c2);
     }
     
     public void testSortByDateOldest(){
@@ -141,10 +141,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         thread.addComment(c2);
         thread.sortComments(SortTypes.SORT_DATE_OLDEST);
 
-        assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
-        assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);
-        assertTrue("c4 is at index 2", (thread.getComments().get(2)) == c4);
-        assertTrue("c5 is at index 3", (thread.getComments().get(3)) == c5);
+        assertTrue("c2 is at index 0", (thread.getBodyComment().getChildAtIndex(0)) == c2);
+        assertTrue("c3 is at index 1", (thread.getBodyComment().getChildAtIndex(1)) == c3);
+        assertTrue("c4 is at index 2", (thread.getBodyComment().getChildAtIndex(2)) == c4);
+        assertTrue("c5 is at index 3", (thread.getBodyComment().getChildAtIndex(3)) == c5);
     }
 
     /**
@@ -217,11 +217,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t.sortComments(SortTypes.SORT_USER_SCORE_HIGHEST);
         
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        assertTrue("c1 is at location 0", t.getBodyComment().getChildAtIndex(0) == c1);
+        assertTrue("c2 is at location 1", t.getBodyComment().getChildAtIndex(1) == c2);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c4 is at location 3", t.getBodyComment().getChildAtIndex(3) == c4);
+        assertTrue("c5 is at location 4", t.getBodyComment().getChildAtIndex(4) == c5);
         
         c5.setCommentDate(currentDate);
         c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
@@ -233,11 +233,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t.sortComments(SortTypes.SORT_USER_SCORE_HIGHEST);
         
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        assertTrue("c5 is at location 0", t.getBodyComment().getChildAtIndex(0) == c5);
+        assertTrue("c4 is at location 1", t.getBodyComment().getChildAtIndex(1) == c4);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c2 is at location 3", t.getBodyComment().getChildAtIndex(3) == c2);
+        assertTrue("c1 is at location 4", t.getBodyComment().getChildAtIndex(4) == c1);
     }
     
     /**
@@ -304,11 +304,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t.sortComments(SortTypes.SORT_USER_SCORE_LOWEST);
         
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        assertTrue("c5 is at location 0", t.getBodyComment().getChildAtIndex(0) == c5);
+        assertTrue("c4 is at location 1", t.getBodyComment().getChildAtIndex(1) == c4);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c2 is at location 3", t.getBodyComment().getChildAtIndex(3) == c2);
+        assertTrue("c1 is at location 4", t.getBodyComment().getChildAtIndex(4) == c1);
         
         c5.setCommentDate(currentDate);
         c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
@@ -320,11 +320,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t.sortComments(SortTypes.SORT_USER_SCORE_LOWEST);
         
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        assertTrue("c1 is at location 0", t.getBodyComment().getChildAtIndex(0) == c1);
+        assertTrue("c2 is at location 1", t.getBodyComment().getChildAtIndex(1) == c2);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c4 is at location 3", t.getBodyComment().getChildAtIndex(3) == c4);
+        assertTrue("c5 is at location 4", t.getBodyComment().getChildAtIndex(4) == c5);
     }
     
     /**
@@ -390,11 +390,11 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         
         t.sortComments(SortTypes.SORT_LOCATION_MISC);
         
-        Log.i("Comment at index 0:", t.getComments().get(0).getTextPost());
-        Log.i("Comment at index 1:", t.getComments().get(1).getTextPost());
-        Log.i("Comment at index 2:", t.getComments().get(2).getTextPost());
-        Log.i("Comment at index 3:", t.getComments().get(3).getTextPost());
-        Log.i("Comment at index 4:", t.getComments().get(4).getTextPost());
+        Log.i("Comment at index 0:", t.getBodyComment().getChildAtIndex(0).getTextPost());
+        Log.i("Comment at index 1:", t.getBodyComment().getChildAtIndex(1).getTextPost());
+        Log.i("Comment at index 2:", t.getBodyComment().getChildAtIndex(2).getTextPost());
+        Log.i("Comment at index 3:", t.getBodyComment().getChildAtIndex(3).getTextPost());
+        Log.i("Comment at index 4:", t.getBodyComment().getChildAtIndex(4).getTextPost());
         
         Log.i("Lat of c1:", String.valueOf(c1.getLocation().getLatitude()));
         Log.i("Lat of c2:", String.valueOf(c2.getLocation().getLatitude()));
@@ -402,20 +402,20 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Log.i("Lat of c4:", String.valueOf(c4.getLocation().getLatitude()));
         Log.i("Lat of c5:", String.valueOf(c5.getLocation().getLatitude()));
         
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        assertTrue("c1 is at location 0", t.getBodyComment().getChildAtIndex(0) == c1);
+        assertTrue("c2 is at location 1", t.getBodyComment().getChildAtIndex(1) == c2);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c4 is at location 3", t.getBodyComment().getChildAtIndex(3) == c4);
+        assertTrue("c5 is at location 4", t.getBodyComment().getChildAtIndex(4) == c5);
         
         t.getSortLoc().setCoordinates(20,20);
         
         t.sortComments(SortTypes.SORT_LOCATION_MISC);
         
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        assertTrue("c5 is at location 0", t.getBodyComment().getChildAtIndex(0) == c5);
+        assertTrue("c4 is at location 1", t.getBodyComment().getChildAtIndex(1) == c4);
+        assertTrue("c3 is at location 2", t.getBodyComment().getChildAtIndex(2) == c3);
+        assertTrue("c2 is at location 3", t.getBodyComment().getChildAtIndex(3) == c2);
+        assertTrue("c1 is at location 4", t.getBodyComment().getChildAtIndex(4) == c1);
     }
 }

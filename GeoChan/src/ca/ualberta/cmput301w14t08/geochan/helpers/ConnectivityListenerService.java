@@ -58,6 +58,10 @@ public class ConnectivityListenerService extends BroadcastReceiver {
         return isConnectedToMobile;
     }
 
+    /**
+     * getters and setters
+     */
+    
     public ConnectivityManager getConnectivityManager() {
         return connectivityManager;
     }
