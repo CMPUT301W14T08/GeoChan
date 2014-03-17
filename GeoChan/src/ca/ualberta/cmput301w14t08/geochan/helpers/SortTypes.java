@@ -26,6 +26,11 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * This class contains various sort types and comparators
+ * used for locally sorting ThreadComments and Comments.
+ *
+ */
 public class SortTypes {
 
     public static final int SORT_DATE_NEWEST = 0;

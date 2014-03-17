@@ -29,6 +29,11 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * Responsible for asynchronously loading ThreadComments from the ElasticSearch
+ * server for delivery to an adapter.
+ *
+ */
 public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment>> {
     ArrayList<ThreadComment> list = null;
     ElasticSearchClient client;
