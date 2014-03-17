@@ -396,7 +396,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             format.setMaximumFractionDigits(4);
 
             replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude()) + " Longitude: "
-                    + format.format(repLocCom));
+                    + format.format(repLocCom.getLongitude()));
         } else {
             replyLocationText.setText("Error: No location found");
         }
