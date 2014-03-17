@@ -32,8 +32,9 @@ import android.graphics.Picture;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
  * A comment within a thread of comments. Contains the text of the comment,
@@ -52,7 +53,7 @@ public class Comment implements Parcelable {
     private Comment parent;
     private ArrayList<Comment> children;
     private ArrayList<String> commentIds;
-    private UserHashManager manager;
+    private PreferencesManager manager;
     private long id;
 
     /**
@@ -60,18 +61,18 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, GeoLocation location) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -80,18 +81,18 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, Picture image, GeoLocation location) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -100,18 +101,18 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -120,18 +121,18 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getInstance().getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
         this.commentIds = new ArrayList<String>();
     }
 
@@ -140,6 +141,7 @@ public class Comment implements Parcelable {
      */
     public Comment() {
         super();
+        this.manager = PreferencesManager.getInstance();
         this.textPost = "This is a test comment.";
         this.commentDate = new Date();
         this.image = null;

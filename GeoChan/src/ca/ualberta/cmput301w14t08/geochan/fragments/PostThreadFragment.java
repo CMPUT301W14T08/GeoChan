@@ -22,9 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +33,6 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -108,13 +105,6 @@ public class PostThreadFragment extends Fragment {
                 this.getFragmentManager().popBackStackImmediate();
             }
         }
-    }
-
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        UserHashManager manager = UserHashManager.getInstance();
-        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override

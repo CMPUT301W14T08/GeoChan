@@ -2,7 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.FavouritesIOManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
  * This class handles the threads/comments saved by the user as favourite, to be

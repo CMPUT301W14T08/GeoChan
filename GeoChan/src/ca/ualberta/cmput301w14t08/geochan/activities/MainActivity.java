@@ -34,7 +34,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates
@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return;
         }
         // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
-        UserHashManager.generateInstance(this);
+        PreferencesManager.generateInstance(this);
         Fragment fragment = new ThreadListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
         getFragmentManager().addOnBackStackChangedListener(this);
