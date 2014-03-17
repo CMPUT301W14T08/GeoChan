@@ -79,8 +79,8 @@ public class CustomLocationFragment extends Fragment {
 
     public void onStart() {
         super.onStart();
-        // GeoLocationLog log = GeoLocationLog.getInstance();
-        logArray = GeoLocationLog.getLogEntries();
+        GeoLocationLog log = GeoLocationLog.getInstance();
+        logArray = log.getLogEntries();
         fm = getFragmentManager();
 
         latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
