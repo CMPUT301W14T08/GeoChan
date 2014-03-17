@@ -98,7 +98,7 @@ public class CustomLocationFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // clicks a previous location item in the list
                 LogEntry logEntry = (LogEntry) parent.getItemAtPosition(position);
-                setBundleArguments(logEntry.getGeoLocation());
+                setBundleArguments(logEntry.getGeoLocation(), "PREVIOUS_LOCATION");
                 fm.popBackStackImmediate();
             }
         });
@@ -128,7 +128,7 @@ public class CustomLocationFragment extends Fragment {
             Double latVal = Double.valueOf(latStr);
             Double longVal = Double.valueOf(longStr);
             GeoLocation geoLocation = new GeoLocation(latVal,longVal);
-            setBundleArguments(geoLocation);
+            setBundleArguments(geoLocation, "NEW_LOCATION");
             fm.popBackStackImmediate();
         }
     }
@@ -139,8 +139,9 @@ public class CustomLocationFragment extends Fragment {
      */
     public void submitCurrentLocation(View v) {
         LocationListenerService listener = new LocationListenerService(getActivity());
+        listener.startListening();
         GeoLocation geoLocation = new GeoLocation(listener);
-        setBundleArguments(geoLocation);
+        setBundleArguments(geoLocation, "CURRENT_LOCATION");
         fm.popBackStackImmediate();
     }
 
@@ -149,7 +150,7 @@ public class CustomLocationFragment extends Fragment {
      * previous fragment
      * @param geoLocation
      */
-    public void setBundleArguments(GeoLocation geoLocation) {
+    public void setBundleArguments(GeoLocation geoLocation, String locationType) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == THREAD) {
@@ -158,12 +159,14 @@ public class CustomLocationFragment extends Fragment {
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
+            args.putString("LocationType", locationType);
         } else if (postType == COMMENT) {
             PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
                     .findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
+            args.putString("LocationType", locationType);
         }
     }
 }

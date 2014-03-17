@@ -88,11 +88,15 @@ public class PostCommentFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                Double lat = args.getDouble("LATITUDE");
-                Double lon = args.getDouble("LONGITUDE");
-                geoLocation.setCoordinates(lat, lon);
                 Button locButton = (Button) getActivity().findViewById(R.id.location_button);
-                locButton.setText("Location:" + "Lat:" + Double.toString(lat) + ", Lon:" + Double.toString(lon));
+                if (args.getString("LocationType") == "CURRENT_LOCATION") {
+                    locButton.setText("Location: Current Location");
+                } else {
+                    Double lat = args.getDouble("LATITUDE");
+                    Double lon = args.getDouble("LONGITUDE");
+                    geoLocation.setCoordinates(lat, lon);
+                    locButton.setText("Location: " + "Lat: " + Double.toString(lat) + ", Lon: " + Double.toString(lon));
+                }
             }
         }
     }
