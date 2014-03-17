@@ -51,7 +51,7 @@ public class ThreadComment {
         super();
         this.bodyComment = bodyComment;
         this.setTitle(title);
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
     }
 
     /* This constructor is only used for testing. */
@@ -59,7 +59,7 @@ public class ThreadComment {
         super();
         this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
-        this.id = HashHelper.getInstance().getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
     }
 
     /**
