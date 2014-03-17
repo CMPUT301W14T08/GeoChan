@@ -43,6 +43,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
+/**
+ * This class is a fragment which allows the user to specify a custom location
+ * for their post/comment via either a custom long/latt or selecting a
+ * previously used location.
+ * 
+ */
 public class CustomLocationFragment extends Fragment {
 
     private ArrayList<LogEntry> logArray;
@@ -58,11 +64,10 @@ public class CustomLocationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(false); 
+        setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
-    
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -74,14 +79,15 @@ public class CustomLocationFragment extends Fragment {
 
     public void onStart() {
         super.onStart();
-        //GeoLocationLog log = GeoLocationLog.getInstance();
+        // GeoLocationLog log = GeoLocationLog.getInstance();
         logArray = GeoLocationLog.getLogEntries();
         fm = getFragmentManager();
-        
+
         latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
-        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);;
+        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
+        ;
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
-        lv.setOnItemClickListener(new OnItemClickListener () {
+        lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setArgsForPreviousLocation((LogEntry) parent.getItemAtPosition(position));
@@ -93,7 +99,8 @@ public class CustomLocationFragment extends Fragment {
     }
 
     public void submitNewLocationFromCoordinates(View v) {
-        if (latitudeEditText.getText().toString().equals("") && longitudeEditText.getText().toString().equals("")) {
+        if (latitudeEditText.getText().toString().equals("")
+                && longitudeEditText.getText().toString().equals("")) {
             ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
         } else {
             setArgsForCustomCoordinates();
@@ -106,35 +113,39 @@ public class CustomLocationFragment extends Fragment {
         fm.popBackStackImmediate();
     }
 
-    // the next 3 methods need to be re-factored together as there is significant overlap
-    
+    // the next 3 methods need to be re-factored together as there is
+    // significant overlap
+
     public void setArgsForCustomCoordinates() {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
+                    .findFragmentByTag("postThreadFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
             args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                    .findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
             args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
         }
     }
 
-
     public void setArgsForPreviousLocation(LogEntry clickedEntry) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
+                    .findFragmentByTag("postThreadFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                    .findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
             args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
@@ -147,16 +158,18 @@ public class CustomLocationFragment extends Fragment {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag("postThreadFrag");
+            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
+                    .findFragmentByTag("postThreadFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager().findFragmentByTag("repFrag");
+            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+                    .findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         }
     }
-    
+
 }

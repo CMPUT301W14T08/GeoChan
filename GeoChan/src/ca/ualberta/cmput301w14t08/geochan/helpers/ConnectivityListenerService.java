@@ -12,19 +12,22 @@ public class ConnectivityListenerService extends BroadcastReceiver {
 
     /**
      * Constructor. Gets the system service Connectivity Service
+     * 
      * @param context
      */
     public ConnectivityListenerService(Context context) {
-        connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO -> Implement :)
     }
-    
+
     /**
      * Returns true if device is connected to internet
+     * 
      * @return isConnected
      */
     public boolean isConnected() {
@@ -35,6 +38,7 @@ public class ConnectivityListenerService extends BroadcastReceiver {
 
     /**
      * Returns true if device is connected via WiFi
+     * 
      * @return isConnectedToWifi
      */
     public boolean isWifi() {
@@ -45,6 +49,7 @@ public class ConnectivityListenerService extends BroadcastReceiver {
 
     /**
      * Returns true if device is connected via Mobile
+     * 
      * @return isConnectedToMobile
      */
     public boolean isMobile() {

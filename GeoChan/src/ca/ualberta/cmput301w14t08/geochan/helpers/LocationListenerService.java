@@ -32,11 +32,13 @@ public class LocationListenerService {
     private static Location location;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    private static final int TWO_MINUTES = 1000 * 60 * 2; // taken from Android Location Strategy
+    private static final int TWO_MINUTES = 1000 * 60 * 2; // taken from Android
+                                                          // Location Strategy
 
     /**
-     * Constructs a new service object. Creates a locationListener
-     * object within and implements its interface. 
+     * Constructs a new service object. Creates a locationListener object within
+     * and implements its interface.
+     * 
      * @param activity
      */
     public LocationListenerService(Activity activity) {
@@ -74,16 +76,17 @@ public class LocationListenerService {
     }
 
     /**
-     * LocationManager tells the locationListener to stop listening for
-     * location changes
+     * LocationManager tells the locationListener to stop listening for location
+     * changes
      */
     public void stopListening() {
         locationManager.removeUpdates(locationListener);
     }
 
     /**
-     * Gets the current location. Checks if the latest location is
-     * better than the location currently assigned
+     * Gets the current location. Checks if the latest location is better than
+     * the location currently assigned
+     * 
      * @return location
      */
     public Location getCurrentLocation() {
@@ -96,16 +99,18 @@ public class LocationListenerService {
 
     /**
      * asks the location manager for the last known location on the GPS Provider
+     * 
      * @return location
      */
     public Location getLastKnownLocation() {
         return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
-    /** 
-     * Checks to see if a new location is better than the currentBestLocation. 
+    /**
+     * Checks to see if a new location is better than the currentBestLocation.
      * This code is from the Android Location Strategies guide, found here:
-     * http://developer.android.com/guide/topics/location/strategies.html 
+     * http://developer.android.com/guide/topics/location/strategies.html
+     * 
      * @param location
      * @param currentBestLocation
      * @return boolean
@@ -156,9 +161,10 @@ public class LocationListenerService {
     }
 
     /**
-     * Checks to see if two providers are the same. Used by isBetterLocation method
-     * This code is from the Android Location Strategies Guide found here:
-     * http://developer.android.com/guide/topics/location/strategies.html
+     * Checks to see if two providers are the same. Used by isBetterLocation
+     * method This code is from the Android Location Strategies Guide found
+     * here: http://developer.android.com/guide/topics/location/strategies.html
+     * 
      * @param provider1
      * @param provider2
      * @return boolean

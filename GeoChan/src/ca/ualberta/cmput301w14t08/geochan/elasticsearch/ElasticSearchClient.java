@@ -74,6 +74,7 @@ public class ElasticSearchClient {
 
     /**
      * Returns a single instance of the ElasticSearchClient.
+     * 
      * @return the instance
      */
     public static ElasticSearchClient getInstance() {
@@ -85,7 +86,9 @@ public class ElasticSearchClient {
 
     /**
      * Posts a ThreadComment to the ElasticSearch server.
-     * @param thread the ThreadComment
+     * 
+     * @param thread
+     *            the ThreadComment
      * @return the Thread for the work for monitoring purposes
      */
     public Thread postThread(final ThreadComment thread) {
@@ -94,7 +97,9 @@ public class ElasticSearchClient {
 
     /**
      * Posts a Comment to the ElasticSearch server.
-     * @param thread the ThreadComment
+     * 
+     * @param thread
+     *            the ThreadComment
      * @return the Thread for the work for monitoring purposes
      */
     public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
@@ -106,6 +111,7 @@ public class ElasticSearchClient {
 
     /**
      * Returns the total number of ThreadComments on the server
+     * 
      * @return number of ThreadComments
      */
     public int getThreadCount() {
@@ -114,6 +120,7 @@ public class ElasticSearchClient {
 
     /**
      * Returns the total number of Comments on the server
+     * 
      * @return number of Comments
      */
     public int getCommentCount() {
@@ -122,13 +129,14 @@ public class ElasticSearchClient {
 
     /**
      * Gets an ArrayList of ThreadComments from the server
+     * 
      * @return the ThreadComments
      */
     public ArrayList<ThreadComment> getThreads() {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
         }.getType();
-        ElasticSearchSearchResponse<ThreadComment> esResponse = gson
-                .fromJson(searchAll(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
+        ElasticSearchSearchResponse<ThreadComment> esResponse = gson.fromJson(
+                searchAll(ElasticSearchQueries.SEARCH_MATCH_ALL, TYPE_THREAD),
                 elasticSearchSearchResponseType);
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         for (ElasticSearchResponse<ThreadComment> r : esResponse.getHits()) {
@@ -137,10 +145,12 @@ public class ElasticSearchClient {
         }
         return list;
     }
-    
+
     /**
      * Gets a list of comments for a specified parent comment
-     * @param topComment the parent comment
+     * 
+     * @param topComment
+     *            the parent comment
      * @return the Comments
      */
     public ArrayList<Comment> getComments(Comment topComment) {
@@ -149,7 +159,8 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(get);
-            JsonArray array = result.getJsonObject().get("_source").getAsJsonObject().get("comments").getAsJsonArray();
+            JsonArray array = result.getJsonObject().get("_source").getAsJsonObject()
+                    .get("comments").getAsJsonArray();
             ArrayList<String> hits = new ArrayList<String>();
             for (int i = 0; i < array.size(); ++i) {
                 hits.add(array.get(i).getAsString());
@@ -160,7 +171,7 @@ public class ElasticSearchClient {
             for (Comment comment : comments) {
                 comment.setParent(topComment);
                 ArrayList<Comment> children = getComments(comment);
-                if (children != null) { 
+                if (children != null) {
                     comment.setChildren(children);
                 }
             }
@@ -170,10 +181,12 @@ public class ElasticSearchClient {
         }
         return comments;
     }
-    
+
     /**
      * Gets a Comment, specified by its id
-     * @param id the id
+     * 
+     * @param id
+     *            the id
      * @return the Comment
      */
     private Comment get(final String id) {
@@ -181,7 +194,8 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(get);
-            Type type = new TypeToken<ElasticSearchResponse<Comment>>() {}.getType();
+            Type type = new TypeToken<ElasticSearchResponse<Comment>>() {
+            }.getType();
             ElasticSearchResponse<Comment> esResponse = gson.fromJson(result.getJsonString(), type);
             return esResponse.getSource();
         } catch (Exception e) {
@@ -190,7 +204,7 @@ public class ElasticSearchClient {
             return null;
         }
     }
-    
+
     /**
      * Posts a JSON string request to the ElasticSearch server
      * @param json the JSON query string
@@ -215,7 +229,7 @@ public class ElasticSearchClient {
         t.start();
         return t;
     }
-    
+
     /**
      * Updates a record on the ElasticSearch server
      * @param query the JSON query string
@@ -239,10 +253,12 @@ public class ElasticSearchClient {
         t.start();
         return t;
     }
-    
+
     /**
      * Counts the number of records on the ElasticSearch server
-     * @param type the ElasticSearch type
+     * 
+     * @param type
+     *            the ElasticSearch type
      * @return the count
      */
     private int count(final String type) {
@@ -261,11 +277,14 @@ public class ElasticSearchClient {
             return 0;
         }
     }
-    
+
     /**
      * Searches the ElasticSearch server for all results for a specific type
-     * @param query the JSON query string
-     * @param type the ElasticSearch type
+     * 
+     * @param query
+     *            the JSON query string
+     * @param type
+     *            the ElasticSearch type
      * @return the JSON result string
      */
     private String searchAll(final String query, final String type) {

@@ -18,13 +18,12 @@
  * limitations under the License.
  */
 
-
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 /**
- * Contains various queries and builders for queries
- * to be used when interacting with ElasticSearch.
- *
+ * Contains various queries and builders for queries to be used when interacting
+ * with ElasticSearch.
+ * 
  */
 public class ElasticSearchQueries {
     /**
@@ -36,39 +35,37 @@ public class ElasticSearchQueries {
     private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
             + "       \"match\" : {\n" + "           \"parent\" : \"";
 
-    private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n"
-            + "}";
-    
-    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n"
-            + "    \"upsert\" : {\n"
+    private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n" + "}";
+
+    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" + "    \"upsert\" : {\n"
             + "       \"comments\" : [\"";
-            
-    private static final String UPDATE_COMMENT_LIST_MIDDLE = "\"]\n"
-            + "    },\n"
-            + "    \"script\": \"ctx._source.comments += comment\",\n"
-            + "    \"params\" : {\n"
+
+    private static final String UPDATE_COMMENT_LIST_MIDDLE = "\"]\n" + "    },\n"
+            + "    \"script\": \"ctx._source.comments += comment\",\n" + "    \"params\" : {\n"
             + "        \"comment\" : \"";
-            
-    private static final String UPDATE_COMMENT_LIST_END = "\"\n"
-            + "    }\n"
-            + "}";
+
+    private static final String UPDATE_COMMENT_LIST_END = "\"\n" + "    }\n" + "}";
 
     /**
      * Returns a query string to search by parent ID
-     * @param id the parent ID
+     * 
+     * @param id
+     *            the parent ID
      * @return the JSON query string
      */
     public static String getMatchParent(String id) {
         return SEARCH_MATCH_PARENT_BEGIN + id + SEARCH_MATCH_PARENT_END;
     }
-    
+
     /**
      * Returns a query string to add an ID to a list of comments
-     * @param id the comment ID
+     * 
+     * @param id
+     *            the comment ID
      * @return the JSON query string
      */
     public static String commentListScript(String id) {
-        return UPDATE_COMMENT_LIST_BEGIN + id + UPDATE_COMMENT_LIST_MIDDLE
-                + id + UPDATE_COMMENT_LIST_END;
+        return UPDATE_COMMENT_LIST_BEGIN + id + UPDATE_COMMENT_LIST_MIDDLE + id
+                + UPDATE_COMMENT_LIST_END;
     }
 }

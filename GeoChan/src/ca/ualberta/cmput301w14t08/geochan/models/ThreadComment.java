@@ -30,8 +30,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 /**
- * ThreadComment is a model class that handles all operations of threads in the application.
- * It aggregates a Comment object and adds thread specific fields: title, id
+ * ThreadComment is a model class that handles all operations of threads in the
+ * application. It aggregates a Comment object and adds thread specific fields:
+ * title, id
  * 
  */
 public class ThreadComment {
@@ -39,11 +40,11 @@ public class ThreadComment {
     private String title;
     private UserHashManager manager;
     private long id;
-    
+
     /**
-     * A location used for our comment sorting methods.
-     * Should be set by the fragment whenever the user decides
-     * to sort comments in a thread by relevance or location.
+     * A location used for our comment sorting methods. Should be set by the
+     * fragment whenever the user decides to sort comments in a thread by
+     * relevance or location.
      */
     private GeoLocation sortLoc;
 
@@ -67,7 +68,7 @@ public class ThreadComment {
     /**
      * Getters and setters
      */
-    
+
     public Date getThreadDate() {
         return bodyComment.getCommentDate();
     }
@@ -99,36 +100,41 @@ public class ThreadComment {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    public void setSortLoc(GeoLocation g){
+
+    public void setSortLoc(GeoLocation g) {
         this.sortLoc = g;
     }
-    
-    public GeoLocation getSortLoc(){
+
+    public GeoLocation getSortLoc() {
         return this.sortLoc;
     }
 
     public void addComment(Comment c) {
         this.bodyComment.addChild(c);
     }
-    
+
     /**
-* Determines the distance between the Thread (defined by the GeoLocation of
-* the top comment) and the provided GeoLocation in terms of coordinates.
-* @param g The GeoLocation we want to determine the distance from.
-* @return The distance, in terms of coordinates, between the Thread and the passed GeoLocation.
-*/
+     * Determines the distance between the Thread (defined by the GeoLocation of
+     * the top comment) and the provided GeoLocation in terms of coordinates.
+     * 
+     * @param g
+     *            The GeoLocation we want to determine the distance from.
+     * @return The distance, in terms of coordinates, between the Thread and the
+     *         passed GeoLocation.
+     */
     public double getDistanceFrom(GeoLocation g) {
-      return this.getBodyComment().getLocation().distance(g);
+        return this.getBodyComment().getLocation().distance(g);
     }
-    
+
     /**
-* Determines the time passed between when the Thread was posted and the
-* passed Date in terms of number of hours.
-* @param d The Date we are comparing with.
-* @return The number of hours between when the Thread was posted and the passed Date.
-* Returns a minimum of 0.5.
-*/
+     * Determines the time passed between when the Thread was posted and the
+     * passed Date in terms of number of hours.
+     * 
+     * @param d
+     *            The Date we are comparing with.
+     * @return The number of hours between when the Thread was posted and the
+     *         passed Date. Returns a minimum of 0.5.
+     */
     public double getTimeFrom(Date d) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -136,32 +142,34 @@ public class ThreadComment {
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+        if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
             return 0.5;
         } else {
             return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
         }
     }
-    
+
     /**
-* Determines the score of a thread relevant to
-* @param g The GeoLocation relevant to sorting. In sorting, the Thread.sortLoc GeoLocation
-* of the sorting thread is used and should be set in the fragment.
-* @return The score of the comment in relation to the user's location and current time.
-*/
-    public double getScoreFromUser(GeoLocation g){
+     * Determines the score of a thread relevant to
+     * 
+     * @param g
+     *            The GeoLocation relevant to sorting. In sorting, the
+     *            Thread.sortLoc GeoLocation of the sorting thread is used and
+     *            should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and
+     *         current time.
+     */
+    public double getScoreFromUser(GeoLocation g) {
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 10000;
-        
-        if(g == null){
+
+        if (g == null) {
             Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst
-                * (1 / Math.sqrt(this.getDistanceFrom(g)));
-        double timeScore = timeConst
-                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if (distScore + timeScore > maxScore) {
             return maxScore;
         } else {
@@ -178,31 +186,36 @@ public class ThreadComment {
     public void sortComments(int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByDateNewest());
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByDateNewest());
             break;
         case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByDateOldest());
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByDateOldest());
             break;
         case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentDistance());
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByParentDistance());
             break;
         case SortTypes.SORT_LOCATION_MISC:
-            Collections.sort(this.getBodyComment().getChildren(), 
-                             SortTypes.sortCommentsByLocationDistance(getSortLoc()));
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByLocationDistance(getSortLoc()));
             break;
         case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentScoreHighest());
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByParentScoreLowest());
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByParentScoreLowest());
             break;
         case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(this.getBodyComment().getChildren(), 
-                            SortTypes.sortCommentsByUserScoreHighest(getSortLoc()));
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByUserScoreHighest(getSortLoc()));
             break;
         case SortTypes.SORT_USER_SCORE_LOWEST:
             Collections.sort(this.getBodyComment().getChildren(),
-                            SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
+                    SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
             break;
         }
     }

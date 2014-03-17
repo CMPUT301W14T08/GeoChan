@@ -24,9 +24,9 @@ import java.util.ArrayList;
 
 /**
  * This model class handles all operations involved in logging used locations.
- *
+ * 
  */
-public class GeoLocationLog {    
+public class GeoLocationLog {
 
     private static ArrayList<LogEntry> entries;
 
@@ -36,26 +36,30 @@ public class GeoLocationLog {
     private GeoLocationLog() {
         entries = new ArrayList<LogEntry>();
     }
-   
+
     /**
      * Adds a new LogEntry to the GeoLocationLog.
-     * @param threadTitle Title to be stored in the new LogEntry.
-     * @param geoLocation GeoLocation to be stored in the new LogEntry.
+     * 
+     * @param threadTitle
+     *            Title to be stored in the new LogEntry.
+     * @param geoLocation
+     *            GeoLocation to be stored in the new LogEntry.
      */
-    public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
-        if(entries == null) {
+    public static void addLogEntry(String threadTitle, GeoLocation geoLocation) {
+        if (entries == null) {
             entries = new ArrayList<LogEntry>();
         }
-        LogEntry logEntry = new LogEntry(threadTitle,geoLocation);
+        LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
         entries.add(logEntry);
     }
-    
+
     /**
      * Return the log entries array, if null create one
+     * 
      * @return entries
      */
     public static ArrayList<LogEntry> getLogEntries() {
-        if(entries == null) {
+        if (entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries;
@@ -63,6 +67,7 @@ public class GeoLocationLog {
 
     /**
      * Return true if log is empty, else false. If null create one
+     * 
      * @return entries
      */
     public static boolean isEmpty() {
@@ -76,7 +81,7 @@ public class GeoLocationLog {
      * Removes all LogEntry objects from entries.
      */
     public static void clearLog() {
-        if(entries == null) {
+        if (entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         entries.clear();
@@ -84,10 +89,11 @@ public class GeoLocationLog {
 
     /**
      * Returns the number of LogEntry objects stored in entries.
+     * 
      * @return Number of LogEntry objects.
      */
     public static int size() {
-        if(entries == null) {
+        if (entries == null) {
             entries = new ArrayList<LogEntry>();
         }
         return entries.size();

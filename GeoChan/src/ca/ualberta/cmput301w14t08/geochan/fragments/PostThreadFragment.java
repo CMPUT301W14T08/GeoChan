@@ -41,7 +41,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-
 /**
  * Responsible for the UI fragment that allows a user to post a new thread.
  */
@@ -69,7 +68,7 @@ public class PostThreadFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+                geoLocation.setCoordinates(args.getDouble("LATITUDE"), args.getDouble("LONGITUDE"));
             }
         }
     }

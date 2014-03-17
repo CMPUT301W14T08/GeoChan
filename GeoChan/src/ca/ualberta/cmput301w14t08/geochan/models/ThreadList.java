@@ -27,15 +27,15 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 
 /**
  * Utility class that stores and manages an arraylist of ThreadComment objects.
- *
+ * 
  */
 public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
-    
+
     /**
-     * A GeoLocation used for our thread sorting methods, should be set
-     * by the fragment whenever the user decides to sort Threads by relevance
-     * or location.
+     * A GeoLocation used for our thread sorting methods, should be set by the
+     * fragment whenever the user decides to sort Threads by relevance or
+     * location.
      */
     private static GeoLocation sortLoc;
 
@@ -52,19 +52,22 @@ public class ThreadList {
     public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
         threads = listOfThreads;
     }
-    
-    public static void setSortLoc(GeoLocation g){
+
+    public static void setSortLoc(GeoLocation g) {
         sortLoc = g;
     }
-    
-    public static GeoLocation getSortLoc(){
+
+    public static GeoLocation getSortLoc() {
         return sortLoc;
     }
 
     /**
      * Creates a new ThreadComment and adds it to to the ThreadList.
-     * @param comment The bodyComment of the ThreadComment to be created.
-     * @param title The title of the ThreadComment to be created.
+     * 
+     * @param comment
+     *            The bodyComment of the ThreadComment to be created.
+     * @param title
+     *            The title of the ThreadComment to be created.
      */
     public static void addThread(Comment comment, String title) {
         if (threads == null) {
@@ -72,10 +75,12 @@ public class ThreadList {
         }
         threads.add(new ThreadComment(comment, title));
     }
-    
+
     /**
      * Adds a new ThreadComment to the ThreadList.
-     * @param t The ThreadComment to be added.
+     * 
+     * @param t
+     *            The ThreadComment to be added.
      */
     public static void addThread(ThreadComment t) {
         if (threads == null) {
@@ -83,8 +88,8 @@ public class ThreadList {
         }
         threads.add(t);
     }
-    
-    public static void clearThreads(){
+
+    public static void clearThreads() {
         threads.clear();
     }
 
@@ -105,10 +110,12 @@ public class ThreadList {
             Collections.sort(threads, SortTypes.sortThreadsByDateOldest());
             break;
         case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(threads, SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
+            Collections.sort(threads,
+                    SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
             break;
         case SortTypes.SORT_USER_SCORE_LOWEST:
-            Collections.sort(threads, SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
+            Collections.sort(threads,
+                    SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
             break;
         case SortTypes.SORT_LOCATION_MISC:
             Collections.sort(threads, SortTypes.sortThreadsByLocation(sortLoc));
