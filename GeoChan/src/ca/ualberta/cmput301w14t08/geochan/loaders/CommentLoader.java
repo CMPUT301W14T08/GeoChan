@@ -30,6 +30,11 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * Responsible for asynchronously loading Comments from the ElasticSearch
+ * server for delivery to an adapter.
+ *
+ */
 public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     ArrayList<Comment> list = null;
     ElasticSearchClient client;

@@ -24,6 +24,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
+/**
+ * Represents a count response served by ElasticSearch
+ *
+ */
 public class ElasticSearchCountResponse {
     int count;
     transient Object _shards;
