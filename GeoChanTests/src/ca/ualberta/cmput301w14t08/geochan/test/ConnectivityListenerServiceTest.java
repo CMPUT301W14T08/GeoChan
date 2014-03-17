@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityListenerService;
@@ -33,5 +34,12 @@ public class ConnectivityListenerServiceTest extends ActivityInstrumentationTest
         ConnectivityListenerService connectivityListenerService = 
                 new ConnectivityListenerService(getActivity().getApplicationContext());
         assertEquals("Connection should be active", true, connectivityListenerService.isConnected());
+    }
+    
+    public void testOnReceive() {
+        ConnectivityListenerService connectivityListenerService = 
+                new ConnectivityListenerService(getActivity().getApplicationContext());
+        Intent intent = new Intent();
+        connectivityListenerService.onReceive(getActivity(), intent);
     }
 }
