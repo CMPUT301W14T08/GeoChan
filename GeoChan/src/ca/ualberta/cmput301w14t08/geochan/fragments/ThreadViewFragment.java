@@ -67,7 +67,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        // inflater.inflate(R.menu.thread_list, menu);
+        inflater.inflate(R.menu.thread_view, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
