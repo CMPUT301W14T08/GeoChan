@@ -188,8 +188,8 @@ public class SortTypes {
      * Comparator for sorting comments in a thread based on the current
      * GeoLocation of the Thread's sortLoc member.
      * 
-     * @param g
-     * @return
+     * @param g the GeoLocation to sort by
+     * @return the comparator
      */
     public static Comparator<Comment> sortCommentsByLocationDistance(final GeoLocation g) {
         return new Comparator<Comment>() {

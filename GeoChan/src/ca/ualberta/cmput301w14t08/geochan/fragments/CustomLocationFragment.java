@@ -78,6 +78,10 @@ public class CustomLocationFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Setups up the Location Log and creates connection to buttons and text fields
+     * Also setups an onItemClickListener for previous location items
+     */
     public void onStart() {
         super.onStart();
         GeoLocationLog log = GeoLocationLog.getInstance();
@@ -92,6 +96,7 @@ public class CustomLocationFragment extends Fragment {
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // clicks a previous location item in the list
                 LogEntry logEntry = (LogEntry) parent.getItemAtPosition(position);
                 setBundleArguments(logEntry.getGeoLocation());
                 fm.popBackStackImmediate();
@@ -102,16 +107,28 @@ public class CustomLocationFragment extends Fragment {
         lv.setAdapter(customLocationAdapter);
     }
 
+    /**
+     * Called when a user enters custom Long/Lat coordinates and clicks 
+     * Submit Location
+     * @param v
+     */
     public void submitNewLocationFromCoordinates(View v) {
         if (latitudeEditText.getText().toString().equals("")
                 && longitudeEditText.getText().toString().equals("")) {
             ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
         } else {
-            setArgsForCustomCoordinates();
+            Double customLat = Double.valueOf(latitudeEditText.getText().toString());
+            Double customLong = Double.valueOf(longitudeEditText.getText().toString());
+            GeoLocation geoLocation = new GeoLocation(customLat,customLong);
+            setBundleArguments(geoLocation);
             fm.popBackStackImmediate();
         }
     }
 
+    /**
+     * Called when a user clicks the current location button
+     * @param v
+     */
     public void submitCurrentLocation(View v) {
         resetToCurrentLocation();
         fm.popBackStackImmediate();
@@ -129,8 +146,14 @@ public class CustomLocationFragment extends Fragment {
         locationListenerService.startListening();
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         setBundleArguments(geoLocation);
+        fm.popBackStackImmediate();
     }
 
+    /**
+     * sets the Bundle arguments for passing back the location to the 
+     * previous fragment
+     * @param geoLocation
+     */
     public void setBundleArguments(GeoLocation geoLocation) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");

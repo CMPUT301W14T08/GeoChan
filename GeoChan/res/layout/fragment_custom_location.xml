@@ -56,7 +56,12 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:ems="10"
+<<<<<<< HEAD
             android:hint="@string/placeholder_latitude" />
+=======
+            android:inputType="numberDecimal"
+            android:hint="@string/placeholder_longitude" />
+>>>>>>> 10d6a707fd4f93c826cec2c67508fa11fa4b0772
 
         <EditText
             android:id="@+id/longitude_edit_text"
@@ -64,9 +69,14 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:ems="10"
+<<<<<<< HEAD
             android:hint="@string/placeholder_longitude" />
 
         
+=======
+            android:inputType="numberDecimal"
+            android:hint="@string/placeholder_latitude" />
+>>>>>>> 10d6a707fd4f93c826cec2c67508fa11fa4b0772
     </LinearLayout>
 
     <TextView

@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.app.Fragment;
@@ -353,10 +355,13 @@ public class ThreadViewAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_op_locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            double origPostLat = Math.round(loc.getLatitude() * 100) / 100;
-            double origPostLong = Math.round(loc.getLongitude() * 100) / 100;
-            origPostLocationText.setText("Latitude: " + Double.toString(origPostLat)
-                    + " Longitude: " + Double.toString(origPostLong));
+            DecimalFormat format = new DecimalFormat();
+            format.setRoundingMode(RoundingMode.HALF_EVEN);
+            format.setMinimumFractionDigits(0);
+            format.setMaximumFractionDigits(4);
+
+            origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
+                    + format.format(loc.getLongitude()));
         } else {
             origPostLocationText.setText("Error: No location found");
         }
@@ -385,10 +390,13 @@ public class ThreadViewAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_comment_locationText);
         GeoLocation repLocCom = reply.getLocation();
         if (repLocCom != null) {
-            double commentLat = Math.round(repLocCom.getLatitude() * 100) / 100;
-            double commentLong = Math.round(repLocCom.getLongitude() * 100) / 100;
-            replyLocationText.setText("Latitude: " + Double.toString(commentLat) + " Longitude: "
-                    + Double.toString(commentLong));
+            DecimalFormat format = new DecimalFormat();
+            format.setRoundingMode(RoundingMode.HALF_EVEN);
+            format.setMinimumFractionDigits(0);
+            format.setMaximumFractionDigits(4);
+
+            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude()) + " Longitude: "
+                    + format.format(repLocCom.getLongitude()));
         } else {
             replyLocationText.setText("Error: No location found");
         }
