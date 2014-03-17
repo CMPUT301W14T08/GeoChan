@@ -9,5 +9,11 @@
           android:icon="@drawable/ic_action_refresh"
           android:title="@string/action_refresh"
           android:showAsAction="ifRoom" />
+    
+    <item android:id="@+id/thead_sort"
+          android:icon="@drawable/ic_sort_methods"
+          android:title="@string/thread_sort"
+          android:showAsAction="ifRoom" />
+        
 
 </menu>
