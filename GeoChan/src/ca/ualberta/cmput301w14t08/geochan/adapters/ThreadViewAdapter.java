@@ -45,10 +45,17 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * inflates layouts for OP, top level comments and comment replies.
  */
 public class ThreadViewAdapter extends BaseAdapter {
-    private static final int TYPE_COMMENT = 0;
-    private static final int TYPE_OP = 1;
-    private static final int TYPE_SEPARATOR = 2;
-    private static final int TYPE_MAX_COUNT = 3;
+    private static final int TYPE_COMMENT0 = 0;
+    private static final int TYPE_COMMENT1 = 1;
+    private static final int TYPE_COMMENT2 = 2;
+    private static final int TYPE_COMMENT3 = 3;
+    private static final int TYPE_COMMENT4 = 4;
+    private static final int TYPE_COMMENT5 = 5;
+    private static final int TYPE_COMMENT6 = 6;
+    private static final int TYPE_COMMENT7 = 7;
+    private static final int TYPE_OP = 8;
+    private static final int TYPE_SEPARATOR = 9;
+    private static final int TYPE_MAX_COUNT = 10;
 
     private Context context;
     private ThreadComment thread;
@@ -140,7 +147,8 @@ public class ThreadViewAdapter extends BaseAdapter {
         } else if (position == 1) {
             type = TYPE_SEPARATOR;
         } else {
-            type = TYPE_COMMENT;
+            int depth = ((Comment) getItem(position)).getDepth();
+            type = depth;
         }
         return type;
     }
@@ -168,82 +176,92 @@ public class ThreadViewAdapter extends BaseAdapter {
             setOPFields(convertView);
             break;
 
-        case TYPE_COMMENT:
+        case TYPE_COMMENT0:
             final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                // This switch inflates the correct layout for comment's "depth"
-                // in the tree, where thread body comment is root.
-                switch (comment.getDepth()) {
-                case 0:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
-                    break;
-                case 1:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
-                    break;
-                case 2:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
-                    break;
-                case 3:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
-                    break;
-                case 4:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
-                    break;
-                case 5:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
-                    break;
-                case 6:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
-                    break;
-                case 7:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
-                    break;
-                default:
-                    convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
-                    break;
-                }
+                convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
             }
             setCommentFields(convertView, comment);
-
-            // Here handle button presses
-            final ImageButton replyButton = (ImageButton) convertView
-                    .findViewById(R.id.comment_reply_button);
-
-            final ImageButton starButton = (ImageButton) convertView
-                    .findViewById(R.id.comment_star_button);
-
-            if (starButton != null) {
-                starButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // Perform action on click
-                        Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                        //Add code here to save the comment/thread;
-                        
-                    }
-                });
+            listenForButtons(convertView, comment);
+            break;
+            
+        case TYPE_COMMENT1:
+            final Comment comment1 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
             }
-            // This if condition will be removed once every comment has its own
-            // reply button.
-            if (replyButton != null) {
-                replyButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // Perform action on click
-                        Log.e("ButtonClick", "click");
-                        Log.e("Comment being replied:", comment.getTextPost());
-                        Fragment fragment = new PostCommentFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("cmt", comment);
-                        fragment.setArguments(bundle);
-
-                        manager.beginTransaction()
-                                .replace(R.id.fragment_container, fragment, "repFrag")
-                                .addToBackStack(null).commit();
-                        manager.executePendingTransactions();
-                    }
-                });
+            setCommentFields(convertView, comment1);
+            listenForButtons(convertView, comment1);
+            break;
+            
+        case TYPE_COMMENT2:
+            final Comment comment2 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
             }
+            setCommentFields(convertView, comment2);
+            listenForButtons(convertView, comment2);
+            break;
+            
+        case TYPE_COMMENT3:
+            final Comment comment3 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
+            }
+            setCommentFields(convertView, comment3);
+            listenForButtons(convertView, comment3);
+            break;
+            
+        case TYPE_COMMENT4:
+            final Comment comment4 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
+            }
+            setCommentFields(convertView, comment4);
+            listenForButtons(convertView, comment4);
+            break;
+            
+        case TYPE_COMMENT5:
+            final Comment comment5 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
+            }
+            setCommentFields(convertView, comment5);
+            listenForButtons(convertView, comment5);
+            break;
+            
+        case TYPE_COMMENT6:
+            final Comment comment6 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
+            }
+            setCommentFields(convertView, comment6);
+            listenForButtons(convertView, comment6);
+            break;
+            
+        case TYPE_COMMENT7:
+            final Comment comment7 = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
+            }
+            setCommentFields(convertView, comment7);
+            listenForButtons(convertView, comment7);
             break;
 
         case TYPE_SEPARATOR:
@@ -258,6 +276,49 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
+    private void listenForButtons(View convertView, final Comment comment) {
+        // TODO Auto-generated method stub
+        // Here handle button presses
+        final ImageButton replyButton = (ImageButton) convertView
+                .findViewById(R.id.comment_reply_button);
+
+        final ImageButton starButton = (ImageButton) convertView
+                .findViewById(R.id.comment_star_button);
+
+        if (starButton != null) {
+            starButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
+                    //Add code here to save the comment/thread;
+                    
+                }
+            });
+        }
+        // This if condition will be removed once every comment has its own
+        // reply button.
+        if (replyButton != null) {
+            replyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    Log.e("ButtonClick", "click");
+                    Log.e("Comment being replied:", comment.getTextPost());
+                    Fragment fragment = new PostCommentFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("cmt", comment);
+                    fragment.setArguments(bundle);
+
+                    manager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "repFrag")
+                            .addToBackStack(null).commit();
+                    manager.executePendingTransactions();
+                }
+           
+            });
+        }
+    }
+    
 
     /**
      * This method sets all the required fields for the OP
@@ -324,3 +385,21 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 }
+
+/*
+ * //This switch inflates the correct layout for comment's "depth" // in the
+ * tree, where thread body comment is root. switch (comment.getDepth()) { case
+ * 0: convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
+ * break; case 1: convertView = inflater.inflate(R.layout.thread_view_comment_1,
+ * null); break; case 2: convertView =
+ * inflater.inflate(R.layout.thread_view_comment_2, null); break; case 3:
+ * convertView = inflater.inflate(R.layout.thread_view_comment_3, null); break;
+ * case 4: convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
+ * break; case 5: convertView = inflater.inflate(R.layout.thread_view_comment_5,
+ * null); break; case 6: convertView =
+ * inflater.inflate(R.layout.thread_view_comment_6, null); break; case 7:
+ * convertView = inflater.inflate(R.layout.thread_view_comment_7, null); break;
+ * default: convertView = inflater.inflate(R.layout.thread_view_comment_0,
+ * null); break; }
+ */
+
