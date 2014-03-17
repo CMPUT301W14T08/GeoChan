@@ -142,13 +142,13 @@ public class ElasticSearchClient {
             for (String hit : hits) {
                 comments.add(get(hit));
             }
-            /*for (Comment comment : comments) {
+            for (Comment comment : comments) {
                 comment.setParent(topComment);
                 ArrayList<Comment> children = getComments(comment);
                 if (children != null) { 
                     comment.setChildren(children);
                 }
-            }*/
+            }
         } catch (JSONException e) {
             Log.e("???", "WHAt the fuck.");
         } catch (Exception e) {
@@ -163,8 +163,9 @@ public class ElasticSearchClient {
         JestResult result = null;
         try {
             result = client.execute(get);
-            Type type = new TypeToken<Comment>() {}.getType();
-            return gson.fromJson(result.getJsonString(), type);
+            Type type = new TypeToken<ElasticSearchResponse<Comment>>() {}.getType();
+            ElasticSearchResponse<Comment> esResponse = gson.fromJson(result.getJsonString(), type);
+            return esResponse.getSource();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
