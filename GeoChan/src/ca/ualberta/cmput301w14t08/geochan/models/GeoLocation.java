@@ -114,7 +114,7 @@ public class GeoLocation {
 
     /**
      * Sets new longitude value. A new location object is created so that the
-     * LocationListnerService's lastKnownLocation attribute is not affected
+     * LocationListenerService's lastKnownLocation attribute is not affected
      * 
      * @param newLong
      */

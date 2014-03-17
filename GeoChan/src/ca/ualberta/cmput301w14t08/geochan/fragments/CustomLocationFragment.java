@@ -113,13 +113,21 @@ public class CustomLocationFragment extends Fragment {
      * @param v
      */
     public void submitNewLocationFromCoordinates(View v) {
-        if (latitudeEditText.getText().toString().equals("")
-                && longitudeEditText.getText().toString().equals("")) {
+        String latStr = latitudeEditText.getText().toString();
+        String longStr = longitudeEditText.getText().toString();
+        
+        if (latStr.equals("") && longStr.equals("")) {
             ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
-        } else {
-            Double customLat = Double.valueOf(latitudeEditText.getText().toString());
-            Double customLong = Double.valueOf(longitudeEditText.getText().toString());
-            GeoLocation geoLocation = new GeoLocation(customLat,customLong);
+        } 
+        else if (-90 > Double.valueOf(latStr) ||  90 < Double.valueOf(latStr) ||
+                -180 > Double.valueOf(longStr) || 180 < Double.valueOf(longStr)) {
+            ErrorDialog.show(getActivity(), "Latitude must be between -90 and 90 and" +
+            		"Longitude must be between -180 and 180");
+        }
+        else {
+            Double latVal = Double.valueOf(latStr);
+            Double longVal = Double.valueOf(longStr);
+            GeoLocation geoLocation = new GeoLocation(latVal,longVal);
             setBundleArguments(geoLocation);
             fm.popBackStackImmediate();
         }
@@ -159,5 +167,4 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
         }
     }
-
 }
