@@ -25,6 +25,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Picture;
+import android.graphics.RectF;
+import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -65,8 +71,25 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        Picture image = new Picture();
+        Picture thumbnail = new Picture();
         if (hasImage) {
-            // TODO: Implement decoding of images
+            /* 
+             * http://stackoverflow.com/questions/20594833/convert-byte-array-or-bitmap-to-picture
+             */
+            String encodedImage = object.get("image").getAsString();
+            byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            Canvas canvas = image.beginRecording(bitmap.getWidth(), bitmap.getHeight());
+            canvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), null);
+            image.endRecording();
+            
+            String encodedThumb = object.get("imageThumbnail").getAsString();
+            byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);
+            Bitmap thumbBitmap = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
+            Canvas thumbCanvas = thumbnail.beginRecording(thumbBitmap.getWidth(), thumbBitmap.getHeight());
+            thumbCanvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) thumbBitmap.getWidth(), (float) thumbBitmap.getHeight()), null);
+            thumbnail.endRecording();
         }
         GeoLocation location = new GeoLocation(latitude, longitude);
         final Comment c = new Comment(textPost, location);
@@ -74,10 +97,13 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         c.setUser(user);
         c.setHash(hash);
         c.setId(Long.parseLong(id));
+        if (hasImage) {
+            c.setImage(image);
+            c.setImageThumb(thumbnail);
+        }
         final ThreadComment comment = new ThreadComment(c, title);
         comment.setThreadDate(new Date(threadDate));
         comment.setId(Long.parseLong(id));
-        // TODO: Set image
         return comment;
     }
 
