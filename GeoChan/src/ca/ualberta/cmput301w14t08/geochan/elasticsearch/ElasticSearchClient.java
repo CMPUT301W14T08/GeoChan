@@ -207,17 +207,20 @@ public class ElasticSearchClient {
 
     /**
      * Posts a JSON string request to the ElasticSearch server
-     * @param json the JSON query string
-     * @param type the ElasticSearch type
-     * @param id the record ID
+     * 
+     * @param json
+     *            the JSON query string
+     * @param type
+     *            the ElasticSearch type
+     * @param id
+     *            the record ID
      * @return the network Thread (for monitoring purposes)
      */
     private Thread post(final String json, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
-                Index index = new Index.Builder(json).index(URL_INDEX).type(type)
-                        .id(id).build();
+                Index index = new Index.Builder(json).index(URL_INDEX).type(type).id(id).build();
                 try {
                     client.execute(index);
                 } catch (Exception e) {
@@ -232,16 +235,21 @@ public class ElasticSearchClient {
 
     /**
      * Updates a record on the ElasticSearch server
-     * @param query the JSON query string
-     * @param type the ElasticSearch type
-     * @param id the record ID
+     * 
+     * @param query
+     *            the JSON query string
+     * @param type
+     *            the ElasticSearch type
+     * @param id
+     *            the record ID
      * @return the network Thread (for monitoring purposes)
      */
     private Thread update(final String query, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
-                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id).build();
+                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id)
+                        .build();
                 try {
                     client.execute(update);
                 } catch (Exception e) {
