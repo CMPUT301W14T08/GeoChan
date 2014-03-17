@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 public class ConnectivityListenerService extends BroadcastReceiver {
 
@@ -20,9 +21,13 @@ public class ConnectivityListenerService extends BroadcastReceiver {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    /**
+     * called when BroacastReceiver receives an intent broadcast
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO -> Implement :)
+        Log.e("onReceive","Called");
     }
 
     /**

@@ -103,7 +103,6 @@ public class PostCommentFragment extends Fragment {
                 Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
-                // GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
