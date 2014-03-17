@@ -26,7 +26,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
 /**
  * Responsible for the UI fragment that allows the user to edit
@@ -41,7 +41,7 @@ public class PreferencesFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
-
+        
         username = (EditTextPreference) findPreference("username");
         username.setSummary(username.getText());
 
@@ -50,13 +50,12 @@ public class PreferencesFragment extends PreferenceFragment {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
                 hash.setSummary((String) newValue + " #"
-                        + UserHashManager.getHash((String) newValue));
+                        + HashHelper.getInstance().getHash((String) newValue));
                 return true;
             }
         });
 
         Preference hash = findPreference("device_hash");
-        UserHashManager manager = UserHashManager.getInstance();
-        hash.setSummary(username.getText() + " #" + manager.getHash());
+        hash.setSummary(username.getText() + " #" + HashHelper.getInstance().getHash(username.getText()));
     }
 }

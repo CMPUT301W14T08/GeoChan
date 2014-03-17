@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the
@@ -38,7 +38,6 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 public class ThreadComment {
     private Comment bodyComment;
     private String title;
-    private UserHashManager manager;
     private long id;
 
     /**
@@ -52,8 +51,7 @@ public class ThreadComment {
         super();
         this.bodyComment = bodyComment;
         this.setTitle(title);
-        this.manager = UserHashManager.getInstance();
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
     }
 
     /* This constructor is only used for testing. */
@@ -61,8 +59,7 @@ public class ThreadComment {
         super();
         this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
-        this.manager = UserHashManager.getInstance();
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getInstance().getCommentIdHash();
     }
 
     /**
