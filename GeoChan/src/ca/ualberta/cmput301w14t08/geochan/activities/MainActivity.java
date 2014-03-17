@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -90,16 +91,18 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return super.onOptionsItemSelected(item);
         }
     }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFragmentManager().addOnBackStackChangedListener(this);
+        checkActionBar();
+    }
 
     // Do not display the back arrow in threadListFragment
     @Override
     public void onBackStackChanged() {
-        int count = getFragmentManager().getBackStackEntryCount();
-        if (count > 0) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-        }
+        checkActionBar();
     }
 
     /**
@@ -169,6 +172,15 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
                 .findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
+    }
+    
+    public void checkActionBar() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 
 }
