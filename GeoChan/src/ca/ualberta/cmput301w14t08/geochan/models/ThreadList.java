@@ -122,4 +122,34 @@ public class ThreadList {
             break;
         }
     }
+    
+    /**
+     * Sorts a thread list according to the tag passed.
+     * This will be moved into its own class, this is temporary.
+     * @param threadList
+     *            Comment list to sort
+     * @param tag
+     *            Tag to sort comments by
+     */
+    public static void sortThreads(ArrayList<ThreadComment> threadList, int tag) {
+        switch (tag) {
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(threadList, SortTypes.sortThreadsByDateNewest());
+            break;
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(threadList, SortTypes.sortThreadsByDateOldest());
+            break;
+        case SortTypes.SORT_USER_SCORE_HIGHEST:
+            Collections.sort(threadList,
+                    SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
+            break;
+        case SortTypes.SORT_USER_SCORE_LOWEST:
+            Collections.sort(threadList,
+                    SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
+            break;
+        case SortTypes.SORT_LOCATION_MISC:
+            Collections.sort(threadList, SortTypes.sortThreadsByLocation(sortLoc));
+            break;
+        }
+    }
 }

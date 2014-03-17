@@ -20,6 +20,7 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -213,6 +214,39 @@ public class ThreadComment {
         case SortTypes.SORT_USER_SCORE_LOWEST:
             Collections.sort(this.getBodyComment().getChildren(),
                     SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
+            break;
+        }
+    }
+    
+    /**
+     * Sorts a thread's comments according to the tag passed.
+     * This will be moved into its own class, this is temporary.
+     * @param comments
+     *            Comment list to sort
+     * @param tag
+     *            Tag to sort comments by
+     */
+    public static void sortComments(ArrayList<Comment> comments, int tag) {
+        switch (tag) {
+        case SortTypes.SORT_DATE_NEWEST:
+            Collections.sort(comments,
+                    SortTypes.sortCommentsByDateNewest());
+            break;
+        case SortTypes.SORT_DATE_OLDEST:
+            Collections.sort(comments,
+                    SortTypes.sortCommentsByDateOldest());
+            break;
+        case SortTypes.SORT_LOCATION_OP:
+            Collections.sort(comments,
+                    SortTypes.sortCommentsByParentDistance());
+            break;
+        case SortTypes.SORT_SCORE_HIGHEST:
+            Collections.sort(comments,
+                    SortTypes.sortCommentsByParentScoreHighest());
+            break;
+        case SortTypes.SORT_SCORE_LOWEST:
+            Collections.sort(comments,
+                    SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }
