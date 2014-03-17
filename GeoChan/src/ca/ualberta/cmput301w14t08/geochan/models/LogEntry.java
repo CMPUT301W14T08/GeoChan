@@ -40,6 +40,10 @@ public class LogEntry {
         this.threadTitle = title;
         this.geoLocation = geoLocation;
     }
+    
+    /**
+     * Getters and Setters
+     */
 
     public String getThreadTitle() {
         return threadTitle;

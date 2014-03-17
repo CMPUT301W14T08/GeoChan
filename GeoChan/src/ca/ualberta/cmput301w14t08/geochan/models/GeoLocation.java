@@ -130,37 +130,21 @@ public class GeoLocation {
     }
 
     /**
-     * Returns the latitude of the GeoLocation.
-     * 
-     * @return Latitude of the GeoLocation.
+     * Getters and Setters
      */
+    
     public double getLatitude() {
         return location.getLatitude();
     }
 
-    /**
-     * Returns the longitude of the GeoLocation.
-     * 
-     * @return Longitude of the GeoLocation.
-     */
     public double getLongitude() {
         return location.getLongitude();
     }
 
-    /**
-     * gets Location
-     * 
-     * @return location
-     */
     public Location getLocation() {
         return location;
     }
 
-    /**
-     * Replaces the location attribute with a new supplied locatoin
-     * 
-     * @param location
-     */
     public void setLocation(Location location) {
         this.location = location;
     }

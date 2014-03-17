@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  * This model class handles all operations involved in logging used locations.
- * 
+ * Follows singleton design pattern.
  */
 public class GeoLocationLog {
 

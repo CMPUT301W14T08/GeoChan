@@ -58,6 +58,7 @@ public class CustomLocationFragment extends Fragment {
     private int postType;
     private FragmentManager fm;
 
+    // flags for type of post that initiated this fragment
     public static final int THREAD = 1;
     public static final int COMMENT = 2;
     public static final int REPLY = 3;
@@ -81,19 +82,22 @@ public class CustomLocationFragment extends Fragment {
         super.onStart();
         GeoLocationLog log = GeoLocationLog.getInstance();
         logArray = log.getLogEntries();
+        
         fm = getFragmentManager();
 
         latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
         longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
-        ;
+     
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setArgsForPreviousLocation((LogEntry) parent.getItemAtPosition(position));
+                LogEntry logEntry = (LogEntry) parent.getItemAtPosition(position);
+                setBundleArguments(logEntry.getGeoLocation());
                 fm.popBackStackImmediate();
             }
         });
+        
         customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
     }
@@ -113,50 +117,23 @@ public class CustomLocationFragment extends Fragment {
         fm.popBackStackImmediate();
     }
 
-    // the next 3 methods need to be re-factored together as there is
-    // significant overlap
-
     public void setArgsForCustomCoordinates() {
-        Bundle bundle = getArguments();
-        postType = bundle.getInt("postType");
-        if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-                    .findFragmentByTag("postThreadFrag");
-            Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
-            args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
-        } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                    .findFragmentByTag("repFrag");
-            Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", Double.valueOf(latitudeEditText.getText().toString()));
-            args.putDouble("LONGITUDE", Double.valueOf(longitudeEditText.getText().toString()));
-        }
-    }
-
-    public void setArgsForPreviousLocation(LogEntry clickedEntry) {
-        Bundle bundle = getArguments();
-        postType = bundle.getInt("postType");
-        if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-                    .findFragmentByTag("postThreadFrag");
-            Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
-            args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
-        } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                    .findFragmentByTag("repFrag");
-            Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", clickedEntry.getGeoLocation().getLatitude());
-            args.putDouble("LONGITUDE", clickedEntry.getGeoLocation().getLongitude());
-        }
+        Double customLat = Double.valueOf(latitudeEditText.getText().toString());
+        Double customLong = Double.valueOf(longitudeEditText.getText().toString());
+        GeoLocation geoLocation = new GeoLocation(customLat,customLong);
+        setBundleArguments(geoLocation);
     }
 
     public void resetToCurrentLocation() {
+        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        GeoLocation geoLocation = new GeoLocation(locationListenerService);
+        setBundleArguments(geoLocation);
+    }
+    
+    public void setBundleArguments(GeoLocation geoLocation) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
-        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
-        GeoLocation geoLocation = new GeoLocation(locationListenerService);
         if (postType == THREAD) {
             PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
                     .findFragmentByTag("postThreadFrag");
