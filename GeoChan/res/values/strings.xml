@@ -19,7 +19,7 @@
     <string name="device_hash"/>
     <string name="attach_image">Attach Image</string>
     <string name="post">Post</string>
-    <string name="location">Location: Current Location</string>
+    <string name="location">Current Location</string>
     <string name="placeholder_location">location text</string>
     <string name="thread_view_op_reply">Reply to OP</string>
     <string name="op_replyingTo">Replying to:</string>

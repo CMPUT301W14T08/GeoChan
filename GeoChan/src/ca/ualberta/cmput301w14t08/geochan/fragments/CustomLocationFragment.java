@@ -115,14 +115,14 @@ public class CustomLocationFragment extends Fragment {
     public void submitNewLocationFromCoordinates(View v) {
         String latStr = latitudeEditText.getText().toString();
         String longStr = longitudeEditText.getText().toString();
-        
+
         if (latStr.equals("") && longStr.equals("")) {
             ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
         } 
         else if (-90 > Double.valueOf(latStr) ||  90 < Double.valueOf(latStr) ||
                 -180 > Double.valueOf(longStr) || 180 < Double.valueOf(longStr)) {
-            ErrorDialog.show(getActivity(), "Latitude must be between -90 and 90 and" +
-            		"Longitude must be between -180 and 180");
+            ErrorDialog.show(getActivity(), "Latitude must be between -90 and 90, " +
+                    "Longitude must be between -180 and 180");
         }
         else {
             Double latVal = Double.valueOf(latStr);
@@ -141,7 +141,11 @@ public class CustomLocationFragment extends Fragment {
         LocationListenerService listener = new LocationListenerService(getActivity());
         listener.startListening();
         GeoLocation geoLocation = new GeoLocation(listener);
-        setBundleArguments(geoLocation, "CURRENT_LOCATION");
+        if (geoLocation.getLocation() == null) {
+            ErrorDialog.show(getActivity(), "Could not obtain location");
+        } else {
+            setBundleArguments(geoLocation, "CURRENT_LOCATION");
+        }
         fm.popBackStackImmediate();
     }
 
