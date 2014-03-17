@@ -138,22 +138,8 @@ public class CustomLocationFragment extends Fragment {
      * @param v
      */
     public void submitCurrentLocation(View v) {
-        resetToCurrentLocation();
-        fm.popBackStackImmediate();
-    }
-
-    
-    public void setArgsForCustomCoordinates() {
-        Double customLat = Double.valueOf(latitudeEditText.getText().toString());
-        Double customLong = Double.valueOf(longitudeEditText.getText().toString());
-        GeoLocation geoLocation = new GeoLocation(customLat, customLong);
-        setBundleArguments(geoLocation);
-    }
-
-    public void resetToCurrentLocation() {
-        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-        GeoLocation geoLocation = new GeoLocation(locationListenerService);
+        LocationListenerService listener = new LocationListenerService(getActivity());
+        GeoLocation geoLocation = new GeoLocation(listener);
         setBundleArguments(geoLocation);
         fm.popBackStackImmediate();
     }
