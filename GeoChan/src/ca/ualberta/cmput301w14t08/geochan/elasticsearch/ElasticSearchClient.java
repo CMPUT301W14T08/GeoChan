@@ -119,11 +119,11 @@ public class ElasticSearchClient {
     }
 
     /**
-     * Returns the total number of Comments on the server
+     * Returns the total number of Comments under a parent comment on the server
      * 
      * @return number of Comments
      */
-    public int getCommentCount() {
+    public int getCommentCount(Comment parent) {
         return count(TYPE_COMMENT);
     }
 
@@ -189,7 +189,7 @@ public class ElasticSearchClient {
      *            the id
      * @return the Comment
      */
-    private Comment get(final String id) {
+    public Comment get(final String id) {
         Get get = new Get.Builder(URL_INDEX, id).type(TYPE_COMMENT).build();
         JestResult result = null;
         try {
@@ -216,7 +216,7 @@ public class ElasticSearchClient {
      *            the record ID
      * @return the network Thread (for monitoring purposes)
      */
-    private Thread post(final String json, final String type, final String id) {
+    public Thread post(final String json, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -244,7 +244,7 @@ public class ElasticSearchClient {
      *            the record ID
      * @return the network Thread (for monitoring purposes)
      */
-    private Thread update(final String query, final String type, final String id) {
+    public Thread update(final String query, final String type, final String id) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -269,7 +269,7 @@ public class ElasticSearchClient {
      *            the ElasticSearch type
      * @return the count
      */
-    private int count(final String type) {
+    public int count(final String type) {
         Count count = new Count.Builder().addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
@@ -295,7 +295,7 @@ public class ElasticSearchClient {
      *            the ElasticSearch type
      * @return the JSON result string
      */
-    private String searchAll(final String query, final String type) {
+    public String searchAll(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
         JestResult result = null;
         try {
