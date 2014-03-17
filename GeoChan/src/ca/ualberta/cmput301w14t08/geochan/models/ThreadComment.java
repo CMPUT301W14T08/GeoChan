@@ -215,6 +215,10 @@ public class ThreadComment {
             Collections.sort(this.getBodyComment().getChildren(),
                     SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
             break;
+        case SortTypes.SORT_IMAGE:
+            Collections.sort(this.getBodyComment().getChildren(),
+                    SortTypes.sortCommentsByImage());
+            break;
         }
     }
     

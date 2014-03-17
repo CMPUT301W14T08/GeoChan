@@ -40,6 +40,36 @@ public class SortTypes {
     public static final int SORT_USER_SCORE_HIGHEST = 5;
     public static final int SORT_USER_SCORE_LOWEST = 6;
     public static final int SORT_LOCATION_MISC = 7;
+    public static final int SORT_IMAGE = 8;
+    
+    /**
+     * Comparator for pushing comments with images to the top.
+     * Uses comment date to break ties if both comments have images,
+     * or do not have images.
+     * @return
+     */
+    public static Comparator<Comment> sortCommentsByImage(){
+        return new Comparator<Comment>(){
+            public int compare(Comment c1, Comment c2){
+                if(c1.hasImage() && !(c2.hasImage())){
+                    return -1;
+                } else if (!(c1.hasImage()) && c2.hasImage()){
+                    return 1;
+                } else if(c1.hasImage() == c2.hasImage()){
+                    int val = c1.getCommentDate().compareTo(c2.getCommentDate());
+                    if (val < 0){
+                        return -1;
+                    } else if (val > 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
 
     /**
      * Comparator for pushing old comments in a thread to the top.
