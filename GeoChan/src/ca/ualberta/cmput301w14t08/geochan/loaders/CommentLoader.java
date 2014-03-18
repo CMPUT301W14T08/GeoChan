@@ -62,8 +62,15 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
             list = new ArrayList<Comment>();
         }
         ArrayList<Comment> result = client.getComments(thread.getBodyComment());
-        ThreadComment.sortComments(result, manager.getCommentSort());
+        sort(result);
         return result;
+    }
+    
+    public void sort(ArrayList<Comment> list) {
+        ThreadComment.sortComments(list, manager.getCommentSort());
+        for (Comment comment : list) {
+            sort(comment.getChildren());
+        }
     }
 
     @Override
