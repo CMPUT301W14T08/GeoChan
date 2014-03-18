@@ -36,8 +36,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -122,6 +122,12 @@ public class PostCommentFragment extends Fragment {
                     InputMethodManager.HIDE_NOT_ALWAYS);*/
             
             this.getFragmentManager().popBackStackImmediate();
+        }
+    }
+    
+    public void attachImage(View v) {
+        if (v.getId() == R.id.attach_image_button) {
+            
         }
     }
 

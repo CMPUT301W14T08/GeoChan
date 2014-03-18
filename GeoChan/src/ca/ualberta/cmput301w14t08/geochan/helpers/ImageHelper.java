@@ -22,6 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import java.io.File;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,23 +33,24 @@ import android.provider.MediaStore;
 
 public class ImageHelper {
     
-    private Context context;
+    private Activity activity;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri fileUri;
     
-    public ImageHelper(Context context) {
-        this.context = context;  ;
+    public ImageHelper(Activity activity) {
+        this.activity = activity;  ;
     }
 
     public void captureImage() {
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity.getApplicationContext());
         myAlertDialog.setTitle("Upload Pictures");
         myAlertDialog.setMessage("How do you want to set your picture?");
 
         myAlertDialog.setPositiveButton("Gallery",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
+                        
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         
                         String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/geochan";
@@ -61,7 +63,12 @@ public class ImageHelper {
                         fileUri = Uri.fromFile(imageFile);
                         
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-                        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                        activity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                        
+                        //Add new picture to android gallery
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        mediaScanIntent.setData(fileUri);
+                        activity.sendBroadcast(mediaScanIntent);
 
                     }
                 });
@@ -76,6 +83,5 @@ public class ImageHelper {
         myAlertDialog.show();
     }
 
-    }
     
 }
