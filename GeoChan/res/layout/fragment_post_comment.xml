@@ -72,6 +72,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:text="@string/attach_image"
+            android:onClick="attachImage"
             android:textSize="12sp" />
 
         <Button
@@ -84,5 +85,14 @@
             android:text="@string/post"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/commentBody"
+        android:src="@drawable/ic_action_chat"
+        android:contentDescription="@string/image_desc"/>
 
 </RelativeLayout>

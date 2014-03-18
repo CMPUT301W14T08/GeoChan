@@ -22,46 +22,63 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import java.io.File;
 
+import ca.ualberta.cmput301w14t08.geochan.R;
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Picture;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 public class ImageHelper {
     
     private Activity activity;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
+    private static final int SELECT_PICTURE = 1;
     private Uri fileUri;
+
     
     public ImageHelper(Activity activity) {
         this.activity = activity;  ;
+        
     }
 
     public void captureImage() {
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity.getApplicationContext());
-        myAlertDialog.setTitle("Upload Pictures");
-        myAlertDialog.setMessage("How do you want to set your picture?");
+       
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
+        myAlertDialog.setTitle(R.string.attach_image_title);
+        myAlertDialog.setMessage(R.string.attach_image_dialog);
 
         myAlertDialog.setPositiveButton("Gallery",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        fileUri = getImageUri();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+                        activity.startActivityForResult(intent, SELECT_PICTURE);
+                        
+                        //Add new picture to android gallery
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        mediaScanIntent.setData(fileUri);
+                        activity.sendBroadcast(mediaScanIntent);
+                    }
+                });
+
+        myAlertDialog.setNegativeButton("Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        
-                        String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/geochan";
-                        File folderF = new File(folder);
-                        if (!folderF.exists()) {
-                            folderF.mkdir();
-                        }
-                        String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
-                        File imageFile = new File(imageFilePath);
-                        fileUri = Uri.fromFile(imageFile);
-                        
+                        fileUri = getImageUri();
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
                         activity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                         
@@ -72,16 +89,21 @@ public class ImageHelper {
 
                     }
                 });
-
-        myAlertDialog.setNegativeButton("Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        
-
-                    }
-                });
         myAlertDialog.show();
+      
     }
+   
 
+    private Uri getImageUri() {
+        String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/GeoChan";
+        File folderF = new File(folder);
+        if (!folderF.exists()) {
+            folderF.mkdir();
+        }
+        String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        File imageFile = new File(imageFilePath);
+        return Uri.fromFile(imageFile);
+    }
+    
     
 }

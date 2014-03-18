@@ -21,7 +21,10 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Picture;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
@@ -33,9 +36,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -53,6 +58,10 @@ public class PostCommentFragment extends Fragment {
     private ThreadComment thread;
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
+    private ImageHelper imageHelper;
+    private Picture picture;
+    private Picture thumb;
+    private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,9 +86,12 @@ public class PostCommentFragment extends Fragment {
         bodyView.setMovementMethod(new ScrollingMovementMethod());
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
+        imageView = (ImageView) getActivity().findViewById(R.id.imageView);
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
+        imageHelper = new ImageHelper(getActivity());
+        
     }
 
     @Override
@@ -127,9 +139,22 @@ public class PostCommentFragment extends Fragment {
     
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
-            
+            imageHelper.captureImage();
+            //picture = imageHelper.getPicture();
+            //thumb = imageHelper.getThumbnail();
         }
     }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //if (resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            Log.d("imagehelper","Image set successfully");
+        //}
+    }
+    
 
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager

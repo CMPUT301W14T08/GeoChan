@@ -73,5 +73,14 @@
             android:text="@string/post"
             android:textSize="12sp" />
     </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/replyBody"
+        android:src="@drawable/ic_action_chat"
+        android:contentDescription="@string/image_desc"/>
 
 </RelativeLayout>
