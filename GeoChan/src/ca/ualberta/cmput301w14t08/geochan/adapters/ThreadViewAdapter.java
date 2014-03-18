@@ -55,9 +55,10 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT5 = 5;
     private static final int TYPE_COMMENT6 = 6;
     private static final int TYPE_COMMENT7 = 7;
+    private static final int TYPE_COMMENTMAX = 10;
     private static final int TYPE_OP = 8;
     private static final int TYPE_SEPARATOR = 9;
-    private static final int TYPE_MAX_COUNT = 10;
+    private static final int TYPE_MAX_COUNT = 11;
 
     private Context context;
     private ThreadComment thread;
@@ -150,7 +151,11 @@ public class ThreadViewAdapter extends BaseAdapter {
             type = TYPE_SEPARATOR;
         } else {
             int depth = ((Comment) getItem(position)).getDepth();
-            type = depth;
+            if(depth <= 7) {
+                type = depth;
+            } else {
+                type = TYPE_COMMENTMAX;
+            }
         }
         return type;
     }
@@ -287,6 +292,20 @@ public class ThreadViewAdapter extends BaseAdapter {
             TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
             numComments.setText(Integer.toString(getCount() - 2) + " Comments:");
             break;
+            
+        case TYPE_COMMENTMAX:
+            final Comment commentMax = (Comment) getItem(position);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.thread_view_comment_max, null);
+            }
+            setCommentFields(convertView, commentMax);
+            TextView depthMeter = (TextView) convertView.findViewById(R.id.thread_view_comment_depth_meter);
+            depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth()-7));
+            listenForButtons(convertView, commentMax);
+            break;
+
         }
         return convertView;
     }
@@ -299,12 +318,6 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
-        
-        replyButton.setScaleX((float) 0.6);
-        replyButton.setScaleY((float) 0.6);
-        starButton.setScaleX((float) 0.6);
-        starButton.setScaleY((float) 0.6);
-        starButton.setX(starButton.getX() + 35);
         
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {

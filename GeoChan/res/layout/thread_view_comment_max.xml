@@ -3,13 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    
+    <TextView
+        android:id="@+id/thread_view_comment_depth_meter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/imageView7"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#FF0000"
+        android:textStyle="italic"
+        android:text="Max depth + 2" />
+    
     <TextView
         android:id="@+id/thread_view_comment_commentBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/imageView2"
-        android:paddingRight="5dp"
+        android:layout_below="@+id/thread_view_comment_depth_meter"
+        android:layout_toRightOf="@+id/imageView7"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="@string/lorem_ipsum" />
 
     <ImageView
@@ -30,17 +43,57 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView1"
         android:contentDescription="@+id/imageView2"
-        android:src="@drawable/rect2" />
-
-    <TextView
-        android:id="@+id/thread_view_comment_commentBy"
-        android:layout_width="wrap_content"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_view_comment_commentBody"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView2"
-        android:text="@string/placeholder_postby"
-        android:paddingLeft="5dp"
-        android:textColor="#00f" />
+        android:contentDescription="@+id/imageView3"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="7dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView3"
+        android:contentDescription="@+id/imageView4"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="7dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView4"
+        android:contentDescription="@+id/imageView5"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="7dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView5"
+        android:contentDescription="@+id/imageView6"
+        android:src="@drawable/rect" />
+    
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="7dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView6"
+        android:contentDescription="@+id/imageView7"
+        android:src="@drawable/rect_max" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentDate"
@@ -61,7 +114,17 @@
         android:text="@string/placeholder_location"
         android:paddingLeft="5dp"
         android:textColor="#2E8B57" />
-    
+
+    <TextView
+        android:id="@+id/thread_view_comment_commentBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/thread_view_comment_commentBody"
+        android:layout_below="@+id/thread_view_comment_commentBody"
+        android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
+        android:textColor="#00f" />
+
     <ImageButton
         android:id="@+id/comment_star_button"
         android:layout_width="wrap_content"
