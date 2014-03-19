@@ -22,6 +22,10 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
+
 /**
  * This model class handles all operations involved in logging used locations.
  * Follows singleton design pattern.
@@ -29,13 +33,16 @@ import java.util.ArrayList;
 public class GeoLocationLog {
 
     private static GeoLocationLog instance = null;
+    private Context context;
     private ArrayList<LogEntry> entries;
 
     /**
      * Protected constructor. Is called only if singleton has not been constructed.
      */
-    protected GeoLocationLog() {
-        entries = new ArrayList<LogEntry>();
+    protected GeoLocationLog(Context context) {
+        this.context = context;
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        this.entries = manager.deserializeLog();
     }
 
     
@@ -44,9 +51,9 @@ public class GeoLocationLog {
      * Else construct a new one
      * @return instance
      */
-    public static GeoLocationLog getInstance() {
+    public static GeoLocationLog getInstance(Context context) {
         if (instance == null) {
-            instance = new GeoLocationLog();
+            instance = new GeoLocationLog(context);
         }
         return instance;
     }
@@ -61,6 +68,9 @@ public class GeoLocationLog {
     public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
         LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
         entries.add(logEntry);
+        Log.e("Log add", "22");
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        manager.serializeLog(entries);
     }
 
     /**
@@ -68,6 +78,8 @@ public class GeoLocationLog {
      * @return entries
      */
     public ArrayList<LogEntry> getLogEntries() {
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        entries = manager.deserializeLog();
         return entries;
     }
 

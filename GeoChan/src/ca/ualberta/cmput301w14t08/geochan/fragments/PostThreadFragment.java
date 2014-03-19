@@ -113,7 +113,7 @@ public class PostThreadFragment extends Fragment {
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                     // log the thread and the geolocation
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(title, geoLocation);
                     Log.e("size of locLog:",
                             Integer.toString(geoLocationLog.getLogEntries().size()));

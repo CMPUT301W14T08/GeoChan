@@ -48,6 +48,7 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         
         int count = 0;
         for(ThreadComment t : favLog.getThreads()) {
+            ++count;
             assertTrue("Comment text must match", t.getBodyComment().getTextPost() == commentText);
             assertTrue("Thread title must match", t.getTitle() == threadText);
         }
