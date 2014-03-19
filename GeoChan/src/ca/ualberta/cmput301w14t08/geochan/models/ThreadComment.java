@@ -20,15 +20,12 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the
@@ -40,13 +37,6 @@ public class ThreadComment {
     private Comment bodyComment;
     private String title;
     private long id;
-
-    /**
-     * A location used for our comment sorting methods. Should be set by the
-     * fragment whenever the user decides to sort comments in a thread by
-     * relevance or location.
-     */
-    private GeoLocation sortLoc;
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
@@ -99,13 +89,6 @@ public class ThreadComment {
         this.title = title;
     }
 
-    public void setSortLoc(GeoLocation g) {
-        this.sortLoc = g;
-    }
-
-    public GeoLocation getSortLoc() {
-        return this.sortLoc;
-    }
 
     public void addComment(Comment c) {
         this.bodyComment.addChild(c);

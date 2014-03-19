@@ -3,11 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.graphics.Picture;
-import android.location.Location;
-import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
@@ -68,17 +64,14 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     public void testGetScoreFromUser(){
         ThreadComment t1 = new ThreadComment();
         ThreadComment t2 = new ThreadComment();
+        GeoLocation g = new GeoLocation(0,0);
         
         t1.getBodyComment().getLocation().setCoordinates(0,0);
         t2.getBodyComment().getLocation().setCoordinates(5, 5);
         
-        t1.setSortLoc(new GeoLocation(0,0));
-        t2.setSortLoc(new GeoLocation(0,0));
-        
         assertTrue("Scores calculated relatively correctly.",
-                    t1.getScoreFromUser(t1.getSortLoc()) >
-                    t2.getScoreFromUser(t2.getSortLoc()));
-        
+                    t1.getScoreFromUser(g) >
+                    t2.getScoreFromUser(g)); 
     }
     
     public void testSortByDateNewest(){

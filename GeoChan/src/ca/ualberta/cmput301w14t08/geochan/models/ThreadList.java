@@ -21,9 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
-import java.util.Collections;
-
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * Utility class that stores and manages an arraylist of ThreadComment objects.
