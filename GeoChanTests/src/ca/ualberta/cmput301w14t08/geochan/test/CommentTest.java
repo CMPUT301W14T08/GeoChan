@@ -380,6 +380,66 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
     
+    public void testSortByImage(){
+        long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(new Date(currentDate.getTime() - 1*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() - 2*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() - 3*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() - 4*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() - 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() - 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() - 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() - 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() - 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() - 10*extraTime));
+        
+        c10.setImage(new Picture());
+        c8.setImage(new Picture());
+        c5.setImage(new Picture());
+        c3.setImage(new Picture());
+        
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
+        
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_IMAGE, carrier, new GeoLocation(0,0));
+        
+        assertTrue("c5 at index 0", carrier.get(0) == c5);
+        assertTrue("c3 at index 1", carrier.get(1) == c3);
+        assertTrue("c4 at index 2", carrier.get(2) == c4);
+        assertTrue("c2 at index 3", carrier.get(3) == c2);
+        assertTrue("c1 at index 4", carrier.get(4) == c1);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c10);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c9);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c8);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
+    }
+    
     /**
      * Tests the calculation of comment scores in relation to their parent.
      */
