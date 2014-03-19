@@ -23,7 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * Utility class that stores and manages an arraylist of ThreadComment objects.
@@ -92,36 +92,6 @@ public class ThreadList {
     public static void clearThreads() {
         threads.clear();
     }
-
-    /**
-     * Sorts threads according to the tag passed. "DATE_NEWEST" pushes the most
-     * recent threads to the top. "DATE_OLDEST" pushes the oldest threads to the
-     * top.
-     * 
-     * @param tag
-     *            Sets the sorting method to use
-     */
-    public static void sortThreads(int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(threads, SortTypes.sortThreadsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(threads, SortTypes.sortThreadsByDateOldest());
-            break;
-        case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(threads,
-                    SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
-            break;
-        case SortTypes.SORT_USER_SCORE_LOWEST:
-            Collections.sort(threads,
-                    SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
-            break;
-        case SortTypes.SORT_LOCATION_MISC:
-            Collections.sort(threads, SortTypes.sortThreadsByLocation(sortLoc));
-            break;
-        }
-    }
     
     /**
      * Sorts a thread list according to the tag passed.
@@ -131,25 +101,5 @@ public class ThreadList {
      * @param tag
      *            Tag to sort comments by
      */
-    public static void sortThreads(ArrayList<ThreadComment> threadList, int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(threadList, SortTypes.sortThreadsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(threadList, SortTypes.sortThreadsByDateOldest());
-            break;
-        case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(threadList,
-                    SortTypes.sortThreadsByUserScoreHighest(ThreadList.getSortLoc()));
-            break;
-        case SortTypes.SORT_USER_SCORE_LOWEST:
-            Collections.sort(threadList,
-                    SortTypes.sortThreadsByUserScoreLowest(ThreadList.getSortLoc()));
-            break;
-        case SortTypes.SORT_LOCATION_MISC:
-            Collections.sort(threadList, SortTypes.sortThreadsByLocation(sortLoc));
-            break;
-        }
-    }
+
 }

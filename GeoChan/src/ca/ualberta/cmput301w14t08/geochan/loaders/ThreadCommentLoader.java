@@ -60,7 +60,9 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
             list = new ArrayList<ThreadComment>();
         }
         ArrayList<ThreadComment> result = client.getThreads();
-        ThreadList.sortThreads(result, manager.getThreadSort());
+        //ThreadList.sortThreads(result, manager.getThreadSort());
+        //Need to resolve this by figuring out the sortLoc.
+        //SortUtil.sortThreads(manager.getThreadSort(),result, sortLoc);
         return result;
     }
 

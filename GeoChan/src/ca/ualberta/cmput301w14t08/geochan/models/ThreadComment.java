@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the
@@ -175,83 +175,4 @@ public class ThreadComment {
         }
     }
 
-    /**
-     * Sorts thread comments according to the tag passed.
-     * 
-     * @param tag
-     *            Tag to sort comments by
-     */
-    public void sortComments(int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByDateOldest());
-            break;
-        case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByParentDistance());
-            break;
-        case SortTypes.SORT_LOCATION_MISC:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByLocationDistance(getSortLoc()));
-            break;
-        case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByParentScoreHighest());
-            break;
-        case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByParentScoreLowest());
-            break;
-        case SortTypes.SORT_USER_SCORE_HIGHEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByUserScoreHighest(getSortLoc()));
-            break;
-        case SortTypes.SORT_USER_SCORE_LOWEST:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
-            break;
-        case SortTypes.SORT_IMAGE:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByImage());
-            break;
-        }
-    }
-    
-    /**
-     * Sorts a thread's comments according to the tag passed.
-     * This will be moved into its own class, this is temporary.
-     * @param comments
-     *            Comment list to sort
-     * @param tag
-     *            Tag to sort comments by
-     */
-    public static void sortComments(ArrayList<Comment> comments, int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByDateOldest());
-            break;
-        case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentDistance());
-            break;
-        case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentScoreHighest());
-            break;
-        case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentScoreLowest());
-            break;
-        }
-    }
 }

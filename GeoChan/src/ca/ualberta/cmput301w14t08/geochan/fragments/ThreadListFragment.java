@@ -43,7 +43,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -110,8 +110,10 @@ public class ThreadListFragment extends Fragment implements
             }
         });
         SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
-        ThreadList.sortThreads(sort);
+        int sort = pref.getInt("sortThreads", SortUtil.SORT_DATE_NEWEST);
+        //ThreadList.sortThreads(sort);
+        //Will need to figure out sortLoc here somehow.
+        //SortUtil.sortThreads(sort, ThreadList.getThreads(), sortLoc);
         adapter.notifyDataSetChanged();
     }
 

@@ -33,7 +33,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
@@ -240,32 +240,6 @@ public class Comment implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    /**
-     * Sorts child comments according to the tag passed.
-     * 
-     * @param tag
-     *            Tag to sort comments by
-     */
-    public void sortChildren(int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateOldest());
-            break;
-        case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentDistance());
-            break;
-        case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreHighest());
-            break;
-        case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreLowest());
-            break;
-        }
     }
 
     /**
