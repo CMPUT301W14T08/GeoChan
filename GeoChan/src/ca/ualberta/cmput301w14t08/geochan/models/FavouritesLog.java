@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
@@ -10,19 +11,21 @@ import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
  */
 public class FavouritesLog {
     private static FavouritesLog instance = null;
+    private Context context;
     private FavouritesIOManager manager;
     private ArrayList<ThreadComment> threads;
     private ArrayList<Comment> comments;
 
-    private FavouritesLog() {
+    private FavouritesLog(Context context) {
         threads = new ArrayList<ThreadComment>();
         comments = new ArrayList<Comment>();
-        manager = FavouritesIOManager.getInstance();
+        this.context = context;
+        manager = FavouritesIOManager.getInstance(context);
     }
 
-    public static FavouritesLog getInstance() {
+    public static FavouritesLog getInstance(Context context) {
         if (instance == null) {
-            instance = new FavouritesLog();
+            instance = new FavouritesLog(context);
         }
         return instance;
     }
