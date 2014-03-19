@@ -329,7 +329,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                    FavouritesLog log = FavouritesLog.getInstance();
+                    FavouritesLog log = FavouritesLog.getInstance(context);
                     log.addComment(comment);
                 }
             });
