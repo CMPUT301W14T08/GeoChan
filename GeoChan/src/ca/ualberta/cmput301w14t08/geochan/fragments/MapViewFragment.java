@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 
 import android.app.Fragment;
@@ -36,7 +37,10 @@ public class MapViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
+        openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
+        openMapView.setMultiTouchControls(true);
+        
         mapController = openMapView.getController();
         mapController.setZoom(4);
     }
