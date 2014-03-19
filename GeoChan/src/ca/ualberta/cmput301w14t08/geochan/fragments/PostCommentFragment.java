@@ -84,12 +84,10 @@ public class PostCommentFragment extends Fragment {
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
-        Log.e("OnStart", thread.getTitle());
     }
 
     @Override
     public void onResume() {
-        Log.e("OnResume", thread.getTitle());
         super.onResume();
         Bundle args = getArguments();
         if (args != null) {
@@ -130,7 +128,6 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
-                Log.e("WAAF", thread.getTitle());
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
 
