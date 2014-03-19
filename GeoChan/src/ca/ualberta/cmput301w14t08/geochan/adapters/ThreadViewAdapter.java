@@ -39,6 +39,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -151,7 +152,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             type = TYPE_SEPARATOR;
         } else {
             int depth = ((Comment) getItem(position)).getDepth();
-            if(depth <= 7) {
+            if (depth <= 7) {
                 type = depth;
             } else {
                 type = TYPE_COMMENTMAX;
@@ -292,7 +293,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
             numComments.setText(Integer.toString(getCount() - 2) + " Comments:");
             break;
-            
+
         case TYPE_COMMENTMAX:
             final Comment commentMax = (Comment) getItem(position);
             if (convertView == null) {
@@ -301,8 +302,9 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_max, null);
             }
             setCommentFields(convertView, commentMax);
-            TextView depthMeter = (TextView) convertView.findViewById(R.id.thread_view_comment_depth_meter);
-            depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth()-7));
+            TextView depthMeter = (TextView) convertView
+                    .findViewById(R.id.thread_view_comment_depth_meter);
+            depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
             listenForButtons(convertView, commentMax);
             break;
 
@@ -318,17 +320,17 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
-        
+
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    // Perform action on click
                     Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                    // Add code here to save the comment/thread;
-
+                    FavouritesLog log = FavouritesLog.getInstance();
+                    log.addComment(comment);
                 }
             });
         }
+
         if (replyButton != null) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -379,8 +381,8 @@ public class ThreadViewAdapter extends BaseAdapter {
             format.setMinimumFractionDigits(0);
             format.setMaximumFractionDigits(4);
 
-            origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
-                    + format.format(loc.getLongitude()));
+            origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
+                    + " Longitude: " + format.format(loc.getLongitude()));
         } else {
             origPostLocationText.setText("Error: No location found");
         }
@@ -414,8 +416,8 @@ public class ThreadViewAdapter extends BaseAdapter {
             format.setMinimumFractionDigits(0);
             format.setMaximumFractionDigits(4);
 
-            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude()) + " Longitude: "
-                    + format.format(repLocCom.getLongitude()));
+            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
+                    + " Longitude: " + format.format(repLocCom.getLongitude()));
         } else {
             replyLocationText.setText("Error: No location found");
         }
