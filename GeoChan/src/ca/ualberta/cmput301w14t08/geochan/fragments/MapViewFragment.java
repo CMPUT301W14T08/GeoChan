@@ -34,6 +34,7 @@ public class MapViewFragment extends Fragment {
     
     @Override 
     public void onStart() {
+        super.onStart();
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
         openMapView.setBuiltInZoomControls(true);
         mapController = openMapView.getController();

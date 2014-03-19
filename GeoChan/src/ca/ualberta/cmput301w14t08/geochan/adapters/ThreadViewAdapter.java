@@ -37,6 +37,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
@@ -320,6 +321,9 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
+        
+        final ImageButton mapButton = (ImageButton) convertView
+                .findViewById(R.id.thread_map_button);
 
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
@@ -327,6 +331,16 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
                     FavouritesLog log = FavouritesLog.getInstance();
                     log.addComment(comment);
+                }
+            });
+        }
+        
+        if (mapButton != null) {
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Fragment fragment = new MapViewFragment();
+                    manager.beginTransaction().replace(R.id.fragment_container, fragment, "mapFrag").addToBackStack(null).commit();
+                    manager.executePendingTransactions();
                 }
             });
         }
