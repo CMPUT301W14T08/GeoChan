@@ -63,15 +63,17 @@ public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_MAX_COUNT = 11;
 
     private Context context;
+    private int id;
     private ThreadComment thread;
     private ArrayList<Comment> comments;
     private FragmentManager manager;
 
-    public ThreadViewAdapter(Context context, ThreadComment thread, FragmentManager manager) {
+    public ThreadViewAdapter(Context context, ThreadComment thread, FragmentManager manager, int id) {
         super();
         this.context = context;
         this.thread = thread;
         this.manager = manager;
+        this.id = id;
         this.comments = new ArrayList<Comment>();
         buildAList(thread.getBodyComment());
     }
@@ -354,6 +356,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Fragment fragment = new PostCommentFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("cmt", comment);
+                    bundle.putLong("id", id);
                     fragment.setArguments(bundle);
 
                     manager.beginTransaction()

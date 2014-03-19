@@ -23,7 +23,6 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
 
 /**
@@ -68,7 +67,6 @@ public class GeoLocationLog {
     public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
         LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
         entries.add(logEntry);
-        Log.e("Log add", "22");
         GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
         manager.serializeLog(entries);
     }

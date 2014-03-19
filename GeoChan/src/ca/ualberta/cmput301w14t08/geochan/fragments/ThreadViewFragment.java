@@ -46,6 +46,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private ListView threadView;
     private ThreadViewAdapter adapter;
+    private int threadIndex;
     private ThreadComment thread = null;
 
     @Override
@@ -59,8 +60,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        final int id = (int) bundle.getLong("id");
-        thread = ThreadList.getThreads().get(id);
+        threadIndex = (int) bundle.getLong("id");
+        //final int id = (int) bundle.getLong("id");
+        thread = ThreadList.getThreads().get(threadIndex);
         getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 
@@ -80,7 +82,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         final int id = (int) bundle.getLong("id");
         ThreadComment thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -112,7 +114,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
          *  Have to reset adapter: workaround for a strange issue, for description,
          *  see : http://stackoverflow.com/questions/20512068/listview-not-updating-properly-cursoradapter-after-swapcursor
          */
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
     }
 

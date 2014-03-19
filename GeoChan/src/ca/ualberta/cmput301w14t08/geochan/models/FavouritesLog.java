@@ -11,6 +11,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
  */
 public class FavouritesLog {
     private static FavouritesLog instance = null;
+    @SuppressWarnings("unused")
     private Context context;
     private FavouritesIOManager manager;
     private ArrayList<ThreadComment> threads;

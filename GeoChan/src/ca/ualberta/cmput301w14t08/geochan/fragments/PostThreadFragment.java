@@ -26,7 +26,6 @@ import java.text.DecimalFormat;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,8 +114,6 @@ public class PostThreadFragment extends Fragment {
                     // log the thread and the geolocation
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(title, geoLocation);
-                    Log.e("size of locLog:",
-                            Integer.toString(geoLocationLog.getLogEntries().size()));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

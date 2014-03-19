@@ -40,8 +40,11 @@ public class GeoLocationLogIOManager {
 
     public void serializeLog(ArrayList<LogEntry> list) {
         try {
+            for(LogEntry l : list) {
+                Log.e("BBB", l.getThreadTitle());
+            }
             GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
+            //gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
             gsonBuilder.registerTypeAdapter(Location.class, new LocationSerializer());
             Gson gson = gsonBuilder.create();
             
@@ -64,7 +67,7 @@ public class GeoLocationLogIOManager {
         try {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
-            gsonBuilder.registerTypeAdapter(Location.class, new LocationSerializer());
+            //gsonBuilder.registerTypeAdapter(Location.class, new LocationSerializer());
             Gson gson = gsonBuilder.create();
             
             FileInputStream f = context.openFileInput(FILENAME);
@@ -86,6 +89,9 @@ public class GeoLocationLogIOManager {
             e.printStackTrace();
         }
         Log.e("size of location log:", Integer.toString(list.size()));
+        for(LogEntry l : list) {
+            Log.e("WWW", l.getThreadTitle());
+        }
         return list;
     }
 }
