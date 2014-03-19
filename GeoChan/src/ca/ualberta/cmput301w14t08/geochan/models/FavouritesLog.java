@@ -8,18 +8,33 @@ import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
  * This class handles the threads/comments saved by the user as favourite, to be
  * available for later viewing.
  */
-public class Favourites {
+public class FavouritesLog {
+    private static FavouritesLog instance = null;
+    private FavouritesIOManager manager;
     private ArrayList<ThreadComment> threads;
     private ArrayList<Comment> comments;
 
+    private FavouritesLog() {
+        threads = new ArrayList<ThreadComment>();
+        comments = new ArrayList<Comment>();
+        manager = FavouritesIOManager.getInstance();
+    }
+
+    public static FavouritesLog getInstance() {
+        if (instance == null) {
+            instance = new FavouritesLog();
+        }
+        return instance;
+    }
+
     public void addThreadComment(ThreadComment thread) {
         threads.add(thread);
-        FavouritesIOManager.serializeThreads();
+        manager.serializeThreads();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        FavouritesIOManager.serializeComments();
+        manager.serializeComments();
     }
 
     // Getters and Setters

@@ -1,40 +1,36 @@
 package ca.ualberta.cmput301w14t08.geochan.managers;
 
-import android.content.Context;
-
 /**
  * This class is responsible for persistency of favourite threads/comments
  * 
  */
 public class FavouritesIOManager {
-    private static Context context;
     private static FavouritesIOManager instance;
     private static final String FILENAME = "fav.sav";
 
-    private FavouritesIOManager(Context context) {
-        FavouritesIOManager.context = context;
+    private FavouritesIOManager() {
     }
 
-    public static FavouritesIOManager getInstance(Context context) {
+    public static FavouritesIOManager getInstance() {
         if (instance == null) {
-            instance = new FavouritesIOManager(context);
+            instance = new FavouritesIOManager();
         }
         return instance;
     }
 
-    public static void serializeComments() {
+    public void serializeComments() {
 
     }
 
-    public static void serializeThreads() {
+    public void serializeThreads() {
 
     }
 
-    public static void deSerializeComments() {
+    public void deSerializeComments() {
 
     }
 
-    public static void deSerializeThreads() {
+    public void deSerializeThreads() {
 
     }
 }
