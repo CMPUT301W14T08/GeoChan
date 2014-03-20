@@ -35,6 +35,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates

@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.io.Serializable;
+
 import android.location.Location;
 import android.location.LocationManager;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -27,8 +29,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 /**
  * Responsible for GeoLocation services for Comment objects
  */
-public class GeoLocation {
+public class GeoLocation implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private Location location;
 
     /**

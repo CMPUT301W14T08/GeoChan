@@ -39,6 +39,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -340,8 +341,16 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (mapButton != null) {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Fragment fragment = new MapViewFragment();
-                    manager.beginTransaction().replace(R.id.fragment_container, fragment, "mapFrag").addToBackStack(null).commit();
+                    Log.e("ButtonClick", "mapView");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("thread_comment", comment);
+                    
+                    Fragment mapFrag = new MapViewFragment();
+                    mapFrag.setArguments(bundle);
+                    
+                    manager.beginTransaction().
+                            replace(R.id.fragment_container, mapFrag, "mapFrag")
+                            .addToBackStack(null).commit();
                     manager.executePendingTransactions();
                 }
             });
