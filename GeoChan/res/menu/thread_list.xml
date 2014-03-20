@@ -14,5 +14,10 @@
           android:icon="@drawable/ic_sort_methods"
           android:title="@string/thread_sort"
           android:showAsAction="ifRoom" />
+    
+    <item android:id="@+id/action_favourites"
+          android:icon="@drawable/ic_favourites"
+          android:title="@string/favourites"
+          android:showAsAction="ifRoom" />
         
 </menu>

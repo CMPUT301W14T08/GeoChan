@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
@@ -73,6 +74,15 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             // This next line is necessary for JUnit to see fragments
             getFragmentManager().executePendingTransactions();
             return true;
+
+        case R.id.action_favourites:
+            FavouritesFragment favFrag = new FavouritesFragment();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, favFrag, "favFrag").addToBackStack(null)
+                    .commit();
+            getFragmentManager().executePendingTransactions();
+            return true;
+
         case R.id.action_add_thread:
             PostThreadFragment frag = new PostThreadFragment();
             frag.setArguments(new Bundle());
@@ -90,7 +100,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -175,7 +185,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
-    
+
     /**
      * Checks the back stack for fragments and enables/disables the back button
      * in the action bar accordingly
