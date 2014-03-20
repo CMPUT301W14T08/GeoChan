@@ -33,5 +33,8 @@
     <string name="comment_star_button">Favourite</string>
     <string name="action_refresh">Refresh from Server</string>
     <string name="thread_sort">Sorting Method</string>
+    <string name="favourites">Favourites</string>
+    <string name="threads_fav">Threads</string>
+    <string name="comments_fav">Comments</string>
 
 </resources>
