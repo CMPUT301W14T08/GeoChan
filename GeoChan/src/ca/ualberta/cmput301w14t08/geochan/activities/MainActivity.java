@@ -23,7 +23,10 @@ package ca.ualberta.cmput301w14t08.geochan.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -160,4 +163,5 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager().findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
+    
 }

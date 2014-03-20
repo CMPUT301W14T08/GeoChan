@@ -20,13 +20,18 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.io.File;
+
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -90,7 +95,9 @@ public class PostCommentFragment extends Fragment {
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
-        imageHelper = new ImageHelper(getActivity());
+        imageHelper = new ImageHelper(getActivity().getApplicationContext());
+        picture = null;
+        thumb = null;
         
     }
 
@@ -109,14 +116,14 @@ public class PostCommentFragment extends Fragment {
         if (v.getId() == R.id.post_comment_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
-            if (geoLocation.getLocation() == null) {
+            if (geoLocation.getLocation() == null && picture == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, null, thread.getBodyComment());
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, thread.getBodyComment(), newComment);
-            } else {
+            } else if (picture == null) {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
@@ -125,6 +132,11 @@ public class PostCommentFragment extends Fragment {
                 GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
                 Log.e("size of locLog:",
                         Integer.toString(GeoLocationLog.getLogEntries().size()));
+            } else {
+                // Comment with picture and geolocation
+                Comment newComment = new Comment(comment, picture, geoLocation, thread.getBodyComment());
+                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                client.postComment(thread, thread.getBodyComment(), newComment);
             }
             
             /* RIGHT NOW THIS BLOCK CAUSES A CRASH
@@ -139,20 +151,33 @@ public class PostCommentFragment extends Fragment {
     
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
-            imageHelper.captureImage();
-            //picture = imageHelper.getPicture();
-            //thumb = imageHelper.getThumbnail();
+            imageHelper.displayImageDialog();
+            boolean cameraChoice = imageHelper.getCameraChoice();
+            
+            if (cameraChoice) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                File file = imageHelper.createImageFile();
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                startActivityForResult(intent, 1);    
+            } else {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = imageHelper.createImageFile();
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                startActivityForResult(intent, 1);
+            }
         }
     }
-    
+ 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //if (resultCode == Activity.RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
             Log.d("imagehelper","Image set successfully");
-        //}
+            picture = imageHelper.getPicture();
+            //thumb = imageHelper.getThumbnail();
+        }
     }
     
 
