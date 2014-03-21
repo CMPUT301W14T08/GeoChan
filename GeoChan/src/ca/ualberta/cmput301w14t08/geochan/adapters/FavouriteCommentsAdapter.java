@@ -15,6 +15,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
+
 public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<Comment> list;
     Context context;
@@ -36,13 +37,11 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         Comment comment = (Comment) getItem(position);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -75,6 +74,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         } else {
             commentLocationText.setText("Error: No location found");
         }
+        
         //Button replyButton = (Button) convertView.findViewById(R.id.comment_reply_button);
         //replyButton.setVisibility(View.GONE);
         

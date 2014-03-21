@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,7 +77,8 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return true;
 
         case R.id.action_favourites:
-            
+            Intent intent = new Intent(this.getBaseContext(),FavouritesActivity.class);
+            startActivity(intent);
             return true;
 
         case R.id.action_add_thread:
