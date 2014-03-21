@@ -41,23 +41,23 @@ public class SortTypes {
     public static final int SORT_USER_SCORE_LOWEST = 6;
     public static final int SORT_LOCATION_MISC = 7;
     public static final int SORT_IMAGE = 8;
-    
+
     /**
-     * Comparator for pushing comments with images to the top.
-     * Uses comment date to break ties if both comments have images,
-     * or do not have images.
+     * Comparator for pushing comments with images to the top. Uses comment date
+     * to break ties if both comments have images, or do not have images.
+     * 
      * @return
      */
-    public static Comparator<Comment> sortCommentsByImage(){
-        return new Comparator<Comment>(){
-            public int compare(Comment c1, Comment c2){
-                if(c1.hasImage() && !(c2.hasImage())){
+    public static Comparator<Comment> sortCommentsByImage() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                if (c1.hasImage() && !(c2.hasImage())) {
                     return -1;
-                } else if (!(c1.hasImage()) && c2.hasImage()){
+                } else if (!(c1.hasImage()) && c2.hasImage()) {
                     return 1;
-                } else if(c1.hasImage() == c2.hasImage()){
+                } else if (c1.hasImage() == c2.hasImage()) {
                     int val = c1.getCommentDate().compareTo(c2.getCommentDate());
-                    if (val < 0){
+                    if (val < 0) {
                         return -1;
                     } else if (val > 0) {
                         return 1;
@@ -218,7 +218,8 @@ public class SortTypes {
      * Comparator for sorting comments in a thread based on the current
      * GeoLocation of the Thread's sortLoc member.
      * 
-     * @param g the GeoLocation to sort by
+     * @param g
+     *            the GeoLocation to sort by
      * @return the comparator
      */
     public static Comparator<Comment> sortCommentsByLocationDistance(final GeoLocation g) {

@@ -17,7 +17,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<Comment> list;
     Context context;
-    
+
     public FavouriteCommentsAdapter(ArrayList<Comment> list, Context context) {
         this.list = list;
         this.context = context;
@@ -51,7 +51,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_comment_commentBody);
         commentBody.setText(comment.getTextPost());
         // Comment creator
-        TextView commentBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
+        TextView commentBy = (TextView) convertView
+                .findViewById(R.id.thread_view_comment_commentBy);
         commentBy.setText("Posted by " + comment.getUser() + "#" + comment.getHash());
         // Comment timestamp
         TextView commentTime = (TextView) convertView
@@ -72,12 +73,15 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         } else {
             commentLocationText.setText("Error: No location found");
         }
-        //Button replyButton = (Button) convertView.findViewById(R.id.comment_reply_button);
-        //replyButton.setVisibility(View.GONE);
-        
-        //Button starButton = (Button) convertView.findViewById(R.id.comment_star_button);
-        //starButton.setVisibility(View.GONE);
-        
+
+        // Button replyButton = (Button)
+        // convertView.findViewById(R.id.comment_reply_button);
+        // replyButton.setVisibility(View.GONE);
+
+        // Button starButton = (Button)
+        // convertView.findViewById(R.id.comment_star_button);
+        // starButton.setVisibility(View.GONE);
+
         return convertView;
     }
 

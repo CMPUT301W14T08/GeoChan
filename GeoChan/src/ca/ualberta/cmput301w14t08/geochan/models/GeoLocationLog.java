@@ -36,7 +36,8 @@ public class GeoLocationLog {
     private ArrayList<LogEntry> entries;
 
     /**
-     * Protected constructor. Is called only if singleton has not been constructed.
+     * Protected constructor. Is called only if singleton has not been
+     * constructed.
      */
     protected GeoLocationLog(Context context) {
         this.context = context;
@@ -44,10 +45,10 @@ public class GeoLocationLog {
         this.entries = manager.deserializeLog();
     }
 
-    
     /**
-     * Singleton construction method. If instance already exists, return it
-     * Else construct a new one
+     * Singleton construction method. If instance already exists, return it Else
+     * construct a new one
+     * 
      * @return instance
      */
     public static GeoLocationLog getInstance(Context context) {
@@ -56,9 +57,10 @@ public class GeoLocationLog {
         }
         return instance;
     }
-    
+
     /**
      * Adds a new LogEntry to the GeoLocationLog.
+     * 
      * @param threadTitle
      *            Title to be stored in the new LogEntry.
      * @param geoLocation
@@ -73,6 +75,7 @@ public class GeoLocationLog {
 
     /**
      * Return the log entries array, if null create one
+     * 
      * @return entries
      */
     public ArrayList<LogEntry> getLogEntries() {
@@ -83,6 +86,7 @@ public class GeoLocationLog {
 
     /**
      * Return true if log is empty, else false. If null create one
+     * 
      * @return entries
      */
     public boolean isEmpty() {
@@ -98,6 +102,7 @@ public class GeoLocationLog {
 
     /**
      * Returns the number of LogEntry objects stored in entries.
+     * 
      * @return Number of LogEntry objects.
      */
     public int size() {

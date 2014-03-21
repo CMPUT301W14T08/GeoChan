@@ -22,30 +22,30 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
-import android.app.Fragment;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Loader;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
  */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
-    private ListView threadView;
+    private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
     private ThreadComment thread = null;
@@ -62,8 +62,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         threadIndex = (int) bundle.getLong("id");
-        //final int id = (int) bundle.getLong("id");
-        thread = ThreadList.getThreads().get(threadIndex);
+        thread = bundle.getParcelable("thread");
         getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 
@@ -79,14 +78,18 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onStart() {
         super.onStart();
-        Bundle bundle = getArguments();
-        final int id = (int) bundle.getLong("id");
-        ThreadComment thread = ThreadList.getThreads().get(id);
-        threadView = (ListView) getView().findViewById(R.id.thread_view_list);
+        threadView = (PullToRefreshListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        threadView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                reload();
+            }
+        });
     }
 
     /*
@@ -110,13 +113,16 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
         thread.getBodyComment().setChildren(list);
-        
+
         /*
-         *  Have to reset adapter: workaround for a strange issue, for description,
-         *  see : http://stackoverflow.com/questions/20512068/listview-not-updating-properly-cursoradapter-after-swapcursor
+         * Have to reset adapter: workaround for a strange issue, for
+         * description, see :
+         * http://stackoverflow.com/questions/20512068/listview
+         * -not-updating-properly-cursoradapter-after-swapcursor
          */
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
+        threadView.onRefreshComplete();
     }
 
     /*
@@ -130,9 +136,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
         //
     }
-    
-    
+
     public GeoLocation getThreadLocation() {
         return thread.getSortLoc();
+    }
+    
+    private void reload() {
+        getLoaderManager().getLoader(1).forceLoad();
     }
 }

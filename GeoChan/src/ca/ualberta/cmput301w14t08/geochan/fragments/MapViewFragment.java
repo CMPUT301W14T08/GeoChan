@@ -13,12 +13,11 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,7 +82,6 @@ public class MapViewFragment extends Fragment {
         }
     }  
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -99,16 +97,14 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * gets the comment from the bundle. If it has a valid location, set up the map
-     * otherwise return to previous fragment
+     * gets the comment from the bundle. If it has a valid location, set up the
+     * map otherwise return to previous fragment
      */
-    @Override 
+    @Override
     public void onStart() {
         super.onStart();
 
         activity = getActivity();
-        
-       
         locationListenerService = new LocationListenerService(activity);
         locationListenerService.startListening();
         currentLocation = new GeoLocation(locationListenerService);
@@ -138,7 +134,7 @@ public class MapViewFragment extends Fragment {
     }
     
     /**
-     * This setups up the comment location the map. The map is center at the location
+     * This sets up the comment location the map. The map is center at the location
      * of the comment GeoLocation, and has a bubble on this point
      * @param geoLocation
      */

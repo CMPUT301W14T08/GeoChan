@@ -33,15 +33,11 @@ import io.searchbox.core.Update;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentDeserializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
@@ -61,12 +57,7 @@ public class ElasticSearchClient {
 
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentSerializer());
-        builder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
-        gson = builder.create();
+        gson = GsonHelper.getGson();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
         client = factory.getObject();

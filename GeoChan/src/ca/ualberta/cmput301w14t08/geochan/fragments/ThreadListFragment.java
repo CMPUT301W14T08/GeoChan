@@ -26,12 +26,12 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
  */
 import java.util.ArrayList;
 
-import android.app.Fragment;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,13 +40,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Responsible for the UI fragment that displays multiple ThreadComments to the
@@ -55,7 +56,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  */
 public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
-    private ListView threadListView;
+    private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
 
     @Override
@@ -73,6 +74,8 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
+
         getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 
@@ -88,7 +91,6 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
@@ -100,7 +102,8 @@ public class ThreadListFragment extends Fragment implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();
-                bundle.putLong("id", id);
+                bundle.putParcelable("thread", ThreadList.getThreads().get((int) id));
+                bundle.putLong("id", (int) id);
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "thread_view_fragment")
@@ -113,6 +116,14 @@ public class ThreadListFragment extends Fragment implements
         int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
         ThreadList.sortThreads(sort);
         adapter.notifyDataSetChanged();
+        threadListView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                reload();
+            }
+        });
+
     }
 
     /*
@@ -139,6 +150,7 @@ public class ThreadListFragment extends Fragment implements
         ThreadList.setThreads(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
+        threadListView.onRefreshComplete();
     }
 
     /*
@@ -151,5 +163,9 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
         adapter.setList(new ArrayList<ThreadComment>());
+    }
+    
+    private void reload() {
+        getLoaderManager().getLoader(0).forceLoad();
     }
 }

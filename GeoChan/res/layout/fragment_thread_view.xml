@@ -4,10 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ListView
+    <eu.erikw.PullToRefreshListView
         android:id="@+id/thread_view_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    </ListView>
+    </eu.erikw.PullToRefreshListView>
 
 </LinearLayout>
