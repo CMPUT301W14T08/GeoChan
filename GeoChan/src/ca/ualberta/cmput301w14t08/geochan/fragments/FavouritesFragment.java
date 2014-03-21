@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.ArrayAdapter;
 import ca.ualberta.cmput301w14t08.geochan.R;
 
 public class FavouritesFragment extends Fragment implements
-ActionBar.OnNavigationListener {
+ActionBar.OnNavigationListener, OnBackStackChangedListener {
     private static ActionBar actionBar;
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     
@@ -23,8 +24,7 @@ ActionBar.OnNavigationListener {
 
         // Set up the action bar to show a dropdown list.
         actionBar = getActivity().getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        enableSpinner();
         // Show the Up button in the action bar.
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -49,6 +49,7 @@ ActionBar.OnNavigationListener {
                         savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
             }
         }
+        getChildFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -62,7 +63,7 @@ ActionBar.OnNavigationListener {
     @Override
     public void onPause() {
         super.onPause();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        disableSpinner();
     }
     
     @Override
@@ -80,5 +81,25 @@ ActionBar.OnNavigationListener {
             break;
         }
         return true;
+    }
+    
+    @Override
+    public void onBackStackChanged() {
+        Fragment f = getChildFragmentManager().findFragmentByTag("thread_view_fragment");
+        if (f != null) {
+            disableSpinner();
+        } else {
+            enableSpinner();
+        }
+    }
+    
+    private void enableSpinner() {
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+    }
+    
+    private void disableSpinner() {
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
     }
 }

@@ -251,24 +251,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         } else {
             getActionBar().setDisplayHomeAsUpEnabled(false);
         }
-        Fragment fav = null;
-        Fragment favParent = getSupportFragmentManager().findFragmentByTag("favouritesFrag");
-        if (favParent != null) {
-            List<Fragment> list = favParent.getChildFragmentManager().getFragments();
-            if (list != null) {
-                for (Fragment f : list) {
-                    Log.e("???", f.getTag());
-                }
-            }
-            fav = favParent.getChildFragmentManager().findFragmentByTag("thread_view_fav_fragment");
-        }
-        if (fav != null) {
-            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            getActionBar().setDisplayShowTitleEnabled(true);
-        } else if (favParent != null && favParent.isVisible()) {
-            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            getActionBar().setDisplayShowTitleEnabled(false);
-        }
     }
 
     public void getDirections(View v) {
