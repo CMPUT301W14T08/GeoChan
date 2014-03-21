@@ -37,7 +37,7 @@ public class MapViewFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoPoint geoPoint;
     private Activity activity;
-
+/*
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
         
         ProgressDialog directionsLoadingDialog = new ProgressDialog(activity.getApplicationContext());
@@ -79,8 +79,14 @@ public class MapViewFragment extends Fragment {
             directionsLoadingDialog.dismiss();
         }
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+*/
         
-    }
+    
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,7 +157,7 @@ public class MapViewFragment extends Fragment {
     }
     
     public void getDirections() {
-        MapAsyncTask directionsAsyncTask = new MapAsyncTask();
+       //MapAsyncTask directionsAsyncTask = new MapAsyncTask();
         
     }
 }
