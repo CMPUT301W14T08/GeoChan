@@ -30,6 +30,7 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import eu.erikw.PullToRefreshListView;
 
 /**
  * Responsible for asynchronously loading ThreadComments from the ElasticSearch
@@ -40,11 +41,13 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
     private ArrayList<ThreadComment> list = null;
     private ElasticSearchClient client;
     private PreferencesManager manager;
+    private PullToRefreshListView threadListView;
 
     public static final int LOADER_ID = 0;
 
-    public ThreadCommentLoader(Context context) {
+    public ThreadCommentLoader(Context context, PullToRefreshListView threadListView) {
         super(context);
+        this.threadListView = threadListView;
         this.client = ElasticSearchClient.getInstance();
         this.manager = PreferencesManager.getInstance();
     }
@@ -70,6 +73,7 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
         if (isStarted()) {
             super.deliverResult(list);
         }
+        this.threadListView.onRefreshComplete();
     }
 
     @Override
@@ -77,18 +81,6 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
         if (list != null) {
             deliverResult(list);
         }
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int count = client.getThreadCount();
-                if (count != list.size()) {
-                    forceLoad();
-                }
-            }
-        }, 5000, 60000);
 
         if (list == null && this.isStarted()) {
             forceLoad();
