@@ -345,10 +345,16 @@ public class ThreadViewAdapter extends BaseAdapter {
                     
                     Fragment mapFrag = new MapViewFragment();
                     mapFrag.setArguments(bundle);
-                    
-                    manager.beginTransaction().
+                    Fragment fav = manager.findFragmentByTag("favThrFragment");
+                    if (fav != null) {
+                        manager.beginTransaction().
+                            replace(R.id.container, mapFrag, "mapFrag")
+                            .addToBackStack(null).commit();
+                    } else {
+                        manager.beginTransaction().
                             replace(R.id.fragment_container, mapFrag, "mapFrag")
                             .addToBackStack(null).commit();
+                    }
                     manager.executePendingTransactions();
                 }
             });

@@ -16,9 +16,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class FavouriteThreadsFragment extends Fragment {
-    ArrayList<ThreadComment> list;
-    FavouritesLog log;
-    ListView favouritesListView;
+    private ArrayList<ThreadComment> list;
+    private FavouritesLog log;
+    private ListView favouritesListView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class FavouriteThreadsFragment extends Fragment {
         log = FavouritesLog.getInstance(getActivity());
         list = log.getThreads();
     }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -51,7 +52,7 @@ public class FavouriteThreadsFragment extends Fragment {
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, fragment, "thread_view_fragment")
-                        .addToBackStack("thread_view_fragment").commit();
+                        .addToBackStack(null).commit();
                 // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                 getFragmentManager().executePendingTransactions();
             }

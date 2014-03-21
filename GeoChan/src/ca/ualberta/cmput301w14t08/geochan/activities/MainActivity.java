@@ -20,8 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.view.Menu;
@@ -30,10 +32,10 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
@@ -73,11 +75,19 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
 
             // This next line is necessary for JUnit to see fragments
             getSupportFragmentManager().executePendingTransactions(); */
+            Intent intent = new Intent(this.getBaseContext(), PreferencesActivity.class);
+            startActivity(intent);
             return true;
 
         case R.id.action_favourites:
             /*Intent intent = new Intent(this.getBaseContext(),FavouritesActivity.class);
             startActivity(intent);*/
+            getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
+            .addToBackStack(null).commit();
+
+            // This next line is necessary for JUnit to see fragments
+            getSupportFragmentManager().executePendingTransactions();
             return true;
 
         case R.id.action_add_thread:
@@ -193,6 +203,15 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        Fragment favParent = getSupportFragmentManager().findFragmentByTag("favouritesFrag");
+        Fragment fav = getSupportFragmentManager().findFragmentByTag("thread_view_fav_fragment");
+        if (fav != null) {
+            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            getActionBar().setDisplayShowTitleEnabled(true);
+        } else if (favParent != null && favParent.isVisible()) {
+            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            getActionBar().setDisplayShowTitleEnabled(false);
         }
     }
     

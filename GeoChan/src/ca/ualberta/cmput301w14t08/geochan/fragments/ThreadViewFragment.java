@@ -48,7 +48,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ThreadViewAdapter adapter;
     private int threadIndex;
     private ThreadComment thread = null;
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
