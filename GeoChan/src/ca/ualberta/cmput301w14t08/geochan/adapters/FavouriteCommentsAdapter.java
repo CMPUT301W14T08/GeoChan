@@ -21,6 +21,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     
     public FavouriteCommentsAdapter(ArrayList<Comment> list, Context context) {
         this.list = list;
+        this.context = context;
     }
 
     @Override
@@ -74,11 +75,11 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         } else {
             commentLocationText.setText("Error: No location found");
         }
-        Button replyButton = (Button) convertView.findViewById(R.id.comment_reply_button);
-        replyButton.setVisibility(View.GONE);
+        //Button replyButton = (Button) convertView.findViewById(R.id.comment_reply_button);
+        //replyButton.setVisibility(View.GONE);
         
-        Button starButton = (Button) convertView.findViewById(R.id.comment_star_button);
-        starButton.setVisibility(View.GONE);
+        //Button starButton = (Button) convertView.findViewById(R.id.comment_star_button);
+        //starButton.setVisibility(View.GONE);
         
         return convertView;
     }

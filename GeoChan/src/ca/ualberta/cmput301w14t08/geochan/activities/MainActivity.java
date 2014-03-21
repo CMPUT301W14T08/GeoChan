@@ -30,13 +30,11 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates
@@ -77,11 +75,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             return true;
 
         case R.id.action_favourites:
-            FavouritesFragment favFrag = new FavouritesFragment();
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, favFrag, "favFrag").addToBackStack(null)
-                    .commit();
-            getFragmentManager().executePendingTransactions();
+            
             return true;
 
         case R.id.action_add_thread:
