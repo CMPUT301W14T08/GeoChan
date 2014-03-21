@@ -71,12 +71,12 @@ ActionBar.OnNavigationListener {
         case 0:
             Fragment thrFragment = new FavouriteThreadsFragment();
             getChildFragmentManager().beginTransaction()
-            .add(R.id.container, thrFragment, "favThrFragment").commit();
+            .replace(R.id.container, thrFragment, "favThrFragment").commit();
             break;
         case 1:
             Fragment cmtFragment = new FavouriteCommentsFragment();
             getChildFragmentManager().beginTransaction()
-            .add(R.id.container, cmtFragment, "favComFragment").commit();
+            .replace(R.id.container, cmtFragment, "favComFragment").commit();
             break;
         }
         return true;
