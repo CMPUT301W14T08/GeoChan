@@ -18,6 +18,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +40,14 @@ public class MapViewFragment extends Fragment {
     private GeoPoint startGeoPoint;
     private Activity activity;
     private Polyline roadOverlay;
-    private ArrayList<Comment> listOfComments;
+    private Comment topComment;
+    
+    
+    private double DELTA_LAT;
+    private double DELTA_LONG;
+    
+    int latSpan;
+    int longSpan;
 
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
 
@@ -98,6 +106,9 @@ public class MapViewFragment extends Fragment {
         super.onStart();
 
         activity = getActivity();
+        
+        DELTA_LAT = 0;
+        DELTA_LONG = 0;
 
         locationListenerService = new LocationListenerService(activity);
         locationListenerService.startListening();
@@ -105,15 +116,15 @@ public class MapViewFragment extends Fragment {
         currentLocation = new GeoLocation(locationListenerService);
 
         Bundle args = getArguments();
-        Comment comment = (Comment) args.getParcelable("thread_comment");
+        topComment = (Comment) args.getParcelable("thread_comment");
         
-        GeoLocation geoLocation = comment.getLocation();
+        GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
             FragmentManager fm = getFragmentManager();
             fm.popBackStackImmediate();
         } else {
-            this.setupMap(comment);
+            this.setupMap(topComment);
         }
     }
 
@@ -123,6 +134,11 @@ public class MapViewFragment extends Fragment {
         locationListenerService.stopListening();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+    
     /**
      * This setups up the comment location the map. The map is center at the location
      * of the comment GeoLocation, and has a bubble on this point/
@@ -138,12 +154,20 @@ public class MapViewFragment extends Fragment {
         startGeoPoint = new GeoPoint(geoLocation.getLocation());
         setGeoPointMarker(startGeoPoint);
         buildMarkersForChildComments(comment);
-
+        
+        latSpan = (int) Math.round(DELTA_LAT);
+        longSpan = (int) Math.round(DELTA_LONG);
+        
         mapController = openMapView.getController();
         mapController.setZoom(12);
+
         mapController.animateTo(startGeoPoint);
     }
     
+    /**
+     * recursively places markers on the map of all child comments of a thread.
+     * @param comment
+     */
     private void buildMarkersForChildComments(Comment comment) {
         ArrayList<Comment> children = comment.getChildren();
         if (children.size() == 0) {
@@ -152,10 +176,31 @@ public class MapViewFragment extends Fragment {
             for (Comment c : children) {
                 GeoLocation commentLocation = c.getLocation();
                 setGeoPointMarker(new GeoPoint(commentLocation.getLatitude(), commentLocation.getLongitude()));
+                checkCommentLocationDistance(c);
             }
         }
     }
     
+    public void checkCommentLocationDistance(Comment c) {
+        
+        double topCommentLat = topComment.getLocation().getLatitude();
+        double topCommentLong = topComment.getLocation().getLongitude();
+        double commentLat = c.getLocation().getLatitude();
+        double commentLong = c.getLocation().getLongitude();
+        
+        if (Math.abs(topCommentLat - commentLat) > DELTA_LAT) {
+            DELTA_LAT = topCommentLat - commentLat;
+        }
+        
+        if (Math.abs(topCommentLong - commentLong) > DELTA_LONG) {
+            DELTA_LONG = topCommentLong - commentLong;
+        }
+    }
+    
+    /**
+     * Places a GeoPoint Marker on the MapView
+     * @param geoPoint
+     */
     public void setGeoPointMarker(GeoPoint geoPoint) {
         Marker marker = new Marker(openMapView);
         marker.setPosition(geoPoint);
@@ -168,11 +213,15 @@ public class MapViewFragment extends Fragment {
      * current location to the comment location. Uses an Async task to get map overlay
      */
     public void getDirections() {
+        Log.e("LatSpan", Integer.toString(latSpan));
+        Log.e("LongSpan", Integer.toString(longSpan));
+        mapController.zoomToSpan(latSpan*1000000, longSpan*1000000);
+        /*
         if (currentLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
         } else {
             new MapAsyncTask().execute();
         }
-        openMapView.invalidate();
+        openMapView.invalidate();*/
     }
 }
