@@ -61,9 +61,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        threadIndex = (int) bundle.getLong("id");
+        // threadIndex = (int) bundle.getLong("id");
         //final int id = (int) bundle.getLong("id");
-        thread = ThreadList.getThreads().get(threadIndex);
+        thread = bundle.getParcelable("thread");
         getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
 

@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
@@ -36,7 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
  * title, id
  * 
  */
-public class ThreadComment {
+public class ThreadComment implements Parcelable {
     private Comment bodyComment;
     private String title;
     private long id;
@@ -254,4 +256,33 @@ public class ThreadComment {
             break;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(bodyComment, flags);
+        dest.writeValue(title);
+        dest.writeValue(id);
+    }
+    
+    public ThreadComment(Parcel in) {
+        super();
+        this.setBodyComment((Comment) in.readValue(getClass().getClassLoader()));
+        this.setTitle((String) in.readValue(getClass().getClassLoader()));
+        this.setId((long) in.readLong());
+    }
+    
+    public static final Parcelable.Creator<ThreadComment> CREATOR = new Parcelable.Creator<ThreadComment>() {
+        public ThreadComment createFromParcel(Parcel in) {
+            return new ThreadComment(in);
+        }
+        
+        public ThreadComment[] newArray(int size) {
+            return new ThreadComment[size];
+        }
+    };
 }

@@ -100,7 +100,7 @@ public class ThreadListFragment extends Fragment implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();
-                bundle.putLong("id", id);
+                bundle.putParcelable("thread", ThreadList.getThreads().get((int) id));
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "thread_view_fragment")
