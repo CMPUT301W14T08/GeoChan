@@ -1,6 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -11,6 +12,7 @@ import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Overlay;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -177,6 +179,7 @@ public class MapViewFragment extends Fragment {
                 GeoLocation commentLocation = c.getLocation();
                 setGeoPointMarker(new GeoPoint(commentLocation.getLatitude(), commentLocation.getLongitude()));
                 checkCommentLocationDistance(c);
+                buildMarkersForChildComments(c);
             }
         }
     }
@@ -187,13 +190,16 @@ public class MapViewFragment extends Fragment {
         double topCommentLong = topComment.getLocation().getLongitude();
         double commentLat = c.getLocation().getLatitude();
         double commentLong = c.getLocation().getLongitude();
+        Log.e("LatSpan", Double.toString(Math.abs(topCommentLat-commentLat)));
+        Log.e("LongSpan", Double.toString(Math.abs(topCommentLong-commentLong)));
+        
         
         if (Math.abs(topCommentLat - commentLat) > DELTA_LAT) {
-            DELTA_LAT = topCommentLat - commentLat;
+            DELTA_LAT = Math.abs(topCommentLat - commentLat);
         }
         
         if (Math.abs(topCommentLong - commentLong) > DELTA_LONG) {
-            DELTA_LONG = topCommentLong - commentLong;
+            DELTA_LONG = Math.abs(topCommentLong - commentLong);
         }
     }
     
@@ -213,9 +219,9 @@ public class MapViewFragment extends Fragment {
      * current location to the comment location. Uses an Async task to get map overlay
      */
     public void getDirections() {
-        Log.e("LatSpan", Integer.toString(latSpan));
-        Log.e("LongSpan", Integer.toString(longSpan));
-        mapController.zoomToSpan(latSpan*1000000, longSpan*1000000);
+        mapController.zoomToSpan(latSpan*2*90000, longSpan*2*90000);
+        Log.e("LatSpan", Double.toString(latSpan));
+        Log.e("LongSpan", Double.toString(longSpan));
         /*
         if (currentLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
