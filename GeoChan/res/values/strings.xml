@@ -33,5 +33,10 @@
     <string name="comment_star_button">Favourite</string>
     <string name="action_refresh">Refresh from Server</string>
     <string name="thread_sort">Sorting Method</string>
+    <string name="date_new">Date (Newest)</string>
+    <string name="date_old">Date (Oldest)</string>
+    <string name="score_highest">Relevance (Highest)</string>
+    <string name="score_lowest">Relevance (Lowest)</string>
+    <string name="sort_location">Location</string>
 
 </resources>

@@ -86,6 +86,21 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         case android.R.id.home:
             getFragmentManager().popBackStack();
             return true;
+        case R.id.thread_sort_date_new:
+            //Sorting stuff for sorting by date new here.
+            return true;
+        case R.id.thread_sort_date_old:
+            //Sorting stuff for sorting by date old here.
+            return true;
+        case R.id.thread_sort_score_high:
+            //Sorting stuff for sorting by score high here.
+            return true;
+        case R.id.thread_sort_score_low:
+            //Sorting stuff for sorting by score low here.
+            return true;
+        case R.id.thread_sort_location:
+            //Sorting stuff for sorting by location here.
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }

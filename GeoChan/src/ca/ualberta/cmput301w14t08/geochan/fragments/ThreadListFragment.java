@@ -84,6 +84,7 @@ public class ThreadListFragment extends Fragment implements
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
+    
 
     @Override
     public void onStart() {
