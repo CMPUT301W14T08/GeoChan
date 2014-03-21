@@ -36,9 +36,10 @@ public class MapViewFragment extends Fragment {
     private IMapController mapController;
     private LocationListenerService locationListenerService;
     private GeoLocation currentLocation;
-    private GeoPoint geoPoint;
+    private GeoPoint startGeoPoint;
     private Activity activity;
     private Polyline roadOverlay;
+    private ArrayList<Comment> listOfComments;
 
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
 
@@ -57,7 +58,7 @@ public class MapViewFragment extends Fragment {
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
             waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
-            waypoints.add(geoPoint);
+            waypoints.add(startGeoPoint);
             Road road = roadManager.getRoad(waypoints);
 
             roadOverlay = RoadManager.buildRoadOverlay(road, activity);
@@ -105,13 +106,14 @@ public class MapViewFragment extends Fragment {
 
         Bundle args = getArguments();
         Comment comment = (Comment) args.getParcelable("thread_comment");
+        
         GeoLocation geoLocation = comment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
             FragmentManager fm = getFragmentManager();
             fm.popBackStackImmediate();
         } else {
-            this.setupMap(geoLocation);
+            this.setupMap(comment);
         }
     }
 
@@ -126,22 +128,39 @@ public class MapViewFragment extends Fragment {
      * of the comment GeoLocation, and has a bubble on this point/
      * @param geoLocation
      */
-    public void setupMap(GeoLocation geoLocation) {
+    public void setupMap(Comment comment) {
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
 
-        geoPoint = new GeoPoint(geoLocation.getLocation());
-
-        Marker startMarker = new Marker(openMapView);
-        startMarker.setPosition(geoPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        openMapView.getOverlays().add(startMarker);
+        GeoLocation geoLocation = comment.getLocation();
+        startGeoPoint = new GeoPoint(geoLocation.getLocation());
+        setGeoPointMarker(startGeoPoint);
+        buildMarkersForChildComments(comment);
 
         mapController = openMapView.getController();
         mapController.setZoom(12);
-        mapController.animateTo(geoPoint);
+        mapController.animateTo(startGeoPoint);
+    }
+    
+    private void buildMarkersForChildComments(Comment comment) {
+        ArrayList<Comment> children = comment.getChildren();
+        if (children.size() == 0) {
+            return;
+        } else {
+            for (Comment c : children) {
+                GeoLocation commentLocation = c.getLocation();
+                setGeoPointMarker(new GeoPoint(commentLocation.getLatitude(), commentLocation.getLongitude()));
+            }
+        }
+    }
+    
+    public void setGeoPointMarker(GeoPoint geoPoint) {
+        Marker marker = new Marker(openMapView);
+        marker.setPosition(geoPoint);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        openMapView.getOverlays().add(marker);
     }
 
     /**
