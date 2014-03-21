@@ -65,12 +65,14 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         sort(result);
         return result;
     }
-    
+
     /**
-     * Sort a List of Comments
-     * This function is most likely temporary and will be changed
-     * rewritten or replaced once sorting is more finalized within the app
-     * @param list the list to sort
+     * Sort a List of Comments This function is most likely temporary and will
+     * be changed rewritten or replaced once sorting is more finalized within
+     * the app
+     * 
+     * @param list
+     *            the list to sort
      */
     private void sort(ArrayList<Comment> list) {
         ThreadComment.sortComments(list, manager.getCommentSort());

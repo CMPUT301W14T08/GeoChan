@@ -122,10 +122,11 @@ public class ThreadList {
             break;
         }
     }
-    
+
     /**
-     * Sorts a thread list according to the tag passed.
-     * This will be moved into its own class, this is temporary.
+     * Sorts a thread list according to the tag passed. This will be moved into
+     * its own class, this is temporary.
+     * 
      * @param threadList
      *            Comment list to sort
      * @param tag

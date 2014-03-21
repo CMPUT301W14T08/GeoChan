@@ -40,7 +40,7 @@ public class LogEntry {
         this.threadTitle = title;
         this.geoLocation = geoLocation;
     }
-    
+
     /**
      * Getters and Setters
      */

@@ -81,12 +81,12 @@ public class PostThreadFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
     }
-
 
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {

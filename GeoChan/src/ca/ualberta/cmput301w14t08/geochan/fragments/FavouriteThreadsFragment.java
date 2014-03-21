@@ -19,14 +19,14 @@ public class FavouriteThreadsFragment extends Fragment {
     private ArrayList<ThreadComment> list;
     private FavouritesLog log;
     private ListView favouritesListView;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log = FavouritesLog.getInstance(getActivity());
         list = log.getThreads();
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -60,5 +60,3 @@ public class FavouriteThreadsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 }
-
-

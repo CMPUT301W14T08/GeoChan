@@ -98,13 +98,14 @@ public class PostCommentFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
-                    
+
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }

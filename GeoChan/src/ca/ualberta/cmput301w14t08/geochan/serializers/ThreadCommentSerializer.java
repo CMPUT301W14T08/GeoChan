@@ -70,7 +70,8 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
             Picture picture = thread.getBodyComment().getImage();
             Picture pictureThumb = thread.getBodyComment().getImageThumb();
             /*
-             * http://stackoverflow.com/questions/15563021/how-to-convert-a-picture-object-into-a-bitmap-object-android
+             * http://stackoverflow.com/questions/15563021/how-to-convert-a-picture
+             * -object-into-a-bitmap-object-android
              */
             PictureDrawable drawable = new PictureDrawable(picture);
             PictureDrawable drawableThumb = new PictureDrawable(pictureThumb);

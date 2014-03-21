@@ -48,7 +48,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ThreadViewAdapter adapter;
     private int threadIndex;
     private ThreadComment thread = null;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,10 +105,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
         thread.getBodyComment().setChildren(list);
-        
+
         /*
-         *  Have to reset adapter: workaround for a strange issue, for description,
-         *  see : http://stackoverflow.com/questions/20512068/listview-not-updating-properly-cursoradapter-after-swapcursor
+         * Have to reset adapter: workaround for a strange issue, for
+         * description, see :
+         * http://stackoverflow.com/questions/20512068/listview
+         * -not-updating-properly-cursoradapter-after-swapcursor
          */
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
@@ -125,8 +127,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
         //
     }
-    
-    
+
     public GeoLocation getThreadLocation() {
         return thread.getSortLoc();
     }

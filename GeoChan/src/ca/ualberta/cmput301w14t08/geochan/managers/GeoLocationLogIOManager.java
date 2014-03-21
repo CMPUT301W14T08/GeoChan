@@ -41,7 +41,7 @@ public class GeoLocationLogIOManager {
         try {
             String json = gson.toJson(list);
             FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f)); 
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
             Log.e("GGG", "serialized");
             w.write(json);
             w.close();
@@ -67,7 +67,8 @@ public class GeoLocationLogIOManager {
             }
             r.close();
             f.close();
-            Type type = new TypeToken<ArrayList<LogEntry>>() {}.getType();
+            Type type = new TypeToken<ArrayList<LogEntry>>() {
+            }.getType();
             list = gson.fromJson(json, type);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -75,7 +76,7 @@ public class GeoLocationLogIOManager {
             e.printStackTrace();
         }
         Log.e("size of location log:", Integer.toString(list.size()));
-        for(LogEntry l : list) {
+        for (LogEntry l : list) {
             Log.e("WWW", l.getThreadTitle());
         }
         return list;

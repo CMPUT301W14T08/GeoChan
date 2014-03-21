@@ -27,7 +27,7 @@ public class ConnectivityListenerService extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO -> Implement :)
-        Log.e("onReceive","Called");
+        Log.e("onReceive", "Called");
     }
 
     /**
@@ -66,7 +66,7 @@ public class ConnectivityListenerService extends BroadcastReceiver {
     /**
      * getters and setters
      */
-    
+
     public ConnectivityManager getConnectivityManager() {
         return connectivityManager;
     }

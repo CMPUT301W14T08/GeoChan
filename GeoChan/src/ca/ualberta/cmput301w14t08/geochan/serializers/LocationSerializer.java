@@ -13,9 +13,11 @@ public class LocationSerializer implements JsonSerializer<Location> {
 
     /*
      * (non-Javadoc)
-     * @see com.google.gson.JsonSerializer#serialize(java.lang.Object, java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
-     * Some of this code is taken from a stackOverflow user Brian Roach, for details, see:
-     * http://stackoverflow.com/a/13997920
+     * 
+     * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+     * java.lang.reflect.Type, com.google.gson.JsonSerializationContext) Some of
+     * this code is taken from a stackOverflow user Brian Roach, for details,
+     * see: http://stackoverflow.com/a/13997920
      */
     @Override
     public JsonElement serialize(Location t, Type type, JsonSerializationContext jsc) {

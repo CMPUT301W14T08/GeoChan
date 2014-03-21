@@ -314,15 +314,15 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    
+
     private void listenForThreadButtons(View convertView, final ThreadComment thread) {
-     // Here handle button presses
+        // Here handle button presses
         final ImageButton replyButton = (ImageButton) convertView
                 .findViewById(R.id.comment_reply_button);
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
-        
+
         final ImageButton mapButton = (ImageButton) convertView
                 .findViewById(R.id.thread_map_button);
 
@@ -335,25 +335,24 @@ public class ThreadViewAdapter extends BaseAdapter {
                 }
             });
         }
-        
+
         if (mapButton != null) {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Log.e("ButtonClick", "mapView");
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("thread_comment", thread.getBodyComment());
-                    
+
                     Fragment mapFrag = new MapViewFragment();
                     mapFrag.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
-                        manager.beginTransaction().
-                            replace(R.id.container, mapFrag, "mapFrag")
-                            .addToBackStack(null).commit();
+                        manager.beginTransaction().replace(R.id.container, mapFrag, "mapFrag")
+                                .addToBackStack(null).commit();
                     } else {
-                        manager.beginTransaction().
-                            replace(R.id.fragment_container, mapFrag, "mapFrag")
-                            .addToBackStack(null).commit();
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, mapFrag, "mapFrag")
+                                .addToBackStack(null).commit();
                     }
                     manager.executePendingTransactions();
                 }

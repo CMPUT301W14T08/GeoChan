@@ -17,7 +17,7 @@ public class GsonHelper {
 
     private static Gson gson = null;
     private static GsonHelper instance = null;
-    
+
     private GsonHelper() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Comment.class, new CommentSerializer());
@@ -28,19 +28,19 @@ public class GsonHelper {
         builder.registerTypeAdapter(Location.class, new LocationDeserializer());
         gson = builder.create();
     }
-    
+
     public static GsonHelper getInstance() {
         if (instance == null) {
             instance = new GsonHelper();
         }
         return instance;
     }
-    
+
     public static Gson getGson() {
         if (gson == null) {
             getInstance();
         }
         return gson;
     }
-    
+
 }

@@ -218,15 +218,15 @@ public class ThreadComment implements Parcelable {
                     SortTypes.sortCommentsByUserScoreLowest(getSortLoc()));
             break;
         case SortTypes.SORT_IMAGE:
-            Collections.sort(this.getBodyComment().getChildren(),
-                    SortTypes.sortCommentsByImage());
+            Collections.sort(this.getBodyComment().getChildren(), SortTypes.sortCommentsByImage());
             break;
         }
     }
-    
+
     /**
-     * Sorts a thread's comments according to the tag passed.
-     * This will be moved into its own class, this is temporary.
+     * Sorts a thread's comments according to the tag passed. This will be moved
+     * into its own class, this is temporary.
+     * 
      * @param comments
      *            Comment list to sort
      * @param tag
@@ -235,24 +235,19 @@ public class ThreadComment implements Parcelable {
     public static void sortComments(ArrayList<Comment> comments, int tag) {
         switch (tag) {
         case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByDateNewest());
+            Collections.sort(comments, SortTypes.sortCommentsByDateNewest());
             break;
         case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByDateOldest());
+            Collections.sort(comments, SortTypes.sortCommentsByDateOldest());
             break;
         case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentDistance());
+            Collections.sort(comments, SortTypes.sortCommentsByParentDistance());
             break;
         case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentScoreHighest());
+            Collections.sort(comments, SortTypes.sortCommentsByParentScoreHighest());
             break;
         case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(comments,
-                    SortTypes.sortCommentsByParentScoreLowest());
+            Collections.sort(comments, SortTypes.sortCommentsByParentScoreLowest());
             break;
         }
     }
@@ -268,19 +263,19 @@ public class ThreadComment implements Parcelable {
         dest.writeValue(title);
         dest.writeValue(id);
     }
-    
+
     public ThreadComment(Parcel in) {
         super();
         this.setBodyComment((Comment) in.readValue(getClass().getClassLoader()));
         this.setTitle((String) in.readValue(getClass().getClassLoader()));
         this.setId((long) in.readLong());
     }
-    
+
     public static final Parcelable.Creator<ThreadComment> CREATOR = new Parcelable.Creator<ThreadComment>() {
         public ThreadComment createFromParcel(Parcel in) {
             return new ThreadComment(in);
         }
-        
+
         public ThreadComment[] newArray(int size) {
             return new ThreadComment[size];
         }

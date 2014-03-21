@@ -81,8 +81,8 @@ public class CustomLocationAdapter extends BaseAdapter {
         format.setMinimumFractionDigits(0);
         format.setMaximumFractionDigits(4);
 
-        loc.setText("Latitude: " + format.format(logEntry.getGeoLocation().getLatitude()) + ", Longitude: "
-                + format.format(logEntry.getGeoLocation().getLongitude()));
+        loc.setText("Latitude: " + format.format(logEntry.getGeoLocation().getLatitude())
+                + ", Longitude: " + format.format(logEntry.getGeoLocation().getLongitude()));
 
         return convertView;
     }

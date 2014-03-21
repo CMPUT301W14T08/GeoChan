@@ -2,7 +2,6 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,14 +17,14 @@ public class FavouriteCommentsFragment extends Fragment {
     private static ArrayList<Comment> list;
     private FavouritesLog log;
     private ListView favouritesListView;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log = FavouritesLog.getInstance(getActivity());
         list = log.getComments();
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub

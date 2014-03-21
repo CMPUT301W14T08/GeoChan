@@ -11,11 +11,11 @@ import android.preference.Preference.OnPreferenceChangeListener;
 public class PreferencesActivity extends PreferenceActivity {
     private EditTextPreference username;
 
-    /* 
-     * Because we are using the support library for fragments,
-     * we must use the deprecated method of inflating the preferences
-     * XML inside of the PreferenceActivity since the support
-     * library's fragment manager does not support the use of a PreferenceFragment.
+    /*
+     * Because we are using the support library for fragments, we must use the
+     * deprecated method of inflating the preferences XML inside of the
+     * PreferenceActivity since the support library's fragment manager does not
+     * support the use of a PreferenceFragment.
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -23,7 +23,7 @@ public class PreferencesActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
-        
+
         username = (EditTextPreference) findPreference("username");
         username.setSummary(username.getText());
 
@@ -31,8 +31,7 @@ public class PreferencesActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
-                hash.setSummary((String) newValue + " #"
-                        + HashHelper.getHash((String) newValue));
+                hash.setSummary((String) newValue + " #" + HashHelper.getHash((String) newValue));
                 return true;
             }
         });

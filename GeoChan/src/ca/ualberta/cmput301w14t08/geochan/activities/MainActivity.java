@@ -22,14 +22,12 @@ package ca.ualberta.cmput301w14t08.geochan.activities;
 
 import java.util.List;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -148,11 +146,11 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     // multiple children to the backstack.
     // (in our case, only one child fragments adds fragments to the backstack,
     // so we're fine with this)
-    // 
+    //
     // This code was taken from the website:
     // http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html
     // Accessed on March 21, 2014
-    
+
     private boolean returnBackStackImmediate(FragmentManager fm) {
         List<Fragment> fragments = fm.getFragments();
         if (fragments != null && fragments.size() > 0) {

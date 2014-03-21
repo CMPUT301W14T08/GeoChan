@@ -23,7 +23,6 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.util.Date;
 import java.util.Random;
 
-import android.support.v4.app.FragmentManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
