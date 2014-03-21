@@ -20,12 +20,16 @@
 
 package ca.ualberta.cmput301w14t08.geochan.activities;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,7 +58,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
         PreferencesManager.generateInstance(this);
         ThreadListFragment fragment = new ThreadListFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
+                .commit();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
@@ -69,22 +74,27 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_settings:
-            /* getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
-                    .addToBackStack(null).commit();
-
-            // This next line is necessary for JUnit to see fragments
-            getSupportFragmentManager().executePendingTransactions(); */
+            /*
+             * getSupportFragmentManager().beginTransaction()
+             * .replace(R.id.fragment_container, new PreferencesFragment(),
+             * "prefFrag") .addToBackStack(null).commit();
+             * 
+             * // This next line is necessary for JUnit to see fragments
+             * getSupportFragmentManager().executePendingTransactions();
+             */
             Intent intent = new Intent(this.getBaseContext(), PreferencesActivity.class);
             startActivity(intent);
             return true;
 
         case R.id.action_favourites:
-            /*Intent intent = new Intent(this.getBaseContext(),FavouritesActivity.class);
-            startActivity(intent);*/
+            /*
+             * Intent intent = new
+             * Intent(this.getBaseContext(),FavouritesActivity.class);
+             * startActivity(intent);
+             */
             getSupportFragmentManager().beginTransaction()
-            .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
-            .addToBackStack(null).commit();
+                    .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
+                    .addToBackStack(null).commit();
 
             // This next line is necessary for JUnit to see fragments
             getSupportFragmentManager().executePendingTransactions();
@@ -101,7 +111,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             getSupportFragmentManager().executePendingTransactions();
             return true;
         case android.R.id.home:
-            getSupportFragmentManager().popBackStack();
+            if (!returnBackStackImmediate(getSupportFragmentManager())) {
+                getSupportFragmentManager().popBackStack();
+            }
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -124,6 +136,41 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         checkActionBar();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!returnBackStackImmediate(getSupportFragmentManager())) {
+            super.onBackPressed();
+        }
+    }
+
+    // HACK: propagate back button press to child fragments.
+    // This might not work properly when you have multiple fragments adding
+    // multiple children to the backstack.
+    // (in our case, only one child fragments adds fragments to the backstack,
+    // so we're fine with this)
+    // 
+    // This code was taken from the website:
+    // http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html
+    // Accessed on March 21, 2014
+    
+    private boolean returnBackStackImmediate(FragmentManager fm) {
+        List<Fragment> fragments = fm.getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.getChildFragmentManager() != null) {
+                    if (fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+                        if (fragment.getChildFragmentManager().popBackStackImmediate()) {
+                            return true;
+                        } else {
+                            return returnBackStackImmediate(fragment.getChildFragmentManager());
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Calls the respective post new thread method in the fragment.
      * 
@@ -131,8 +178,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      *            View passed to the activity to check which button was pressed
      */
     public void postNewThread(View v) {
-        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager().findFragmentByTag(
-                "postThreadFrag");
+        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
+                .findFragmentByTag("postThreadFrag");
         fragment.postNewThread(v);
     }
 
@@ -204,8 +251,17 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         } else {
             getActionBar().setDisplayHomeAsUpEnabled(false);
         }
+        Fragment fav = null;
         Fragment favParent = getSupportFragmentManager().findFragmentByTag("favouritesFrag");
-        Fragment fav = getSupportFragmentManager().findFragmentByTag("thread_view_fav_fragment");
+        if (favParent != null) {
+            List<Fragment> list = favParent.getChildFragmentManager().getFragments();
+            if (list != null) {
+                for (Fragment f : list) {
+                    Log.e("???", f.getTag());
+                }
+            }
+            fav = favParent.getChildFragmentManager().findFragmentByTag("thread_view_fav_fragment");
+        }
         if (fav != null) {
             getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             getActionBar().setDisplayShowTitleEnabled(true);
@@ -214,10 +270,10 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             getActionBar().setDisplayShowTitleEnabled(false);
         }
     }
-    
+
     public void getDirections(View v) {
-        MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager()
-                .findFragmentByTag("mapFrag");
+        MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(
+                "mapFrag");
         fragment.getDirections();
     }
 
