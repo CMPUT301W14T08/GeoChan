@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,7 +46,7 @@ public class MapViewFragment extends Fragment {
     private double MIN_LAT;
     private double MIN_LONG;
     
-    final public static int ZOOM_FACTOR = 900000;
+    final public static int ZOOM_FACTOR = 90000;
 
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
 
@@ -153,23 +152,16 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        int maxLatitude = (int) Math.round(MAX_LAT);
-        int maxLongitude = (int) Math.round(MAX_LONG);
-        int minLatitude = (int) Math.round(MAX_LAT);
-        int minLongitude = (int) Math.round(MAX_LONG);
-        
-        Log.e("MaxLat", Integer.toString(maxLatitude));
-        Log.e("MInLat", Integer.toString(minLatitude));
-        Log.e("MaxLong", Integer.toString(maxLongitude));
-        Log.e("MinLong", Integer.toString(minLongitude));
-        Log.e("zoomToSpanLong",Integer.toString(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR));
-        Log.e("zoomToSpanLat",Integer.toString(Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR));
+        //int maxLatitude = (int) Math.round(MAX_LAT);
+        //int maxLongitude = (int) Math.round(MAX_LONG);
+        //int minLatitude = (int) Math.round(MIN_LAT);
+        //int minLongitude = (int) Math.round(MIN_LONG);
         
         mapController = openMapView.getController();
         mapController.setZoom(18);
         mapController.animateTo(startGeoPoint);
-        mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
-                Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
+        //mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
+        //        Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
     }
     
     /**
