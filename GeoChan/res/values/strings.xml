@@ -36,5 +36,6 @@
     <string name="favourites">Favourites</string>
     <string name="threads_fav">Threads</string>
     <string name="comments_fav">Comments</string>
+    <string name="get_directions_button_text">Get Directions</string>
 
 </resources>

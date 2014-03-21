@@ -31,12 +31,12 @@ import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates
@@ -198,6 +198,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         } else {
             getActionBar().setDisplayHomeAsUpEnabled(false);
         }
+    }
+    
+    public void getDirections(View v) {
+        MapViewFragment fragment = (MapViewFragment) getFragmentManager()
+                .findFragmentByTag("mapFrag");
+        fragment.getDirections();
     }
 
 }
