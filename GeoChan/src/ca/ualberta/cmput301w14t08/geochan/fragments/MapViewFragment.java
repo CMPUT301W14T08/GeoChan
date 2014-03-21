@@ -18,6 +18,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,57 +38,48 @@ public class MapViewFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoPoint geoPoint;
     private Activity activity;
-/*
+    private Polyline roadOverlay;
+
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
-        
+
         ProgressDialog directionsLoadingDialog = new ProgressDialog(activity.getApplicationContext());
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            //this method will be running on UI thread
-            directionsLoadingDialog.setMessage("Getting Directions");
-            directionsLoadingDialog.show();
+            //directionsLoadingDialog.setMessage("Getting Directions");
+            //directionsLoadingDialog.show();
         }
-        
+
         @Override
-        protected Void doInBackground() {
+        protected Void doInBackground(Void ... params) {
+            Log.e("Trying to","run async task in background");
+            /*
             RoadManager roadManager = new OSRMRoadManager();
-            
+
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-            
+
             GeoLocation geoLocation = new GeoLocation(locationListenerService);   
             //waypoints.add(new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude()));
             waypoints.add(new GeoPoint(53.533,-113.495));
             waypoints.add(geoPoint);
             Road road = roadManager.getRoad(waypoints);
 
-            
+
             Polyline roadOverlay = RoadManager.buildRoadOverlay(road, activity);
-            openMapView.getOverlays().add(roadOverlay);
-            
-            openMapView.invalidate();
+             */
+
+            return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            //this method will be running on UI thread
-
-            directionsLoadingDialog.dismiss();
+            //directionsLoadingDialog.dismiss();
         }
+    }  
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-*/
-        
-    
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -109,11 +101,11 @@ public class MapViewFragment extends Fragment {
     @Override 
     public void onStart() {
         super.onStart();
-        
+
         activity = getActivity();
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        
+
         Bundle args = getArguments();
         Comment comment = (Comment) args.getParcelable("thread_comment");
         GeoLocation geoLocation = comment.getLocation();
@@ -125,7 +117,7 @@ public class MapViewFragment extends Fragment {
             this.setupMap(geoLocation);
         }
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();
@@ -155,9 +147,12 @@ public class MapViewFragment extends Fragment {
         mapController.setZoom(12);
         mapController.animateTo(geoPoint);
     }
-    
+
     public void getDirections() {
-       //MapAsyncTask directionsAsyncTask = new MapAsyncTask();
-        
+        Log.e("Clicked","Get Directions");
+        new MapAsyncTask().execute();
+
+        openMapView.getOverlays().add(roadOverlay);
+        openMapView.invalidate();
     }
 }
