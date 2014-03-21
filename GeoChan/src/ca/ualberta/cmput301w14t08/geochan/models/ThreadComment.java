@@ -143,7 +143,7 @@ public class ThreadComment {
     public double getScoreFromUser(GeoLocation g) {
         int distConst = 25;
         int timeConst = 10;
-        int maxScore = 10000;
+        long maxScore = 100000000;
 
         if (g == null) {
             Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");

@@ -27,7 +27,6 @@ import java.util.Comparator;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Helper class. Manages Comparators for sorting across multiple classes.
@@ -47,6 +46,14 @@ public class SortUtil {
     public static final int SORT_IMAGE = 8;
     
     
+    /**
+     * Sorts the ArrayList of ThreadComments passed to it according to
+     * the tag passed. The passed GeoLocation is used in sorting by
+     * location or score.
+     * @param tag Tag specifying the sorting method to be used.
+     * @param threads The ArrayList of ThreadComments to be sorted
+     * @param sortLoc The GeoLocation used in sorting of ThreadComments.
+     */
     public static void sortThreads(int tag, 
                                    ArrayList<ThreadComment> threads,
                                    GeoLocation sortLoc){
@@ -70,6 +77,25 @@ public class SortUtil {
                     sortThreadsByLocation(sortLoc));
             break;
         }      
+    }
+    
+    /**
+     * Sorts the ArrayList of ThreadComments according to the tag
+     * passed to it. Only used for sorting methods
+     * that do not require a GeoLocation.
+     * @param tag Tag specifying the type of sorting to be done.
+     * @param threads The ArrayList of ThreadComments to be sorted.
+     */
+    public static void sortThreads(int tag,
+                                   ArrayList<ThreadComment> threads){
+        switch (tag){
+        case(SORT_DATE_OLDEST):
+            Collections.sort(threads, sortThreadsByDateOldest());
+            break;
+        case(SORT_DATE_NEWEST):
+            Collections.sort(threads, sortThreadsByDateNewest());
+            break;
+        }
     }
     
     public static void sortComments(int tag,

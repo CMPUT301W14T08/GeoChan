@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,8 +44,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -57,6 +60,7 @@ public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
     private ListView threadListView;
     private ThreadListAdapter adapter;
+    private LocationListenerService locationListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locationListener = new LocationListenerService(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -83,6 +88,51 @@ public class ThreadListFragment extends Fragment implements
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        GeoLocation g = new GeoLocation(locationListener);
+        Log.e("Thread at index 0 pre sort:",ThreadList.getThreads().get(0).getTitle());
+        switch(item.getItemId()){
+        case R.id.thread_sort_date_new:
+            SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
+            return true;
+        case R.id.thread_sort_date_old:
+            SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
+            return true;
+        case R.id.thread_sort_score_high:
+            SortUtil.sortThreads(SortUtil.SORT_SCORE_HIGHEST,
+                                ThreadList.getThreads(),
+                                g);
+            adapter.notifyDataSetChanged();
+            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
+           // for (ThreadComment thread: ThreadList.getThreads()){
+           //     Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
+           // }
+            Log.e("", "");
+            return true;
+        case R.id.thread_sort_score_low:
+            SortUtil.sortThreads(SortUtil.SORT_SCORE_LOWEST,
+                                ThreadList.getThreads(),
+                                g);
+            adapter.notifyDataSetChanged();
+            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
+            for (ThreadComment thread: ThreadList.getThreads()){
+                Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
+            }
+            //Sorting stuff for sorting by score low here.
+            return true;
+        case R.id.thread_sort_location:
+            //Sorting stuff for sorting by location here.
+            return true;
+        default:
+            return getActivity().onOptionsItemSelected(item);
+        }
     }
     
 

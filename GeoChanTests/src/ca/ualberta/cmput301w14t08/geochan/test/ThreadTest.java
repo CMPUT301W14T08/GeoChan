@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
@@ -303,8 +305,17 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t8);
         carrier.add(t9);
         
+        for(ThreadComment thread: carrier){
+            Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
+        }
+        
         SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, 
                             carrier, new GeoLocation(0,0));
+        
+        Log.e(""," ");
+        for(ThreadComment thread: carrier){
+            Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
+        }
         
         assertTrue("t1 at index 0", carrier.get(0) == t1);
         assertTrue("t2 at index 1", carrier.get(1) == t2);
