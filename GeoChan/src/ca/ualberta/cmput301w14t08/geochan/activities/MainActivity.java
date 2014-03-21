@@ -20,11 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
  * This is the main and, so far, only activity in the application. It inflates
  * the default fragment and handles some of the crucial controller methods
  */
-public class MainActivity extends Activity implements OnBackStackChangedListener {
+public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +51,9 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         }
         // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
         PreferencesManager.generateInstance(this);
-        Fragment fragment = new ThreadListFragment();
-        getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
-        getFragmentManager().addOnBackStackChangedListener(this);
+        ThreadListFragment fragment = new ThreadListFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -68,31 +67,31 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_settings:
-            getFragmentManager().beginTransaction()
+            /* getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new PreferencesFragment(), "prefFrag")
                     .addToBackStack(null).commit();
 
             // This next line is necessary for JUnit to see fragments
-            getFragmentManager().executePendingTransactions();
+            getSupportFragmentManager().executePendingTransactions(); */
             return true;
 
         case R.id.action_favourites:
-            Intent intent = new Intent(this.getBaseContext(),FavouritesActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(this.getBaseContext(),FavouritesActivity.class);
+            startActivity(intent);*/
             return true;
 
         case R.id.action_add_thread:
             PostThreadFragment frag = new PostThreadFragment();
             frag.setArguments(new Bundle());
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, frag, "postThreadFrag").addToBackStack(null)
                     .commit();
 
             // This next line is necessary for JUnit to see fragments
-            getFragmentManager().executePendingTransactions();
+            getSupportFragmentManager().executePendingTransactions();
             return true;
         case android.R.id.home:
-            getFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStack();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -102,7 +101,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     @Override
     public void onResume() {
         super.onResume();
-        getFragmentManager().addOnBackStackChangedListener(this);
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
         checkActionBar();
     }
 
@@ -122,7 +121,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
      *            View passed to the activity to check which button was pressed
      */
     public void postNewThread(View v) {
-        PostThreadFragment fragment = (PostThreadFragment) getFragmentManager().findFragmentByTag(
+        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager().findFragmentByTag(
                 "postThreadFrag");
         fragment.postNewThread(v);
     }
@@ -134,7 +133,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
      *            View passed to the activity to check which button was pressed
      */
     public void postReply(View v) {
-        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
+        PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
         fragment.postReply(v);
     }
@@ -154,10 +153,10 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
                 .commit();
-        getFragmentManager().executePendingTransactions();
+        getSupportFragmentManager().executePendingTransactions();
     }
 
     /**
@@ -167,7 +166,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
      *            View passed to the activity to check which button was pressed
      */
     public void submitLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+        CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(v);
     }
@@ -179,7 +178,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
      *            View passed to the activity to check which button was pressed
      */
     public void submitCurrentLocation(View v) {
-        CustomLocationFragment fragment = (CustomLocationFragment) getFragmentManager()
+        CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(v);
     }
@@ -189,7 +188,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
      * in the action bar accordingly
      */
     private void checkActionBar() {
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count > 0) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
@@ -198,7 +197,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
     }
     
     public void getDirections(View v) {
-        MapViewFragment fragment = (MapViewFragment) getFragmentManager()
+        MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager()
                 .findFragmentByTag("mapFrag");
         fragment.getDirections();
     }

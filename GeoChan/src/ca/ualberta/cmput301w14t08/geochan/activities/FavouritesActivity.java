@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.activities;
+/*package ca.ualberta.cmput301w14t08.geochan.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -72,3 +72,4 @@ ActionBar.OnNavigationListener {
         return true;
     }
 }
+*/
