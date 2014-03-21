@@ -39,7 +39,6 @@ import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
@@ -61,8 +60,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        // threadIndex = (int) bundle.getLong("id");
-        //final int id = (int) bundle.getLong("id");
+        threadIndex = (int) bundle.getLong("id");
         thread = bundle.getParcelable("thread");
         getLoaderManager().restartLoader(CommentLoader.LOADER_ID, null, this);
     }
@@ -79,9 +77,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onStart() {
         super.onStart();
-        Bundle bundle = getArguments();
-        final int id = (int) bundle.getLong("id");
-        ThreadComment thread = ThreadList.getThreads().get(id);
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.

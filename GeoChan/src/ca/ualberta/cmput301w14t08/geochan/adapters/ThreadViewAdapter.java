@@ -196,7 +196,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_op, null);
             }
             setOPFields(convertView);
-            listenForButtons(convertView, thread.getBodyComment());
+            listenForThreadButtons(convertView, thread);
             break;
 
         case TYPE_COMMENT0:
@@ -207,7 +207,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
             }
             setCommentFields(convertView, comment);
-            listenForButtons(convertView, comment);
+            listenForCommentButtons(convertView, comment);
             break;
 
         case TYPE_COMMENT1:
@@ -218,7 +218,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
             }
             setCommentFields(convertView, comment1);
-            listenForButtons(convertView, comment1);
+            listenForCommentButtons(convertView, comment1);
             break;
 
         case TYPE_COMMENT2:
@@ -229,7 +229,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
             }
             setCommentFields(convertView, comment2);
-            listenForButtons(convertView, comment2);
+            listenForCommentButtons(convertView, comment2);
             break;
 
         case TYPE_COMMENT3:
@@ -240,7 +240,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
             }
             setCommentFields(convertView, comment3);
-            listenForButtons(convertView, comment3);
+            listenForCommentButtons(convertView, comment3);
             break;
 
         case TYPE_COMMENT4:
@@ -251,7 +251,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
             }
             setCommentFields(convertView, comment4);
-            listenForButtons(convertView, comment4);
+            listenForCommentButtons(convertView, comment4);
             break;
 
         case TYPE_COMMENT5:
@@ -262,7 +262,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
             }
             setCommentFields(convertView, comment5);
-            listenForButtons(convertView, comment5);
+            listenForCommentButtons(convertView, comment5);
             break;
 
         case TYPE_COMMENT6:
@@ -273,7 +273,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
             }
             setCommentFields(convertView, comment6);
-            listenForButtons(convertView, comment6);
+            listenForCommentButtons(convertView, comment6);
             break;
 
         case TYPE_COMMENT7:
@@ -284,7 +284,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
             }
             setCommentFields(convertView, comment7);
-            listenForButtons(convertView, comment7);
+            listenForCommentButtons(convertView, comment7);
             break;
 
         case TYPE_SEPARATOR:
@@ -308,16 +308,15 @@ public class ThreadViewAdapter extends BaseAdapter {
             TextView depthMeter = (TextView) convertView
                     .findViewById(R.id.thread_view_comment_depth_meter);
             depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
-            listenForButtons(convertView, commentMax);
+            listenForCommentButtons(convertView, commentMax);
             break;
 
         }
         return convertView;
     }
-
-    private void listenForButtons(View convertView, final Comment comment) {
-        // TODO Auto-generated method stub
-        // Here handle button presses
+    
+    private void listenForThreadButtons(View convertView, final ThreadComment thread) {
+     // Here handle button presses
         final ImageButton replyButton = (ImageButton) convertView
                 .findViewById(R.id.comment_reply_button);
 
@@ -332,7 +331,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
                     FavouritesLog log = FavouritesLog.getInstance(context);
-                    log.addComment(comment);
+                    log.addThreadComment(thread);
                 }
             });
         }
@@ -342,7 +341,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Log.e("ButtonClick", "mapView");
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("thread_comment", comment);
+                    bundle.putParcelable("thread_comment", thread.getBodyComment());
                     
                     Fragment mapFrag = new MapViewFragment();
                     mapFrag.setArguments(bundle);
@@ -351,6 +350,46 @@ public class ThreadViewAdapter extends BaseAdapter {
                             replace(R.id.fragment_container, mapFrag, "mapFrag")
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();
+                }
+            });
+        }
+
+        if (replyButton != null) {
+            replyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    Log.e("ButtonClick", "click");
+                    Log.e("Comment being replied:", thread.getBodyComment().getTextPost());
+                    Fragment fragment = new PostCommentFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("cmt", thread.getBodyComment());
+                    bundle.putLong("id", id);
+                    fragment.setArguments(bundle);
+
+                    manager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "repFrag")
+                            .addToBackStack(null).commit();
+                    manager.executePendingTransactions();
+                }
+
+            });
+        }
+    }
+
+    private void listenForCommentButtons(View convertView, final Comment comment) {
+        // Here handle button presses
+        final ImageButton replyButton = (ImageButton) convertView
+                .findViewById(R.id.comment_reply_button);
+
+        final ImageButton starButton = (ImageButton) convertView
+                .findViewById(R.id.comment_star_button);
+
+        if (starButton != null) {
+            starButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
+                    FavouritesLog log = FavouritesLog.getInstance(context);
+                    log.addComment(comment);
                 }
             });
         }
