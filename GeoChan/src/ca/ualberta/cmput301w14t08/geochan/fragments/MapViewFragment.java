@@ -18,7 +18,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,38 +35,33 @@ public class MapViewFragment extends Fragment {
     private MapView openMapView;
     private IMapController mapController;
     private LocationListenerService locationListenerService;
+    private GeoLocation currentLocation;
     private GeoPoint geoPoint;
     private Activity activity;
     private Polyline roadOverlay;
 
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
 
-        ProgressDialog directionsLoadingDialog = new ProgressDialog(activity.getApplicationContext());
+        ProgressDialog directionsLoadingDialog = new ProgressDialog(activity);
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //directionsLoadingDialog.setMessage("Getting Directions");
-            //directionsLoadingDialog.show();
+            directionsLoadingDialog.setMessage("Getting Directions");
+            directionsLoadingDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void ... params) {
-            Log.e("Trying to","run async task in background");
-            /*
             RoadManager roadManager = new OSRMRoadManager();
-
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
-            GeoLocation geoLocation = new GeoLocation(locationListenerService);   
-            //waypoints.add(new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude()));
-            waypoints.add(new GeoPoint(53.533,-113.495));
+            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
             waypoints.add(geoPoint);
             Road road = roadManager.getRoad(waypoints);
 
-
-            Polyline roadOverlay = RoadManager.buildRoadOverlay(road, activity);
-             */
+            roadOverlay = RoadManager.buildRoadOverlay(road, activity);
+            openMapView.getOverlays().add(roadOverlay);
 
             return null;
         }
@@ -75,7 +69,7 @@ public class MapViewFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            //directionsLoadingDialog.dismiss();
+            directionsLoadingDialog.dismiss();
         }
     }  
 
@@ -103,8 +97,11 @@ public class MapViewFragment extends Fragment {
         super.onStart();
 
         activity = getActivity();
-        locationListenerService = new LocationListenerService(getActivity());
+
+        locationListenerService = new LocationListenerService(activity);
         locationListenerService.startListening();
+
+        currentLocation = new GeoLocation(locationListenerService);
 
         Bundle args = getArguments();
         Comment comment = (Comment) args.getParcelable("thread_comment");
@@ -130,7 +127,6 @@ public class MapViewFragment extends Fragment {
      * @param geoLocation
      */
     public void setupMap(GeoLocation geoLocation) {
-
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
@@ -148,11 +144,16 @@ public class MapViewFragment extends Fragment {
         mapController.animateTo(geoPoint);
     }
 
+    /**
+     * Called when the get_directions_button is clicked. Displays directions from
+     * current location to the comment location. Uses an Async task to get map overlay
+     */
     public void getDirections() {
-        Log.e("Clicked","Get Directions");
-        new MapAsyncTask().execute();
-
-        openMapView.getOverlays().add(roadOverlay);
+        if (currentLocation.getLocation() == null) {
+            ErrorDialog.show(getActivity(), "Could not retrieve your location");
+        } else {
+            new MapAsyncTask().execute();
+        }
         openMapView.invalidate();
     }
 }

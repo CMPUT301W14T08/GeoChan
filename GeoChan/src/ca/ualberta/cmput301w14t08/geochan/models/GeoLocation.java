@@ -45,7 +45,7 @@ public class GeoLocation {
     }
 
     /**
-     * Construcs a new GeoLocation object with a supplied location object
+     * Constructs a new GeoLocation object with a supplied location object
      * 
      * @param location
      */
