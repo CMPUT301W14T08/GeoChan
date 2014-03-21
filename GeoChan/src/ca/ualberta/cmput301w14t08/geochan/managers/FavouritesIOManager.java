@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.content.Context;
+import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -30,12 +31,14 @@ import com.google.gson.reflect.TypeToken;
 public class FavouritesIOManager {
     private static FavouritesIOManager instance;
     private Context context;
+    private Gson gson;
     private static final String FILENAME1 = "favcom.sav";
     private static final String FILENAME2 = "favthr.sav";
 
 
     private FavouritesIOManager(Context context) {
         this.context = context;
+        this.gson = GsonHelper.getGson();
     }
 
     public static FavouritesIOManager getInstance(Context context) {
@@ -47,11 +50,6 @@ public class FavouritesIOManager {
 
     public void serializeComments() {
         try {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            //gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
-            gsonBuilder.registerTypeAdapter(Comment.class, new CommentSerializer());
-            Gson gson = gsonBuilder.create();
-            
             String json = gson.toJson(FavouritesLog.getInstance(context).getComments());
             FileOutputStream f = context.openFileOutput(FILENAME1, Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f)); 
@@ -67,11 +65,6 @@ public class FavouritesIOManager {
 
     public void serializeThreads() {
         try {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            //gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
-            gsonBuilder.registerTypeAdapter(Comment.class, new ThreadCommentSerializer());
-            Gson gson = gsonBuilder.create();
-            
             String json = gson.toJson(FavouritesLog.getInstance(context).getThreads());
             FileOutputStream f = context.openFileOutput(FILENAME2, Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f)); 
@@ -88,11 +81,6 @@ public class FavouritesIOManager {
     public ArrayList<Comment> deSerializeComments() {
         ArrayList<Comment> list = new ArrayList<Comment>();
         try {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            //gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
-            gsonBuilder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-            Gson gson = gsonBuilder.create();
-            
             FileInputStream f = context.openFileInput(FILENAME1);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
             String json = "";
@@ -117,11 +105,6 @@ public class FavouritesIOManager {
     public ArrayList<ThreadComment> deSerializeThreads() {
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            //gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserializer());
-            gsonBuilder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-            Gson gson = gsonBuilder.create();
-            
             FileInputStream f = context.openFileInput(FILENAME2);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
             String json = "";
