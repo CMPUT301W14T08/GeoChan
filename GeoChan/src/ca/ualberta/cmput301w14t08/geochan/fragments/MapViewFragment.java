@@ -140,7 +140,7 @@ public class MapViewFragment extends Fragment {
     public void setupMap(GeoLocation geoLocation) {
 
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
-        openMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+        openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
 
@@ -152,7 +152,7 @@ public class MapViewFragment extends Fragment {
         openMapView.getOverlays().add(startMarker);
 
         mapController = openMapView.getController();
-        // mapController.setZoom(12);
+        mapController.setZoom(12);
         mapController.animateTo(geoPoint);
     }
     
