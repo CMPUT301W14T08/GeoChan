@@ -134,7 +134,7 @@ public class ThreadListFragment extends Fragment implements
      */
     @Override
     public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-        return new ThreadCommentLoader(getActivity(), threadListView);
+        return new ThreadCommentLoader(getActivity());
     }
 
     /*
@@ -150,6 +150,7 @@ public class ThreadListFragment extends Fragment implements
         ThreadList.setThreads(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
+        threadListView.onRefreshComplete();
     }
 
     /*

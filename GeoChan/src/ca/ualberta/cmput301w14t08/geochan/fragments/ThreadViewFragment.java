@@ -32,19 +32,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
  */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
-    private ListView threadView;
+    private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
     private ThreadComment thread = null;
@@ -77,11 +78,18 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onStart() {
         super.onStart();
-        threadView = (ListView) getView().findViewById(R.id.thread_view_list);
+        threadView = (PullToRefreshListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        threadView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                reload();
+            }
+        });
     }
 
     /*
@@ -114,6 +122,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
          */
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
+        threadView.onRefreshComplete();
     }
 
     /*
@@ -130,5 +139,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
     public GeoLocation getThreadLocation() {
         return thread.getSortLoc();
+    }
+    
+    private void reload() {
+        getLoaderManager().getLoader(1).forceLoad();
     }
 }

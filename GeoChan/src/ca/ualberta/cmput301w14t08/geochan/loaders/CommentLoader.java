@@ -95,18 +95,6 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
             deliverResult(list);
         }
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int count = client.getCommentCount(thread.getBodyComment());
-                if (count != list.size()) {
-                    forceLoad();
-                }
-            }
-        }, 5000, 60000);
-
         if (list == null) {
             forceLoad();
         }
