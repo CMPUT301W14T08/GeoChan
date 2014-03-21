@@ -1,14 +1,17 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,12 +59,18 @@ public class MapViewFragment extends Fragment {
             openMapView.setTileSource(TileSourceFactory.MAPNIK);
             openMapView.setBuiltInZoomControls(true);
             openMapView.setMultiTouchControls(true);
-
-            mapController = openMapView.getController();
+            
             GeoPoint geoPoint = new GeoPoint(geoLocation.getLocation());
-
-            mapController.setCenter(geoPoint);
+            
+            Marker startMarker = new Marker(openMapView);
+            startMarker.setPosition(geoPoint);
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            openMapView.getOverlays().add(startMarker);
+            
+            mapController = openMapView.getController();
             mapController.setZoom(12);
+            mapController.setCenter(geoPoint);
+
         }
     }
 }
