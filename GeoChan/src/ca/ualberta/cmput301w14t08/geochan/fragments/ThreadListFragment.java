@@ -71,8 +71,16 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locationListener = new LocationListenerService(getActivity());
+        //locationListener = new LocationListenerService(getActivity());
         setHasOptionsMenu(true);
+    }
+    
+    @Override
+    public void onResume(){
+        if(locationListener == null){
+            locationListener = new LocationListenerService(getActivity());
+        }
+        super.onResume();
     }
 
     @Override
@@ -93,6 +101,11 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         GeoLocation g = new GeoLocation(locationListener);
+        if(g.getLocation() == null){
+            Log.e("G loc is null","");
+        }
+        Log.e("G's lat:", String.valueOf(g.getLatitude()));
+        Log.e("G's long:", String.valueOf(g.getLongitude()));
         Log.e("Thread at index 0 pre sort:",ThreadList.getThreads().get(0).getTitle());
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
