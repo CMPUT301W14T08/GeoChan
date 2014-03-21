@@ -32,8 +32,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         actionBar.setListNavigationCallbacks(
         // Specify a SpinnerAdapter to populate the dropdown list.
                 new ArrayAdapter<String>(actionBar.getThemedContext(),
-                // android.R.layout.simple_list_item_1,
-                        android.R.id.text1, new String[] { getString(R.string.threads_fav),
+                        android.R.layout.simple_list_item_1, android.R.id.text1,
+                        new String[] { getString(R.string.threads_fav),
                                 getString(R.string.comments_fav), }), this);
         return inflater.inflate(R.layout.fragment_favourites, container, false);
     }

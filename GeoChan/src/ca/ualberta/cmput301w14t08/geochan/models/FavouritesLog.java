@@ -18,10 +18,10 @@ public class FavouritesLog {
     private ArrayList<Comment> comments;
 
     private FavouritesLog(Context context) {
-        threads = new ArrayList<ThreadComment>();
-        comments = new ArrayList<Comment>();
         this.context = context;
         manager = FavouritesIOManager.getInstance(context);
+        threads = manager.deSerializeThreads();
+        comments = manager.deSerializeComments();
     }
 
     public static FavouritesLog getInstance(Context context) {
@@ -33,12 +33,12 @@ public class FavouritesLog {
 
     public void addThreadComment(ThreadComment thread) {
         threads.add(thread);
-        // manager.serializeThreads();
+        manager.serializeThreads();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        // manager.serializeComments();
+        manager.serializeComments();
     }
 
     // Getters and Setters
