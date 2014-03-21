@@ -101,22 +101,17 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         GeoLocation g = new GeoLocation(locationListener);
-        if(g.getLocation() == null){
-            Log.e("G loc is null","");
-        }
-        Log.e("G's lat:", String.valueOf(g.getLatitude()));
-        Log.e("G's long:", String.valueOf(g.getLongitude()));
-        Log.e("Thread at index 0 pre sort:",ThreadList.getThreads().get(0).getTitle());
+        g.getLocation();
+        g.getLatitude();
+        g.getLongitude();
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
-            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
             return true;
         case R.id.thread_sort_date_old:
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
-            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
             return true;
         case R.id.thread_sort_score_high:
             SortUtil.sortThreads(SortUtil.SORT_SCORE_HIGHEST,
@@ -124,9 +119,9 @@ public class ThreadListFragment extends Fragment implements
                                 g);
             adapter.notifyDataSetChanged();
             Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
-           // for (ThreadComment thread: ThreadList.getThreads()){
-           //     Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
-           // }
+            for (ThreadComment thread: ThreadList.getThreads()){
+                Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
+            }
             Log.e("", "");
             return true;
         case R.id.thread_sort_score_low:
@@ -138,11 +133,16 @@ public class ThreadListFragment extends Fragment implements
             for (ThreadComment thread: ThreadList.getThreads()){
                 Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
             }
-            //Sorting stuff for sorting by score low here.
             return true;
-        case R.id.thread_sort_location:
+        case R.id.thread_sort_location_current:
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION_USER,
+                                ThreadList.getThreads(),
+                                g);
+            adapter.notifyDataSetChanged();
             //Sorting stuff for sorting by location here.
             return true;
+        case R.id.thread_sort_location_other:
+            //Sorting stuff for getting a location and sorting here.
         default:
             return getActivity().onOptionsItemSelected(item);
         }

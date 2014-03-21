@@ -36,8 +36,7 @@ public class SortUtil {
 
     public static final int SORT_DATE_NEWEST = 0;
     public static final int SORT_DATE_OLDEST = 1;
-    @Deprecated
-    public static final int SORT_LOCATION_OP = 2;
+    public static final int SORT_LOCATION_USER = 2;
     public static final int SORT_SCORE_HIGHEST = 3;
     public static final int SORT_SCORE_LOWEST = 4;
     public static final int SORT_USER_SCORE_HIGHEST = 5;
