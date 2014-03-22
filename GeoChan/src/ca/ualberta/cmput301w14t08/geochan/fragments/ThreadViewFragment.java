@@ -26,6 +26,7 @@ import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +36,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -47,10 +50,14 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ListView threadView;
     private ThreadViewAdapter adapter;
     private ThreadComment thread = null;
+    private LocationListenerService locationListener;
     
     @Override
     public void onResume(){
         setHasOptionsMenu(true);
+        if(locationListener == null){
+            locationListener = new LocationListenerService(getActivity());
+        }
         super.onResume();
     }
 
@@ -94,6 +101,19 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+        case(R.id.comment_sort_date_new):
+            Log.e("Sorting comments by date new.","");
+            SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
+                                thread.getBodyComment().getChildren());
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_date_old):
+            SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, 
+                                thread.getBodyComment().getChildren());
+            adapter.notifyDataSetChanged();
+            return true;
+        }
         return getActivity().onOptionsItemSelected(item);
     }
 
