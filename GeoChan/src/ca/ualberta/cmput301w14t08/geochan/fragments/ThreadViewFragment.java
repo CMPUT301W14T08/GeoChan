@@ -26,6 +26,7 @@ import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +40,9 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -50,13 +53,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ListView threadView;
     private ThreadViewAdapter adapter;
     private ThreadComment thread = null;
-    private LocationListenerService locationListener;
+    private LocationListenerService locationListener = null;
+    private PreferencesManager prefManager = null;
     
     @Override
     public void onResume(){
         setHasOptionsMenu(true);
         if(locationListener == null){
             locationListener = new LocationListenerService(getActivity());
+        }
+        if(prefManager == null){
+            prefManager = PreferencesManager.getInstance();
         }
         super.onResume();
     }
@@ -101,20 +108,66 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        Log.e("onOptionsItemSelect in ThreadViewFragment called","");
         switch(item.getItemId()){
         case(R.id.comment_sort_date_new):
+            prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
             Log.e("Sorting comments by date new.","");
             SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
                                 thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+            threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_date_old):
+            prefManager.setCommentSort(SortUtil.SORT_DATE_OLDEST);
             SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, 
                                 thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+            threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
+        case(R.id.comment_sort_image):
+            prefManager.setCommentSort(SortUtil.SORT_IMAGE);
+            SortUtil.sortComments(SortUtil.SORT_IMAGE, 
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_location_current):
+            prefManager.setCommentSort(SortUtil.SORT_LOCATION);
+            //SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+            SortUtil.setCommentSortGeo(new GeoLocation(0,0));//For testing purposes.
+            SortUtil.sortComments(SortUtil.SORT_LOCATION,
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_location_other):
+            //Put location sorting stuff here.
+            return true;
+        case(R.id.comment_sort_score_high):
+             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
+             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
+                                   thread.getBodyComment().getChildren());
+             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+             threadView.setAdapter(adapter);
+             adapter.notifyDataSetChanged();
+             return true;
+        case(R.id.comment_sort_score_low):
+             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
+             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
+                                   thread.getBodyComment().getChildren());
+             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+             threadView.setAdapter(adapter);
+             adapter.notifyDataSetChanged();
+             return true;
         }
-        return getActivity().onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     /*

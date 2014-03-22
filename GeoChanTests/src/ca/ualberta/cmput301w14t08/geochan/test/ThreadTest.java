@@ -133,7 +133,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t9);
         carrier.add(t10);
         
-        SortUtil.setSortGeo(new GeoLocation(0,0));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
         SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, 
                             carrier);
@@ -208,7 +208,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t9);
         carrier.add(t10);
         
-        SortUtil.setSortGeo(new GeoLocation(0,0));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
         SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, 
                             carrier);
@@ -312,7 +312,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
             Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
         }
         
-        SortUtil.setSortGeo(new GeoLocation(0,0));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
         SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, 
                             carrier);
@@ -417,7 +417,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t8);
         carrier.add(t9);
         
-        SortUtil.setSortGeo(new GeoLocation(0,0));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
         SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST, 
                             carrier);
@@ -503,7 +503,7 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t8);
         carrier.add(t9);
         
-        SortUtil.setSortGeo(new GeoLocation(0,0));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
         SortUtil.sortThreads(SortUtil.SORT_LOCATION, 
                             carrier);

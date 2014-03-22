@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.managers;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
@@ -60,10 +61,30 @@ public class PreferencesManager {
     }
     
     /**
+     * Chanes the ThreadComment sort type.
+     * @param sortMethod The new ThreadComment sorting method.
+     */
+    public void setThreadSort(int sortMethod){
+        Editor editor = preferences.edit();
+        editor.putInt("thread_sort", sortMethod);
+        editor.commit();
+    }
+    
+    /**
      * Returns the comment sort type as an integer
      * @return the comment sort type
      */
     public int getCommentSort() {
         return preferences.getInt("comment_sort", SortUtil.SORT_DATE_NEWEST);
+    }
+    
+    /**
+     * Changes the comment sort type.
+     * @param sortMethod The new comment sorting type.
+     */
+    public void setCommentSort(int sortMethod){
+        Editor editor = preferences.edit();
+        editor.putInt("comment_sort", sortMethod);
+        editor.commit();
     }
 }

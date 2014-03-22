@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager.OnBackStackChangedListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,6 +70,7 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.e("onOptionsItemSelect in MainActivity called","");
         switch (item.getItemId()) {
         case R.id.action_settings:
             getFragmentManager().beginTransaction()
@@ -92,7 +94,8 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
             getFragmentManager().popBackStack();
             return true;
         default:
-            return super.onOptionsItemSelected(item);
+            //return super.onOptionsItemSelected(item);
+            return false;
         }
     }
     

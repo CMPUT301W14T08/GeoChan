@@ -36,25 +36,40 @@ public class SortUtil {
 
     public static final int SORT_DATE_NEWEST = 0;
     public static final int SORT_DATE_OLDEST = 1;
-    public static final int SORT_LOCATION_USER = 2;
+   // @Deprecated
+    //public static final int SORT_LOCATION_USER = 2;
+    @Deprecated
     public static final int SORT_SCORE_HIGHEST = 3;
+    @Deprecated
     public static final int SORT_SCORE_LOWEST = 4;
     public static final int SORT_USER_SCORE_HIGHEST = 5;
     public static final int SORT_USER_SCORE_LOWEST = 6;
     public static final int SORT_LOCATION = 7;
     public static final int SORT_IMAGE = 8;
     
-    private static GeoLocation sortGeo;
+    private static GeoLocation commentSortGeo = null;
+    private static GeoLocation threadSortGeo = null;
     
-    public static GeoLocation getSortGeo(){
-        if(sortGeo == null){
-            sortGeo = new GeoLocation(0,0);
+    public static GeoLocation getCommentSortGeo(){
+        if(commentSortGeo == null){
+            commentSortGeo = new GeoLocation(0,0);
         }
-        return sortGeo;
+        return commentSortGeo;
     }
     
-    public static void setSortGeo(GeoLocation g){
-        sortGeo = g;
+    public static GeoLocation getThreadSortGeo(){
+        if(threadSortGeo == null){
+            commentSortGeo = new GeoLocation(0,0);
+        }
+        return commentSortGeo;
+    }
+    
+    public static void setCommentSortGeo(GeoLocation g){
+        commentSortGeo = g;
+    }
+    
+    public static void setThreadSortGeo(GeoLocation g){
+        threadSortGeo = g;
     }
     
     
@@ -273,8 +288,8 @@ public class SortUtil {
     private static Comparator<Comment> sortCommentsByUserScoreHighest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
-                double val1 = c1.getScoreFromUser(SortUtil.getSortGeo());
-                double val2 = c2.getScoreFromUser(SortUtil.getSortGeo());
+                double val1 = c1.getScoreFromUser(SortUtil.getCommentSortGeo());
+                double val2 = c2.getScoreFromUser(SortUtil.getCommentSortGeo());
                 if (val1 > val2) {
                     return -1;
                 } else if (val1 < val2) {
@@ -298,8 +313,8 @@ public class SortUtil {
     private static Comparator<Comment> sortCommentsByUserScoreLowest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
-                double val1 = c1.getScoreFromUser(SortUtil.getSortGeo());
-                double val2 = c2.getScoreFromUser(SortUtil.getSortGeo());
+                double val1 = c1.getScoreFromUser(SortUtil.getCommentSortGeo());
+                double val2 = c2.getScoreFromUser(SortUtil.getCommentSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -341,8 +356,8 @@ public class SortUtil {
     private static Comparator<Comment> sortCommentsByLocation() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
-                double val1 = c1.getDistanceFrom(SortUtil.getSortGeo());
-                double val2 = c2.getDistanceFrom(SortUtil.getSortGeo());
+                double val1 = c1.getDistanceFrom(SortUtil.getCommentSortGeo());
+                double val2 = c2.getDistanceFrom(SortUtil.getCommentSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -400,8 +415,8 @@ public class SortUtil {
     private static Comparator<ThreadComment> sortThreadsByUserScoreHighest() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getScoreFromUser(SortUtil.getSortGeo());
-                double val2 = t2.getScoreFromUser(SortUtil.getSortGeo());
+                double val1 = t1.getScoreFromUser(SortUtil.getThreadSortGeo());
+                double val2 = t2.getScoreFromUser(SortUtil.getThreadSortGeo());
                 if (val1 > val2) {
                     return -1;
                 } else if (val1 < val2) {// mixed these 2 around
@@ -423,8 +438,8 @@ public class SortUtil {
     private static Comparator<ThreadComment> sortThreadsByUserScoreLowest() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getScoreFromUser(SortUtil.getSortGeo());
-                double val2 = t2.getScoreFromUser(SortUtil.getSortGeo());
+                double val1 = t1.getScoreFromUser(SortUtil.getThreadSortGeo());
+                double val2 = t2.getScoreFromUser(SortUtil.getThreadSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -447,8 +462,8 @@ public class SortUtil {
     private static Comparator<ThreadComment> sortThreadsByLocation() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getDistanceFrom(SortUtil.getSortGeo());
-                double val2 = t2.getDistanceFrom(SortUtil.getSortGeo());
+                double val1 = t1.getDistanceFrom(SortUtil.getThreadSortGeo());
+                double val2 = t2.getDistanceFrom(SortUtil.getThreadSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {

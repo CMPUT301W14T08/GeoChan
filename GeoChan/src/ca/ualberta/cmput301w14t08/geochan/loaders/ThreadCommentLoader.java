@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -60,9 +61,7 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
             list = new ArrayList<ThreadComment>();
         }
         ArrayList<ThreadComment> result = client.getThreads();
-        //ThreadList.sortThreads(result, manager.getThreadSort());
-        //Need to resolve this by figuring out the sortLoc.
-        //SortUtil.sortThreads(manager.getThreadSort(),result, sortLoc);
+        SortUtil.sortThreads(manager.getThreadSort(),result);
         return result;
     }
 

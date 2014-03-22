@@ -60,7 +60,7 @@ public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
     private ListView threadListView;
     private ThreadListAdapter adapter;
-    private LocationListenerService locationListener;
+    private LocationListenerService locationListener = null;
    // private GeoLocation sortGeo;
 
     @Override
@@ -81,9 +81,6 @@ public class ThreadListFragment extends Fragment implements
         if(locationListener == null){
             locationListener = new LocationListenerService(getActivity());
         }
-       /* if(sortGeo == null){
-            sortGeo = new GeoLocation(locationListener);
-        }*/
         super.onResume();
     }
 
@@ -97,7 +94,6 @@ public class ThreadListFragment extends Fragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu, inflater);
-        //menu.clear();
         inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
@@ -105,29 +101,34 @@ public class ThreadListFragment extends Fragment implements
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        SortUtil.setSortGeo(new GeoLocation(locationListener));
+        //Log.i("onOptionsItemSelect in ThreadListFragment called","");
         //SortUtil.setSortGeo(new GeoLocation(20,20));
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
+            Log.i("sorting by date new in threadListFragment","");
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_date_old:
+            Log.e("sorting by date old in threadListFragment","");
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_high:
-            SortUtil.sortThreads(SortUtil.SORT_SCORE_HIGHEST,
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_low:
-            SortUtil.sortThreads(SortUtil.SORT_SCORE_LOWEST,
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_location_current:
-            SortUtil.sortThreads(SortUtil.SORT_LOCATION_USER,
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             //Sorting stuff for sorting by location here.
@@ -135,7 +136,7 @@ public class ThreadListFragment extends Fragment implements
         case R.id.thread_sort_location_other:
             //Sorting stuff for getting a location and sorting here.
         default:
-            return getActivity().onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);
         }
     }
     
