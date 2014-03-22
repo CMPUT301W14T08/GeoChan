@@ -144,6 +144,7 @@ public class ThreadComment {
         int distConst = 25;
         int timeConst = 10;
         long maxScore = 100000000;
+        double minScore = 0.0001;
 
         if (g == null) {
             Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");
@@ -153,6 +154,8 @@ public class ThreadComment {
         double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if (distScore + timeScore > maxScore) {
             return maxScore;
+        } else if (distScore + timeScore < minScore){
+            return minScore;
         } else {
             return distScore + timeScore;
         }

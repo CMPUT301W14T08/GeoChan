@@ -11,7 +11,6 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
@@ -134,8 +133,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t9);
         carrier.add(t10);
         
+        SortUtil.setSortGeo(new GeoLocation(0,0));
+        
         SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, 
-                            carrier, new GeoLocation(0,0));
+                            carrier);
         
         assertTrue("t10 at index 0", carrier.get(0) == t10);
         assertTrue("t9 at index 1", carrier.get(1) == t9);
@@ -207,8 +208,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t9);
         carrier.add(t10);
         
+        SortUtil.setSortGeo(new GeoLocation(0,0));
+        
         SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, 
-                            carrier, new GeoLocation(0,0));
+                            carrier);
         
         assertTrue("t1 at index 0", carrier.get(0) == t1);
         assertTrue("t2 at index 1", carrier.get(1) == t2);
@@ -309,8 +312,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
             Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
         }
         
+        SortUtil.setSortGeo(new GeoLocation(0,0));
+        
         SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, 
-                            carrier, new GeoLocation(0,0));
+                            carrier);
         
         Log.e(""," ");
         for(ThreadComment thread: carrier){
@@ -412,8 +417,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t8);
         carrier.add(t9);
         
+        SortUtil.setSortGeo(new GeoLocation(0,0));
+        
         SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST, 
-                            carrier, new GeoLocation(0,0));
+                            carrier);
         
         assertTrue("t10 at index 0", carrier.get(0) == t10);
         assertTrue("t9 at index 1", carrier.get(1) == t9);
@@ -496,8 +503,10 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         carrier.add(t8);
         carrier.add(t9);
         
+        SortUtil.setSortGeo(new GeoLocation(0,0));
+        
         SortUtil.sortThreads(SortUtil.SORT_LOCATION, 
-                            carrier, new GeoLocation(0,0));
+                            carrier);
         
         assertTrue("t1 at index 0", carrier.get(0) == t1);
         assertTrue("t2 at index 1", carrier.get(1) == t2);

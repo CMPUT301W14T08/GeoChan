@@ -61,6 +61,7 @@ public class ThreadListFragment extends Fragment implements
     private ListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener;
+   // private GeoLocation sortGeo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +81,9 @@ public class ThreadListFragment extends Fragment implements
         if(locationListener == null){
             locationListener = new LocationListenerService(getActivity());
         }
+       /* if(sortGeo == null){
+            sortGeo = new GeoLocation(locationListener);
+        }*/
         super.onResume();
     }
 
@@ -92,18 +96,17 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
+        //menu.clear();
         inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
-        super.onCreateOptionsMenu(menu, inflater);
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        GeoLocation g = new GeoLocation(locationListener);
-        g.getLocation();
-        g.getLatitude();
-        g.getLongitude();
+        SortUtil.setSortGeo(new GeoLocation(locationListener));
+        //SortUtil.setSortGeo(new GeoLocation(20,20));
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
@@ -115,29 +118,17 @@ public class ThreadListFragment extends Fragment implements
             return true;
         case R.id.thread_sort_score_high:
             SortUtil.sortThreads(SortUtil.SORT_SCORE_HIGHEST,
-                                ThreadList.getThreads(),
-                                g);
+                                ThreadList.getThreads());
             adapter.notifyDataSetChanged();
-            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
-            for (ThreadComment thread: ThreadList.getThreads()){
-                Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
-            }
-            Log.e("", "");
             return true;
         case R.id.thread_sort_score_low:
             SortUtil.sortThreads(SortUtil.SORT_SCORE_LOWEST,
-                                ThreadList.getThreads(),
-                                g);
+                                ThreadList.getThreads());
             adapter.notifyDataSetChanged();
-            Log.e("Thread at index 0 post sort:",ThreadList.getThreads().get(0).getTitle());
-            for (ThreadComment thread: ThreadList.getThreads()){
-                Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(g)));
-            }
             return true;
         case R.id.thread_sort_location_current:
             SortUtil.sortThreads(SortUtil.SORT_LOCATION_USER,
-                                ThreadList.getThreads(),
-                                g);
+                                ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             //Sorting stuff for sorting by location here.
             return true;

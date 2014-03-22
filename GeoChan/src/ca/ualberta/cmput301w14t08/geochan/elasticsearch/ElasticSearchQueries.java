@@ -29,8 +29,8 @@ public class ElasticSearchQueries {
     /**
      * A query string to search for all results in a type.
      */
-    public static final String SEARCH_MATCH_ALL = "{\n" + "   \"query\": {\n"
-            + "       \"match_all\" : { } \n" + "   }\n" + "}";
+    public static final String SEARCH_MATCH_ALL = "{\n" + " \"size\" : 9999, \n"
+            + " \"query\": {\n" + " \"match_all\" : { } \n" + " }\n" + "}";
 
     private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
             + "       \"match\" : {\n" + "           \"parent\" : \"";

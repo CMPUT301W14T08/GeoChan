@@ -47,6 +47,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ListView threadView;
     private ThreadViewAdapter adapter;
     private ThreadComment thread = null;
+    
+    @Override
+    public void onResume(){
+        setHasOptionsMenu(true);
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +90,11 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        return getActivity().onOptionsItemSelected(item);
     }
 
     /*

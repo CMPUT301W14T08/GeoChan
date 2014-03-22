@@ -44,6 +44,19 @@ public class SortUtil {
     public static final int SORT_LOCATION = 7;
     public static final int SORT_IMAGE = 8;
     
+    private static GeoLocation sortGeo;
+    
+    public static GeoLocation getSortGeo(){
+        if(sortGeo == null){
+            sortGeo = new GeoLocation(0,0);
+        }
+        return sortGeo;
+    }
+    
+    public static void setSortGeo(GeoLocation g){
+        sortGeo = g;
+    }
+    
     
     /**
      * Sorts the ArrayList of ThreadComments passed to it according to
@@ -54,8 +67,7 @@ public class SortUtil {
      * @param sortLoc The GeoLocation used in sorting of ThreadComments.
      */
     public static void sortThreads(int tag, 
-                                   ArrayList<ThreadComment> threads,
-                                   GeoLocation sortLoc){
+                                   ArrayList<ThreadComment> threads){
         switch (tag){
         case(SORT_DATE_OLDEST):
             Collections.sort(threads, sortThreadsByDateOldest());
@@ -65,15 +77,15 @@ public class SortUtil {
             break;
         case(SORT_USER_SCORE_HIGHEST):
             Collections.sort(threads, 
-                      sortThreadsByUserScoreHighest(sortLoc));
+                      sortThreadsByUserScoreHighest());
             break;
         case(SORT_USER_SCORE_LOWEST):
             Collections.sort(threads,
-                    sortThreadsByUserScoreLowest(sortLoc));
+                    sortThreadsByUserScoreLowest());
             break;
         case(SORT_LOCATION):
             Collections.sort(threads,
-                    sortThreadsByLocation(sortLoc));
+                    sortThreadsByLocation());
             break;
         }      
     }
@@ -85,56 +97,44 @@ public class SortUtil {
      * @param tag Tag specifying the type of sorting to be done.
      * @param threads The ArrayList of ThreadComments to be sorted.
      */
-    public static void sortThreads(int tag,
-                                   ArrayList<ThreadComment> threads){
-        switch (tag){
-        case(SORT_DATE_OLDEST):
-            Collections.sort(threads, sortThreadsByDateOldest());
-            break;
-        case(SORT_DATE_NEWEST):
-            Collections.sort(threads, sortThreadsByDateNewest());
-            break;
-        }
-    }
     
     public static void sortComments(int tag,
-                                    ArrayList<Comment> coms,
-                                    GeoLocation sortLoc){
+                                    ArrayList<Comment> coms){
         switch(tag){
         case(SORT_DATE_OLDEST):
             Collections.sort(coms, sortCommentsByDateOldest());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         case(SORT_DATE_NEWEST):
             Collections.sort(coms, sortCommentsByDateNewest());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         case(SORT_LOCATION):
-            Collections.sort(coms, sortCommentsByLocation(sortLoc));
+            Collections.sort(coms, sortCommentsByLocation());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         case(SORT_USER_SCORE_HIGHEST):
-            Collections.sort(coms, sortCommentsByUserScoreHighest(sortLoc));
+            Collections.sort(coms, sortCommentsByUserScoreHighest());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         case(SORT_USER_SCORE_LOWEST):
-            Collections.sort(coms, sortCommentsByUserScoreLowest(sortLoc));
+            Collections.sort(coms, sortCommentsByUserScoreLowest());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         case(SORT_IMAGE):
             Collections.sort(coms, sortCommentsByImage());
             for(Comment c: coms){
-                sortComments(tag, c.getChildren(), sortLoc);
+                sortComments(tag, c.getChildren());
             }
             break;
         }
@@ -255,11 +255,26 @@ public class SortUtil {
      * @return A comparator for sorting comments by score relative to user
      *         provided location.
      */
-    private static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g) {
+   /* private static Comparator<Comment> sortCommentsByUserScoreHighest(final GeoLocation g) {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
                 double val1 = c1.getScoreFromUser(g);
                 double val2 = c2.getScoreFromUser(g);
+                if (val1 > val2) {
+                    return -1;
+                } else if (val1 < val2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }*/
+    private static Comparator<Comment> sortCommentsByUserScoreHighest() {
+        return new Comparator<Comment>() {
+            public int compare(Comment c1, Comment c2) {
+                double val1 = c1.getScoreFromUser(SortUtil.getSortGeo());
+                double val2 = c2.getScoreFromUser(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return -1;
                 } else if (val1 < val2) {
@@ -280,11 +295,11 @@ public class SortUtil {
      * @return A comparator for sorting comments by score relative to user
      *         provided location.
      */
-    private static Comparator<Comment> sortCommentsByUserScoreLowest(final GeoLocation g) {
+    private static Comparator<Comment> sortCommentsByUserScoreLowest() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
-                double val1 = c1.getScoreFromUser(g);
-                double val2 = c2.getScoreFromUser(g);
+                double val1 = c1.getScoreFromUser(SortUtil.getSortGeo());
+                double val2 = c2.getScoreFromUser(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -323,11 +338,11 @@ public class SortUtil {
      * @param g the GeoLocation to sort by
      * @return the comparator
      */
-    private static Comparator<Comment> sortCommentsByLocation(final GeoLocation g) {
+    private static Comparator<Comment> sortCommentsByLocation() {
         return new Comparator<Comment>() {
             public int compare(Comment c1, Comment c2) {
-                double val1 = c1.getDistanceFrom(g);
-                double val2 = c2.getDistanceFrom(g);
+                double val1 = c1.getDistanceFrom(SortUtil.getSortGeo());
+                double val2 = c2.getDistanceFrom(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -382,11 +397,11 @@ public class SortUtil {
      *            The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to highest score.
      */
-    private static Comparator<ThreadComment> sortThreadsByUserScoreHighest(final GeoLocation g) {
+    private static Comparator<ThreadComment> sortThreadsByUserScoreHighest() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getScoreFromUser(g);
-                double val2 = t2.getScoreFromUser(g);
+                double val1 = t1.getScoreFromUser(SortUtil.getSortGeo());
+                double val2 = t2.getScoreFromUser(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return -1;
                 } else if (val1 < val2) {// mixed these 2 around
@@ -405,11 +420,11 @@ public class SortUtil {
      *            The current ThreadList.sortLoc
      * @return A Comparator used to sort Threads according to lowest score.
      */
-    private static Comparator<ThreadComment> sortThreadsByUserScoreLowest(final GeoLocation g) {
+    private static Comparator<ThreadComment> sortThreadsByUserScoreLowest() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getScoreFromUser(g);
-                double val2 = t2.getScoreFromUser(g);
+                double val1 = t1.getScoreFromUser(SortUtil.getSortGeo());
+                double val2 = t2.getScoreFromUser(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {
@@ -429,11 +444,11 @@ public class SortUtil {
      *            The GeoLocation to be compared against.
      * @return A Comparator used to sort ThreadComments according to location.
      */
-    private static Comparator<ThreadComment> sortThreadsByLocation(final GeoLocation g) {
+    private static Comparator<ThreadComment> sortThreadsByLocation() {
         return new Comparator<ThreadComment>() {
             public int compare(ThreadComment t1, ThreadComment t2) {
-                double val1 = t1.getDistanceFrom(g);
-                double val2 = t2.getDistanceFrom(g);
+                double val1 = t1.getDistanceFrom(SortUtil.getSortGeo());
+                double val2 = t2.getDistanceFrom(SortUtil.getSortGeo());
                 if (val1 > val2) {
                     return 1;
                 } else if (val1 < val2) {

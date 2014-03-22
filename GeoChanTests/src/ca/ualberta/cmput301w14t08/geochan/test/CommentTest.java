@@ -90,7 +90,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c6);
         c3.addChild(c7);
         
-        SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, carrier, new GeoLocation(0,0));
+        SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, carrier);
         
         assertTrue("c5 at index 0", carrier.get(0) == c5);
         assertTrue("c4 at index 1", carrier.get(1) == c4);
@@ -144,7 +144,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c6);
         c3.addChild(c7);
         
-        SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, carrier, new GeoLocation(0,0));
+        SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, carrier);
         
         assertTrue("c1 at index 0", carrier.get(0) == c1);
         assertTrue("c2 at index 1", carrier.get(1) == c2);
@@ -208,7 +208,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c6);
         c3.addChild(c7);
         
-        SortUtil.sortComments(SortUtil.SORT_LOCATION,carrier, new GeoLocation(0,0));
+        SortUtil.sortComments(SortUtil.SORT_LOCATION,carrier);
         
         assertTrue("c1 at index 0", carrier.get(0) == c1);
         assertTrue("c2 at index 1", carrier.get(1) == c2);
@@ -286,7 +286,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c7);
         
         SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
-                                carrier, new GeoLocation(0,0));
+                                carrier);
         
         assertTrue("c1 at index 0", carrier.get(0) == c1);
         assertTrue("c2 at index 1", carrier.get(1) == c2);
@@ -364,7 +364,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c7);
         
         SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
-                                carrier, new GeoLocation(0,0));
+                                carrier);
         
         assertTrue("c5 at index 0", carrier.get(0) == c5);
         assertTrue("c4 at index 1", carrier.get(1) == c4);
@@ -424,7 +424,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c3.addChild(c6);
         c3.addChild(c7);
         
-        SortUtil.sortComments(SortUtil.SORT_IMAGE, carrier, new GeoLocation(0,0));
+        SortUtil.sortComments(SortUtil.SORT_IMAGE, carrier);
         
         assertTrue("c5 at index 0", carrier.get(0) == c5);
         assertTrue("c3 at index 1", carrier.get(1) == c3);

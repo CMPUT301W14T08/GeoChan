@@ -39,5 +39,6 @@
     <string name="score_lowest">Relevance (Lowest)</string>
     <string name="sort_location_current">Location (Current)</string>
     <string name="sort_location_other">Location (Other)</string>
+    <string name="sort_image">Image</string>
 
 </resources>
