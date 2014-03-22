@@ -70,7 +70,6 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.e("onOptionsItemSelect in MainActivity called","");
         switch (item.getItemId()) {
         case R.id.action_settings:
             getFragmentManager().beginTransaction()

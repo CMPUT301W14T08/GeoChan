@@ -104,9 +104,6 @@ public class ThreadComment {
      *         passed GeoLocation.
      */
     public double getDistanceFrom(GeoLocation g) {
-        if(this.getBodyComment().getLocation() == null){
-            Log.e("Error:","Body comment has null location.");
-        }
         return this.getBodyComment().getLocation().distance(g);
     }
 

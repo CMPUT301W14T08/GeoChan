@@ -26,8 +26,6 @@ import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,11 +108,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Log.e("onOptionsItemSelect in ThreadViewFragment called","");
         switch(item.getItemId()){
         case(R.id.comment_sort_date_new):
             prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
-            Log.e("Sorting comments by date new.","");
             SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
                                 thread.getBodyComment().getChildren());
             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());

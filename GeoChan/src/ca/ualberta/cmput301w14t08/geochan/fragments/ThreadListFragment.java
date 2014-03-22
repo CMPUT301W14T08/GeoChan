@@ -32,7 +32,6 @@ import android.content.Context;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,7 +114,6 @@ public class ThreadListFragment extends Fragment implements
             return true;
         case R.id.thread_sort_date_old:
             prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
-            Log.e("sorting by date old in threadListFragment","");
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
@@ -175,9 +173,7 @@ public class ThreadListFragment extends Fragment implements
         });
         SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
         int sort = pref.getInt("sortThreads", SortUtil.SORT_DATE_NEWEST);
-        //ThreadList.sortThreads(sort);
-        //Will need to figure out sortLoc here somehow.
-        //SortUtil.sortThreads(sort, ThreadList.getThreads(), sortLoc);
+        SortUtil.sortThreads(sort, ThreadList.getThreads());
         adapter.notifyDataSetChanged();
     }
 
