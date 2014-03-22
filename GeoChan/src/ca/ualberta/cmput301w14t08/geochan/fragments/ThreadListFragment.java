@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,7 +63,8 @@ public class ThreadListFragment extends Fragment implements
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
-   // private GeoLocation sortGeo;
+    //private GeoLocation sortGeo = null;
+    private static int locSortFlag = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +86,13 @@ public class ThreadListFragment extends Fragment implements
         }
         if(prefManager == null){
             prefManager = PreferencesManager.getInstance();
+        }
+        if(locSortFlag == 1){
+            prefManager.setThreadSort(SortUtil.SORT_LOCATION);
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
+                                ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            locSortFlag = 0;
         }
         locationListener.startListening();
         super.onResume();
@@ -141,9 +150,22 @@ public class ThreadListFragment extends Fragment implements
             return true;
         case R.id.thread_sort_location_other:
             //Sorting stuff for getting a location and sorting here.
+            this.getSortingLoc();
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    private void getSortingLoc(){
+        locSortFlag = 1;
+        Bundle args = new Bundle();
+        args.putInt("postType", CustomLocationFragment.SORT_THREAD);
+        CustomLocationFragment frag = new CustomLocationFragment();
+        frag.setArguments(args);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
     }
     
 

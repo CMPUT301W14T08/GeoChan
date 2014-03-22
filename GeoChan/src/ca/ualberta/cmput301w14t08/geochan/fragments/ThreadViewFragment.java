@@ -53,6 +53,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ThreadComment thread = null;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
+    private static int locSortFlag = 0;
     
     @Override
     public void onResume(){
@@ -62,6 +63,15 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         }
         if(prefManager == null){
             prefManager = PreferencesManager.getInstance();
+        }
+        if(locSortFlag == 1){
+            prefManager.setCommentSort(SortUtil.SORT_LOCATION);
+            SortUtil.sortComments(SortUtil.SORT_LOCATION,
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            locSortFlag = 0;
         }
         locationListener.startListening();
         super.onResume();
@@ -136,7 +146,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         case(R.id.comment_sort_location_current):
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
             SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
-            //SortUtil.setCommentSortGeo(new GeoLocation(0,0));//For testing purposes.
             SortUtil.sortComments(SortUtil.SORT_LOCATION,
                                   thread.getBodyComment().getChildren());
             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());
@@ -144,7 +153,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_location_other):
-            //Put location sorting stuff here.
+            locSortFlag = 1;
+            this.getSortingLoc();
             return true;
         case(R.id.comment_sort_score_high):
              prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
@@ -164,8 +174,20 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
              threadView.setAdapter(adapter);
              adapter.notifyDataSetChanged();
              return true;
-        }
-        return super.onOptionsItemSelected(item);
+         default:
+             return super.onOptionsItemSelected(item);
+        }     
+    }
+    
+    private void getSortingLoc(){
+        Bundle args = new Bundle();
+        args.putInt("postType", CustomLocationFragment.SORT_COMMENT);
+        CustomLocationFragment frag = new CustomLocationFragment();
+        frag.setArguments(args);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
     }
 
     /*

@@ -42,6 +42,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
@@ -62,6 +63,8 @@ public class CustomLocationFragment extends Fragment {
     public static final int THREAD = 1;
     public static final int COMMENT = 2;
     public static final int REPLY = 3;
+    public static final int SORT_THREAD = 4;
+    public static final int SORT_COMMENT = 5;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -171,6 +174,10 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
             args.putString("LocationType", locationType);
+        } else if (postType == SORT_THREAD) {
+            SortUtil.setThreadSortGeo(geoLocation);
+        } else if (postType == SORT_COMMENT){
+            SortUtil.setCommentSortGeo(geoLocation);
         }
     }
 }
