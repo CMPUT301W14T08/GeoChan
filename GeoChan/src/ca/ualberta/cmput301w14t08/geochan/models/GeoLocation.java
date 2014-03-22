@@ -22,6 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -40,7 +41,11 @@ public class GeoLocation {
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
         if (this.location == null) {
+            Log.e("GeoLocation:","location from getCurrentLocation() was null.");
             this.location = locationListenerService.getLastKnownLocation();
+        }
+        if(this.location == null){
+            Log.e("GeoLocation:", "location from getLastKnownLocation() was null.");
         }
     }
 
