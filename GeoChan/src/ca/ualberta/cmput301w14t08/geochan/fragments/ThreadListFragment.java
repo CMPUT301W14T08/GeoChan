@@ -47,6 +47,7 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -61,6 +62,7 @@ public class ThreadListFragment extends Fragment implements
     private ListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
+    private PreferencesManager prefManager = null;
    // private GeoLocation sortGeo;
 
     @Override
@@ -81,6 +83,10 @@ public class ThreadListFragment extends Fragment implements
         if(locationListener == null){
             locationListener = new LocationListenerService(getActivity());
         }
+        if(prefManager == null){
+            prefManager = PreferencesManager.getInstance();
+        }
+        locationListener.startListening();
         super.onResume();
     }
 
@@ -103,28 +109,33 @@ public class ThreadListFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
+            prefManager.setThreadSort(SortUtil.SORT_DATE_NEWEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_date_old:
+            prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
             Log.e("sorting by date old in threadListFragment","");
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_high:
-            SortUtil.setThreadSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
+            prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_HIGHEST);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_low:
-            SortUtil.setThreadSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
+            prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_LOWEST);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_location_current:
-            SortUtil.setThreadSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
+            prefManager.setThreadSort(SortUtil.SORT_LOCATION);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_LOCATION,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();

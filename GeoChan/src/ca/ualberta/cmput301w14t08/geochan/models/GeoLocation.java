@@ -41,11 +41,7 @@ public class GeoLocation {
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
         if (this.location == null) {
-            Log.e("GeoLocation:","location from getCurrentLocation() was null.");
             this.location = locationListenerService.getLastKnownLocation();
-        }
-        if(this.location == null){
-            Log.e("GeoLocation:", "location from getLastKnownLocation() was null.");
         }
     }
 

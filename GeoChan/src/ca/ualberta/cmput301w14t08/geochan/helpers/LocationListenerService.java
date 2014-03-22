@@ -103,7 +103,12 @@ public class LocationListenerService {
      * @return location
      */
     public Location getLastKnownLocation() {
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(loc == null){
+            loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        return loc;
     }
 
     /**

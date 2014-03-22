@@ -36,8 +36,6 @@ public class SortUtil {
 
     public static final int SORT_DATE_NEWEST = 0;
     public static final int SORT_DATE_OLDEST = 1;
-   // @Deprecated
-    //public static final int SORT_LOCATION_USER = 2;
     @Deprecated
     public static final int SORT_SCORE_HIGHEST = 3;
     @Deprecated
@@ -59,9 +57,9 @@ public class SortUtil {
     
     public static GeoLocation getThreadSortGeo(){
         if(threadSortGeo == null){
-            commentSortGeo = new GeoLocation(0,0);
+            threadSortGeo = new GeoLocation(0,0);
         }
-        return commentSortGeo;
+        return threadSortGeo;
     }
     
     public static void setCommentSortGeo(GeoLocation g){

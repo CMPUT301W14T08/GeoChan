@@ -65,6 +65,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         if(prefManager == null){
             prefManager = PreferencesManager.getInstance();
         }
+        locationListener.startListening();
         super.onResume();
     }
 
@@ -106,6 +107,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         adapter.notifyDataSetChanged();
     }
     
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Log.e("onOptionsItemSelect in ThreadViewFragment called","");
@@ -137,8 +139,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             return true;
         case(R.id.comment_sort_location_current):
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
-            //SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
-            SortUtil.setCommentSortGeo(new GeoLocation(0,0));//For testing purposes.
+            SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
+            //SortUtil.setCommentSortGeo(new GeoLocation(0,0));//For testing purposes.
             SortUtil.sortComments(SortUtil.SORT_LOCATION,
                                   thread.getBodyComment().getChildren());
             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager());

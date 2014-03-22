@@ -150,7 +150,7 @@ public class ThreadComment {
         double minScore = 0.0001;
 
         if (g == null) {
-            Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");
+            Log.e("Thread:" + this.getTitle(), "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
         double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
