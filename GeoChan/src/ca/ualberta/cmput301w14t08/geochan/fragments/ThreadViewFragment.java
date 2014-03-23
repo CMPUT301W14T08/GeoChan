@@ -95,9 +95,21 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
+                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                // This loop is supposed to remove selection from other comments,
+                // Does not yet work.
+                for (int i = 0; i < threadView.getCount(); i++) {
+                    if(i != position){
+                        View v = threadView.getAdapter().getView(i, null, null);
+                        RelativeLayout relativeInflater = (RelativeLayout) v.findViewById(R.id.relative_inflater);
+                        if(relativeInflater != null) {
+                            relativeInflater.removeAllViewsInLayout();                        }
+                    }
+                }
+                
                 final Comment comment = (Comment) parent.getAdapter().getItem(position);
                 RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
-                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View child = inflater.inflate(R.layout.comment_buttons, null);
                 relativeInflater.addView(child);
                 
@@ -110,9 +122,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 if (starButton != null) {
                     starButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            Toast.makeText(getActivity(), "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                            FavouritesLog log = FavouritesLog.getInstance(getActivity());
-                            log.addComment(comment);
+                            starButton.setImageResource(R.drawable.ic_rating_marked);
+                            favouriteAComment(comment);
                         }
                     });
                 }
@@ -121,23 +132,31 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                     replyButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             // Perform action on click
-                            Log.e("ButtonClick", "click");
-                            Log.e("Comment being replied:", comment.getTextPost());
-                            Fragment fragment = new PostCommentFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("cmt", comment);
-                            bundle.putLong("id", threadIndex);
-                            fragment.setArguments(bundle);
-
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, fragment, "repFrag")
-                                    .addToBackStack(null).commit();
-                            getFragmentManager().executePendingTransactions();
+                            replyToComment(comment, threadIndex);
                         }
                     });
                 }
             }
         });
+    }
+    
+    public void favouriteAComment(Comment comment) {
+        Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
+        FavouritesLog log = FavouritesLog.getInstance(getActivity());
+        log.addComment(comment);
+    }
+    
+    public void replyToComment(Comment comment, int threadIndex) {
+        Fragment fragment = new PostCommentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("cmt", comment);
+        bundle.putLong("id", threadIndex);
+        fragment.setArguments(bundle);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, "repFrag")
+                .addToBackStack(null).commit();
+        getFragmentManager().executePendingTransactions();
     }
 
     /*
@@ -161,7 +180,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
         thread.getBodyComment().setChildren(list);
-
         /*
          * Have to reset adapter: workaround for a strange issue, for
          * description, see :
