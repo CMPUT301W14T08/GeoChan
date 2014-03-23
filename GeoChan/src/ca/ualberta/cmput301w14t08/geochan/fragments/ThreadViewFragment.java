@@ -22,21 +22,30 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -80,8 +89,55 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         threadView = (ListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
-        threadView.setAdapter(adapter);
+        threadView.setAdapter(adapter);   
         adapter.notifyDataSetChanged();
+        threadView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                final Comment comment = (Comment) parent.getAdapter().getItem(position);
+                RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
+                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View child = inflater.inflate(R.layout.comment_buttons, null);
+                relativeInflater.addView(child);
+                
+                final ImageButton replyButton = (ImageButton) view
+                        .findViewById(R.id.comment_reply_button);
+                
+                final ImageButton starButton = (ImageButton) view
+                        .findViewById(R.id.comment_star_button);
+                
+                if (starButton != null) {
+                    starButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity(), "Saved to Favourites.", Toast.LENGTH_SHORT).show();
+                            FavouritesLog log = FavouritesLog.getInstance(getActivity());
+                            log.addComment(comment);
+                        }
+                    });
+                }
+                
+                if (replyButton != null) {
+                    replyButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            // Perform action on click
+                            Log.e("ButtonClick", "click");
+                            Log.e("Comment being replied:", comment.getTextPost());
+                            Fragment fragment = new PostCommentFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("cmt", comment);
+                            bundle.putLong("id", threadIndex);
+                            fragment.setArguments(bundle);
+
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, fragment, "repFrag")
+                                    .addToBackStack(null).commit();
+                            getFragmentManager().executePendingTransactions();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /*

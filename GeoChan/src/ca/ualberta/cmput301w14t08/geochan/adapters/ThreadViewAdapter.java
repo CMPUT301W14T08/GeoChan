@@ -31,6 +31,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -174,6 +175,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         return TYPE_MAX_COUNT;
     }
 
+
     /*
      * (non-Javadoc)
      * 
@@ -207,7 +209,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
             }
             setCommentFields(convertView, comment);
-            listenForCommentButtons(convertView, comment);
             break;
 
         case TYPE_COMMENT1:
@@ -218,7 +219,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
             }
             setCommentFields(convertView, comment1);
-            listenForCommentButtons(convertView, comment1);
             break;
 
         case TYPE_COMMENT2:
@@ -229,7 +229,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
             }
             setCommentFields(convertView, comment2);
-            listenForCommentButtons(convertView, comment2);
             break;
 
         case TYPE_COMMENT3:
@@ -240,7 +239,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
             }
             setCommentFields(convertView, comment3);
-            listenForCommentButtons(convertView, comment3);
             break;
 
         case TYPE_COMMENT4:
@@ -251,7 +249,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
             }
             setCommentFields(convertView, comment4);
-            listenForCommentButtons(convertView, comment4);
             break;
 
         case TYPE_COMMENT5:
@@ -262,7 +259,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
             }
             setCommentFields(convertView, comment5);
-            listenForCommentButtons(convertView, comment5);
             break;
 
         case TYPE_COMMENT6:
@@ -273,7 +269,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
             }
             setCommentFields(convertView, comment6);
-            listenForCommentButtons(convertView, comment6);
             break;
 
         case TYPE_COMMENT7:
@@ -284,7 +279,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
             }
             setCommentFields(convertView, comment7);
-            listenForCommentButtons(convertView, comment7);
             break;
 
         case TYPE_SEPARATOR:
@@ -308,7 +302,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             TextView depthMeter = (TextView) convertView
                     .findViewById(R.id.thread_view_comment_depth_meter);
             depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
-            listenForCommentButtons(convertView, commentMax);
             break;
 
         }
@@ -368,46 +361,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Fragment fragment = new PostCommentFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("cmt", thread.getBodyComment());
-                    bundle.putLong("id", id);
-                    fragment.setArguments(bundle);
-
-                    manager.beginTransaction()
-                            .replace(R.id.fragment_container, fragment, "repFrag")
-                            .addToBackStack(null).commit();
-                    manager.executePendingTransactions();
-                }
-
-            });
-        }
-    }
-
-    private void listenForCommentButtons(View convertView, final Comment comment) {
-        // Here handle button presses
-        final ImageButton replyButton = (ImageButton) convertView
-                .findViewById(R.id.comment_reply_button);
-
-        final ImageButton starButton = (ImageButton) convertView
-                .findViewById(R.id.comment_star_button);
-
-        if (starButton != null) {
-            starButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Toast.makeText(context, "Saved to Favourites.", Toast.LENGTH_SHORT).show();
-                    FavouritesLog log = FavouritesLog.getInstance(context);
-                    log.addComment(comment);
-                }
-            });
-        }
-
-        if (replyButton != null) {
-            replyButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-                    Log.e("ButtonClick", "click");
-                    Log.e("Comment being replied:", comment.getTextPost());
-                    Fragment fragment = new PostCommentFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("cmt", comment);
                     bundle.putLong("id", id);
                     fragment.setArguments(bundle);
 
