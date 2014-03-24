@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -184,8 +186,9 @@ public class ThreadViewAdapter extends BaseAdapter {
      * 
      * This getView method, depending on the item type, inflates the correct
      * layout. Currently, it is a switch with each of 10 possible layouts having
-     * its own case. The code is cumbersome, given sufficient time, I will try
-     * to find a more elegant solution.
+     * its own case. Apparently if one is to have 10 layouts in a listview, one 
+     * is to have a switch like this, uniting different layouts under single type
+     * does not work.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -424,7 +427,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText(reply.getUser() + "#" + reply.getHash());
+        replyBy.setText(reply.getUser() + "#" + reply.getHash() + " ");
+        String username = reply.getUser();
+        if(HashHelper.getHash(username).equals(reply.getHash())) {
+            replyBy.setBackgroundResource(R.drawable.username_background_rect);
+            replyBy.setTextColor(Color.WHITE);
+        }
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);

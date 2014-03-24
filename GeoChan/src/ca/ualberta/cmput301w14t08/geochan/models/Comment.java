@@ -437,7 +437,7 @@ public class Comment implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(textPost);
-        dest.writeValue(commentDate.getTime());
+        dest.writeValue(commentDate);
         dest.writeValue(image);
         dest.writeValue(location.getLatitude());
         dest.writeValue(location.getLongitude());
@@ -454,7 +454,7 @@ public class Comment implements Parcelable {
     public Comment(Parcel in) {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));
-        this.setCommentDate(new Date(in.readLong()));
+        this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
         this.setImage((Picture) in.readValue(getClass().getClassLoader()));
         this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
