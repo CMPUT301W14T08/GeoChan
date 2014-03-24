@@ -323,6 +323,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT).show();
+                    starButton.setImageResource(R.drawable.ic_rating_marked);
                     FavouritesLog log = FavouritesLog.getInstance(context);
                     log.addThreadComment(thread);
                 }
@@ -423,25 +424,10 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText("Posted by " + reply.getUser() + "#" + reply.getHash());
+        replyBy.setText(reply.getUser() + "#" + reply.getHash());
         // Comment timestamp
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
         replyTime.setText(reply.getCommentDateString());
-        // Comment location
-        TextView replyLocationText = (TextView) convertView
-                .findViewById(R.id.thread_view_comment_locationText);
-        GeoLocation repLocCom = reply.getLocation();
-        if (repLocCom != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
-
-            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
-                    + " Longitude: " + format.format(repLocCom.getLongitude()));
-        } else {
-            replyLocationText.setText("Error: No location found");
-        }
     }
 }

@@ -29,7 +29,7 @@
         android:id="@+id/imageView1"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@+id/imageView1"
@@ -39,7 +39,7 @@
         android:id="@+id/imageView2"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView1"
         android:contentDescription="@+id/imageView2"
@@ -49,7 +49,7 @@
         android:id="@+id/imageView3"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView2"
         android:contentDescription="@+id/imageView3"
@@ -59,7 +59,7 @@
         android:id="@+id/imageView4"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView3"
         android:contentDescription="@+id/imageView4"
@@ -69,7 +69,7 @@
         android:id="@+id/imageView5"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView4"
         android:contentDescription="@+id/imageView5"
@@ -79,7 +79,7 @@
         android:id="@+id/imageView6"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView5"
         android:contentDescription="@+id/imageView6"
@@ -89,7 +89,7 @@
         android:id="@+id/imageView7"
         android:layout_width="7dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_locationText"
+        android:layout_alignBottom="@+id/relative_inflater"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView6"
         android:contentDescription="@+id/imageView7"
@@ -106,16 +106,6 @@
         android:textColor="#00f" />
 
     <TextView
-        android:id="@+id/thread_view_comment_locationText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/thread_view_comment_commentDate"
-        android:layout_below="@+id/thread_view_comment_commentDate"
-        android:text="@string/placeholder_location"
-        android:paddingLeft="5dp"
-        android:textColor="#2E8B57" />
-
-    <TextView
         android:id="@+id/thread_view_comment_commentBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -129,7 +119,7 @@
         android:id="@+id/relative_inflater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_view_comment_locationText"
-        android:layout_toRightOf="@+id/imageView7" />
+        android:layout_alignLeft="@+id/thread_view_comment_commentDate"
+        android:layout_below="@+id/thread_view_comment_commentDate" />
 
 </RelativeLayout>

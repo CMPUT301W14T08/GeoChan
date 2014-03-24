@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -56,6 +58,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
+    private static int position = 0;
     private ThreadComment thread = null;
 
     @Override
@@ -94,25 +97,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         threadView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+                    int _position, long id) {
                 LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                // This loop is supposed to remove selection from other comments,
-                // Does not yet work.
-                for (int i = 0; i < threadView.getCount(); i++) {
-                    if(i != position){
-                        View v = threadView.getAdapter().getView(i, null, null);
-                        RelativeLayout relativeInflater = (RelativeLayout) v.findViewById(R.id.relative_inflater);
-                        if(relativeInflater != null) {
-                            relativeInflater.removeAllViewsInLayout();                        }
-                    }
-                }
+                resetAllOtherViews(_position, threadView);
                 
+                position = _position;
                 final Comment comment = (Comment) parent.getAdapter().getItem(position);
                 RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
                 View child = inflater.inflate(R.layout.comment_buttons, null);
                 relativeInflater.addView(child);
-                
+                setLocationField(view, comment);
+
                 final ImageButton replyButton = (ImageButton) view
                         .findViewById(R.id.comment_reply_button);
                 
@@ -138,6 +133,29 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 }
             }
         });
+    }
+    
+    public void resetAllOtherViews(int _position, ListView listView) {
+        //TODO: implement
+    }
+    
+    public void setLocationField(View view, Comment comment) {
+     // Comment location
+        TextView replyLocationText = (TextView) view
+                .findViewById(R.id.thread_view_comment_location);
+        GeoLocation repLocCom = comment.getLocation();
+        
+        if (repLocCom != null) {
+            DecimalFormat format = new DecimalFormat();
+            format.setRoundingMode(RoundingMode.HALF_EVEN);
+            format.setMinimumFractionDigits(0);
+            format.setMaximumFractionDigits(4);
+
+            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
+                    + " Longitude: " + format.format(repLocCom.getLongitude()));
+        } else {
+            replyLocationText.setText("Error: No location found");
+        } 
     }
     
     public void favouriteAComment(Comment comment) {
