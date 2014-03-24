@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -45,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
@@ -113,6 +115,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 
                 final ImageButton starButton = (ImageButton) view
                         .findViewById(R.id.comment_star_button);
+                
+                if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
+                    final ImageButton editButton = (ImageButton) view
+                            .findViewById(R.id.comment_edit_button);
+                    editButton.setVisibility(View.VISIBLE);
+                }
                 
                 if (starButton != null) {
                     starButton.setOnClickListener(new View.OnClickListener() {
