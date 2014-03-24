@@ -34,7 +34,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 public class MapViewFragment extends Fragment {
 
     private MapView openMapView;
-    private IMapController mapController;
+    //private IMapController mapController;
     private LocationListenerService locationListenerService;
     private GeoLocation currentLocation;
     private GeoPoint startGeoPoint;
@@ -166,7 +166,7 @@ public class MapViewFragment extends Fragment {
         int minLatitude = (int) Math.round(MIN_LAT);
         int minLongitude = (int) Math.round(MIN_LONG);
 
-        mapController = openMapView.getController();
+        IMapController mapController = openMapView.getController();
         mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
                 Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
        
