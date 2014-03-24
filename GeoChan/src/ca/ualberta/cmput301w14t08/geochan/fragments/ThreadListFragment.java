@@ -81,12 +81,7 @@ public class ThreadListFragment extends Fragment implements
     
     @Override
     public void onResume(){
-        if(locationListener == null){
-            locationListener = new LocationListenerService(getActivity());
-        }
-        if(prefManager == null){
-            prefManager = PreferencesManager.getInstance();
-        }
+
         if(locSortFlag == 1){
             prefManager.setThreadSort(SortUtil.SORT_LOCATION);
             SortUtil.sortThreads(SortUtil.SORT_LOCATION,
@@ -174,6 +169,12 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
+        if(locationListener == null){
+            locationListener = new LocationListenerService(getActivity());
+        }
+        if(prefManager == null){
+            prefManager = PreferencesManager.getInstance();
+        }
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
@@ -195,8 +196,7 @@ public class ThreadListFragment extends Fragment implements
                 getFragmentManager().executePendingTransactions();
             }
         });
-        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortThreads", SortUtil.SORT_DATE_NEWEST);
+        int sort = prefManager.getThreadSort();
         SortUtil.sortThreads(sort, ThreadList.getThreads());
         adapter.notifyDataSetChanged();
         threadListView.setOnRefreshListener(new OnRefreshListener() {
