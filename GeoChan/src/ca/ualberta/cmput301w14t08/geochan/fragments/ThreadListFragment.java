@@ -40,13 +40,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Responsible for the UI fragment that displays multiple ThreadComments to the
@@ -55,8 +59,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  */
 public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
-    private ListView threadListView;
+    private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
+    private LocationListenerService locationListener = null;
+    private PreferencesManager prefManager = null;
+    //private GeoLocation sortGeo = null;
+    private static int locSortFlag = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,28 +75,105 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //locationListener = new LocationListenerService(getActivity());
         setHasOptionsMenu(true);
+    }
+    
+    @Override
+    public void onResume(){
+        if(locationListener == null){
+            locationListener = new LocationListenerService(getActivity());
+        }
+        if(prefManager == null){
+            prefManager = PreferencesManager.getInstance();
+        }
+        if(locSortFlag == 1){
+            prefManager.setThreadSort(SortUtil.SORT_LOCATION);
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
+                                ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            locSortFlag = 0;
+        }
+        locationListener.startListening();
+        super.onResume();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
+
         getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.thread_list, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
-        super.onCreateOptionsMenu(menu, inflater);
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+        case R.id.thread_sort_date_new:
+            prefManager.setThreadSort(SortUtil.SORT_DATE_NEWEST);
+            SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            return true;
+        case R.id.thread_sort_date_old:
+            prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
+            SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            return true;
+        case R.id.thread_sort_score_high:
+            prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_HIGHEST);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST,
+                                ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            return true;
+        case R.id.thread_sort_score_low:
+            prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_LOWEST);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST,
+                                ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            return true;
+        case R.id.thread_sort_location_current:
+            prefManager.setThreadSort(SortUtil.SORT_LOCATION);
+            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
+                                ThreadList.getThreads());
+            adapter.notifyDataSetChanged();
+            //Sorting stuff for sorting by location here.
+            return true;
+        case R.id.thread_sort_location_other:
+            //Sorting stuff for getting a location and sorting here.
+            this.getSortingLoc();
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    private void getSortingLoc(){
+        locSortFlag = 1;
+        Bundle args = new Bundle();
+        args.putInt("postType", CustomLocationFragment.SORT_THREAD);
+        CustomLocationFragment frag = new CustomLocationFragment();
+        frag.setArguments(args);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
+    }
+    
 
     @Override
     public void onStart() {
         super.onStart();
-        threadListView = (ListView) getActivity().findViewById(R.id.thread_list);
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
@@ -111,9 +196,17 @@ public class ThreadListFragment extends Fragment implements
             }
         });
         SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int sort = pref.getInt("sortThreads", SortTypes.SORT_DATE_NEWEST);
-        ThreadList.sortThreads(sort);
+        int sort = pref.getInt("sortThreads", SortUtil.SORT_DATE_NEWEST);
+        SortUtil.sortThreads(sort, ThreadList.getThreads());
         adapter.notifyDataSetChanged();
+        threadListView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                reload();
+            }
+        });
+
     }
 
     /*
@@ -140,6 +233,7 @@ public class ThreadListFragment extends Fragment implements
         ThreadList.setThreads(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
+        threadListView.onRefreshComplete();
     }
 
     /*
@@ -152,5 +246,9 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
         adapter.setList(new ArrayList<ThreadComment>());
+    }
+    
+    private void reload() {
+        getLoaderManager().getLoader(0).forceLoad();
     }
 }

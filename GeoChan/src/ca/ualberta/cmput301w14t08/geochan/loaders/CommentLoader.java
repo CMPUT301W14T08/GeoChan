@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -62,23 +63,8 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
             list = new ArrayList<Comment>();
         }
         ArrayList<Comment> result = client.getComments(thread.getBodyComment());
-        sort(result);
+        SortUtil.sortComments(manager.getCommentSort(), result);
         return result;
-    }
-
-    /**
-     * Sort a List of Comments This function is most likely temporary and will
-     * be changed rewritten or replaced once sorting is more finalized within
-     * the app
-     * 
-     * @param list
-     *            the list to sort
-     */
-    private void sort(ArrayList<Comment> list) {
-        ThreadComment.sortComments(list, manager.getCommentSort());
-        for (Comment comment : list) {
-            sort(comment.getChildren());
-        }
     }
 
     @Override
@@ -94,18 +80,6 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list != null) {
             deliverResult(list);
         }
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int count = client.getCommentCount(thread.getBodyComment());
-                if (count != list.size()) {
-                    forceLoad();
-                }
-            }
-        }, 5000, 60000);
 
         if (list == null) {
             forceLoad();

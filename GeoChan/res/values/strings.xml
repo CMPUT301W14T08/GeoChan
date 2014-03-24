@@ -33,6 +33,13 @@
     <string name="comment_star_button">Favourite</string>
     <string name="action_refresh">Refresh from Server</string>
     <string name="thread_sort">Sorting Method</string>
+    <string name="date_new">Date (Newest)</string>
+    <string name="date_old">Date (Oldest)</string>
+    <string name="score_highest">Relevance (Highest)</string>
+    <string name="score_lowest">Relevance (Lowest)</string>
+    <string name="sort_location_current">Location (Current)</string>
+    <string name="sort_location_other">Location (Other)</string>
+    <string name="sort_image">Image</string>
     <string name="favourites">Favourites</string>
     <string name="threads_fav">Threads</string>
     <string name="comments_fav">Comments</string>

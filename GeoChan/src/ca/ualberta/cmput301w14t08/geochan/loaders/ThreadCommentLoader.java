@@ -21,15 +21,13 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Responsible for asynchronously loading ThreadComments from the ElasticSearch
@@ -60,7 +58,7 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
             list = new ArrayList<ThreadComment>();
         }
         ArrayList<ThreadComment> result = client.getThreads();
-        ThreadList.sortThreads(result, manager.getThreadSort());
+        SortUtil.sortThreads(manager.getThreadSort(),result);
         return result;
     }
 
@@ -77,18 +75,6 @@ public class ThreadCommentLoader extends AsyncTaskLoader<ArrayList<ThreadComment
         if (list != null) {
             deliverResult(list);
         }
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int count = client.getThreadCount();
-                if (count != list.size()) {
-                    forceLoad();
-                }
-            }
-        }, 5000, 60000);
 
         if (list == null && this.isStarted()) {
             forceLoad();

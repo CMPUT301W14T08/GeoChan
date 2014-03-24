@@ -25,12 +25,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,21 +45,51 @@ import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
  */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
-    private ListView threadView;
+    private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
     private static int position = 0;
     private ThreadComment thread = null;
+    private LocationListenerService locationListener = null;
+    private PreferencesManager prefManager = null;
+    private static int locSortFlag = 0;
+    
+    @Override
+    public void onResume(){
+        setHasOptionsMenu(true);
+        if(locationListener == null){
+            locationListener = new LocationListenerService(getActivity());
+        }
+        if(prefManager == null){
+            prefManager = PreferencesManager.getInstance();
+        }
+        if(locSortFlag == 1){
+            prefManager.setCommentSort(SortUtil.SORT_LOCATION);
+            SortUtil.sortComments(SortUtil.SORT_LOCATION,
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            locSortFlag = 0;
+        }
+        locationListener.startListening();
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,7 +119,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     @Override
     public void onStart() {
         super.onStart();
-        threadView = (ListView) getView().findViewById(R.id.thread_view_list);
+        threadView = (PullToRefreshListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);   
@@ -141,7 +169,15 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 }
             }
         });
+        threadView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                reload();
+            }
+        });
     }
+
     
     public void resetAllOtherViews(int _position, ListView listView) {
         //TODO: implement
@@ -183,6 +219,80 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 .replace(R.id.fragment_container, fragment, "repFrag")
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
+        
+    }    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+        case(R.id.comment_sort_date_new):
+            prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
+            SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
+                                thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_date_old):
+            prefManager.setCommentSort(SortUtil.SORT_DATE_OLDEST);
+            SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, 
+                                thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_image):
+            prefManager.setCommentSort(SortUtil.SORT_IMAGE);
+            SortUtil.sortComments(SortUtil.SORT_IMAGE, 
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_location_current):
+            prefManager.setCommentSort(SortUtil.SORT_LOCATION);
+            SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
+            SortUtil.sortComments(SortUtil.SORT_LOCATION,
+                                  thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case(R.id.comment_sort_location_other):
+            locSortFlag = 1;
+            this.getSortingLoc();
+            return true;
+        case(R.id.comment_sort_score_high):
+             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
+             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
+                                   thread.getBodyComment().getChildren());
+             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+             threadView.setAdapter(adapter);
+             adapter.notifyDataSetChanged();
+             return true;
+        case(R.id.comment_sort_score_low):
+             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
+             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
+                                   thread.getBodyComment().getChildren());
+             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+             threadView.setAdapter(adapter);
+             adapter.notifyDataSetChanged();
+             return true;
+         default:
+             return super.onOptionsItemSelected(item);
+        }     
+    }
+    
+    private void getSortingLoc(){
+        Bundle args = new Bundle();
+        args.putInt("postType", CustomLocationFragment.SORT_COMMENT);
+        CustomLocationFragment frag = new CustomLocationFragment();
+        frag.setArguments(args);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
     }
 
     /*
@@ -214,6 +324,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
          */
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
+        threadView.onRefreshComplete();
     }
 
     /*
@@ -227,8 +338,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
         //
     }
-
-    public GeoLocation getThreadLocation() {
-        return thread.getSortLoc();
+    
+    private void reload() {
+        getLoaderManager().getLoader(1).forceLoad();
     }
 }

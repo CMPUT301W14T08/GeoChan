@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.graphics.Picture;
@@ -9,7 +10,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
@@ -48,269 +49,395 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertNull(comment.getParent());
     }
     
+    /**
+     * Tests sorting comments according to date (newest).
+     */
     public void testSortByDateNewest(){
-        /*
-         * Tests the implementation of Comment.sortChildren("DATE_NEWEST");
-         */
         long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
         Date currentDate = new Date();
         c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
         c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
         
-        c1.addChild(c5);
-        c1.addChild(c3);
-        c1.addChild(c4);
-        c1.addChild(c2);
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
         
-        c1.sortChildren(SortTypes.SORT_DATE_NEWEST);
-
-        assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
-        assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
-        assertTrue("c3 is at index 2", (c1.getChildren().get(2)) == c3);
-        assertTrue("c2 is at index 3", (c1.getChildren().get(3)) == c2);
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, carrier);
+        
+        assertTrue("c5 at index 0", carrier.get(0) == c5);
+        assertTrue("c4 at index 1", carrier.get(1) == c4);
+        assertTrue("c3 at index 2", carrier.get(2) == c3);
+        assertTrue("c2 at index 3", carrier.get(3) == c2);
+        assertTrue("c1 at index 4", carrier.get(4) == c1);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c10);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c9);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c8);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
     
     public void testSortByDateOldest(){
-        /*
-         * Tests the implementation of Comment.sortChildren("DATE_OLDEST");
-         */
         long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
         Date currentDate = new Date();
         c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
         c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
         
-        c1.addChild(c5);
-        c1.addChild(c3);
-        c1.addChild(c4);
-        c1.addChild(c2);
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
         
-        c1.sortChildren(SortTypes.SORT_DATE_OLDEST);
-
-        assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
-        assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
-        assertTrue("c4 is at index 2", (c1.getChildren().get(2)) == c4);
-        assertTrue("c5 is at index 3", (c1.getChildren().get(3)) == c5);
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, carrier);
+        
+        assertTrue("c1 at index 0", carrier.get(0) == c1);
+        assertTrue("c2 at index 1", carrier.get(1) == c2);
+        assertTrue("c3 at index 2", carrier.get(2) == c3);
+        assertTrue("c4 at index 3", carrier.get(3) == c4);
+        assertTrue("c5 at index 4", carrier.get(4) == c5);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c9);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c10);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c6);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);
     }
     
-    public void testSortByParentDistance(){
-        /*
-         * Tests the implementation of Comment.sortChildren("LOCATION_OP");
-         */
-        
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        
+    public void testSortByLocation(){
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+      
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
         
         c1.setLocation(geoLocation1);
         c2.setLocation(geoLocation2);
         c3.setLocation(geoLocation3);
         c4.setLocation(geoLocation4);
         c5.setLocation(geoLocation5);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
         
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
         
-        c2.setParent(c1);
-        c3.setParent(c1);
-        c4.setParent(c1);
-        c5.setParent(c1);
-       
-        c1.getLocation().setCoordinates(0,0);
-        c2.getLocation().setCoordinates(1,1);
-        c3.getLocation().setCoordinates(2,2);
-        c4.getLocation().setCoordinates(3,3);
-        c5.getLocation().setCoordinates(4,4);
-
-        c1.addChild(c5);
-        c1.addChild(c3);
-        c1.addChild(c4);
-        c1.addChild(c2);
+        c2.addChild(c10);
+        c2.addChild(c9);
         
-        c1.sortChildren(SortTypes.SORT_LOCATION_OP);
-
-        assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
-        assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
-        assertTrue("c4 is at index 2", (c1.getChildren().get(2)) == c4);
-        assertTrue("c5 is at index 3", (c1.getChildren().get(3)) == c5);
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_LOCATION,carrier);
+        
+        assertTrue("c1 at index 0", carrier.get(0) == c1);
+        assertTrue("c2 at index 1", carrier.get(1) == c2);
+        assertTrue("c3 at index 2", carrier.get(2) == c3);
+        assertTrue("c4 at index 3", carrier.get(3) == c4);
+        assertTrue("c5 at index 4", carrier.get(4) == c5);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c9);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c10);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c6);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);     
     }
     
     public void testSortByScoreHighest(){
-        /*
-         * Tests the implementation of Comment.sortChildren("PARENT_SCORE_HIGHEST");
-         */
         long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
-        
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        
-        c1.setLocation(geoLocation1);
-        c2.setLocation(geoLocation2);
-        c3.setLocation(geoLocation3);
-        c4.setLocation(geoLocation4);
-        c5.setLocation(geoLocation5);
-        
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
-        
-        c2.setParent(c1);
-        c3.setParent(c1);
-        c4.setParent(c1);
-        c5.setParent(c1);
-        
-        c1.getLocation().setCoordinates(0,0);
-        c2.getLocation().setCoordinates(1,1);
-        c3.getLocation().setCoordinates(2,2);
-        c4.getLocation().setCoordinates(3,3);
-        c5.getLocation().setCoordinates(4,4);
-
-        c1.addChild(c5);
-        c1.addChild(c3);
-        c1.addChild(c4);
-        c1.addChild(c2);
-        
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
         Date currentDate = new Date();
         
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
         
-        c1.sortChildren(SortTypes.SORT_SCORE_HIGHEST);
-
-        assertTrue("c2 is at index 0", (c1.getChildren().get(0)) == c2);
-        assertTrue("c3 is at index 1", (c1.getChildren().get(1)) == c3);
-        assertTrue("c4 is at index 2", (c1.getChildren().get(2)) == c4);
-        assertTrue("c5 is at index 3", (c1.getChildren().get(3)) == c5);
-    }
-    
-    public void testSortByScoreLowest(){
-        /*
-         * Tests the implementation of Comment.sortChildren("SCORE_LOWEST");
-         */
-        long extraTime = 1320000;
-        Comment c1 = new Comment();
-        Comment c2 = new Comment();
-        Comment c3 = new Comment();
-        Comment c4 = new Comment();
-        Comment c5 = new Comment();
-        
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        
-        c1.setLocation(geoLocation1);
-        c2.setLocation(geoLocation2);
-        c3.setLocation(geoLocation3);
-        c4.setLocation(geoLocation4);
-        c5.setLocation(geoLocation5);
-        
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
-        
-        c2.setParent(c1);
-        c3.setParent(c1);
-        c4.setParent(c1);
-        c5.setParent(c1);
-        
-        c1.getLocation().setCoordinates(0,0);
-        c2.getLocation().setCoordinates(1,1);
-        c3.getLocation().setCoordinates(2,2);
-        c4.getLocation().setCoordinates(3,3);
-        c5.getLocation().setCoordinates(4,4);
-        
-        Date currentDate = new Date();
-        
-        c1.setCommentDate(currentDate);
+        c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
         c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
-
-        c1.addChild(c5);
-        c1.addChild(c3);
-        c1.addChild(c4);
-        c1.addChild(c2);
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
         
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
         
-        c1.sortChildren(SortTypes.SORT_SCORE_LOWEST);
-
-        assertTrue("c5 is at index 0", (c1.getChildren().get(0)) == c5);
-        assertTrue("c4 is at index 1", (c1.getChildren().get(1)) == c4);
-        assertTrue("c3 is at index 2", (c1.getChildren().get(2)) == c3);
-        assertTrue("c2 is at index 3", (c1.getChildren().get(3)) == c2);
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
+        
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
+                                carrier);
+        
+        assertTrue("c1 at index 0", carrier.get(0) == c1);
+        assertTrue("c2 at index 1", carrier.get(1) == c2);
+        assertTrue("c3 at index 2", carrier.get(2) == c3);
+        assertTrue("c4 at index 3", carrier.get(3) == c4);
+        assertTrue("c5 at index 4", carrier.get(4) == c5);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c9);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c10);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c6);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);  
+    }
+    
+    public void testSortByScoreLowest(){
+        long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        Date currentDate = new Date();
+        
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
+        
+        c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
+        
+        c1.setLocation(geoLocation1);
+        c2.setLocation(geoLocation2);
+        c3.setLocation(geoLocation3);
+        c4.setLocation(geoLocation4);
+        c5.setLocation(geoLocation5);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
+        
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
+        
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
+                                carrier);
+        
+        assertTrue("c5 at index 0", carrier.get(0) == c5);
+        assertTrue("c4 at index 1", carrier.get(1) == c4);
+        assertTrue("c3 at index 2", carrier.get(2) == c3);
+        assertTrue("c2 at index 3", carrier.get(3) == c2);
+        assertTrue("c1 at index 4", carrier.get(4) == c1);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c10);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c9);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c8);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
+    }
+    
+    public void testSortByImage(){
+        long extraTime = 1320000;
+        ArrayList<Comment> carrier = new ArrayList<Comment>();
+        Comment c1 = new Comment();
+        Comment c2 = new Comment();
+        Comment c3 = new Comment();
+        Comment c4 = new Comment();
+        Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        Date currentDate = new Date();
+        
+        c1.setCommentDate(new Date(currentDate.getTime() - 1*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() - 2*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() - 3*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() - 4*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() - 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() - 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() - 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() - 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() - 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() - 10*extraTime));
+        
+        c10.setImage(new Picture());
+        c8.setImage(new Picture());
+        c5.setImage(new Picture());
+        c3.setImage(new Picture());
+        
+        carrier.add(c1);
+        carrier.add(c2);
+        carrier.add(c3);
+        carrier.add(c4);
+        carrier.add(c5);
+        
+        c2.addChild(c10);
+        c2.addChild(c9);
+        
+        c3.addChild(c8);
+        c3.addChild(c6);
+        c3.addChild(c7);
+        
+        SortUtil.sortComments(SortUtil.SORT_IMAGE, carrier);
+        
+        assertTrue("c5 at index 0", carrier.get(0) == c5);
+        assertTrue("c3 at index 1", carrier.get(1) == c3);
+        assertTrue("c4 at index 2", carrier.get(2) == c4);
+        assertTrue("c2 at index 3", carrier.get(3) == c2);
+        assertTrue("c1 at index 4", carrier.get(4) == c1);
+        
+        assertTrue("c2 children sorted", c2.getChildAtIndex(0) == c10);
+        assertTrue("c2 children sorted", c2.getChildAtIndex(1) == c9);
+        
+        assertTrue("c3 children sorted", c3.getChildAtIndex(0) == c8);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
+        assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
     
     /**
