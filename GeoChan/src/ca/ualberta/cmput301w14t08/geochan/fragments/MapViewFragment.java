@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,13 +41,13 @@ public class MapViewFragment extends Fragment {
     private Activity activity;
     private Polyline roadOverlay;
     private Comment topComment;
-    
+
     private double MAX_LAT;
     private double MAX_LONG;
     private double MIN_LAT;
     private double MIN_LONG;
-    
-    final public static int ZOOM_FACTOR = 90000;
+
+    final public static int ZOOM_FACTOR = 2000000;
 
     class MapAsyncTask extends AsyncTask<Void,Void,Void> {
 
@@ -84,7 +85,15 @@ public class MapViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        return inflater.inflate(R.layout.fragment_map_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                setZoomLevel();
+            }
+        });
+        return view;
+
     }
 
     @Override
@@ -104,18 +113,19 @@ public class MapViewFragment extends Fragment {
         super.onStart();
 
         activity = getActivity();
+
         locationListenerService = new LocationListenerService(activity);
         locationListenerService.startListening();
         currentLocation = new GeoLocation(locationListenerService);
 
         Bundle args = getArguments();
         topComment = (Comment) args.getParcelable("thread_comment");
-        
+
         MAX_LAT = topComment.getLocation().getLatitude();
         MIN_LAT = topComment.getLocation().getLatitude();
         MAX_LONG = topComment.getLocation().getLongitude();
         MIN_LONG = topComment.getLocation().getLongitude();
-        
+
         GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
@@ -131,7 +141,7 @@ public class MapViewFragment extends Fragment {
         super.onStop();
         locationListenerService.stopListening();
     }
-    
+
     /**
      * This sets up the comment location the map. The map is center at the location
      * of the comment GeoLocation, and has a bubble on this point
@@ -142,28 +152,30 @@ public class MapViewFragment extends Fragment {
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
+        openMapView.getController().setZoom(18);
 
         GeoLocation geoLocation = comment.getLocation();
         startGeoPoint = new GeoPoint(geoLocation.getLocation());
         setGeoPointMarker(startGeoPoint);
         handleChildComments(comment);
     }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        //int maxLatitude = (int) Math.round(MAX_LAT);
-        //int maxLongitude = (int) Math.round(MAX_LONG);
-        //int minLatitude = (int) Math.round(MIN_LAT);
-        //int minLongitude = (int) Math.round(MIN_LONG);
-        
+
+    public void setZoomLevel() {
+        int maxLatitude = (int) Math.round(MAX_LAT);
+        int maxLongitude = (int) Math.round(MAX_LONG);
+        int minLatitude = (int) Math.round(MIN_LAT);
+        int minLongitude = (int) Math.round(MIN_LONG);
+
         mapController = openMapView.getController();
-        mapController.setZoom(18);
+        mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
+                Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
+       
+        Log.e("Delta Lat" , Double.toString(maxLatitude - minLatitude));
+        Log.e("Delta Long" , Double.toString(maxLongitude - minLongitude));
+       
         mapController.animateTo(startGeoPoint);
-        //mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
-        //        Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
     }
-    
+
     /**
      * recursively places markers on the map of all child comments of a thread.
      * @param comment
@@ -181,11 +193,11 @@ public class MapViewFragment extends Fragment {
             }
         }
     }
-    
+
     public void checkCommentLocationDistance(Comment c) {
         double commentLat = c.getLocation().getLatitude();
         double commentLong = c.getLocation().getLongitude();
-        
+
         if (commentLat > MAX_LAT) {
             MAX_LAT = commentLat;
         }
@@ -199,7 +211,7 @@ public class MapViewFragment extends Fragment {
             MIN_LONG = commentLong;
         }
     }
-    
+
     /**
      * Places a GeoPoint Marker on the MapView
      * @param geoPoint
@@ -210,7 +222,7 @@ public class MapViewFragment extends Fragment {
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         openMapView.getOverlays().add(marker);
     }
-   
+
 
     /**
      * Called when the get_directions_button is clicked. Displays directions from
