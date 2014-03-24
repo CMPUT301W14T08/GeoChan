@@ -32,6 +32,6 @@
     <string name="comment_reply_button">Reply</string>
     <string name="attach_image_title">Attach Image</string>
     <string name="attach_image_dialog">Choose image from Camera or Galley</string>
-    <string name="image_desc">Sample image for reply</string>
+    <string name="image_desc">Default image for reply</string>
 
 </resources>

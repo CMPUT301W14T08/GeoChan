@@ -186,9 +186,15 @@ public class ThreadViewAdapter extends BaseAdapter {
         case TYPE_COMMENT:
             final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
+                if (comment.hasImage()) {
+                    LayoutInflater inflater = (LayoutInflater) context
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.thread_view_top_comment_image, null);
+                } else {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.thread_view_top_comment, null);
+                }
             }
 
             setTopCommentFields(convertView, comment);
@@ -217,10 +223,15 @@ public class ThreadViewAdapter extends BaseAdapter {
             Comment reply = (Comment) getItem(position);
             if (convertView == null) {
                 /** Code here will choose depth of reply layout */
-
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+                if (reply.hasImage()) {
+                    LayoutInflater inflater = (LayoutInflater) context
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.thread_view_comment_image, null);
+                } else {
+                    LayoutInflater inflater = (LayoutInflater) context
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
+                }
             }
             setCommentReplyFields(convertView, reply);
             break;

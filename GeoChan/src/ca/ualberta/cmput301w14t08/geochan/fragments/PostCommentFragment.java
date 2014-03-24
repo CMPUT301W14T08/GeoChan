@@ -21,13 +21,18 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -91,11 +96,11 @@ public class PostCommentFragment extends Fragment {
         bodyView.setMovementMethod(new ScrollingMovementMethod());
         titleView.setText(thread.getTitle());
         bodyView.setText(thread.getBodyComment().getTextPost());
-        imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+        imageView = (ImageView) getActivity().findViewById(R.id.imageView1);
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
-        imageHelper = new ImageHelper(getActivity().getApplicationContext());
+        imageHelper = new ImageHelper();
         picture = null;
         thumb = null;
         
@@ -151,20 +156,39 @@ public class PostCommentFragment extends Fragment {
     
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
-            imageHelper.displayImageDialog();
-            boolean cameraChoice = imageHelper.getCameraChoice();
-            
-            if (cameraChoice) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                File file = imageHelper.createImageFile();
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                startActivityForResult(intent, 1);    
-            } else {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = imageHelper.createImageFile();
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                startActivityForResult(intent, 1);
-            }
+            AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(getActivity());
+            myAlertDialog.setTitle(R.string.attach_image_title);
+            myAlertDialog.setMessage(R.string.attach_image_dialog);
+
+            myAlertDialog.setPositiveButton("Gallery",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            try {
+                                File file = imageHelper.createImageFile();
+                                
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                                startActivityForResult(intent, 1); 
+                            } catch (IOException e) {
+                                //do something
+                            }
+                        }
+                    });
+
+            myAlertDialog.setNegativeButton("Camera",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            try {
+                                File file = imageHelper.createImageFile();
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                                startActivityForResult(intent, 1);
+                            } catch (IOException e) {
+                                //do something
+                            }
+                        }
+                    });
+            myAlertDialog.show();             
         }
     }
  
@@ -173,9 +197,10 @@ public class PostCommentFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
+            Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 256, 256);
+            imageView.setImageBitmap(squareBitmap);
             Log.d("imagehelper","Image set successfully");
-            picture = imageHelper.getPicture();
+            //
             //thumb = imageHelper.getThumbnail();
         }
     }

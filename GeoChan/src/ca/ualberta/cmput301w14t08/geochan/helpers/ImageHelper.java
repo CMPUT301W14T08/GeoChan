@@ -23,56 +23,24 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import ca.ualberta.cmput301w14t08.geochan.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
-
+import android.content.Intent;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 
 public class ImageHelper {
 
     String mCurrentPhotoPath;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    private Context context;
-    boolean choice;
-
-    
-    public ImageHelper(Context context) {
-        this.context = context;
-        choice = false;
-    }
-
-    public void displayImageDialog() {
-       
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(context);
-        myAlertDialog.setTitle(R.string.attach_image_title);
-        myAlertDialog.setMessage(R.string.attach_image_dialog);
-
-        myAlertDialog.setPositiveButton("Gallery",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        choice = false;
-                    }
-                });
-
-        myAlertDialog.setNegativeButton("Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        choice = true;
-                    }
-                });
-        myAlertDialog.show();
-      
-    }
 
     public File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = SimpleDateFormat.getDateInstance().toString();
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
@@ -85,11 +53,5 @@ public class ImageHelper {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
-    }
-    
-    public boolean getCameraChoice() {
-        return choice;
-    }
-    
-    
+    }    
 }

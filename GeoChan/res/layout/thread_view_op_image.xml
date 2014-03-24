@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/thread_view_op_threadTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/hello_world"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/thread_view_op_commentBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_threadTitle"
+        android:layout_toLeftOf="@+id/imageButton1"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/thread_view_op_commentBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_commentBody"
+        android:paddingLeft="5dp"
+        android:text="@string/placeholder_postby"
+        android:textColor="#f00" />
+
+    <TextView
+        android:id="@+id/thread_view_op_commentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_commentBy"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_date"
+        android:textColor="#f00" />
+
+    <TextView
+        android:id="@+id/thread_view_op_locationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_op_commentDate"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/placeholder_location"
+        android:textColor="#2E8B57" />
+
+    <ImageButton
+        android:id="@+id/thread_view_op_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/thread_view_op_reply"
+        android:onClick="postReplyToOp"
+        android:src="@drawable/ic_action_reply" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/thread_view_op_commentBody"
+        android:contentDescription="@string/image_desc"
+        android:src="@android:drawable/ic_menu_gallery" />
+
+</RelativeLayout>
