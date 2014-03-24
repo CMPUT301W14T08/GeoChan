@@ -2,24 +2,43 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
  * This class handles the threads/comments saved by the user as favourite, to be
  * available for later viewing.
  */
-public class Favourites {
+public class FavouritesLog {
+    private static FavouritesLog instance = null;
+    @SuppressWarnings("unused")
+    private Context context;
+    private FavouritesIOManager manager;
     private ArrayList<ThreadComment> threads;
     private ArrayList<Comment> comments;
 
+    private FavouritesLog(Context context) {
+        this.context = context;
+        manager = FavouritesIOManager.getInstance(context);
+        threads = manager.deSerializeThreads();
+        comments = manager.deSerializeComments();
+    }
+
+    public static FavouritesLog getInstance(Context context) {
+        if (instance == null) {
+            instance = new FavouritesLog(context);
+        }
+        return instance;
+    }
+
     public void addThreadComment(ThreadComment thread) {
         threads.add(thread);
-        FavouritesIOManager.serializeThreads();
+        manager.serializeThreads();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        FavouritesIOManager.serializeComments();
+        manager.serializeComments();
     }
 
     // Getters and Setters

@@ -215,7 +215,7 @@ public class Comment implements Parcelable {
     public ArrayList<Comment> getChildren() {
         return children;
     }
-    
+
     public Comment getChildAtIndex(int i) {
         return children.get(i);
     }
@@ -411,7 +411,8 @@ public class Comment implements Parcelable {
         dest.writeValue(textPost);
         dest.writeValue(commentDate);
         dest.writeValue(image);
-        dest.writeValue(location);
+        dest.writeValue(location.getLatitude());
+        dest.writeValue(location.getLongitude());
         dest.writeValue(user);
         dest.writeParcelable(parent, flags);
         dest.writeTypedList(children);
@@ -427,7 +428,7 @@ public class Comment implements Parcelable {
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));
         this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
         this.setImage((Picture) in.readValue(getClass().getClassLoader()));
-        this.setLocation((GeoLocation) in.readValue(getClass().getClassLoader()));
+        this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
         in.readTypedList(children, Comment.CREATOR);

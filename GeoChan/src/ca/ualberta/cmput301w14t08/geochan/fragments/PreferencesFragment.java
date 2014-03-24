@@ -30,7 +30,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
 /**
  * Responsible for the UI fragment that allows the user to edit
- *
+ * 
  */
 public class PreferencesFragment extends PreferenceFragment {
 
@@ -41,7 +41,7 @@ public class PreferencesFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
-        
+
         username = (EditTextPreference) findPreference("username");
         username.setSummary(username.getText());
 
@@ -49,8 +49,7 @@ public class PreferencesFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
-                hash.setSummary((String) newValue + " #"
-                        + HashHelper.getHash((String) newValue));
+                hash.setSummary((String) newValue + " #" + HashHelper.getHash((String) newValue));
                 return true;
             }
         });

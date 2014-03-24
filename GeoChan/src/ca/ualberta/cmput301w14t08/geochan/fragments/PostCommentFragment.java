@@ -23,9 +23,9 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -98,13 +98,14 @@ public class PostCommentFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
-                    
+
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
@@ -126,7 +127,7 @@ public class PostCommentFragment extends Fragment {
                 Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
-                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
 

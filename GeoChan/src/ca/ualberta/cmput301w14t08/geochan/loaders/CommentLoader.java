@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
@@ -80,18 +80,6 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list != null) {
             deliverResult(list);
         }
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int count = client.getCommentCount(thread.getBodyComment());
-                if (count != list.size()) {
-                    forceLoad();
-                }
-            }
-        }, 5000, 60000);
 
         if (list == null) {
             forceLoad();

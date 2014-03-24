@@ -89,14 +89,5 @@ public class ThreadList {
     public static void clearThreads() {
         threads.clear();
     }
-    
-    /**
-     * Sorts a thread list according to the tag passed.
-     * This will be moved into its own class, this is temporary.
-     * @param threadList
-     *            Comment list to sort
-     * @param tag
-     *            Tag to sort comments by
-     */
 
 }

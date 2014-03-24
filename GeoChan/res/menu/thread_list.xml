@@ -36,5 +36,10 @@
         </menu>
         
     </item>
+    
+    <item android:id="@+id/action_favourites"
+          android:icon="@drawable/ic_favourites"
+          android:title="@string/favourites"
+          android:showAsAction="ifRoom" />
         
 </menu>

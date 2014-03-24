@@ -80,4 +80,15 @@
         android:paddingRight="5dp"
         android:src="@drawable/ic_reply" />
 
+    <ImageButton
+        android:id="@+id/thread_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_toLeftOf="@+id/comment_star_button"
+        android:background="@null"
+        android:contentDescription="@string/comment_star_button"
+        android:paddingRight="5dp"
+        android:src="@drawable/ic_location_map" />
+
 </RelativeLayout>

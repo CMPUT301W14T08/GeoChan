@@ -40,5 +40,9 @@
     <string name="sort_location_current">Location (Current)</string>
     <string name="sort_location_other">Location (Other)</string>
     <string name="sort_image">Image</string>
+    <string name="favourites">Favourites</string>
+    <string name="threads_fav">Threads</string>
+    <string name="comments_fav">Comments</string>
+    <string name="get_directions_button_text">Get Directions</string>
 
 </resources>

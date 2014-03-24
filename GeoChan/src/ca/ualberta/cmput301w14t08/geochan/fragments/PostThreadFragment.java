@@ -23,10 +23,9 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,12 +81,12 @@ public class PostThreadFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton.setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
     }
-
 
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {
@@ -113,10 +112,8 @@ public class PostThreadFragment extends Fragment {
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                     // log the thread and the geolocation
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(title, geoLocation);
-                    Log.e("size of locLog:",
-                            Integer.toString(geoLocationLog.getLogEntries().size()));
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

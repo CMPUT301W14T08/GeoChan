@@ -72,21 +72,25 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         Picture image = new Picture();
         Picture thumbnail = new Picture();
         if (hasImage) {
-            /* 
-             * http://stackoverflow.com/questions/20594833/convert-byte-array-or-bitmap-to-picture
+            /*
+             * http://stackoverflow.com/questions/20594833/convert-byte-array-or-
+             * bitmap-to-picture
              */
             String encodedImage = object.get("image").getAsString();
             byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             Canvas canvas = image.beginRecording(bitmap.getWidth(), bitmap.getHeight());
-            canvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), null);
+            canvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) bitmap.getWidth(),
+                    (float) bitmap.getHeight()), null);
             image.endRecording();
-            
+
             String encodedThumb = object.get("imageThumbnail").getAsString();
             byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);
             Bitmap thumbBitmap = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
-            Canvas thumbCanvas = thumbnail.beginRecording(thumbBitmap.getWidth(), thumbBitmap.getHeight());
-            thumbCanvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) thumbBitmap.getWidth(), (float) thumbBitmap.getHeight()), null);
+            Canvas thumbCanvas = thumbnail.beginRecording(thumbBitmap.getWidth(),
+                    thumbBitmap.getHeight());
+            thumbCanvas.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) thumbBitmap.getWidth(),
+                    (float) thumbBitmap.getHeight()), null);
             thumbnail.endRecording();
         }
         int depth = object.get("depth").getAsInt();

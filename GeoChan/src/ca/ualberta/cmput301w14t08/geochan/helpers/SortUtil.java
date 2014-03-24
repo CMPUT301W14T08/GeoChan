@@ -156,9 +156,9 @@ public class SortUtil {
     
     
     /**
-     * Comparator for pushing comments with images to the top.
-     * Uses comment date to break ties if both comments have images,
-     * or do not have images.
+     * Comparator for pushing comments with images to the top. Uses comment date
+     * to break ties if both comments have images, or do not have images.
+     * 
      * @return
      */
     private static Comparator<Comment> sortCommentsByImage(){
@@ -166,11 +166,11 @@ public class SortUtil {
             public int compare(Comment c1, Comment c2){
                 if(c1.hasImage() && !(c2.hasImage())){
                     return -1;
-                } else if (!(c1.hasImage()) && c2.hasImage()){
+                } else if (!(c1.hasImage()) && c2.hasImage()) {
                     return 1;
-                } else if(c1.hasImage() == c2.hasImage()){
+                } else if (c1.hasImage() == c2.hasImage()) {
                     int val = c1.getCommentDate().compareTo(c2.getCommentDate());
-                    if (val < 0){
+                    if (val < 0) {
                         return -1;
                     } else if (val > 0) {
                         return 1;
@@ -270,6 +270,11 @@ public class SortUtil {
      * Comparator for sorting comments in a thread based on the current
      * SortUtil.commentSortGeo.
      * 
+<<<<<<< HEAD:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/helpers/SortUtil.java
+=======
+     * @param g
+     *            the GeoLocation to sort by
+>>>>>>> master:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/helpers/SortTypes.java
      * @return the comparator
      */
     private static Comparator<Comment> sortCommentsByLocation() {

@@ -132,7 +132,7 @@ public class GeoLocation {
     /**
      * Getters and Setters
      */
-    
+
     public double getLatitude() {
         return location.getLatitude();
     }

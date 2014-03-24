@@ -22,9 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,12 +82,12 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Setups up the Location Log and creates connection to buttons and text fields
-     * Also setups an onItemClickListener for previous location items
+     * Setups up the Location Log and creates connection to buttons and text
+     * fields Also setups an onItemClickListener for previous location items
      */
     public void onStart() {
         super.onStart();
-        GeoLocationLog log = GeoLocationLog.getInstance();
+        GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         logArray = log.getLogEntries();
 
         fm = getFragmentManager();
@@ -111,8 +111,9 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Called when a user enters custom Long/Lat coordinates and clicks 
-     * Submit Location
+     * Called when a user enters custom Long/Lat coordinates and clicks Submit
+     * Location
+     * 
      * @param v
      */
     public void submitNewLocationFromCoordinates(View v) {
@@ -121,16 +122,14 @@ public class CustomLocationFragment extends Fragment {
 
         if (latStr.equals("") && longStr.equals("")) {
             ErrorDialog.show(getActivity(), "Coordinates can not be left blank.");
-        } 
-        else if (-90 > Double.valueOf(latStr) ||  90 < Double.valueOf(latStr) ||
-                -180 > Double.valueOf(longStr) || 180 < Double.valueOf(longStr)) {
-            ErrorDialog.show(getActivity(), "Latitude must be between -90 and 90, " +
-                    "Longitude must be between -180 and 180");
-        }
-        else {
+        } else if (-90 > Double.valueOf(latStr) || 90 < Double.valueOf(latStr)
+                || -180 > Double.valueOf(longStr) || 180 < Double.valueOf(longStr)) {
+            ErrorDialog.show(getActivity(), "Latitude must be between -90 and 90, "
+                    + "Longitude must be between -180 and 180");
+        } else {
             Double latVal = Double.valueOf(latStr);
             Double longVal = Double.valueOf(longStr);
-            GeoLocation geoLocation = new GeoLocation(latVal,longVal);
+            GeoLocation geoLocation = new GeoLocation(latVal, longVal);
             setBundleArguments(geoLocation, "NEW_LOCATION");
             fm.popBackStackImmediate();
         }
@@ -138,6 +137,7 @@ public class CustomLocationFragment extends Fragment {
 
     /**
      * Called when a user clicks the current location button
+     * 
      * @param v
      */
     public void submitCurrentLocation(View v) {
@@ -153,8 +153,9 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * sets the Bundle arguments for passing back the location to the 
-     * previous fragment
+     * sets the Bundle arguments for passing back the location to the previous
+     * fragment
+     * 
      * @param geoLocation
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
