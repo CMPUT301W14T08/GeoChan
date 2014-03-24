@@ -53,7 +53,7 @@ public class ElasticSearchClient {
     private static final String TYPE_THREAD = "geoThread";
     private static final String TYPE_INDEX = "geoCommentList";
     private static final String URL = "http://cmput301.softwareprocess.es:8080";
-    private static final String URL_INDEX = "testing";
+    private static final String URL_INDEX = "cmput301w14t08";
 
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
