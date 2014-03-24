@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +63,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
-    private static int position = 0;
     private ThreadComment thread = null;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
@@ -127,12 +126,11 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         threadView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                    int _position, long id) {
+                    int position, long id) {
                 LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                resetAllOtherViews(_position, threadView);
                 
-                position = _position;
-                final Comment comment = (Comment) parent.getAdapter().getItem(position);
+                //Log.e("click", "click");               
+                final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
                 RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
                 View child = inflater.inflate(R.layout.comment_buttons, null);
                 relativeInflater.addView(child);
@@ -140,9 +138,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
                 final ImageButton replyButton = (ImageButton) view
                         .findViewById(R.id.comment_reply_button);
+                //replyButton.setFocusable(false);
+                //replyButton.setFocusableInTouchMode(false);
                 
                 final ImageButton starButton = (ImageButton) view
                         .findViewById(R.id.comment_star_button);
+                //starButton.setFocusable(false);
+                //starButton.setFocusableInTouchMode(false);
                 
                 if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
                     final ImageButton editButton = (ImageButton) view
@@ -169,8 +171,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 }
             }
         });
+        
         threadView.setOnRefreshListener(new OnRefreshListener() {
-
             @Override
             public void onRefresh() {
                 reload();
@@ -178,11 +180,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         });
     }
 
-    
-    public void resetAllOtherViews(int _position, ListView listView) {
-        //TODO: implement
-    }
-    
     public void setLocationField(View view, Comment comment) {
      // Comment location
         TextView replyLocationText = (TextView) view
@@ -221,6 +218,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         getFragmentManager().executePendingTransactions();
         
     }    
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
