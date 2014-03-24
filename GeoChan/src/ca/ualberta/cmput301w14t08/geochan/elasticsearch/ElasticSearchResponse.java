@@ -25,7 +25,9 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 /**
- * Represents a response served by ElasticSearch
+ * Represents a response served by ElasticSearch.
+ * 
+ * @author AUTHOR HERE
  * 
  */
 public class ElasticSearchResponse<T> {

@@ -14,6 +14,12 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
+
+/**
+ * COMMENT HERE
+ * @author AUTHOR HERE
+ *
+ */
 public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<Comment> list;
     Context context;
@@ -39,6 +45,11 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     }
 
     @Override
+    /**
+     * CLEAN AND COMMENT
+     * 
+     * @author AUTHOUR HERE
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         Comment comment = (Comment) getItem(position);
         if (convertView == null) {

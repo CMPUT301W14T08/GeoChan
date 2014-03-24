@@ -8,6 +8,12 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 
+
+/**
+ * NEED COMMENT HERE
+ * @author 
+ *
+ */
 public class PreferencesActivity extends PreferenceActivity {
     private EditTextPreference username;
 

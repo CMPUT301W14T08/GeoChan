@@ -13,11 +13,22 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.FavouriteCommentsAdapter;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 
+/**
+ * COMMENT EXPLAINING THE CLASS HERE
+ * @author AUTHOR HERE
+ *
+ */
 public class FavouriteCommentsFragment extends Fragment {
     private static ArrayList<Comment> list;
     private FavouritesLog log;
     private ListView favouritesListView;
 
+
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +36,11 @@ public class FavouriteCommentsFragment extends Fragment {
         list = log.getComments();
     }
 
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub

@@ -50,6 +50,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 /**
  * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
  * inflates layouts for OP, top level comments and comment replies.
+ * 
+ * @author AUTHOR HERE
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT0 = 0;
@@ -86,6 +88,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * objects from the Comment's children tree.
      * 
      * @param comment
+     * 
+     * @author AUTHOR HERE
      */
     private void buildAList(Comment comment) {
         ArrayList<Comment> children = comment.getChildren();
@@ -103,6 +107,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * This method is called once the comments of a thread loaded.
      * 
      * @param thread
+     * 
+     * @author AUTHOR HERE
      */
     public void setThread(ThreadComment thread) {
         this.thread = thread;
@@ -123,6 +129,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * 
      * @param comment
      * @return size
+     * 
+     * @author AUTHOUR HERE
      */
     private int getCountChildren(Comment comment) {
         if (comment.getChildren().size() == 0) {
@@ -191,6 +199,11 @@ public class ThreadViewAdapter extends BaseAdapter {
      * does not work.
      */
     @Override
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
         switch (type) {
@@ -311,6 +324,13 @@ public class ThreadViewAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * COMMENT HERE
+     * @param convertView
+     * @param thread
+     * 
+     * @author AUTHOR HERE
+     */
     private void listenForThreadButtons(View convertView, final ThreadComment thread) {
         // Here handle button presses
         final ImageButton replyButton = (ImageButton) convertView
@@ -380,8 +400,11 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method sets all the required fields for the OP
+     * NEEDS MORE DETAILED COMMENT
      * 
      * @param convertView
+     * 
+     * @author AUTHOUR HERE
      */
     private void setOPFields(View convertView) {
         // Thread title
@@ -415,10 +438,13 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method sets all the equired views for a comment reply
+     * This method sets all the required views for a comment reply.
+     * NEED MORE DETAILED COMMENT
      * 
      * @param convertView
      * @param reply
+     * 
+     * @author AUTHOR HERE
      */
     private void setCommentFields(View convertView, Comment reply) {
         // Comment body

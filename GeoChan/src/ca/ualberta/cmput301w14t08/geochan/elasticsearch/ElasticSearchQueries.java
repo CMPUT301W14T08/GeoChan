@@ -21,9 +21,11 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 /**
+ * A utility class for ElasticSearch.
  * Contains various queries and builders for queries to be used when interacting
  * with ElasticSearch.
  * 
+ * @author AUTHOR HERE
  */
 public class ElasticSearchQueries {
     /**
@@ -32,18 +34,33 @@ public class ElasticSearchQueries {
     public static final String SEARCH_MATCH_ALL = "{\n" + "   \"size\" : 9999,  \n"
             + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n" + "}";
 
+    /**
+     * COMMENT HERE
+     */
     private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
             + "       \"match\" : {\n" + "           \"parent\" : \"";
 
+    /**
+     * COMMENT HERE
+     */
     private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n" + "}";
 
+    /**
+     * COMMENT HERE
+     */
     private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" + "    \"upsert\" : {\n"
             + "       \"comments\" : [\"";
 
+    /**
+     * COMMENT HERE
+     */
     private static final String UPDATE_COMMENT_LIST_MIDDLE = "\"]\n" + "    },\n"
             + "    \"script\": \"ctx._source.comments += comment\",\n" + "    \"params\" : {\n"
             + "        \"comment\" : \"";
 
+    /**
+     * COMMENT HERE
+     */
     private static final String UPDATE_COMMENT_LIST_END = "\"\n" + "    }\n" + "}";
 
     /**
@@ -52,6 +69,8 @@ public class ElasticSearchQueries {
      * @param id
      *            the parent ID
      * @return the JSON query string
+     * 
+     * @author AUTHOR HERE
      */
     public static String getMatchParent(String id) {
         return SEARCH_MATCH_PARENT_BEGIN + id + SEARCH_MATCH_PARENT_END;
@@ -63,6 +82,8 @@ public class ElasticSearchQueries {
      * @param id
      *            the comment ID
      * @return the JSON query string
+     * 
+     * @author AUTHOR HERE
      */
     public static String commentListScript(String id) {
         return UPDATE_COMMENT_LIST_BEGIN + id + UPDATE_COMMENT_LIST_MIDDLE + id

@@ -35,7 +35,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * This is a custom adapter, used to display Thread objects in a list.
+ * This is a custom adapter, used to display ThreadComment objects in a list.
+ * It is used inside of our ThreadListFragment.
+ * 
+ * @author AUTHOUR HERE
  */
 public class ThreadListAdapter extends BaseAdapter {
 
@@ -68,6 +71,11 @@ public class ThreadListAdapter extends BaseAdapter {
     }
 
     @Override
+    /**
+     * COMMENT AND CLEAN
+     * 
+     * @author
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment thread = getItem(position);
 
