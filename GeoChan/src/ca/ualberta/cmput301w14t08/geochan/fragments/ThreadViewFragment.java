@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -128,50 +127,55 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                
-                //Log.e("click", "click");               
+                // "+1" is necessary because of PullToRefresh
                 final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
                 RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
                 View child = inflater.inflate(R.layout.comment_buttons, null);
-                relativeInflater.addView(child);
-                setLocationField(view, comment);
+
+                /* If the child layout with buttons is already inflated,
+                 * remove it. If not, inflate it.
+                 */
+                if(relativeInflater.getChildCount() > 0) {
+                    relativeInflater.removeAllViews();
+                    return;
+                } else {
+                    relativeInflater.addView(child);
+                    setLocationField(view, comment);
+                }
 
                 final ImageButton replyButton = (ImageButton) view
                         .findViewById(R.id.comment_reply_button);
-                //replyButton.setFocusable(false);
-                //replyButton.setFocusableInTouchMode(false);
-                
+                replyButton.setFocusable(false);
+
                 final ImageButton starButton = (ImageButton) view
                         .findViewById(R.id.comment_star_button);
-                //starButton.setFocusable(false);
-                //starButton.setFocusableInTouchMode(false);
-                
+                starButton.setFocusable(false);
+
+                // Check if the comment is by the user to decide
+                // wether or not to display the edit button.
                 if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
                     final ImageButton editButton = (ImageButton) view
                             .findViewById(R.id.comment_edit_button);
                     editButton.setVisibility(View.VISIBLE);
+                    editButton.setFocusable(false);
                 }
-                
-                if (starButton != null) {
-                    starButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            starButton.setImageResource(R.drawable.ic_rating_marked);
-                            favouriteAComment(comment);
-                        }
-                    });
-                }
-                
-                if (replyButton != null) {
-                    replyButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            // Perform action on click
-                            replyToComment(comment, threadIndex);
-                        }
-                    });
-                }
+
+                starButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        starButton.setImageResource(R.drawable.ic_rating_marked);
+                        favouriteAComment(comment);
+                    }
+                });
+
+                replyButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Perform action on click
+                        replyToComment(comment, threadIndex);
+                    }
+                });
             }
         });
-        
+
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -180,6 +184,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         });
     }
 
+    /**
+     * When comment is selected, additional information is displayed
+     * in the form of location coordinates. This method sets that location
+     * field
+     * @param view
+     * @param comment
+     */
     public void setLocationField(View view, Comment comment) {
      // Comment location
         TextView replyLocationText = (TextView) view
@@ -199,12 +210,22 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         } 
     }
     
+    /**
+     * Called when the star button is pressed
+     * in the selected comment. Save the comment as favourite.
+     * @param comment
+     */
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
         log.addComment(comment);
     }
     
+    /**
+     * Set up and launch the postCommentFragment 
+     * @param comment
+     * @param threadIndex
+     */
     public void replyToComment(Comment comment, int threadIndex) {
         Fragment fragment = new PostCommentFragment();
         Bundle bundle = new Bundle();

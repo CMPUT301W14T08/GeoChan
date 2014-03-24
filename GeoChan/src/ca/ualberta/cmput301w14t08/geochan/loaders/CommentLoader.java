@@ -21,8 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.loaders;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;

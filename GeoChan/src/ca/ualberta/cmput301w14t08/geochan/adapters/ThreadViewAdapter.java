@@ -32,7 +32,6 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -427,7 +426,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         replyBody.setText(reply.getTextPost());
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
-        replyBy.setText(reply.getUser() + "#" + reply.getHash() + " ");
+        replyBy.setText(reply.getUser() + "#" + reply.getHash() + "  ");
         String username = reply.getUser();
         if(HashHelper.getHash(username).equals(reply.getHash())) {
             replyBy.setBackgroundResource(R.drawable.username_background_rect);

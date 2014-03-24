@@ -59,9 +59,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_comment_commentDate);
         commentTime.setText(comment.getCommentDateString());
         // Comment location
-        /*
         TextView commentLocationText = (TextView) convertView
-                .findViewById(R.id.thread_view_comment_locationText);
+                .findViewById(R.id.thread_view_comment_location);
         GeoLocation repLocCom = comment.getLocation();
         if (repLocCom != null) {
             DecimalFormat format = new DecimalFormat();
@@ -74,15 +73,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         } else {
             commentLocationText.setText("Error: No location found");
         }
-        */
 
-        // Button replyButton = (Button)
-        // convertView.findViewById(R.id.comment_reply_button);
-        // replyButton.setVisibility(View.GONE);
-
-        // Button starButton = (Button)
-        // convertView.findViewById(R.id.comment_star_button);
-        // starButton.setVisibility(View.GONE);
 
         return convertView;
     }
