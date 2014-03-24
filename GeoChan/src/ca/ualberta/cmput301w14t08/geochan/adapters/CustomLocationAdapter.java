@@ -36,7 +36,9 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 /**
  * This class is an adapter to display a list of locations the user specified in
  * the past. Each list item consists of a title of the associated thread and
- * geolocation represented by long and latt
+ * geolocation represented by longitude and lattitude.
+ * 
+ * @author
  */
 public class CustomLocationAdapter extends BaseAdapter {
     private ArrayList<LogEntry> logArray;

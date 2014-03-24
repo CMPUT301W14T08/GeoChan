@@ -44,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 /**
  * This is the main and, so far, only activity in the application. It inflates
  * the default fragment and handles some of the crucial controller methods
+ * @author henrypabst
  */
  
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
@@ -115,8 +116,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             }
             return true;
         default:
-            //return super.onOptionsItemSelected(item);
-            return false;
+            return super.onOptionsItemSelected(item);
+            //return false;
         }
     }
 

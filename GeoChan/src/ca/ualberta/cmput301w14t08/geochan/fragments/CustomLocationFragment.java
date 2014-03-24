@@ -49,6 +49,8 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
  * for their post/comment via either a custom long/latt or selecting a
  * previously used location.
  * 
+ * @author AUTHOR HERE
+ * 
  */
 public class CustomLocationFragment extends Fragment {
 
@@ -83,7 +85,9 @@ public class CustomLocationFragment extends Fragment {
 
     /**
      * Setups up the Location Log and creates connection to buttons and text
-     * fields Also setups an onItemClickListener for previous location items
+     * fields. Also setups an onItemClickListener for previous location items.
+     * 
+     * @author AUTHOR HERE
      */
     public void onStart() {
         super.onStart();
@@ -114,7 +118,9 @@ public class CustomLocationFragment extends Fragment {
      * Called when a user enters custom Long/Lat coordinates and clicks Submit
      * Location
      * 
-     * @param v
+     * @param v WHAT DOTH V?
+     * 
+     * @author AUTHOR HERE
      */
     public void submitNewLocationFromCoordinates(View v) {
         String latStr = latitudeEditText.getText().toString();
@@ -138,7 +144,9 @@ public class CustomLocationFragment extends Fragment {
     /**
      * Called when a user clicks the current location button
      * 
-     * @param v
+     * @param v WHAT DOTH V?
+     * 
+     * @author AUTHOR HERE
      */
     public void submitCurrentLocation(View v) {
         LocationListenerService listener = new LocationListenerService(getActivity());
@@ -153,10 +161,12 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * sets the Bundle arguments for passing back the location to the previous
+     * Sets the Bundle arguments for passing back the location to the previous
      * fragment
      * 
-     * @param geoLocation
+     * @param geoLocation WHAT DOTH geoLocation?
+     * 
+     * @author AUTHOR HERE
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
         Bundle bundle = getArguments();
