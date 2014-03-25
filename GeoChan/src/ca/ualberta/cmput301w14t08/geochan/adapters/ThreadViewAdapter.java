@@ -107,7 +107,6 @@ public class ThreadViewAdapter extends BaseAdapter {
      * 
      * @param thread
      * 
-     * @author AUTHOR HERE
      */
     public void setThread(ThreadComment thread) {
         this.thread = thread;
@@ -129,7 +128,6 @@ public class ThreadViewAdapter extends BaseAdapter {
      * @param comment
      * @return size
      * 
-     * @author AUTHOUR HERE
      */
     private int getCountChildren(Comment comment) {
         if (comment.getChildren().size() == 0) {
@@ -184,136 +182,72 @@ public class ThreadViewAdapter extends BaseAdapter {
         return TYPE_MAX_COUNT;
     }
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.widget.Adapter#getView(int, android.view.View,
-     * android.view.ViewGroup)
-     * 
-     * This getView method, depending on the item type, inflates the correct
-     * layout. Currently, it is a switch with each of 10 possible layouts having
-     * its own case. Apparently if one is to have 10 layouts in a listview, one 
-     * is to have a switch like this, uniting different layouts under single type
-     * does not work.
-     */
     @Override
     /**
-     * COMMENT HERE
-     * 
-     * @author AUTHOR HERE
+     * Depending on the list item type, inflate the correct
+     * layout.
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
+        final Comment comment = (Comment) getItem(position);
         switch (type) {
         case TYPE_OP:
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_op, null);
-            }
+            convertView = setConvertView(convertView, R.layout.thread_view_op);
             setOPFields(convertView);
             listenForThreadButtons(convertView, thread);
             break;
 
         case TYPE_COMMENT0:
-            final Comment comment = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
-            }
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_0);
             setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT1:
-            final Comment comment1 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_1, null);
-            }
-            setCommentFields(convertView, comment1);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_1);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT2:
-            final Comment comment2 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_2, null);
-            }
-            setCommentFields(convertView, comment2);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_2);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT3:
-            final Comment comment3 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_3, null);
-            }
-            setCommentFields(convertView, comment3);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_3);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT4:
-            final Comment comment4 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_4, null);
-            }
-            setCommentFields(convertView, comment4);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_4);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT5:
-            final Comment comment5 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
-            }
-            setCommentFields(convertView, comment5);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_5);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT6:
-            final Comment comment6 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_6, null);
-            }
-            setCommentFields(convertView, comment6);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_6);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_COMMENT7:
-            final Comment comment7 = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_7, null);
-            }
-            setCommentFields(convertView, comment7);
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_7);
+            setCommentFields(convertView, comment);
             break;
 
         case TYPE_SEPARATOR:
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_separator, null);
-            }
+            convertView = setConvertView(convertView, R.layout.thread_view_separator);
             TextView numComments = (TextView) convertView.findViewById(R.id.textSeparator);
             numComments.setText(Integer.toString(getCount() - 2) + " Comments:");
             break;
 
         case TYPE_COMMENTMAX:
             final Comment commentMax = (Comment) getItem(position);
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.thread_view_comment_max, null);
-            }
+            convertView = setConvertView(convertView, R.layout.thread_view_comment_max);
             setCommentFields(convertView, commentMax);
+            // TYPE_COMMENTMAX has an extra field: depth
             TextView depthMeter = (TextView) convertView
                     .findViewById(R.id.thread_view_comment_depth_meter);
             depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
@@ -324,11 +258,33 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * COMMENT HERE
+     * Assign convertview layout
+     * 
+     * @param convertView
+     *            view to inflate
+     * @param layout
+     *            an R.Layout resource
+     * @return convertView
+     *            Inflated view   
+     */
+    private View setConvertView(View convertView, int layout) {
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(layout, null);
+        }
+        return convertView;
+    }
+
+    /**
+     * Listener for the buttons in the TYPE_OP listView item.
+     * Comments have listeners in ThreadViewFragment, threadComment
+     * buttons have a listener in the adapter for ease of access
+     * to the permanently displayed buttons.
+     * 
      * @param convertView
      * @param thread
      * 
-     * @author AUTHOR HERE
      */
     private void listenForThreadButtons(View convertView, final ThreadComment thread) {
         // Here handle button presses
@@ -337,7 +293,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
-        if(FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
+        if (FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
             starButton.setImageResource(R.drawable.ic_rating_marked);
         }
 
@@ -347,13 +303,15 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    if(!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
-                        Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT).show();
+                    if (!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
+                        Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT)
+                                .show();
                         starButton.setImageResource(R.drawable.ic_rating_marked);
                         FavouritesLog log = FavouritesLog.getInstance(context);
                         log.addThreadComment(thread);
                     } else {
-                        Toast.makeText(context, "Thread removed from Favourites.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Thread removed from Favourites.",
+                                Toast.LENGTH_SHORT).show();
                         starButton.setImageResource(R.drawable.ic_rating_important);
                         FavouritesLog log = FavouritesLog.getInstance(context);
                         log.removeThreadComment(thread);
@@ -408,12 +366,11 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method sets all the required fields for the OP
-     * NEEDS MORE DETAILED COMMENT
+     * Method to set the required fields of the orignal post of the thread.
+     * Title, creator, comment, timestamp, location.
      * 
      * @param convertView
-     * 
-     * @author AUTHOUR HERE
+     *            View container of a listView item
      */
     private void setOPFields(View convertView) {
         // Thread title
@@ -434,6 +391,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_op_locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
+            //The rounding of long and lat for max 4 decimal digits.
             DecimalFormat format = new DecimalFormat();
             format.setRoundingMode(RoundingMode.HALF_EVEN);
             format.setMinimumFractionDigits(0);
@@ -447,13 +405,12 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method sets all the required views for a comment reply.
-     * NEED MORE DETAILED COMMENT
+     * This method sets all the required views for a comment reply. 
+     * Comment, creator, time
      * 
      * @param convertView
      * @param reply
      * 
-     * @author AUTHOR HERE
      */
     private void setCommentFields(View convertView, Comment reply) {
         // Comment body
@@ -464,7 +421,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
         replyBy.setText(reply.getUser() + "#" + reply.getHash() + "  ");
         String username = reply.getUser();
-        if(HashHelper.getHash(username).equals(reply.getHash())) {
+        if (HashHelper.getHash(username).equals(reply.getHash())) {
             replyBy.setBackgroundResource(R.drawable.username_background_rect);
             replyBy.setTextColor(Color.WHITE);
         }

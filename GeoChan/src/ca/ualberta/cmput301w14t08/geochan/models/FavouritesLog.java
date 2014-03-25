@@ -6,7 +6,7 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
- * This class handles the threads/comments saved by the user as favourite, to be
+ * The class that handles the threads/comments saved by the user as favourite, to be
  * available for later viewing.
  */
 public class FavouritesLog {
