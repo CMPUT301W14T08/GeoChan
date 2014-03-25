@@ -40,6 +40,52 @@ public class FavouritesLog {
         comments.add(comment);
         manager.serializeComments();
     }
+    
+    public void removeThreadComment(ThreadComment threadComment) {
+        for(ThreadComment t : getThreads()) {
+            if(t.getId().equals(threadComment.getId())) {
+                getComments().remove(t);
+            }
+        }
+        manager.serializeThreads();
+    }
+    
+    public void removeComment(Comment comment) {
+        for(Comment c : getComments()) {
+            if(c.getId().equals(comment.getId())) {
+                getComments().remove(c);
+            }
+        }
+        manager.serializeComments();
+    }
+    
+    /**
+     * Iterate over the cached favourites and check for comment with given id
+     * @param id
+     * @return
+     */
+    public boolean hasComment(String id) {
+        for(Comment c : getComments()) {
+            if(c.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Iterate over the cached favourites and check for threadComment with given id
+     * @param id
+     * @return
+     */
+    public boolean hasThreadComment(String id) {
+        for(ThreadComment t : getThreads()) {
+            if(t.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Getters and Setters
     public ArrayList<ThreadComment> getThreads() {

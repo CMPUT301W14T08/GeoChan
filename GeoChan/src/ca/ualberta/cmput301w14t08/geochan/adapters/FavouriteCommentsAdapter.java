@@ -55,7 +55,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
+            convertView = inflater.inflate(R.layout.favourites_comment, null);
         }
         // Comment body
         TextView commentBody = (TextView) convertView

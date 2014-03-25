@@ -126,6 +126,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
+                                
                 LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 // "+1" is necessary because of PullToRefresh
                 final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
@@ -160,10 +161,21 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                     editButton.setFocusable(false);
                 }
 
+                // Check if the favourites log already has a copy.
+                if(FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                    starButton.setImageResource(R.drawable.ic_rating_marked);
+                }
+
                 starButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        starButton.setImageResource(R.drawable.ic_rating_marked);
-                        favouriteAComment(comment);
+                        //Favourite or unfavourite depending on current state
+                        if(!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                            starButton.setImageResource(R.drawable.ic_rating_marked);
+                            favouriteAComment(comment);
+                        } else {
+                            starButton.setImageResource(R.drawable.ic_rating_important);
+                            unfavouriteAComment(comment);
+                        }
                     }
                 });
 
@@ -219,6 +231,18 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
         log.addComment(comment);
+    }
+    
+    /**
+     * Called when the star button is pressed
+     * in the selected comment when comment is already starred.
+     * Remove the comment as favourite.
+     * @param comment
+     */
+    public void unfavouriteAComment(Comment comment) {
+        Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT).show();
+        FavouritesLog log = FavouritesLog.getInstance(getActivity());
+        log.removeComment(comment);
     }
     
     /**
