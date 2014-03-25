@@ -50,7 +50,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
  * inflates layouts for OP, top level comments and comment replies.
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  */
 public class ThreadViewAdapter extends BaseAdapter {
     private static final int TYPE_COMMENT0 = 0;
@@ -88,7 +88,6 @@ public class ThreadViewAdapter extends BaseAdapter {
      * 
      * @param comment
      * 
-     * @author AUTHOR HERE
      */
     private void buildAList(Comment comment) {
         ArrayList<Comment> children = comment.getChildren();
@@ -264,8 +263,7 @@ public class ThreadViewAdapter extends BaseAdapter {
      *            view to inflate
      * @param layout
      *            an R.Layout resource
-     * @return convertView
-     *            Inflated view   
+     * @return convertView Inflated view
      */
     private View setConvertView(View convertView, int layout) {
         if (convertView == null) {
@@ -277,10 +275,9 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * Listener for the buttons in the TYPE_OP listView item.
-     * Comments have listeners in ThreadViewFragment, threadComment
-     * buttons have a listener in the adapter for ease of access
-     * to the permanently displayed buttons.
+     * Listener for the buttons in the TYPE_OP listView item. Comments have
+     * listeners in ThreadViewFragment, threadComment buttons have a listener in
+     * the adapter for ease of access to the permanently displayed buttons.
      * 
      * @param convertView
      * @param thread
@@ -391,7 +388,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 .findViewById(R.id.thread_view_op_locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            //The rounding of long and lat for max 4 decimal digits.
+            // The rounding of long and lat for max 4 decimal digits.
             DecimalFormat format = new DecimalFormat();
             format.setRoundingMode(RoundingMode.HALF_EVEN);
             format.setMinimumFractionDigits(0);
@@ -405,8 +402,8 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method sets all the required views for a comment reply. 
-     * Comment, creator, time
+     * This method sets all the required views for a comment reply. Comment,
+     * creator, time
      * 
      * @param convertView
      * @param reply

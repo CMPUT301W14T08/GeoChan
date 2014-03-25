@@ -68,27 +68,26 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
-    
+
     /**
-     * Initializes several of the variables used in displaying the
-     * contents of a thread. If the user just returned from selecting a 
-     * custom location to sort by, it sorts the comments accordingly
-     * and resets locSortFlag.
+     * Initializes several of the variables used in displaying the contents of a
+     * thread. If the user just returned from selecting a custom location to
+     * sort by, it sorts the comments accordingly and resets locSortFlag.
      */
     @Override
-    public void onResume(){
+    public void onResume() {
         setHasOptionsMenu(true);
-        if(locationListener == null){
+        if (locationListener == null) {
             locationListener = new LocationListenerService(getActivity());
         }
-        if(prefManager == null){
+        if (prefManager == null) {
             prefManager = PreferencesManager.getInstance();
         }
-        if(locSortFlag == 1){
+        if (locSortFlag == 1) {
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
-            SortUtil.sortComments(SortUtil.SORT_LOCATION,
-                                  thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            SortUtil.sortComments(SortUtil.SORT_LOCATION, thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             locSortFlag = 0;
@@ -121,8 +120,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
-
 
     /**
      * Set up the ListView, adapter, listeners.
@@ -133,7 +130,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         threadView = (PullToRefreshListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
-        threadView.setAdapter(adapter);   
+        threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
@@ -145,19 +142,19 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     }
 
     /**
-     * When comment is selected, additional information is displayed
-     * in the form of location coordinates. This method sets that location
-     * field TextView in the view.
+     * When comment is selected, additional information is displayed in the form
+     * of location coordinates. This method sets that location field TextView in
+     * the view.
      * 
-     * @param view 
-     * @param comment 
+     * @param view
+     * @param comment
      */
     public void setLocationField(View view, Comment comment) {
-     // Comment location
+        // Comment location
         TextView replyLocationText = (TextView) view
                 .findViewById(R.id.thread_view_comment_location);
         GeoLocation repLocCom = comment.getLocation();
-        
+
         if (repLocCom != null) {
             DecimalFormat format = new DecimalFormat();
             format.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -168,41 +165,42 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                     + " Longitude: " + format.format(repLocCom.getLongitude()));
         } else {
             replyLocationText.setText("Error: No location found");
-        } 
+        }
     }
-    
+
     /**
-     * Called when the star button is pressed
-     * in the selected comment. Save the comment as favourite.
+     * Called when the star button is pressed in the selected comment. Save the
+     * comment as favourite.
      * 
-     * @param comment WHAT DOTH COMMENT?
+     * @param comment
+     *            WHAT DOTH COMMENT?
      */
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
         log.addComment(comment);
     }
-    
+
     /**
-     * Called when the star button is pressed
-     * in the selected comment when comment is already starred.
-     * Remove the comment as favourite.
+     * Called when the star button is pressed in the selected comment when
+     * comment is already starred. Remove the comment as favourite.
      * 
      * @param comment
      */
     public void unfavouriteAComment(Comment comment) {
-        Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT)
+                .show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
         log.removeComment(comment);
     }
-    
+
     /**
-     * Set up and launch the postCommentFragment when the user
-     * wishes to reply to a comment. The fragment takes as input
-     * the index of the therad and the comment object.
+     * Set up and launch the postCommentFragment when the user wishes to reply
+     * to a comment. The fragment takes as input the index of the therad and the
+     * comment object.
      * 
-     * @param comment 
-     * @param threadIndex 
+     * @param comment
+     * @param threadIndex
      */
     public void replyToComment(Comment comment, int threadIndex) {
         Fragment fragment = new PostCommentFragment();
@@ -212,27 +210,29 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         fragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "repFrag")
-                .addToBackStack(null).commit();
+                .replace(R.id.fragment_container, fragment, "repFrag").addToBackStack(null)
+                .commit();
         getFragmentManager().executePendingTransactions();
-        
-    }    
-    
+
+    }
+
     private OnItemClickListener commentButtonListener = new OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view,
-                int position, long id) {
-                            
-            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             // "+1" is necessary because of PullToRefresh
-            final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
-            RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
+            final Comment comment = (Comment) threadView.getItemAtPosition(position + 1);
+            RelativeLayout relativeInflater = (RelativeLayout) view
+                    .findViewById(R.id.relative_inflater);
             View child = inflater.inflate(R.layout.comment_buttons, null);
 
-            /* If the child layout with buttons is already inflated,
-             * remove it. If not, inflate it.
+            /*
+             * If the child layout with buttons is already inflated, remove it.
+             * If not, inflate it.
              */
-            if(relativeInflater.getChildCount() > 0) {
+            if (relativeInflater != null &&relativeInflater.getChildCount() > 0) {
                 relativeInflater.removeAllViews();
                 return;
             } else {
@@ -250,7 +250,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
             // Check if the comment is by the user to decide
             // wether or not to display the edit button.
-            if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
+            if (HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
                 final ImageButton editButton = (ImageButton) view
                         .findViewById(R.id.comment_edit_button);
                 editButton.setVisibility(View.VISIBLE);
@@ -258,14 +258,14 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             }
 
             // Check if the favourites log already has a copy.
-            if(FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+            if (FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
                 starButton.setImageResource(R.drawable.ic_rating_marked);
             }
 
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    //Favourite or unfavourite depending on current state
-                    if(!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                    // Favourite or unfavourite depending on current state
+                    if (!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
                         starButton.setImageResource(R.drawable.ic_rating_marked);
                         favouriteAComment(comment);
                     } else {
@@ -283,88 +283,92 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             });
         }
     };
-    
+
     /**
-     * Determines which sorting option the user selected and sorts
-     * the comments accordingly.
+     * Determines which sorting option the user selected and sorts the comments
+     * accordingly.
      * 
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-        case(R.id.comment_sort_date_new):
-            //User wants to push newer comments to the top.
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case (R.id.comment_sort_date_new):
+            // User wants to push newer comments to the top.
             prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
-            SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
-                                thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
-        case(R.id.comment_sort_date_old):
-            //User wants to push older comments to the top.
+        case (R.id.comment_sort_date_old):
+            // User wants to push older comments to the top.
             prefManager.setCommentSort(SortUtil.SORT_DATE_OLDEST);
-            SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, 
-                                thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
-        case(R.id.comment_sort_image):
-            //User wants to push comments with images to the top.
+        case (R.id.comment_sort_image):
+            // User wants to push comments with images to the top.
             prefManager.setCommentSort(SortUtil.SORT_IMAGE);
-            SortUtil.sortComments(SortUtil.SORT_IMAGE, 
-                                  thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            SortUtil.sortComments(SortUtil.SORT_IMAGE, thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
-        case(R.id.comment_sort_location_current):
-            //User wants to push comments near them to the top.
+        case (R.id.comment_sort_location_current):
+            // User wants to push comments near them to the top.
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
             SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
-            SortUtil.sortComments(SortUtil.SORT_LOCATION,
-                                  thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+            SortUtil.sortComments(SortUtil.SORT_LOCATION, thread.getBodyComment().getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
-        case(R.id.comment_sort_location_other):
-            //User wants to push comments near a selected location to the top.
+        case (R.id.comment_sort_location_other):
+            // User wants to push comments near a selected location to the top.
             locSortFlag = 1;
             this.getSortingLoc();
             return true;
-        case(R.id.comment_sort_score_high):
-            //User wants to push comments with a high score/relevance to the top.
-             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
-             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
-             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
-                                   thread.getBodyComment().getChildren());
-             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-             threadView.setAdapter(adapter);
-             adapter.notifyDataSetChanged();
-             return true;
-        case(R.id.comment_sort_score_low):
-            //User wants to push comments with a low score/relevance to the top.
-             prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
-             SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
-             SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
-                                   thread.getBodyComment().getChildren());
-             adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-             threadView.setAdapter(adapter);
-             adapter.notifyDataSetChanged();
-             return true;
-         default:
-             return super.onOptionsItemSelected(item);
-        }     
+        case (R.id.comment_sort_score_high):
+            // User wants to push comments with a high score/relevance to the
+            // top.
+            prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
+            SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST, thread.getBodyComment()
+                    .getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        case (R.id.comment_sort_score_low):
+            // User wants to push comments with a low score/relevance to the
+            // top.
+            prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
+            SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
+            SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST, thread.getBodyComment()
+                    .getChildren());
+            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                    threadIndex);
+            threadView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
-    
+
     /**
      * Sends the user into a CustomLocationFragment so they can choose a custom
      * location to sort comments by.
      * 
      */
-    private void getSortingLoc(){
+    private void getSortingLoc() {
         Bundle args = new Bundle();
         args.putInt("postType", CustomLocationFragment.SORT_COMMENT);
         CustomLocationFragment frag = new CustomLocationFragment();
@@ -418,7 +422,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
         //
     }
-    
+
     private void reload() {
         getLoaderManager().getLoader(1).forceLoad();
     }
