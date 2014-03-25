@@ -22,7 +22,6 @@ package ca.ualberta.cmput301w14t08.geochan.activities;
 
 import java.util.List;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -192,17 +191,11 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      */
     
     public void attachImage(View v) {
-        PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                .findFragmentByTag("comFrag");
-        fragment.attachImage(v);
-    }
-    
-    public void attachImageReply(View v) {
-        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager()
+        PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
         fragment.attachImage(v);
     }
-
+    
     public void postReply(View v) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");

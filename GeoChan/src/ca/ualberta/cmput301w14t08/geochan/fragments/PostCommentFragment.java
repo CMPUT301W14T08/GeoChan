@@ -24,20 +24,15 @@ import java.io.File;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-
 import android.app.Activity;
 import android.content.Context;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -56,7 +51,6 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -182,6 +176,7 @@ public class PostCommentFragment extends Fragment {
                     InputMethodManager.HIDE_NOT_ALWAYS);
             getFragmentManager().popBackStackImmediate();
         }
+    }
     
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
@@ -220,7 +215,7 @@ public class PostCommentFragment extends Fragment {
             myAlertDialog.show();             
         }
     }
- 
+ /*
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -233,9 +228,7 @@ public class PostCommentFragment extends Fragment {
             Log.d("imagehelper","Image set successfully");
         }
     }
-    
-    }
-
+    */
     @Override
     public void onStop() {
         super.onStop();

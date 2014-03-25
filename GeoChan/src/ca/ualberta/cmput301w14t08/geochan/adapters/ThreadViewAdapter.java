@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -220,15 +219,10 @@ public class ThreadViewAdapter extends BaseAdapter {
         case TYPE_COMMENT0:
             final Comment comment = (Comment) getItem(position);
             if (convertView == null) {
-                if (comment.hasImage()) {
-                    LayoutInflater inflater = (LayoutInflater) context
-                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = inflater.inflate(R.layout.thread_view_top_comment_image, null);
-                } else {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.thread_view_comment_0, null);
-                }
+            }
             setCommentFields(convertView, comment);
             break;
 
@@ -271,13 +265,14 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
             setCommentFields(convertView, comment4);
             break;
+
         case TYPE_COMMENT5:
             final Comment comment5 = (Comment) getItem(position);
             if (convertView == null) {
-                    LayoutInflater inflater = (LayoutInflater) context
-                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.thread_view_comment_5, null);
-                }
+            }
             setCommentFields(convertView, comment5);
             break;
 
@@ -410,11 +405,6 @@ public class ThreadViewAdapter extends BaseAdapter {
 
             });
         }
-        // Comment image
-        if (comment.hasImage()) {
-            ImageView image = (ImageView) convertView.findViewById(R.id.imageButton1);
-            image.setImageBitmap(comment.getImageThumb());
-        }
     }
 
     /**
@@ -482,10 +472,5 @@ public class ThreadViewAdapter extends BaseAdapter {
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
         replyTime.setText(reply.getCommentDateString());
-        }
-        // Image
-        if (reply.hasImage()) {
-            ImageView image = (ImageView) convertView.findViewById(R.id.imageButton1);
-            image.setImageBitmap(reply.getImageThumb());
     }
 }

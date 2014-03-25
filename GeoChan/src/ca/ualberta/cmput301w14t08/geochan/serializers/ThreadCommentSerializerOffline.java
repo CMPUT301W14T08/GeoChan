@@ -24,9 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -68,22 +65,12 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
         if (thread.getBodyComment().hasImage()) {
-            Picture picture = thread.getBodyComment().getImage();
-            Picture pictureThumb = thread.getBodyComment().getImageThumb();
+            Bitmap bitmap = thread.getBodyComment().getImage();
+            Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
             /*
              * http://stackoverflow.com/questions/15563021/how-to-convert-a-picture
              * -object-into-a-bitmap-object-android
              */
-            PictureDrawable drawable = new PictureDrawable(picture);
-            PictureDrawable drawableThumb = new PictureDrawable(pictureThumb);
-            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-            Bitmap bitmapThumb = Bitmap.createBitmap(drawableThumb.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-            Canvas c = new Canvas(bitmap);
-            Canvas cT = new Canvas(bitmapThumb);
-            picture.draw(c);
-            pictureThumb.draw(cT);
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string

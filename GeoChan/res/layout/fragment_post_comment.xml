@@ -9,19 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:text="@string/op_replyingTo"
-        android:layout_alignRight="@+id/imageView1"
+        android:layout_toLeftOf="@+id/imageView1"
         android:paddingRight="5dp"
         android:textStyle="bold"
         android:paddingLeft="5dp" />
-
-        android:layout_alignRight="@+id/imageView1"
     
     <TextView
         android:id="@+id/reply_to_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:text="@string/hello_world"
-        android:layout_alignRight="@+id/imageView1"
+        android:layout_toLeftOf="@+id/imageView1"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:maxLines ="5"
@@ -32,7 +30,6 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/op_body"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:paddingRight="2dp"
@@ -47,7 +44,7 @@
         android:layout_height="300sp"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/reply_to_body"
+        android:layout_below="@+id/imageView1"
         android:background="@android:drawable/editbox_background"
         android:ems="10"
         android:hint="@string/commentHint"
