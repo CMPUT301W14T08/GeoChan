@@ -1,6 +1,8 @@
 GeoChan is a simple, usable, interactive Android application that allows users to discuss locally (as in physically locally) relevant topics. GeoChan is developed as a CMPUT 301 project at the University of Alberta in the winter semester of 2014. 
 
 **Copyright and License**
+
+
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
 
 http://www.apache.org/licenses/LICENSE-2.0
