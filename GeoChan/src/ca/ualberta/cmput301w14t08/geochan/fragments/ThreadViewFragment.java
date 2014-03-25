@@ -58,7 +58,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
 /**
  * Fragment which displays the contents of a ThreadComment.
  * 
- * @author Henry Pabst, 
+ * @author Henry Pabst, Artem Chikin
  */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private PullToRefreshListView threadView;
@@ -121,9 +121,11 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
+    
+
 
     /**
-     * COMMENT GOES HERE
+     * Set up the ListView, adapter, listeners.
      */
     @Override
     public void onStart() {
@@ -133,72 +135,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);   
         adapter.notifyDataSetChanged();
-        threadView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                                
-                LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                // "+1" is necessary because of PullToRefresh
-                final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
-                RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
-                View child = inflater.inflate(R.layout.comment_buttons, null);
-
-                /* If the child layout with buttons is already inflated,
-                 * remove it. If not, inflate it.
-                 */
-                if(relativeInflater.getChildCount() > 0) {
-                    relativeInflater.removeAllViews();
-                    return;
-                } else {
-                    relativeInflater.addView(child);
-                    setLocationField(view, comment);
-                }
-
-                final ImageButton replyButton = (ImageButton) view
-                        .findViewById(R.id.comment_reply_button);
-                replyButton.setFocusable(false);
-
-                final ImageButton starButton = (ImageButton) view
-                        .findViewById(R.id.comment_star_button);
-                starButton.setFocusable(false);
-
-                // Check if the comment is by the user to decide
-                // wether or not to display the edit button.
-                if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
-                    final ImageButton editButton = (ImageButton) view
-                            .findViewById(R.id.comment_edit_button);
-                    editButton.setVisibility(View.VISIBLE);
-                    editButton.setFocusable(false);
-                }
-
-                // Check if the favourites log already has a copy.
-                if(FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
-                    starButton.setImageResource(R.drawable.ic_rating_marked);
-                }
-
-                starButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        //Favourite or unfavourite depending on current state
-                        if(!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
-                            starButton.setImageResource(R.drawable.ic_rating_marked);
-                            favouriteAComment(comment);
-                        } else {
-                            starButton.setImageResource(R.drawable.ic_rating_important);
-                            unfavouriteAComment(comment);
-                        }
-                    }
-                });
-
-                replyButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // Perform action on click
-                        replyToComment(comment, threadIndex);
-                    }
-                });
-            }
-        });
-
+        threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -210,9 +147,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     /**
      * When comment is selected, additional information is displayed
      * in the form of location coordinates. This method sets that location
-     * field.
-     * @param view WHAT DOTH VIEW?
-     * @param comment WHAT DOTH COMMENT?
+     * field TextView in the view.
+     * 
+     * @param view 
+     * @param comment 
      */
     public void setLocationField(View view, Comment comment) {
      // Comment location
@@ -236,6 +174,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     /**
      * Called when the star button is pressed
      * in the selected comment. Save the comment as favourite.
+     * 
      * @param comment WHAT DOTH COMMENT?
      */
     public void favouriteAComment(Comment comment) {
@@ -248,6 +187,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      * Called when the star button is pressed
      * in the selected comment when comment is already starred.
      * Remove the comment as favourite.
+     * 
      * @param comment
      */
     public void unfavouriteAComment(Comment comment) {
@@ -258,9 +198,11 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     
     /**
      * Set up and launch the postCommentFragment when the user
-     * wishes to reply to a comment. 
-     * @param comment WHAT DOTH COMMENT?
-     * @param threadIndex WHAT DOTH THREADINDEX?
+     * wishes to reply to a comment. The fragment takes as input
+     * the index of the therad and the comment object.
+     * 
+     * @param comment 
+     * @param threadIndex 
      */
     public void replyToComment(Comment comment, int threadIndex) {
         Fragment fragment = new PostCommentFragment();
@@ -276,9 +218,76 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         
     }    
     
+    private OnItemClickListener commentButtonListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view,
+                int position, long id) {
+                            
+            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            // "+1" is necessary because of PullToRefresh
+            final Comment comment = (Comment) threadView.getItemAtPosition(position+1);
+            RelativeLayout relativeInflater = (RelativeLayout)view.findViewById(R.id.relative_inflater);
+            View child = inflater.inflate(R.layout.comment_buttons, null);
+
+            /* If the child layout with buttons is already inflated,
+             * remove it. If not, inflate it.
+             */
+            if(relativeInflater.getChildCount() > 0) {
+                relativeInflater.removeAllViews();
+                return;
+            } else {
+                relativeInflater.addView(child);
+                setLocationField(view, comment);
+            }
+
+            final ImageButton replyButton = (ImageButton) view
+                    .findViewById(R.id.comment_reply_button);
+            replyButton.setFocusable(false);
+
+            final ImageButton starButton = (ImageButton) view
+                    .findViewById(R.id.comment_star_button);
+            starButton.setFocusable(false);
+
+            // Check if the comment is by the user to decide
+            // wether or not to display the edit button.
+            if(HashHelper.getHash(comment.getUser()).equals(comment.getHash())) {
+                final ImageButton editButton = (ImageButton) view
+                        .findViewById(R.id.comment_edit_button);
+                editButton.setVisibility(View.VISIBLE);
+                editButton.setFocusable(false);
+            }
+
+            // Check if the favourites log already has a copy.
+            if(FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                starButton.setImageResource(R.drawable.ic_rating_marked);
+            }
+
+            starButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //Favourite or unfavourite depending on current state
+                    if(!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                        starButton.setImageResource(R.drawable.ic_rating_marked);
+                        favouriteAComment(comment);
+                    } else {
+                        starButton.setImageResource(R.drawable.ic_rating_important);
+                        unfavouriteAComment(comment);
+                    }
+                }
+            });
+
+            replyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    replyToComment(comment, threadIndex);
+                }
+            });
+        }
+    };
+    
     /**
      * Determines which sorting option the user selected and sorts
      * the comments accordingly.
+     * 
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -353,6 +362,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     /**
      * Sends the user into a CustomLocationFragment so they can choose a custom
      * location to sort comments by.
+     * 
      */
     private void getSortingLoc(){
         Bundle args = new Bundle();
