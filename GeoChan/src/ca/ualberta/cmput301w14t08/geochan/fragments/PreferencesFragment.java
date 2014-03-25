@@ -30,6 +30,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
 /**
  * Responsible for the UI fragment that allows the user to edit
+ * their username.
+ * 
+ * @author AUTHOR HERE
  * 
  */
 public class PreferencesFragment extends PreferenceFragment {

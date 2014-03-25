@@ -57,6 +57,8 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
  * Fragment which displays the contents of a ThreadComment.
+ * 
+ * @author Henry Pabst, 
  */
 public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
     private PullToRefreshListView threadView;
@@ -67,6 +69,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
     
+    /**
+     * Initializes several of the variables used in displaying the
+     * contents of a thread. If the user just returned from selecting a 
+     * custom location to sort by, it sorts the comments accordingly
+     * and resets locSortFlag.
+     */
     @Override
     public void onResume(){
         setHasOptionsMenu(true);
@@ -114,6 +122,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -199,9 +210,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     /**
      * When comment is selected, additional information is displayed
      * in the form of location coordinates. This method sets that location
-     * field
-     * @param view
-     * @param comment
+     * field.
+     * @param view WHAT DOTH VIEW?
+     * @param comment WHAT DOTH COMMENT?
      */
     public void setLocationField(View view, Comment comment) {
      // Comment location
@@ -225,7 +236,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     /**
      * Called when the star button is pressed
      * in the selected comment. Save the comment as favourite.
-     * @param comment
+     * @param comment WHAT DOTH COMMENT?
      */
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
@@ -246,9 +257,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     }
     
     /**
-     * Set up and launch the postCommentFragment 
-     * @param comment
-     * @param threadIndex
+     * Set up and launch the postCommentFragment when the user
+     * wishes to reply to a comment. 
+     * @param comment WHAT DOTH COMMENT?
+     * @param threadIndex WHAT DOTH THREADINDEX?
      */
     public void replyToComment(Comment comment, int threadIndex) {
         Fragment fragment = new PostCommentFragment();
@@ -264,10 +276,15 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         
     }    
     
+    /**
+     * Determines which sorting option the user selected and sorts
+     * the comments accordingly.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
         case(R.id.comment_sort_date_new):
+            //User wants to push newer comments to the top.
             prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
             SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, 
                                 thread.getBodyComment().getChildren());
@@ -276,6 +293,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_date_old):
+            //User wants to push older comments to the top.
             prefManager.setCommentSort(SortUtil.SORT_DATE_OLDEST);
             SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, 
                                 thread.getBodyComment().getChildren());
@@ -284,6 +302,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_image):
+            //User wants to push comments with images to the top.
             prefManager.setCommentSort(SortUtil.SORT_IMAGE);
             SortUtil.sortComments(SortUtil.SORT_IMAGE, 
                                   thread.getBodyComment().getChildren());
@@ -292,6 +311,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_location_current):
+            //User wants to push comments near them to the top.
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
             SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
             SortUtil.sortComments(SortUtil.SORT_LOCATION,
@@ -301,10 +321,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             return true;
         case(R.id.comment_sort_location_other):
+            //User wants to push comments near a selected location to the top.
             locSortFlag = 1;
             this.getSortingLoc();
             return true;
         case(R.id.comment_sort_score_high):
+            //User wants to push comments with a high score/relevance to the top.
              prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
              SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
              SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST,
@@ -314,6 +336,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
              adapter.notifyDataSetChanged();
              return true;
         case(R.id.comment_sort_score_low):
+            //User wants to push comments with a low score/relevance to the top.
              prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
              SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
              SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST,
@@ -327,6 +350,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         }     
     }
     
+    /**
+     * Sends the user into a CustomLocationFragment so they can choose a custom
+     * location to sort comments by.
+     */
     private void getSortingLoc(){
         Bundle args = new Bundle();
         args.putInt("postType", CustomLocationFragment.SORT_COMMENT);

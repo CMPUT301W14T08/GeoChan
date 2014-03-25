@@ -49,6 +49,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 /**
  * This class is responsible for the fragment that allows user to post a reply
  * to an existing comment.
+ * 
+ * @author AUTHOR HERE
  */
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;
@@ -70,6 +72,10 @@ public class PostCommentFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
+    @Override
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
@@ -85,6 +91,9 @@ public class PostCommentFragment extends Fragment {
         geoLocation = new GeoLocation(locationListenerService);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -111,6 +120,10 @@ public class PostCommentFragment extends Fragment {
         }
     }
 
+    /**
+     * COMMENT GOES HERE
+     * @param v WHAT DOTH V?
+     */
     public void postReply(View v) {
         if (v.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);

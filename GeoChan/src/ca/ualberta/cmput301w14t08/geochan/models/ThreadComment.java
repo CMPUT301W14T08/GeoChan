@@ -34,6 +34,8 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
  * application. It aggregates a Comment object and adds thread specific fields:
  * title, id
  * 
+ * @author Henry Pabst
+ * 
  */
 public class ThreadComment implements Parcelable {
     private Comment bodyComment;

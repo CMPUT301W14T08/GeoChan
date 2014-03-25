@@ -20,10 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-/**
- * This fragment is used to display a list of threads,
- * which is the main view the user sees when they open the app. 
- */
 import java.util.ArrayList;
 
 import android.os.Bundle;
@@ -54,6 +50,8 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * Responsible for the UI fragment that displays multiple ThreadComments to the
  * user.
  * 
+ * @author Henry Pabst, 
+ * 
  */
 public class ThreadListFragment extends Fragment implements
         LoaderCallbacks<ArrayList<ThreadComment>> {
@@ -61,7 +59,6 @@ public class ThreadListFragment extends Fragment implements
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
-    //private GeoLocation sortGeo = null;
     private static int locSortFlag = 0;
 
     @Override
@@ -77,9 +74,14 @@ public class ThreadListFragment extends Fragment implements
         setHasOptionsMenu(true);
     }
     
+    /**
+     * Starts the location listener listening.
+     * If we're sorting threads by a user-entered location, locSortFlag
+     * will be set to 1, so we sort according to the specified location
+     * and set the flag back to 0.
+     */
     @Override
     public void onResume(){
-
         if(locSortFlag == 1){
             prefManager.setThreadSort(SortUtil.SORT_LOCATION);
             SortUtil.sortThreads(SortUtil.SORT_LOCATION,
@@ -108,20 +110,28 @@ public class ThreadListFragment extends Fragment implements
         item.setVisible(true);
     }
     
+    /**
+     * Determines which sorting method was selected
+     * and calls the appropriate sorting method on our
+     * list of threads.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
         case R.id.thread_sort_date_new:
+            //User wants to push new threads to the top.
             prefManager.setThreadSort(SortUtil.SORT_DATE_NEWEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_date_old:
+            //User wants to push old threads to the top.
             prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_high:
+            //User wants threads with high relevance/score at the top.
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_HIGHEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST,
@@ -129,6 +139,7 @@ public class ThreadListFragment extends Fragment implements
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_low:
+            //User wants threads with low relevance/score at the top.
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_LOWEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST,
@@ -136,23 +147,28 @@ public class ThreadListFragment extends Fragment implements
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_location_current:
+            //User wants threads with an OP close to their location at the top.
             prefManager.setThreadSort(SortUtil.SORT_LOCATION);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_LOCATION,
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
-            //Sorting stuff for sorting by location here.
             return true;
         case R.id.thread_sort_location_other:
-            //Sorting stuff for getting a location and sorting here.
+            //User wants threads close to a selected location at the top.
+            locSortFlag = 1;
             this.getSortingLoc();
         default:
             return super.onOptionsItemSelected(item);
         }
     }
     
+    /**
+     * Sets the fragment's locSortFlag to 1 so sorting is
+     * done in onResume then sends the user to a CustomLocationFragment
+     * to enter the location they want to sort according to.
+     */
     private void getSortingLoc(){
-        locSortFlag = 1;
         Bundle args = new Bundle();
         args.putInt("postType", CustomLocationFragment.SORT_THREAD);
         CustomLocationFragment frag = new CustomLocationFragment();
@@ -163,7 +179,12 @@ public class ThreadListFragment extends Fragment implements
         getFragmentManager().executePendingTransactions();
     }
     
-
+    /**
+     * Initializes our fragment with various variables, displays the threads,
+     * sets up a onItemClickListener so the user is sent to the appropriate thread
+     * when they click on it, then sorts the threads according to the method
+     * the user has chosen.
+     */
     @Override
     public void onStart() {
         super.onStart();

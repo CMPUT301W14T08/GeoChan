@@ -38,6 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
  * A comment within a thread of comments. Contains the text of the comment,
  * possibly an image, and meta-data relating to the Comment.
  * 
+ * @author Henry Pabst,
  */
 public class Comment implements Parcelable {
     private String textPost;

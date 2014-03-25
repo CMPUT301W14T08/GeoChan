@@ -10,11 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import ca.ualberta.cmput301w14t08.geochan.R;
 
+/**
+ * COMMENT HERE
+ * 
+ * @author AUTHOR HERE
+ *
+ */
 public class FavouritesFragment extends Fragment implements ActionBar.OnNavigationListener,
         OnBackStackChangedListener {
     private static ActionBar actionBar;
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
+
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -38,6 +50,11 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         return inflater.inflate(R.layout.fragment_favourites, container, false);
     }
 
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +68,11 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         getChildFragmentManager().addOnBackStackChangedListener(this);
     }
 
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Serialize the current dropdown position.
@@ -64,6 +86,11 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         disableSpinner();
     }
 
+    /**
+     * COMMENT HERE
+     * 
+     * @author AUTHOR HERE
+     */
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
         switch (position) {
@@ -81,6 +108,9 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         return true;
     }
 
+    /**
+     * COMMENT HERE
+     */
     @Override
     public void onBackStackChanged() {
         Fragment f = getChildFragmentManager().findFragmentByTag("thread_view_fragment");
@@ -91,11 +121,17 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         }
     }
 
+    /**
+     * COMMENT HERE
+     */
     private void enableSpinner() {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
     }
 
+    /**
+     * COMMENT HERE
+     */
     private void disableSpinner() {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);

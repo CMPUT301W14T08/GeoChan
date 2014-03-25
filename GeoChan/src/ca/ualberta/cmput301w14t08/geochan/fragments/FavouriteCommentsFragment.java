@@ -48,6 +48,11 @@ public class FavouriteCommentsFragment extends Fragment {
     }
 
     @Override
+    /**
+     * Displays a list view of favourites upon starting the fragment.
+     * 
+     * @author AUTHOR HERE
+     */
     public void onStart() {
         super.onStart();
         favouritesListView = (ListView) getView().findViewById(R.id.favourites_list);
