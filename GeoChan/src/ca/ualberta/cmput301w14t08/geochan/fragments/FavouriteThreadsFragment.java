@@ -15,6 +15,12 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * COMMENT HERE
+ * 
+ * @author AUTHOR HERE
+ *
+ */
 public class FavouriteThreadsFragment extends Fragment {
     private ArrayList<ThreadComment> list;
     private FavouritesLog log;
@@ -33,6 +39,9 @@ public class FavouriteThreadsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favourites_list, container, false);
     }
 
+    /**
+     * COMMENT HERE
+     */
     @Override
     public void onStart() {
         super.onStart();

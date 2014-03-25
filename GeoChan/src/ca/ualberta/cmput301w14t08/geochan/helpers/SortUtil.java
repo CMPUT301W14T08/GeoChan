@@ -29,7 +29,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * Helper class. Manages Comparators for sorting across multiple classes.
+ * Helper class. Manages sorting of ArrayLists of different
+ * ThreadComments and Comments by different measures.
+ * 
+ * @author Henry Pabst
  * 
  */
 public class SortUtil {
@@ -77,8 +80,7 @@ public class SortUtil {
      * the tag passed. The passed GeoLocation is used in sorting by
      * location or score.
      * @param tag Tag specifying the sorting method to be used.
-     * @param threads The ArrayList of ThreadComments to be sorted
-     * @param sortLoc The GeoLocation used in sorting of ThreadComments.
+     * @param threads The ArrayList of ThreadComments to be sorted.
      */
     public static void sortThreads(int tag, 
                                    ArrayList<ThreadComment> threads){
@@ -105,11 +107,11 @@ public class SortUtil {
     }
     
     /**
-     * Sorts the ArrayList of ThreadComments according to the tag
-     * passed to it. Only used for sorting methods
-     * that do not require a GeoLocation.
+     * Sorts the ArrayList of Comments according to the tag
+     * passed to it. Recursively sorts all the children of
+     * these comments according to the same measure.
      * @param tag Tag specifying the type of sorting to be done.
-     * @param threads The ArrayList of ThreadComments to be sorted.
+     * @param threads The ArrayList of Comments to be sorted.
      */
     
     public static void sortComments(int tag,
@@ -159,7 +161,7 @@ public class SortUtil {
      * Comparator for pushing comments with images to the top. Uses comment date
      * to break ties if both comments have images, or do not have images.
      * 
-     * @return
+     * @return A comparator used to sort comments by image.
      */
     private static Comparator<Comment> sortCommentsByImage(){
         return new Comparator<Comment>(){
@@ -186,6 +188,8 @@ public class SortUtil {
 
     /**
      * Comparator for pushing old comments in a thread to the top.
+     * 
+     * @return a Comparator for sorting Comments by oldest date.
      */
     private static Comparator<Comment> sortCommentsByDateOldest() {
         return new Comparator<Comment>() {
@@ -204,6 +208,8 @@ public class SortUtil {
 
     /**
      * Comparator for pushing new comments in a thread to the top.
+     * 
+     * @return A Comparator for sorting Comments by newest Date.
      */
     private static Comparator<Comment> sortCommentsByDateNewest() {
         return new Comparator<Comment>() {
@@ -222,7 +228,7 @@ public class SortUtil {
 
    /**
     * Returns a comparator for pushing higher scored comments to the top.
-    * @return
+    * @return A Comparator for pushing higher scored comments to the top.
     */
     private static Comparator<Comment> sortCommentsByUserScoreHighest() {
         return new Comparator<Comment>() {
@@ -241,13 +247,10 @@ public class SortUtil {
     }
 
     /**
-     * Comparator for pushing lower scored comments (relative to user provided
+     * Comparator for pushing lower scored comments (relative to user set
      * location) to the top.
-     * 
-     * @param g
-     *            The passed GeoLocation.
      * @return A comparator for sorting comments by score relative to user
-     *         provided location.
+     *         set location.
      */
     private static Comparator<Comment> sortCommentsByUserScoreLowest() {
         return new Comparator<Comment>() {
@@ -270,11 +273,6 @@ public class SortUtil {
      * Comparator for sorting comments in a thread based on the current
      * SortUtil.commentSortGeo.
      * 
-<<<<<<< HEAD:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/helpers/SortUtil.java
-=======
-     * @param g
-     *            the GeoLocation to sort by
->>>>>>> master:GeoChan/src/ca/ualberta/cmput301w14t08/geochan/helpers/SortTypes.java
      * @return the comparator
      */
     private static Comparator<Comment> sortCommentsByLocation() {
@@ -295,6 +293,8 @@ public class SortUtil {
 
     /**
      * Comparator for pushing old threads to the top.
+     * 
+     * @return a Comparator for sorting threads by oldest date.
      */
     private static Comparator<ThreadComment> sortThreadsByDateOldest() {
         return new Comparator<ThreadComment>() {
@@ -313,6 +313,8 @@ public class SortUtil {
 
     /**
      * Comparator for pushing new threads to the top.
+     * 
+     * @return a Comparator for sorting Comments by newest Date.
      */
     private static Comparator<ThreadComment> sortThreadsByDateNewest() {
         return new Comparator<ThreadComment>() {
@@ -332,7 +334,7 @@ public class SortUtil {
     /**
      * Comparator for passing higher scored Threads to the top.
      * 
-     * @return A Comparator used to sort Threads according to highest score.
+     * @return A Comparator used to sort ThreadComments according to highest score.
      */
     private static Comparator<ThreadComment> sortThreadsByUserScoreHighest() {
         return new Comparator<ThreadComment>() {
@@ -353,7 +355,7 @@ public class SortUtil {
     /**
      * Comparator for pushing lower scored Threads to the top.
      * 
-     * @return A Comparator used to sort Threads according to lowest score.
+     * @return A Comparator used to sort ThreadComments according to lowest score.
      */
     private static Comparator<ThreadComment> sortThreadsByUserScoreLowest() {
         return new Comparator<ThreadComment>() {

@@ -43,6 +43,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * Responsible for the UI fragment that allows a user to post a new thread.
+ * 
+ * @author AUTHOR HERE
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
@@ -62,6 +64,9 @@ public class PostThreadFragment extends Fragment {
         geoLocation = new GeoLocation(locationListenerService);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -88,6 +93,10 @@ public class PostThreadFragment extends Fragment {
         }
     }
 
+    /**
+     * COMMENT GOES HERE
+     * @param v WHAT DOTH V?
+     */
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);

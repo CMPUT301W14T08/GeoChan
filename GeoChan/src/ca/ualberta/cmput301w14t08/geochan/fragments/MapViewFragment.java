@@ -29,6 +29,11 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
+/**
+ * COMMENT GOES HERE
+ * @author 
+ *
+ */
 public class MapViewFragment extends Fragment {
 
     private MapView openMapView;
