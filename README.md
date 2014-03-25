@@ -1,3 +1,5 @@
+**GeoChan**
+
 GeoChan is a simple, usable, interactive Android application that allows users to discuss locally (as in physically locally) relevant topics. GeoChan is developed as a CMPUT 301 project at the University of Alberta in the winter semester of 2014. 
 
 **Copyright and License**
