@@ -33,6 +33,7 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         Location location2 = new Location(LocationManager.GPS_PROVIDER);
 
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
         GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
 
@@ -49,6 +50,7 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
 
     public void testConstruction() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         assertNotNull(geoLocation.getLocation());
         
@@ -63,18 +65,36 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
 
     public void testNewCoordinates() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         geoLocation.setCoordinates(1.0, 1.0);
+        
         assertEquals("Latitude should be 1.0", 1.0, geoLocation.getLatitude());
         assertEquals("Latitude should be 1.0", 1.0, geoLocation.getLongitude());
     }
 
     public void testSetNewLocation() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         Location location = new Location(LocationManager.GPS_PROVIDER);
+        
         geoLocation.setLocation(location);
         assertEquals("Locations should be the same", location, geoLocation.getLocation());
+    }
+    
+    public void testSetNewLatitudeAndLongitude() {
+        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        GeoLocation geoLocation = new GeoLocation(locationListenerService);
+        
+        geoLocation.setLatitude(2.3);
+        assertEquals("Latitude should be 2.3", 2.3, geoLocation.getLatitude());
+        
+        geoLocation.setLongitude(3.2);
+        assertEquals("Longitude should be 3.2", 3.2, geoLocation.getLongitude());
     }
 
     public void testChangeOfCoordinatesDoesNotAffectLocationListener() {

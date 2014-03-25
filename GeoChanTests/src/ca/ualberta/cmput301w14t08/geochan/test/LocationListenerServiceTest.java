@@ -19,7 +19,19 @@ public class LocationListenerServiceTest extends ActivityInstrumentationTestCase
     
     public void testConstruction() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        assertNotNull(locationListenerService);
         assertNotNull(locationListenerService.getCurrentLocation());
+    }
+    
+    public void testSameProvider() {
+        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
+        String provider1 = LocationManager.GPS_PROVIDER;
+        String provider2 = LocationManager.NETWORK_PROVIDER;
+        
+        assertTrue(locationListenerService.isSameProvider(provider1, provider1));
+        assertTrue(locationListenerService.isSameProvider(provider2, provider2));
+        assertFalse(locationListenerService.isSameProvider(provider1, provider2));
+        assertFalse(locationListenerService.isSameProvider(provider2, provider1));
     }
     
     public void testBetterLocationAfterTwoMinutes() {
@@ -37,17 +49,6 @@ public class LocationListenerServiceTest extends ActivityInstrumentationTestCase
         assertFalse(locationListenerService.isBetterLocation(location1, location2));
     }
     
-    public void testSameProvider() {
-        LocationListenerService locationListenerService = new LocationListenerService(getActivity());
-        String provider1 = LocationManager.GPS_PROVIDER;
-        String provider2 = LocationManager.NETWORK_PROVIDER;
-        
-        assertTrue(locationListenerService.isSameProvider(provider1, provider1));
-        assertTrue(locationListenerService.isSameProvider(provider2, provider2));
-        assertFalse(locationListenerService.isSameProvider(provider1, provider2));
-        assertFalse(locationListenerService.isSameProvider(provider2, provider1));
-    }
-    
     public void testBetterAccuracy() {
         LocationListenerService locationListenerService = new LocationListenerService(getActivity());
         Location location1 = new Location(LocationManager.GPS_PROVIDER);
@@ -55,6 +56,7 @@ public class LocationListenerServiceTest extends ActivityInstrumentationTestCase
         location1.setAccuracy(1);
         location2.setAccuracy(2);
         
+        // will use the isBetterLocation method to check accuracy
         assertTrue(locationListenerService.isBetterLocation(location1, location2));
         assertFalse(locationListenerService.isBetterLocation(location2, location1));
     }

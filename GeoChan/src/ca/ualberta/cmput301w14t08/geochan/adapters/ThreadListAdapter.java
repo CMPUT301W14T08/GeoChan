@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -33,7 +35,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * This is a custom adapter, used to display Thread objects in a list
+ * This is a custom adapter, used to display ThreadComment objects in a list.
+ * It is used inside of our ThreadListFragment.
+ * 
+ * @author AUTHOUR HERE
  */
 public class ThreadListAdapter extends BaseAdapter {
 
@@ -66,6 +71,11 @@ public class ThreadListAdapter extends BaseAdapter {
     }
 
     @Override
+    /**
+     * COMMENT AND CLEAN
+     * 
+     * @author
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment thread = getItem(position);
 
@@ -91,10 +101,13 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
         if (loc != null) {
-            double roundedLat = Math.round(loc.getLatitude() * 100) / 100;
-            double roundedLong = Math.round(loc.getLongitude() * 100) / 100;
-            location.setText("Latitude: " + Double.toString(roundedLat) + " Longitude: "
-                    + Double.toString(roundedLong));
+            DecimalFormat format = new DecimalFormat();
+            format.setRoundingMode(RoundingMode.HALF_EVEN);
+            format.setMinimumFractionDigits(0);
+            format.setMaximumFractionDigits(4);
+
+            location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
+                    + format.format(loc.getLongitude()));
         } else {
             location.setText("Error: No location found");
         }

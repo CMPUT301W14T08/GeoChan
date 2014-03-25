@@ -20,51 +20,47 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-
-public class ThreadComment {
-    private ArrayList<Comment> comments;
+/**
+ * ThreadComment is a model class that handles all operations of threads in the
+ * application. It aggregates a Comment object and adds thread specific fields:
+ * title, id
+ * 
+ * @author Henry Pabst
+ * 
+ */
+public class ThreadComment implements Parcelable {
     private Comment bodyComment;
     private String title;
-    private UserHashManager manager;
     private long id;
-    
-    /**
-     * A location used for our comment sorting methods.
-     * Should be set by the fragment whenever the user decides
-     * to sort comments in a thread by relevance or location.
-     */
-    private GeoLocation sortLoc;
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
-        this.comments = new ArrayList<Comment>();
         this.bodyComment = bodyComment;
         this.setTitle(title);
-        this.manager = UserHashManager.getInstance();
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
     }
 
     /* This constructor is only used for testing. */
     public ThreadComment() {
         super();
-        this.comments = new ArrayList<Comment>();
-        this.bodyComment = null;
-        this.title = null;
+        this.bodyComment = new Comment();
+        this.title = "This thread is being used to test!";
+        this.id = HashHelper.getCommentIdHash();
     }
 
     /**
      * Getters and setters
      */
+
     public Date getThreadDate() {
         return bodyComment.getCommentDate();
     }
@@ -89,14 +85,6 @@ public class ThreadComment {
         this.bodyComment = bodyComment;
     }
 
-    public ArrayList<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -104,36 +92,34 @@ public class ThreadComment {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    public void setSortLoc(GeoLocation g){
-        this.sortLoc = g;
-    }
-    
-    public GeoLocation getSortLoc(){
-        return this.sortLoc;
-    }
+
 
     public void addComment(Comment c) {
-        this.comments.add(c);
+        this.bodyComment.addChild(c);
     }
-    
+
     /**
-* Determines the distance between the Thread (defined by the GeoLocation of
-* the top comment) and the provided GeoLocation in terms of coordinates.
-* @param g The GeoLocation we want to determine the distance from.
-* @return The distance, in terms of coordinates, between the Thread and the passed GeoLocation.
-*/
+     * Determines the distance between the Thread (defined by the GeoLocation of
+     * the top comment) and the provided GeoLocation in terms of coordinates.
+     * 
+     * @param g
+     *            The GeoLocation we want to determine the distance from.
+     * @return The distance, in terms of coordinates, between the Thread and the
+     *         passed GeoLocation.
+     */
     public double getDistanceFrom(GeoLocation g) {
-      return this.getBodyComment().getLocation().distance(g);
+        return this.getBodyComment().getLocation().distance(g);
     }
-    
+
     /**
-* Determines the time passed between when the Thread was posted and the
-* passed Date in terms of number of hours.
-* @param d The Date we are comparing with.
-* @return The number of hours between when the Thread was posted and the passed Date.
-* Returns a minimum of 0.5.
-*/
+     * Determines the time passed between when the Thread was posted and the
+     * passed Date in terms of number of hours.
+     * 
+     * @param d
+     *            The Date we are comparing with.
+     * @return The number of hours between when the Thread was posted and the
+     *         passed Date. Returns a minimum of 0.5.
+     */
     public double getTimeFrom(Date d) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -141,62 +127,70 @@ public class ThreadComment {
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+        if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
             return 0.5;
         } else {
             return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
         }
     }
-    
+
     /**
-* Determines the score of a thread relevant to
-* @param g The GeoLocation relevant to sorting. In sorting, the Thread.sortLoc GeoLocation
-* of the sorting thread is used and should be set in the fragment.
-* @return The score of the comment in relation to the user's location and current time.
-*/
-    public double getScoreFromUser(GeoLocation g){
+     * Determines the score of a thread relevant to
+     * 
+     * @param g
+     *            The GeoLocation relevant to sorting. In sorting, the
+     *            Thread.sortLoc GeoLocation of the sorting thread is used and
+     *            should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and
+     *         current time.
+     */
+    public double getScoreFromUser(GeoLocation g) {
         int distConst = 25;
         int timeConst = 10;
-        int maxScore = 10000;
-        
-        if(g == null){
-            Log.e("Thread:", "getScoreFromUser() was incorrectly called with a null location.");
+        long maxScore = 100000000;
+        double minScore = 0.0001;
+
+        if (g == null) {
+            Log.e("Thread:" + this.getTitle(), "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst
-                * (1 / Math.sqrt(this.getDistanceFrom(g)));
-        double timeScore = timeConst
-                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if (distScore + timeScore > maxScore) {
             return maxScore;
+        } else if (distScore + timeScore < minScore){
+            return minScore;
         } else {
             return distScore + timeScore;
         }
     }
 
-    /**
-     * Sorts thread comments according to the tag passed.
-     * 
-     * @param tag
-     *            Tag to sort comments by
-     */
-    public void sortComments(int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByDateOldest());
-            break;
-        case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentDistance());
-            break;
-        case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreHighest());
-            break;
-        case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getComments(), SortTypes.sortCommentsByParentScoreLowest());
-            break;
-        }
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(bodyComment, flags);
+        dest.writeValue(title);
+        dest.writeValue(id);
+    }
+
+    public ThreadComment(Parcel in) {
+        super();
+        this.setBodyComment((Comment) in.readValue(getClass().getClassLoader()));
+        this.setTitle((String) in.readValue(getClass().getClassLoader()));
+        this.setId((long) in.readLong());
+    }
+
+    public static final Parcelable.Creator<ThreadComment> CREATOR = new Parcelable.Creator<ThreadComment>() {
+        public ThreadComment createFromParcel(Parcel in) {
+            return new ThreadComment(in);
+        }
+
+        public ThreadComment[] newArray(int size) {
+            return new ThreadComment[size];
+        }
+    };
 }

@@ -36,6 +36,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+/**
+ * Handles the deserialization of Comments from JSON.
+ * 
+ */
 public class CommentDeserializer implements JsonDeserializer<Comment> {
 
     /*
@@ -44,6 +48,9 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
      * @see
      * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement,
      * java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+     */
+    /**
+     * Deserializes a Comment object from JSON format.
      */
     @Override
     public Comment deserialize(JsonElement json, Type type, JsonDeserializationContext context)

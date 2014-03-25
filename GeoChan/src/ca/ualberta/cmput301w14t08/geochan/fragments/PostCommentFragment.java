@@ -22,19 +22,21 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import android.app.Activity;
+import android.content.Context;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
@@ -45,6 +47,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,15 +64,17 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * Responsible for the UI fragment that allows a user to post a reply to a
- * thread.
+ * This class is responsible for the fragment that allows user to post a reply
+ * to an existing comment.
+ * 
+ * @author AUTHOR HERE
  */
 public class PostCommentFragment extends Fragment {
-
-    private ThreadComment thread;
-    private LocationListenerService locationListenerService;
+    ThreadComment thread;
+    Comment commentToReplyTo;
     private GeoLocation geoLocation;
     private ImageHelper imageHelper;
+    private LocationListenerService locationListenerService;
     private Bitmap picture;
     private Bitmap thumb;
     private ImageView imageView;
@@ -87,15 +93,20 @@ public class PostCommentFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
+    @Override
     public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
+        commentToReplyTo = (Comment) bundle.getParcelable("cmt");
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
-        TextView titleView = (TextView) getActivity().findViewById(R.id.op_title);
-        TextView bodyView = (TextView) getActivity().findViewById(R.id.op_body);
-        bodyView.setMovementMethod(new ScrollingMovementMethod());
-        titleView.setText(thread.getTitle());
-        bodyView.setText(thread.getBodyComment().getTextPost());
+        TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
+        TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
+        bodyReplyTo.setText(commentToReplyTo.getTextPost());
+        replyTo.setText(commentToReplyTo.getUser() + " says:");
         imageView = (ImageView) getActivity().findViewById(R.id.imageView1);
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
@@ -106,37 +117,57 @@ public class PostCommentFragment extends Fragment {
         
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
     @Override
     public void onResume() {
         super.onResume();
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+                Button locButton = (Button) getActivity().findViewById(R.id.location_button);
+                if (args.getString("LocationType") == "CURRENT_LOCATION") {
+                    locButton.setText("Current Location");
+                } else {
+                    Double lat = args.getDouble("LATITUDE");
+                    Double lon = args.getDouble("LONGITUDE");
+                    geoLocation.setCoordinates(lat, lon);
+
+                    DecimalFormat format = new DecimalFormat();
+                    format.setRoundingMode(RoundingMode.HALF_EVEN);
+                    format.setMinimumFractionDigits(0);
+                    format.setMaximumFractionDigits(4);
+
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                }
             }
         }
     }
 
-    public void postComment(View v) {
-        if (v.getId() == R.id.post_comment_button) {
-            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+    /**
+     * COMMENT GOES HERE
+     * @param v WHAT DOTH V?
+     */
+    public void postReply(View v) {
+        if (v.getId() == R.id.post_reply_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
             if (geoLocation.getLocation() == null && picture == null) {
                 // ErrorDialog.show(getActivity(),
                 // "Could not obtain location.");
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, null, thread.getBodyComment());
+                Comment newComment = new Comment(comment, null, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                client.postComment(thread, thread.getBodyComment(), newComment);
+                client.postComment(thread, commentToReplyTo, newComment);
             } else if (picture == null) {
                 // Create a new comment object and set username
-                Comment newComment = new Comment(comment, geoLocation, thread.getBodyComment());
+                Comment newComment = new Comment(comment, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                client.postComment(thread, thread.getBodyComment(), newComment);
-                // log the location and thread title
-                GeoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
-                Log.e("size of locLog:",
-                        Integer.toString(GeoLocationLog.getLogEntries().size()));
+                client.postComment(thread, commentToReplyTo, newComment);
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             } else {
                 // Comment with picture and geolocation
                 Comment newComment = new Comment(comment, picture, geoLocation, thread.getBodyComment());
@@ -144,16 +175,13 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, thread.getBodyComment(), newComment);
             }
-            
-            /* RIGHT NOW THIS BLOCK CAUSES A CRASH
+
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);*/
-            
-            this.getFragmentManager().popBackStackImmediate();
+            inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            getFragmentManager().popBackStackImmediate();
         }
-    }
     
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
@@ -206,12 +234,6 @@ public class PostCommentFragment extends Fragment {
         }
     }
     
-
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        UserHashManager manager = UserHashManager.getInstance();
-        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override

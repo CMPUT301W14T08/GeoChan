@@ -18,11 +18,20 @@
  * limitations under the License.
  */
 
+/*
+ * Reused from https://github.com/rayzhangcl/ESDemo/
+ */
+
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents a search response served by ElasticSearch
+ * @author AUTHOR HERE
+ * 
+ */
 public class ElasticSearchSearchResponse<T> {
     int took;
     boolean timed_out;
@@ -34,6 +43,10 @@ public class ElasticSearchSearchResponse<T> {
         return hits.getHits();
     }
 
+    /**
+     * COMMENT HERE
+     * @return
+     */
     public Collection<T> getSources() {
         Collection<T> out = new ArrayList<T>();
         for (ElasticSearchResponse<T> essrt : getHits()) {

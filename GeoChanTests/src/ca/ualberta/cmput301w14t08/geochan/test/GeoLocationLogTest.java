@@ -16,12 +16,8 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
     }
     
     public void testConstruction() {
-<<<<<<< HEAD
-        assertNotNull(GeoLocationLog.getLogEntries());
-=======
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+        GeoLocationLog geoLocationLog =  GeoLocationLog.getInstance(getActivity());
         assertNotNull(geoLocationLog.getLogEntries());
->>>>>>> master
     }
     
     public void testAddLogEntry() {
@@ -31,7 +27,8 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         
         String threadTitle = "TestThread";
         
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+        
         geoLocationLog.addLogEntry(threadTitle, geoLocation);
         geoLocationLog.addLogEntry(threadTitle, geoLocation);
         geoLocationLog.addLogEntry(threadTitle, geoLocation);
@@ -42,19 +39,23 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         }
     }
     
-    public void testIsLogEmpty() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+    public void testClearLogAndCheckIsLogEmpty() {
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+        
+        geoLocationLog.addLogEntry("TestThreadTitle", new GeoLocation(1.0,2.0));
+        assertEquals("Entries array should NOT be empty", false, geoLocationLog.isEmpty());
+        
         geoLocationLog.clearLog();
         assertEquals("Entries array should be empty",true, geoLocationLog.isEmpty());
     }
     
-    public void testSizeOfLog() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-        
+    public void testSizeOfLog() {        
         locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
+        
+        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
         
         geoLocationLog.addLogEntry("thread1", geoLocation1);
         geoLocationLog.addLogEntry("thread2", geoLocation2);

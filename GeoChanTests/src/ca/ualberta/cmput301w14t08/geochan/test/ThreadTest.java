@@ -1,29 +1,20 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-<<<<<<< HEAD
-import junit.framework.TestCase;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-=======
-import android.location.Location;
-import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortComparators;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
->>>>>>> master
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
-    private Location location;
     private LocationListenerService locationListenerService;
     
     public ThreadTest(){
@@ -39,344 +30,493 @@ public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
         locationListenerService.startListening();
     }
     
+    public void testAddComment(){
+        ThreadComment t1 = new ThreadComment();
+        Comment c1 = new Comment();
+        
+        t1.addComment(c1);
+        
+        assertTrue("Comment added successfuly.", t1.getBodyComment().getChildren().contains(c1));
+    }
+    
+    public void testGetDistanceFrom(){
+        ThreadComment t1 = new ThreadComment();
+        GeoLocation g1 = new GeoLocation(5,5);
+        
+        t1.getBodyComment().getLocation().setCoordinates(0, 0);
+        
+        assertEquals("Distance calculated correctly.", t1.getDistanceFrom(g1),
+                      Math.sqrt(50));
+    }
+    
+    public void testGetTimeFrom(){
+        ThreadComment t1 = new ThreadComment();
+        Date d1 = new Date();
+        
+        assertEquals("Minimum time value calculated correctly.",t1.getTimeFrom(d1),
+                    0.5);
+        
+        d1 = new Date(t1.getThreadDate().getTime() + 3600000);
+        
+        assertEquals("Time calculated correctly.", t1.getTimeFrom(d1),
+                    1.0);
+    }
+    
+    public void testGetScoreFromUser(){
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        GeoLocation g = new GeoLocation(0,0);
+        
+        t1.getBodyComment().getLocation().setCoordinates(0,0);
+        t2.getBodyComment().getLocation().setCoordinates(5, 5);
+        
+        assertTrue("Scores calculated relatively correctly.",
+                    t1.getScoreFromUser(g) >
+                    t2.getScoreFromUser(g)); 
+    }
+    
     public void testSortByDateNewest(){
-        /*
-         * Tests the implementation of Thread.sortComments("DATE_NEWEST");
-         */
+        ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
+        ThreadComment t6 = new ThreadComment();
+        ThreadComment t7 = new ThreadComment();
+        ThreadComment t8 = new ThreadComment();
+        ThreadComment t9 = new ThreadComment();
+        ThreadComment t10 = new ThreadComment();
         long extraTime = 1320000;
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
         Date currentDate = new Date();
+        
         c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
         c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
-        c1.setTextPost("c1");
-        c2.setTextPost("c2");
-        c3.setTextPost("c3");
-        c4.setTextPost("c4");
-        c5.setTextPost("c5");
-        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
-        thread.addComment(c4);
-        thread.addComment(c3);
-        thread.addComment(c5);
-        thread.addComment(c2);
-        thread.sortComments(SortTypes.SORT_DATE_NEWEST);
-
-        assertTrue("c5 is at index 0", (thread.getComments().get(0)) == c5);
-        assertTrue("c4 is at index 1", (thread.getComments().get(1)) == c4);
-        assertTrue("c3 is at index 2", (thread.getComments().get(2)) == c3);
-        assertTrue("c2 is at index 3", (thread.getComments().get(3)) == c2);
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
+        
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        t6.setBodyComment(c6);
+        t7.setBodyComment(c7);
+        t8.setBodyComment(c8);
+        t9.setBodyComment(c9);
+        t10.setBodyComment(c10);
+        
+        carrier.add(t1);
+        carrier.add(t2);
+        carrier.add(t3);
+        carrier.add(t4);
+        carrier.add(t5);
+        carrier.add(t6);
+        carrier.add(t7);
+        carrier.add(t8);
+        carrier.add(t9);
+        carrier.add(t10);
+        
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
+        
+        SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, 
+                            carrier);
+        
+        assertTrue("t10 at index 0", carrier.get(0) == t10);
+        assertTrue("t9 at index 1", carrier.get(1) == t9);
+        assertTrue("t8 at index 2", carrier.get(2) == t8);
+        assertTrue("t7 at index 3", carrier.get(3) == t7);
+        assertTrue("t6 at index 4", carrier.get(4) == t6);
+        assertTrue("t5 at index 5", carrier.get(5) == t5);
+        assertTrue("t4 at index 6", carrier.get(6) == t4);
+        assertTrue("t3 at index 7", carrier.get(7) == t3);
+        assertTrue("t2 at index 8", carrier.get(8) == t2);
+        assertTrue("t1 at index 9", carrier.get(9) == t1);   
     }
     
     public void testSortByDateOldest(){
-        /*
-         * Tests the implementation of Thread.sortComments("DATE_OLDEST");
-         */
+        ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
+        ThreadComment t6 = new ThreadComment();
+        ThreadComment t7 = new ThreadComment();
+        ThreadComment t8 = new ThreadComment();
+        ThreadComment t9 = new ThreadComment();
+        ThreadComment t10 = new ThreadComment();
         long extraTime = 1320000;
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
         Date currentDate = new Date();
+        
         c1.setCommentDate(new Date(currentDate.getTime() + 1*extraTime));
         c2.setCommentDate(new Date(currentDate.getTime() + 2*extraTime));
         c3.setCommentDate(new Date(currentDate.getTime() + 3*extraTime));
         c4.setCommentDate(new Date(currentDate.getTime() + 4*extraTime));
         c5.setCommentDate(new Date(currentDate.getTime() + 5*extraTime));
-        c1.setTextPost("c1");
-        c2.setTextPost("c2");
-        c3.setTextPost("c3");
-        c4.setTextPost("c4");
-        c5.setTextPost("c5");
-        ThreadComment thread = new ThreadComment(c1, "This thread is for testing!");
-        thread.addComment(c4);
-        thread.addComment(c3);
-        thread.addComment(c5);
-        thread.addComment(c2);
-        thread.sortComments(SortTypes.SORT_DATE_OLDEST);
-
-        assertTrue("c2 is at index 0", (thread.getComments().get(0)) == c2);
-        assertTrue("c3 is at index 1", (thread.getComments().get(1)) == c3);
-        assertTrue("c4 is at index 2", (thread.getComments().get(2)) == c4);
-        assertTrue("c5 is at index 3", (thread.getComments().get(3)) == c5);
+        c6.setCommentDate(new Date(currentDate.getTime() + 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() + 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() + 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() + 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() + 10*extraTime));
+        
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        t6.setBodyComment(c6);
+        t7.setBodyComment(c7);
+        t8.setBodyComment(c8);
+        t9.setBodyComment(c9);
+        t10.setBodyComment(c10);
+        
+        carrier.add(t1);
+        carrier.add(t2);
+        carrier.add(t3);
+        carrier.add(t4);
+        carrier.add(t5);
+        carrier.add(t6);
+        carrier.add(t7);
+        carrier.add(t8);
+        carrier.add(t9);
+        carrier.add(t10);
+        
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
+        
+        SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, 
+                            carrier);
+        
+        assertTrue("t1 at index 0", carrier.get(0) == t1);
+        assertTrue("t2 at index 1", carrier.get(1) == t2);
+        assertTrue("t3 at index 2", carrier.get(2) == t3);
+        assertTrue("t4 at index 3", carrier.get(3) == t4);
+        assertTrue("t5 at index 4", carrier.get(4) == t5);
+        assertTrue("t6 at index 5", carrier.get(5) == t6);
+        assertTrue("t7 at index 6", carrier.get(6) == t7);
+        assertTrue("t8 at index 7", carrier.get(7) == t8);
+        assertTrue("t9 at index 8", carrier.get(8) == t9);
+        assertTrue("t10 at index 9", carrier.get(9) == t10);         
     }
 
     /**
      * Tests the sorting of comments in a thread by the score relative to the user.
      */
     public void testSortByUserScoreHighest(){
+        ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
+        ThreadComment t6 = new ThreadComment();
+        ThreadComment t7 = new ThreadComment();
+        ThreadComment t8 = new ThreadComment();
+        ThreadComment t9 = new ThreadComment();
+        ThreadComment t10 = new ThreadComment();
         long extraTime = 1320000;
-        ThreadComment t = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        Date currentDate = new Date();
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
         
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        Location locationT = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        c1.setCommentDate(new Date(currentDate.getTime() - 1*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() - 2*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() - 3*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() - 4*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() - 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() - 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() - 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() - 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() - 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() - 10*extraTime));
         
         c1.setLocation(geoLocation1);
         c2.setLocation(geoLocation2);
         c3.setLocation(geoLocation3);
         c4.setLocation(geoLocation4);
         c5.setLocation(geoLocation5);
-        t.setSortLoc(geoLocationT);
-        
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
-        t.getSortLoc().setLocation(locationT);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
         
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        t6.setBodyComment(c6);
+        t7.setBodyComment(c7);
+        t8.setBodyComment(c8);
+        t9.setBodyComment(c9);
+        t10.setBodyComment(c10);
         
-        Date currentDate = new Date();
+        carrier.add(t3);
+        carrier.add(t2);
+        carrier.add(t4);
+        carrier.add(t1);
+        carrier.add(t5);
+        carrier.add(t7);
+        carrier.add(t6);
+        carrier.add(t10);
+        carrier.add(t8);
+        carrier.add(t9);
         
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        for(ThreadComment thread: carrier){
+            Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
+        }
         
-        t.addComment(c3);
-        t.addComment(c2);
-        t.addComment(c4);
-        t.addComment(c5);
-        t.addComment(c1);
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
+        SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, 
+                            carrier);
         
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        Log.e(""," ");
+        for(ThreadComment thread: carrier){
+            Log.e("Score of thread:", String.valueOf(thread.getScoreFromUser(new GeoLocation(0,0))));
+        }
         
-        Log.i("Score of c1:", String.valueOf(c1.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c2:", String.valueOf(c2.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c3:", String.valueOf(c3.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c4:", String.valueOf(c4.getScoreFromUser(t.getSortLoc())));
-        Log.i("Score of c5:", String.valueOf(c5.getScoreFromUser(t.getSortLoc())));
-        
-        c5.setCommentDate(currentDate);
-        c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
-        
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
-        
-        t.sortComments(SortComparators.SORT_USER_SCORE_HIGHEST);
-        
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        assertTrue("t1 at index 0", carrier.get(0) == t1);
+        assertTrue("t2 at index 1", carrier.get(1) == t2);
+        assertTrue("t3 at index 2", carrier.get(2) == t3);
+        assertTrue("t4 at index 3", carrier.get(3) == t4);
+        assertTrue("t5 at index 4", carrier.get(4) == t5);
+        assertTrue("t6 at index 5", carrier.get(5) == t6);
+        assertTrue("t7 at index 6", carrier.get(6) == t7);
+        assertTrue("t8 at index 7", carrier.get(7) == t8);
+        assertTrue("t9 at index 8", carrier.get(8) == t9);
+        assertTrue("t10 at index 9", carrier.get(9) == t10);  
     }
     
     /**
-     * Tests the sorting of comments in a thread by the score relative to the user.
+     * Tests the sorting of threads by the score relative to the user.
      */
     public void testSortByUserScoreLowest(){
+        ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
+        ThreadComment t6 = new ThreadComment();
+        ThreadComment t7 = new ThreadComment();
+        ThreadComment t8 = new ThreadComment();
+        ThreadComment t9 = new ThreadComment();
+        ThreadComment t10 = new ThreadComment();
         long extraTime = 1320000;
-        ThreadComment t = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        Date currentDate = new Date();
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
         
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        Location locationT = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        c1.setCommentDate(new Date(currentDate.getTime() - 1*extraTime));
+        c2.setCommentDate(new Date(currentDate.getTime() - 2*extraTime));
+        c3.setCommentDate(new Date(currentDate.getTime() - 3*extraTime));
+        c4.setCommentDate(new Date(currentDate.getTime() - 4*extraTime));
+        c5.setCommentDate(new Date(currentDate.getTime() - 5*extraTime));
+        c6.setCommentDate(new Date(currentDate.getTime() - 6*extraTime));
+        c7.setCommentDate(new Date(currentDate.getTime() - 7*extraTime));
+        c8.setCommentDate(new Date(currentDate.getTime() - 8*extraTime));
+        c9.setCommentDate(new Date(currentDate.getTime() - 9*extraTime));
+        c10.setCommentDate(new Date(currentDate.getTime() - 10*extraTime));
         
         c1.setLocation(geoLocation1);
         c2.setLocation(geoLocation2);
         c3.setLocation(geoLocation3);
         c4.setLocation(geoLocation4);
         c5.setLocation(geoLocation5);
-        t.setSortLoc(geoLocationT);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
         
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
-        t.getSortLoc().setLocation(locationT);
         
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        t6.setBodyComment(c6);
+        t7.setBodyComment(c7);
+        t8.setBodyComment(c8);
+        t9.setBodyComment(c9);
+        t10.setBodyComment(c10);
         
-        Date currentDate = new Date();
+        carrier.add(t3);
+        carrier.add(t2);
+        carrier.add(t4);
+        carrier.add(t1);
+        carrier.add(t5);
+        carrier.add(t7);
+        carrier.add(t6);
+        carrier.add(t10);
+        carrier.add(t8);
+        carrier.add(t9);
         
-        c1.setCommentDate(currentDate);
-        c2.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c4.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c5.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
-        t.addComment(c3);
-        t.addComment(c2);
-        t.addComment(c4);
-        t.addComment(c5);
-        t.addComment(c1);
+        SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST, 
+                            carrier);
         
-        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
-        
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
-        
-        c5.setCommentDate(currentDate);
-        c4.setCommentDate(new Date(currentDate.getTime() + 20*extraTime));
-        c3.setCommentDate(new Date(currentDate.getTime() + 30*extraTime));
-        c2.setCommentDate(new Date(currentDate.getTime() + 40*extraTime));
-        c1.setCommentDate(new Date(currentDate.getTime() + 50*extraTime));
-        
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
-        
-        t.sortComments(SortComparators.SORT_USER_SCORE_LOWEST);
-        
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
+        assertTrue("t10 at index 0", carrier.get(0) == t10);
+        assertTrue("t9 at index 1", carrier.get(1) == t9);
+        assertTrue("t8 at index 2", carrier.get(2) == t8);
+        assertTrue("t7 at index 3", carrier.get(3) == t7);
+        assertTrue("t6 at index 4", carrier.get(4) == t6);
+        assertTrue("t5 at index 5", carrier.get(5) == t5);
+        assertTrue("t4 at index 6", carrier.get(6) == t4);
+        assertTrue("t3 at index 7", carrier.get(7) == t3);
+        assertTrue("t2 at index 8", carrier.get(8) == t2);
+        assertTrue("t1 at index 9", carrier.get(9) == t1);
     }
     
     /**
-     * Tests the sorting of comments in a thread by the score relative to the user.
+     * Tests the sorting of threads by some location.
      */
     public void testSortByLocation(){
-        ThreadComment t = new ThreadComment();
+        ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
+        ThreadComment t1 = new ThreadComment();
+        ThreadComment t2 = new ThreadComment();
+        ThreadComment t3 = new ThreadComment();
+        ThreadComment t4 = new ThreadComment();
+        ThreadComment t5 = new ThreadComment();
+        ThreadComment t6 = new ThreadComment();
+        ThreadComment t7 = new ThreadComment();
+        ThreadComment t8 = new ThreadComment();
+        ThreadComment t9 = new ThreadComment();
+        ThreadComment t10 = new ThreadComment();
         Comment c1 = new Comment();
         Comment c2 = new Comment();
         Comment c3 = new Comment();
         Comment c4 = new Comment();
         Comment c5 = new Comment();
-        
-        Location location1 = new Location(LocationManager.GPS_PROVIDER);
-        Location location2 = new Location(LocationManager.GPS_PROVIDER);
-        Location location3 = new Location(LocationManager.GPS_PROVIDER);
-        Location location4 = new Location(LocationManager.GPS_PROVIDER);
-        Location location5 = new Location(LocationManager.GPS_PROVIDER);
-        Location locationT = new Location(LocationManager.GPS_PROVIDER);
-        
-        locationListenerService = new LocationListenerService(activity);
-        
-        GeoLocation geoLocation1 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation4 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocation5 = new GeoLocation(locationListenerService);
-        GeoLocation geoLocationT = new GeoLocation(locationListenerService);
+        Comment c6 = new Comment();
+        Comment c7 = new Comment();
+        Comment c8 = new Comment();
+        Comment c9 = new Comment();
+        Comment c10 = new Comment();
+        GeoLocation geoLocation1 = new GeoLocation(5,5);
+        GeoLocation geoLocation2 = new GeoLocation(10,10);
+        GeoLocation geoLocation3 = new GeoLocation(15,15);
+        GeoLocation geoLocation4 = new GeoLocation(20,20);
+        GeoLocation geoLocation5 = new GeoLocation(25,25);
+        GeoLocation geoLocation6 = new GeoLocation(30,30);
+        GeoLocation geoLocation7 = new GeoLocation(35,35);
+        GeoLocation geoLocation8 = new GeoLocation(40,40);
+        GeoLocation geoLocation9 = new GeoLocation(45,45);
+        GeoLocation geoLocation10 = new GeoLocation(50,50);
         
         c1.setLocation(geoLocation1);
         c2.setLocation(geoLocation2);
         c3.setLocation(geoLocation3);
         c4.setLocation(geoLocation4);
         c5.setLocation(geoLocation5);
-        t.setSortLoc(geoLocationT);
+        c6.setLocation(geoLocation6);
+        c7.setLocation(geoLocation7);
+        c8.setLocation(geoLocation8);
+        c9.setLocation(geoLocation9);
+        c10.setLocation(geoLocation10);
+           
+        t1.setBodyComment(c1);
+        t2.setBodyComment(c2);
+        t3.setBodyComment(c3);
+        t4.setBodyComment(c4);
+        t5.setBodyComment(c5);
+        t6.setBodyComment(c6);
+        t7.setBodyComment(c7);
+        t8.setBodyComment(c8);
+        t9.setBodyComment(c9);
+        t10.setBodyComment(c10);
         
-        c1.getLocation().setLocation(location1);
-        c2.getLocation().setLocation(location2);
-        c3.getLocation().setLocation(location3);
-        c4.getLocation().setLocation(location4);
-        c5.getLocation().setLocation(location5);
-        t.getSortLoc().setLocation(locationT);
+        carrier.add(t3);
+        carrier.add(t2);
+        carrier.add(t4);
+        carrier.add(t1);
+        carrier.add(t5);
+        carrier.add(t7);
+        carrier.add(t6);
+        carrier.add(t10);
+        carrier.add(t8);
+        carrier.add(t9);
         
-        t.getSortLoc().setLatitude(0);
-        t.getSortLoc().setLongitude(0);
-        c1.getLocation().setLatitude(0);
-        c1.getLocation().setLongitude(0);
-        c2.getLocation().setLatitude(5);
-        c2.getLocation().setLongitude(5);
-        c3.getLocation().setLatitude(10);
-        c3.getLocation().setLongitude(10);
-        c4.getLocation().setLatitude(15);
-        c4.getLocation().setLongitude(15);
-        c5.getLocation().setLatitude(20);
-        c5.getLocation().setLongitude(20);
+        SortUtil.setThreadSortGeo(new GeoLocation(0,0));
         
-        t.addComment(c3);
-        t.addComment(c2);
-        t.addComment(c4);
-        t.addComment(c5);
-        t.addComment(c1);
+        SortUtil.sortThreads(SortUtil.SORT_LOCATION, 
+                            carrier);
         
-        t.sortComments(SortComparators.SORT_LOCATION_MISC);
-        
-        assertTrue("c1 is at location 0", t.getComments().get(0) == c1);
-        assertTrue("c2 is at location 1", t.getComments().get(1) == c2);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c4 is at location 3", t.getComments().get(3) == c4);
-        assertTrue("c5 is at location 4", t.getComments().get(4) == c5);
-        
-        t.getSortLoc().setLatitude(20);
-        t.getSortLoc().setLongitude(20);
-        
-        t.sortComments(SortComparators.SORT_LOCATION_MISC);
-        
-        assertTrue("c5 is at location 0", t.getComments().get(0) == c5);
-        assertTrue("c4 is at location 1", t.getComments().get(1) == c4);
-        assertTrue("c3 is at location 2", t.getComments().get(2) == c3);
-        assertTrue("c2 is at location 3", t.getComments().get(3) == c2);
-        assertTrue("c1 is at location 4", t.getComments().get(4) == c1);
+        assertTrue("t1 at index 0", carrier.get(0) == t1);
+        assertTrue("t2 at index 1", carrier.get(1) == t2);
+        assertTrue("t3 at index 2", carrier.get(2) == t3);
+        assertTrue("t4 at index 3", carrier.get(3) == t4);
+        assertTrue("t5 at index 4", carrier.get(4) == t5);
+        assertTrue("t6 at index 5", carrier.get(5) == t6);
+        assertTrue("t7 at index 6", carrier.get(6) == t7);
+        assertTrue("t8 at index 7", carrier.get(7) == t8);
+        assertTrue("t9 at index 8", carrier.get(8) == t9);
+        assertTrue("t10 at index 9", carrier.get(9) == t10); 
     }
 }

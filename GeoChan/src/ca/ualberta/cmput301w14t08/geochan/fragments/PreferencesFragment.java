@@ -26,8 +26,15 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
+/**
+ * Responsible for the UI fragment that allows the user to edit
+ * their username.
+ * 
+ * @author AUTHOR HERE
+ * 
+ */
 public class PreferencesFragment extends PreferenceFragment {
 
     private EditTextPreference username;
@@ -45,14 +52,12 @@ public class PreferencesFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 Preference hash = findPreference("device_hash");
-                hash.setSummary((String) newValue + " #"
-                        + UserHashManager.getHash((String) newValue));
+                hash.setSummary((String) newValue + " #" + HashHelper.getHash((String) newValue));
                 return true;
             }
         });
 
         Preference hash = findPreference("device_hash");
-        UserHashManager manager = UserHashManager.getInstance();
-        hash.setSummary(username.getText() + " #" + manager.getHash());
+        hash.setSummary(username.getText() + " #" + HashHelper.getHash());
     }
 }

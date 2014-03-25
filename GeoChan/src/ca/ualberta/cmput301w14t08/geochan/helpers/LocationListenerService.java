@@ -32,11 +32,21 @@ public class LocationListenerService {
     private static Location location;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private static final int TWO_MINUTES = 1000 * 60 * 2; // taken from Android
+                                                          // Location Strategy
 
+    /**
+     * Constructs a new service object. Creates a locationListener object within
+     * and implements its interface.
+     * 
+     * @param activity
+     */
     public LocationListenerService(Activity activity) {
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
+        // Creates a LocationListener object and implements its interface.
+        // If onLocationChanged is called, send the new location to
+        // isBetterLocation to check before setting.
         locationListener = new LocationListener() {
             public void onLocationChanged(Location newLocation) {
                 if (isBetterLocation(newLocation, location)) {
@@ -55,16 +65,30 @@ public class LocationListenerService {
         };
     }
 
+    /**
+     * LocationManager tells the locationListener to start listening for
+     * location changes
+     */
     public void startListening() {
         for (String provider : locationManager.getAllProviders()) {
             locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
         }
     }
 
+    /**
+     * LocationManager tells the locationListener to stop listening for location
+     * changes
+     */
     public void stopListening() {
         locationManager.removeUpdates(locationListener);
     }
 
+    /**
+     * Gets the current location. Checks if the latest location is better than
+     * the location currently assigned
+     * 
+     * @return location
+     */
     public Location getCurrentLocation() {
         Location tempLocation = getLastKnownLocation();
         if (isBetterLocation(tempLocation, location)) {
@@ -73,11 +97,29 @@ public class LocationListenerService {
         return location;
     }
 
+    /**
+     * asks the location manager for the last known location on the GPS Provider
+     * 
+     * @return location
+     */
     public Location getLastKnownLocation() {
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(loc == null){
+            loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        return loc;
     }
 
-    // http://developer.android.com/guide/topics/location/strategies.html 
+    /**
+     * Checks to see if a new location is better than the currentBestLocation.
+     * This code is from the Android Location Strategies guide, found here:
+     * http://developer.android.com/guide/topics/location/strategies.html
+     * 
+     * @param location
+     * @param currentBestLocation
+     * @return boolean
+     */
     public boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
@@ -123,12 +165,19 @@ public class LocationListenerService {
         return false;
     }
 
-    // Checks whether two providers are the same
+    /**
+     * Checks to see if two providers are the same. Used by isBetterLocation
+     * method This code is from the Android Location Strategies Guide found
+     * here: http://developer.android.com/guide/topics/location/strategies.html
+     * 
+     * @param provider1
+     * @param provider2
+     * @return boolean
+     */
     public boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
         }
         return provider1.equals(provider2);
     }
-
 }

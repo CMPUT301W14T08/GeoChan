@@ -24,6 +24,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+/**
+ * Helper class. Used to display error messages to the user.
+ * 
+ */
 public class ErrorDialog {
     public static void show(Context context, String message) {
         AlertDialog.Builder error = new AlertDialog.Builder(context);

@@ -20,30 +20,31 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import android.app.Fragment;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-
 /**
  * Responsible for the UI fragment that allows a user to post a new thread.
+ * 
+ * @author AUTHOR HERE
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
@@ -63,17 +64,39 @@ public class PostThreadFragment extends Fragment {
         geoLocation = new GeoLocation(locationListenerService);
     }
 
+    /**
+     * COMMENT GOES HERE
+     */
     @Override
     public void onResume() {
         super.onResume();
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                geoLocation.setCoordinates(args.getDouble("LATITUDE"),args.getDouble("LONGITUDE"));
+                Button locButton = (Button) getActivity().findViewById(R.id.thread_location_button);
+                if (args.getString("LocationType") == "CURRENT_LOCATION") {
+                    locButton.setText("Current Location");
+                } else {
+                    Double lat = args.getDouble("LATITUDE");
+                    Double lon = args.getDouble("LONGITUDE");
+                    geoLocation.setCoordinates(lat, lon);
+
+                    DecimalFormat format = new DecimalFormat();
+                    format.setRoundingMode(RoundingMode.HALF_EVEN);
+                    format.setMinimumFractionDigits(0);
+                    format.setMaximumFractionDigits(4);
+
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                }
             }
         }
     }
 
+    /**
+     * COMMENT GOES HERE
+     * @param v WHAT DOTH V?
+     */
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
@@ -98,24 +121,16 @@ public class PostThreadFragment extends Fragment {
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                     // log the thread and the geolocation
-                    GeoLocationLog.addLogEntry(title, geoLocation);
-                    Log.e("size of locLog:",
-                            Integer.toString(GeoLocationLog.getLogEntries().size()));
+                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+                    geoLocationLog.addLogEntry(title, geoLocation);
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
-                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
                 this.getFragmentManager().popBackStackImmediate();
             }
         }
-    }
-
-    public String retrieveUsername() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        UserHashManager manager = UserHashManager.getInstance();
-        return preferences.getString("username", "Anon") + "#" + manager.getHash();
     }
 
     @Override

@@ -18,8 +18,18 @@
  * limitations under the License.
  */
 
+/*
+ * Reused from https://github.com/rayzhangcl/ESDemo/
+ */
+
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
+/**
+ * Represents a response served by ElasticSearch.
+ * 
+ * @author AUTHOR HERE
+ * 
+ */
 public class ElasticSearchResponse<T> {
     String _index;
     String _type;

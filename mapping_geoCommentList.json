@@ -1,0 +1,7 @@
+{
+	"geoCommentList" : {
+		"properties" : {
+			"comments" : {"type" : "string", "index" : "not_analyzed"}
+		}
+	}
+}

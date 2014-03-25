@@ -23,7 +23,6 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -32,9 +31,15 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortTypes;
-import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
+/**
+ * A comment within a thread of comments. Contains the text of the comment,
+ * possibly an image, and meta-data relating to the Comment.
+ * 
+ * @author Henry Pabst,
+ */
 public class Comment implements Parcelable {
     private String textPost;
     private Date commentDate;
@@ -46,7 +51,8 @@ public class Comment implements Parcelable {
     private int depth;
     private Comment parent;
     private ArrayList<Comment> children;
-    private UserHashManager manager;
+    private ArrayList<String> commentIds;
+    private PreferencesManager manager;
     private long id;
 
     /**
@@ -54,18 +60,19 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, GeoLocation location) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -73,18 +80,19 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, Bitmap image, GeoLocation location) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = -1;
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -92,18 +100,19 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, Bitmap image, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(image);
         this.setImageThumb(image);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -111,18 +120,19 @@ public class Comment implements Parcelable {
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
-        this.manager = UserHashManager.getInstance();
+        this.manager = PreferencesManager.getInstance();
         this.setTextPost(textPost);
         this.setCommentDate(new Date());
         this.setImage(null);
         this.setImageThumb(null);
         this.setLocation(location);
         this.setUser(manager.getUser());
-        this.setHash(manager.getHash());
+        this.setHash(HashHelper.getHash(manager.getUser()));
         this.depth = parent.depth + 1;
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
-        this.id = manager.getCommentIdHash();
+        this.id = HashHelper.getCommentIdHash();
+        this.commentIds = new ArrayList<String>();
     }
 
     /**
@@ -130,10 +140,11 @@ public class Comment implements Parcelable {
      */
     public Comment() {
         super();
+        this.manager = PreferencesManager.getInstance();
         this.textPost = "This is a test comment.";
         this.commentDate = new Date();
         this.image = null;
-        this.location = null;
+        this.location = new GeoLocation(0, 0);
         this.parent = null;
         this.children = new ArrayList<Comment>();
         this.setUser(new String());
@@ -142,6 +153,15 @@ public class Comment implements Parcelable {
         this.setParent(null);
         this.setChildren(new ArrayList<Comment>());
         this.id = -1;
+        this.commentIds = new ArrayList<String>();
+    }
+
+    public ArrayList<String> getCommentIds() {
+        return commentIds;
+    }
+
+    public void setCommentIds(ArrayList<String> commentIds) {
+        this.commentIds = commentIds;
     }
 
     public boolean hasImage() {
@@ -152,9 +172,7 @@ public class Comment implements Parcelable {
         children.add(comment);
     }
 
-    /**
-     * Getters and setters
-     */
+    // Getters and setters.
     public String getTextPost() {
         return textPost;
     }
@@ -199,6 +217,10 @@ public class Comment implements Parcelable {
         return children;
     }
 
+    public Comment getChildAtIndex(int i) {
+        return children.get(i);
+    }
+
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;
     }
@@ -220,49 +242,26 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Sorts child comments according to the tag passed.
+     * Determines the distance between a comment and a GeoLocation in terms of
+     * latitude and longitude coordinates.
      * 
-     * @param tag
-     *            Tag to sort comments by
-     */
-    public void sortChildren(int tag) {
-        switch (tag) {
-        case SortTypes.SORT_DATE_NEWEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateNewest());
-            break;
-        case SortTypes.SORT_DATE_OLDEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByDateOldest());
-            break;
-        case SortTypes.SORT_LOCATION_OP:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentDistance());
-            break;
-        case SortTypes.SORT_SCORE_HIGHEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreHighest());
-            break;
-        case SortTypes.SORT_SCORE_LOWEST:
-            Collections.sort(this.getChildren(), SortTypes.sortCommentsByParentScoreLowest());
-            break;
-        }
-    }
-
-    /**
-     * Determines the distance between a comment and a GeoLocation
-     * in terms of latitude and longitude coordinates.
-     * @param g The GeoLocation to be compared with.
-     * @return The distance between the Comment and the passed
-     * GeoLocation in terms of coordinates.
+     * @param g
+     *            The GeoLocation to be compared with.
+     * @return The distance between the Comment and the passed GeoLocation in
+     *         terms of coordinates.
      */
     public double getDistanceFrom(GeoLocation g) {
         return this.getLocation().distance(g);
     }
-    
 
     /**
-     * Determines the amount of time between when the Comment was
-     * posted and the passed date in terms of hours.
-     * @param d The Date to be compared with.
-     * @return The number of hours between when the Comment was
-     * posted and the passed Date.
+     * Determines the amount of time between when the Comment was posted and the
+     * passed date in terms of hours.
+     * 
+     * @param d
+     *            The Date to be compared with.
+     * @return The number of hours between when the Comment was posted and the
+     *         passed Date.
      */
     public double getTimeFrom(Date d) {
         Calendar cal1 = Calendar.getInstance();
@@ -271,7 +270,7 @@ public class Comment implements Parcelable {
         cal2.setTime(d);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
-        if(TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1){
+        if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
             return 0.5;
         } else {
             return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
@@ -279,9 +278,10 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Determines the "score" of the Comment in relation to its
-     * parent. Should never be called on the bodyComment of a
-     * ThreadComment, and will return 0 if it does.
+     * Determines the "score" of the Comment in relation to its parent. Should
+     * never be called on the bodyComment of a ThreadComment, and will return 0
+     * if it does.
+     * 
      * @return The score of the Comment in relation to its parent.
      */
     public double getScoreFromParent() {
@@ -306,28 +306,30 @@ public class Comment implements Parcelable {
             return distScore + timeScore;
         }
     }
-    
+
     /**
-     * Determines the score of a comment in a thread relevant to the user's current location
-     * and time.
-     * @param g The current GeoLocation of the user. In sorting, the Thread.sortLoc GeoLocation
-     * of the sorting thread is used and should be set in the fragment.
-     * @return The score of the comment in relation to the user's location and current time.
+     * Determines the score of a comment in a thread relevant to the user's
+     * current location and time.
+     * 
+     * @param g
+     *            The current GeoLocation of the user. In sorting, the
+     *            Thread.sortLoc GeoLocation of the sorting thread is used and
+     *            should be set in the fragment.
+     * @return The score of the comment in relation to the user's location and
+     *         current time.
      */
-    public double getScoreFromUser(GeoLocation g){
+    public double getScoreFromUser(GeoLocation g) {
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 10000;
-        
-        if(g == null){
+
+        if (g == null) {
             Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst
-                * (1 / Math.sqrt(this.getDistanceFrom(g)));
-        double timeScore = timeConst
-                * (1 / Math.sqrt(this.getTimeFrom(new Date())));
-        if ((distScore + timeScore) > maxScore){
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
+        if ((distScore + timeScore) > maxScore) {
             return maxScore;
         } else {
             return distScore + timeScore;
@@ -335,8 +337,8 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * Converts the Comment's commentDate to an appropriately
-     * formatted string.
+     * Converts the Comment's commentDate to an appropriately formatted string.
+     * 
      * @return The string of the Comment's commentDate.
      */
     public String getCommentDateString() {
@@ -410,18 +412,24 @@ public class Comment implements Parcelable {
         dest.writeValue(textPost);
         dest.writeValue(commentDate);
         dest.writeValue(image);
-        dest.writeValue(location);
+        dest.writeValue(location.getLatitude());
+        dest.writeValue(location.getLongitude());
         dest.writeValue(user);
         dest.writeParcelable(parent, flags);
         dest.writeTypedList(children);
     }
 
+    /**
+     * This is the Comment constructor to build the object from a parcel.
+     * 
+     * @param in
+     */
     public Comment(Parcel in) {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));
         this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
         this.setImage((Bitmap) in.readValue(getClass().getClassLoader()));
-        this.setLocation((GeoLocation) in.readValue(getClass().getClassLoader()));
+        this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
         in.readTypedList(children, Comment.CREATOR);

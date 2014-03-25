@@ -19,7 +19,7 @@
     <string name="device_hash"/>
     <string name="attach_image">Attach Image</string>
     <string name="post">Post</string>
-    <string name="location">Location: Current Location</string>
+    <string name="location">Current Location</string>
     <string name="placeholder_location">location text</string>
     <string name="thread_view_op_reply">Reply to OP</string>
     <string name="op_replyingTo">Replying to:</string>
@@ -33,5 +33,19 @@
     <string name="attach_image_title">Attach Image</string>
     <string name="attach_image_dialog">Choose image from Camera or Galley</string>
     <string name="image_desc">Default image for reply</string>
+    <string name="comment_star_button">Favourite</string>
+    <string name="action_refresh">Refresh from Server</string>
+    <string name="thread_sort">Sorting Method</string>
+    <string name="date_new">Date (Newest)</string>
+    <string name="date_old">Date (Oldest)</string>
+    <string name="score_highest">Relevance (Highest)</string>
+    <string name="score_lowest">Relevance (Lowest)</string>
+    <string name="sort_location_current">Location (Current)</string>
+    <string name="sort_location_other">Location (Other)</string>
+    <string name="sort_image">Image</string>
+    <string name="favourites">Favourites</string>
+    <string name="threads_fav">Threads</string>
+    <string name="comments_fav">Comments</string>
+    <string name="get_directions_button_text">Get Directions</string>
 
 </resources>

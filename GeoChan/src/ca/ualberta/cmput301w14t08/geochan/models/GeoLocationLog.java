@@ -22,48 +22,90 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
 
-public class GeoLocationLog {    
+/**
+ * This model class handles all operations involved in logging used locations.
+ * Follows singleton design pattern.
+ */
+public class GeoLocationLog {
 
-    private static ArrayList<LogEntry> entries;
+    private static GeoLocationLog instance = null;
+    private Context context;
+    private ArrayList<LogEntry> entries;
 
-    private GeoLocationLog() {
-        entries = new ArrayList<LogEntry>();
+    /**
+     * Protected constructor. Is called only if singleton has not been
+     * constructed.
+     */
+    protected GeoLocationLog(Context context) {
+        this.context = context;
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        this.entries = manager.deserializeLog();
     }
-   
-    public static void addLogEntry(String threadTitle,GeoLocation geoLocation) {
-        if(entries == null) {
-            entries = new ArrayList<LogEntry>();
+
+    /**
+     * Singleton construction method. If instance already exists, return it Else
+     * construct a new one
+     * 
+     * @return instance
+     */
+    public static GeoLocationLog getInstance(Context context) {
+        if (instance == null) {
+            instance = new GeoLocationLog(context);
         }
-        LogEntry logEntry = new LogEntry(threadTitle,geoLocation);
+        return instance;
+    }
+
+    /**
+     * Adds a new LogEntry to the GeoLocationLog.
+     * 
+     * @param threadTitle
+     *            Title to be stored in the new LogEntry.
+     * @param geoLocation
+     *            GeoLocation to be stored in the new LogEntry.
+     */
+    public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
+        LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
         entries.add(logEntry);
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        manager.serializeLog(entries);
     }
-    
-    public static ArrayList<LogEntry> getLogEntries() {
-        if(entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
+
+    /**
+     * Return the log entries array, if null create one
+     * 
+     * @return entries
+     */
+    public ArrayList<LogEntry> getLogEntries() {
+        GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
+        entries = manager.deserializeLog();
         return entries;
     }
 
+    /**
+     * Return true if log is empty, else false. If null create one
+     * 
+     * @return entries
+     */
     public boolean isEmpty() {
-        if(entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
         return entries.size() == 0;
     }
 
+    /**
+     * Removes all LogEntry objects from entries.
+     */
     public void clearLog() {
-        if(entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
         entries.clear();
     }
 
+    /**
+     * Returns the number of LogEntry objects stored in entries.
+     * 
+     * @return Number of LogEntry objects.
+     */
     public int size() {
-        if(entries == null) {
-            entries = new ArrayList<LogEntry>();
-        }
         return entries.size();
     }
 }

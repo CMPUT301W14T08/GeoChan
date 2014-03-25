@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -31,6 +33,13 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
+/**
+ * This class is an adapter to display a list of locations the user specified in
+ * the past. Each list item consists of a title of the associated thread and
+ * geolocation represented by longitude and lattitude.
+ * 
+ * @author
+ */
 public class CustomLocationAdapter extends BaseAdapter {
     private ArrayList<LogEntry> logArray;
     private Context context;
@@ -69,9 +78,13 @@ public class CustomLocationAdapter extends BaseAdapter {
         title.setText(logEntry.getThreadTitle());
 
         TextView loc = (TextView) convertView.findViewById(R.id.log_entry_location);
-        String lat = Double.toString(logEntry.getGeoLocation().getLatitude());
-        String lon = Double.toString(logEntry.getGeoLocation().getLongitude());
-        loc.setText("Lattitiude: " + lat + ", Longtitude: " + lon);
+        DecimalFormat format = new DecimalFormat();
+        format.setRoundingMode(RoundingMode.HALF_EVEN);
+        format.setMinimumFractionDigits(0);
+        format.setMaximumFractionDigits(4);
+
+        loc.setText("Latitude: " + format.format(logEntry.getGeoLocation().getLatitude())
+                + ", Longitude: " + format.format(logEntry.getGeoLocation().getLongitude()));
 
         return convertView;
     }
