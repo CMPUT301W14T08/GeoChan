@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -194,6 +195,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
         fragment.postReply(v);
+    }
+    
+    public void makeEdit(View view){
+        EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag("editFrag");
+        fragment.makeEdit(view);
     }
 
     /**
