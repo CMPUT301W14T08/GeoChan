@@ -337,6 +337,9 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
+        if(FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
+            starButton.setImageResource(R.drawable.ic_rating_marked);
+        }
 
         final ImageButton mapButton = (ImageButton) convertView
                 .findViewById(R.id.thread_map_button);
@@ -344,10 +347,17 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT).show();
-                    starButton.setImageResource(R.drawable.ic_rating_marked);
-                    FavouritesLog log = FavouritesLog.getInstance(context);
-                    log.addThreadComment(thread);
+                    if(!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
+                        Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT).show();
+                        starButton.setImageResource(R.drawable.ic_rating_marked);
+                        FavouritesLog log = FavouritesLog.getInstance(context);
+                        log.addThreadComment(thread);
+                    } else {
+                        Toast.makeText(context, "Thread removed from Favourites.", Toast.LENGTH_SHORT).show();
+                        starButton.setImageResource(R.drawable.ic_rating_important);
+                        FavouritesLog log = FavouritesLog.getInstance(context);
+                        log.removeThreadComment(thread);
+                    }
                 }
             });
         }

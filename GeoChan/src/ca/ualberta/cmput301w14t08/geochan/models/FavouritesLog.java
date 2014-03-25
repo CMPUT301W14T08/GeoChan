@@ -44,7 +44,7 @@ public class FavouritesLog {
     public void removeThreadComment(ThreadComment threadComment) {
         for(ThreadComment t : getThreads()) {
             if(t.getId().equals(threadComment.getId())) {
-                getComments().remove(t);
+                getThreads().remove(t);
             }
         }
         manager.serializeThreads();
