@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import android.graphics.Picture;
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -38,8 +38,8 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 public class Comment implements Parcelable {
     private String textPost;
     private Date commentDate;
-    private Picture image;
-    private Picture imageThumb;
+    private Bitmap image;
+    private Bitmap imageThumb;
     private GeoLocation location;
     private String user;
     private String hash;
@@ -71,7 +71,7 @@ public class Comment implements Parcelable {
     /**
      * a comment with an image and without a parent
      */
-    public Comment(String textPost, Picture image, GeoLocation location) {
+    public Comment(String textPost, Bitmap image, GeoLocation location) {
         super();
         this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
@@ -90,7 +90,7 @@ public class Comment implements Parcelable {
     /**
      * a comment with an image, with a parent
      */
-    public Comment(String textPost, Picture image, GeoLocation location, Comment parent) {
+    public Comment(String textPost, Bitmap image, GeoLocation location, Comment parent) {
         super();
         this.manager = UserHashManager.getInstance();
         this.setTextPost(textPost);
@@ -163,11 +163,11 @@ public class Comment implements Parcelable {
         this.textPost = textPost;
     }
 
-    public Picture getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(Picture image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -348,7 +348,7 @@ public class Comment implements Parcelable {
     /**
      * @return the imageThumb
      */
-    public Picture getImageThumb() {
+    public Bitmap getImageThumb() {
         return imageThumb;
     }
 
@@ -356,7 +356,7 @@ public class Comment implements Parcelable {
      * @param imageThumb
      *            the imageThumb to set
      */
-    public void setImageThumb(Picture imageThumb) {
+    public void setImageThumb(Bitmap imageThumb) {
         this.imageThumb = imageThumb;
     }
 
@@ -420,7 +420,7 @@ public class Comment implements Parcelable {
         super();
         this.setTextPost((String) in.readValue(getClass().getClassLoader()));
         this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
-        this.setImage((Picture) in.readValue(getClass().getClassLoader()));
+        this.setImage((Bitmap) in.readValue(getClass().getClassLoader()));
         this.setLocation((GeoLocation) in.readValue(getClass().getClassLoader()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));

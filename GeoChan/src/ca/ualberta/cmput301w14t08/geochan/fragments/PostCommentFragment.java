@@ -69,8 +69,8 @@ public class PostCommentFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
     private ImageHelper imageHelper;
-    private Picture picture;
-    private Picture thumb;
+    private Bitmap picture;
+    private Bitmap thumb;
     private ImageView imageView;
 
     @Override
@@ -140,6 +140,7 @@ public class PostCommentFragment extends Fragment {
             } else {
                 // Comment with picture and geolocation
                 Comment newComment = new Comment(comment, picture, geoLocation, thread.getBodyComment());
+                newComment.setImageThumb(thumb);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, thread.getBodyComment(), newComment);
             }
@@ -198,10 +199,10 @@ public class PostCommentFragment extends Fragment {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 256, 256);
+            picture = imageBitmap;
+            thumb = squareBitmap;
             imageView.setImageBitmap(squareBitmap);
             Log.d("imagehelper","Image set successfully");
-            //
-            //thumb = imageHelper.getThumbnail();
         }
     }
     

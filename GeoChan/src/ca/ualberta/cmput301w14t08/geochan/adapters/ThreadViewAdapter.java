@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostReplyFragment;
@@ -274,6 +275,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         } else {
             commentLocationText.setText("Error: No location found");
         }
+        // Comment image
+        if (comment.hasImage()) {
+            ImageView image = (ImageView) convertView.findViewById(R.id.imageButton1);
+            image.setImageBitmap(comment.getImageThumb());
+        }
     }
 
     private void setOPFields(View convertView) {
@@ -328,6 +334,11 @@ public class ThreadViewAdapter extends BaseAdapter {
                     + Double.toString(commentLong));
         } else {
             replyLocationText.setText("Error: No location found");
+        }
+        // Image
+        if (reply.hasImage()) {
+            ImageView image = (ImageView) convertView.findViewById(R.id.imageButton1);
+            image.setImageBitmap(reply.getImageThumb());
         }
     }
 

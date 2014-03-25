@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -58,9 +57,8 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
         if (thread.getBodyComment().hasImage()) {
-            Picture picture = thread.getBodyComment().getImage();
-            Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(),
-                    Bitmap.Config.RGB_565);
+            Bitmap bitmap = thread.getBodyComment().getImage();
+ 
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string

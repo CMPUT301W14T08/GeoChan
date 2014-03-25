@@ -121,6 +121,12 @@ public class MainActivity extends Activity implements OnBackStackChangedListener
                 .findFragmentByTag("comFrag");
         fragment.attachImage(v);
     }
+    
+    public void attachImageReply(View v) {
+        PostReplyFragment fragment = (PostReplyFragment) getFragmentManager()
+                .findFragmentByTag("repFrag");
+        fragment.attachImage(v);
+    }
 
     public void postReply(View v) {
         PostReplyFragment fragment = (PostReplyFragment) getFragmentManager().findFragmentByTag(

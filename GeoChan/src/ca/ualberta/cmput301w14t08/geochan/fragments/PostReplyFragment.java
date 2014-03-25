@@ -20,12 +20,23 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.io.File;
+import java.io.IOException;
+
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,9 +45,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.UserHashManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -51,6 +64,10 @@ public class PostReplyFragment extends Fragment {
     ThreadComment thread;
     Comment commentToReplyTo;
     private LocationListenerService locationListenerService;
+    private ImageHelper imageHelper;
+    private Bitmap picture;
+    private Bitmap thumb;
+    private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,11 +90,14 @@ public class PostReplyFragment extends Fragment {
 
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+        imageView = (ImageView) getActivity().findViewById(R.id.imageView1);
         bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
         bodyReplyTo.setText(commentToReplyTo.getTextPost());
         replyTo.setText(commentToReplyTo.getUser() + " says:");
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        thumb = null;
+        picture = null;
     }
 
     public void postReply(View v) {
@@ -106,6 +126,56 @@ public class PostReplyFragment extends Fragment {
         }
     }
 
+    public void attachImage(View v) {
+        if (v.getId() == R.id.attach_image_button) {
+            AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(getActivity());
+            myAlertDialog.setTitle(R.string.attach_image_title);
+            myAlertDialog.setMessage(R.string.attach_image_dialog);
+
+            myAlertDialog.setPositiveButton("Gallery",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            try {
+                                File file = imageHelper.createImageFile();
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                                startActivityForResult(intent, 1); 
+                            } catch (IOException e) {
+                                //do something
+                            }
+                        }
+                    });
+
+            myAlertDialog.setNegativeButton("Camera",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            try {
+                                File file = imageHelper.createImageFile();
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
+                                startActivityForResult(intent, 1);
+                            } catch (IOException e) {
+                                //do something
+                            }
+                        }
+                    });
+            myAlertDialog.show();             
+        }
+    }
+ 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 256, 256);
+            picture = imageBitmap;
+            thumb = squareBitmap;
+            imageView.setImageBitmap(squareBitmap);
+            Log.d("imagehelper","Image set successfully");
+        }
+    }
+    
     public String retrieveUsername() {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
