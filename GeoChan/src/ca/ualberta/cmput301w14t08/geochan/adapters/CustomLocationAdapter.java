@@ -38,7 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
  * the past. Each list item consists of a title of the associated thread and
  * geolocation represented by longitude and lattitude.
  * 
- * @author
+ * @author Artem Chikin
  */
 public class CustomLocationAdapter extends BaseAdapter {
     private ArrayList<LogEntry> logArray;

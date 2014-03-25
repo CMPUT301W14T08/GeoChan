@@ -31,7 +31,7 @@
         android:layout_below="@+id/thread_view_comment_commentBy"
         android:paddingLeft="5dp"
         android:text="@string/placeholder_date"
-        android:textColor="#00f" />
+        android:textColor="#808080" />
 
 	<RelativeLayout
 	    android:id="@+id/relative_inflater"

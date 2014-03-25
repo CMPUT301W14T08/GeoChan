@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -173,7 +174,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      * comment as favourite.
      * 
      * @param comment
-     *            WHAT DOTH COMMENT?
      */
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
@@ -236,6 +236,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 relativeInflater.removeAllViews();
                 return;
             } else {
+                resetOtherCommentLayouts(position);
                 relativeInflater.addView(child);
                 setLocationField(view, comment);
             }
@@ -283,6 +284,26 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             });
         }
     };
+
+    private void resetOtherCommentLayouts(int position) {
+        for (int i = 0; i < threadView.getCount(); i++) {
+
+            if(i == position) {
+                continue;
+            }
+            View v = threadView.getChildAt(i);
+            if(v == null) {
+                Log.e("NULL", "NULL");
+                continue;
+            }
+            RelativeLayout relativeInflater = (RelativeLayout) v
+                    .findViewById(R.id.relative_inflater);
+            if(relativeInflater != null && relativeInflater.getChildCount() > 0) {
+                relativeInflater.removeAllViews();
+            }
+        }
+
+    }
 
     /**
      * Determines which sorting option the user selected and sorts the comments

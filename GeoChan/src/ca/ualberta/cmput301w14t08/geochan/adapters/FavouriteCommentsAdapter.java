@@ -17,7 +17,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * COMMENT HERE
- * @author AUTHOR HERE
+ * @author Artem Chikin
  *
  */
 public class FavouriteCommentsAdapter extends BaseAdapter {

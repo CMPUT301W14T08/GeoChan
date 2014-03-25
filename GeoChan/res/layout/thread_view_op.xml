@@ -45,7 +45,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/placeholder_date"
-        android:textColor="#f00" />
+        android:textColor="#808080" />
 
     <TextView
         android:id="@+id/thread_view_op_locationText"
@@ -57,38 +57,56 @@
         android:paddingRight="5dp"
         android:text="@string/placeholder_location"
         android:textColor="#2E8B57" />
-    
-    <ImageButton
-        android:id="@+id/comment_star_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/comment_reply_button"
-        android:layout_toLeftOf="@+id/comment_reply_button"
-        android:background="@null"
-        android:contentDescription="@string/comment_star_button"
-        android:paddingRight="5dp"
-        android:src="@drawable/ic_rating_important" />
 
-    <ImageButton
-        android:id="@+id/comment_reply_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:background="@null"
-        android:contentDescription="@string/thread_view_op_reply"
-        android:paddingRight="5dp"
-        android:src="@drawable/ic_reply" />
+        android:background="@drawable/rect_op_buttons"
+        android:layout_below="@+id/thread_view_op_locationText"
+        android:orientation="horizontal" >
+        
+        <ImageButton
+            android:id="@+id/comment_reply_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/thread_view_op_reply"
+            android:paddingRight="5dp"
+            android:src="@drawable/ic_reply" />
+        
+        <ImageButton
+            android:id="@+id/comment_star_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/comment_star_button"
+            android:paddingRight="5dp"
+            android:src="@drawable/ic_rating_important" />
 
-    <ImageButton
-        android:id="@+id/thread_map_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-		android:layout_alignBottom="@+id/thread_view_op_locationText"
-        android:layout_toLeftOf="@+id/comment_star_button"
-        android:background="@null"
-        android:contentDescription="@string/comment_star_button"
-        android:paddingRight="5dp"
-        android:src="@drawable/ic_location_map" />
+        <ImageButton
+            android:id="@+id/thread_map_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/comment_star_button"
+            android:paddingRight="5dp"
+            android:src="@drawable/ic_location_map" />
+
+        <ImageButton
+            android:id="@+id/comment_edit_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/comment_star_button"
+            android:focusable="false"
+            android:paddingRight="5dp"
+            android:src="@drawable/ic_edit" />
+    </LinearLayout>
 
 </RelativeLayout>

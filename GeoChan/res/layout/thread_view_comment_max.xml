@@ -103,7 +103,7 @@
         android:layout_below="@+id/thread_view_comment_commentBy"
         android:text="@string/placeholder_date"
         android:paddingLeft="5dp"
-        android:textColor="#00f" />
+        android:textColor="#808080" />
 
     <TextView
         android:id="@+id/thread_view_comment_commentBy"
