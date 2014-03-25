@@ -44,5 +44,7 @@
     <string name="threads_fav">Threads</string>
     <string name="comments_fav">Comments</string>
     <string name="get_directions_button_text">Get Directions</string>
+    <string name="make_edit">Post Edit</string>
+    <string name="comment_being_edited">Comment Being Edited:</string>
 
 </resources>
