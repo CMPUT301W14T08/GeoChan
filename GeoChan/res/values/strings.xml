@@ -46,5 +46,6 @@
     <string name="get_directions_button_text">Get Directions</string>
     <string name="attach_image_title">Attach Image</string>
     <string name="attach_image_dialog">Select a source:</string>
+    <string name="image_desc">Image Thumbnail</string>
 
 </resources>
