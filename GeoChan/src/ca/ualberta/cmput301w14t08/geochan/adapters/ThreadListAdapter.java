@@ -25,12 +25,14 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -76,13 +78,17 @@ public class ThreadListAdapter extends BaseAdapter {
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment thread = getItem(position);
-
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.thread_list_item_no_image, null);
         }
-        // Thread title
+        setThreadFields(convertView, thread);
+        return convertView;
+    }
+    
+    private void setThreadFields(View convertView, ThreadComment thread) {
+     // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
         // Thread bodyComment snippet
@@ -95,6 +101,13 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
         user.setText("Posted by " + thread.getBodyComment().getUser() + "#"
                 + thread.getBodyComment().getHash());
+        
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(thread.getBodyComment().getHash())) {
+            user.setBackgroundResource(R.drawable.username_background_thread_rect);
+            user.setTextColor(Color.WHITE);
+            user.setText(" " + user.getText() + "  ");
+        }
+        
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
@@ -109,7 +122,6 @@ public class ThreadListAdapter extends BaseAdapter {
         } else {
             location.setText("Error: No location found");
         }
-        return convertView;
     }
 
 }

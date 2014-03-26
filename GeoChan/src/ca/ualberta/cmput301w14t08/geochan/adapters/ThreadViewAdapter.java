@@ -298,12 +298,19 @@ public class ThreadViewAdapter extends BaseAdapter {
         final ImageButton mapButton = (ImageButton) convertView
                 .findViewById(R.id.thread_map_button);
 
+        final ImageButton editButton = (ImageButton) convertView
+                .findViewById(R.id.thread_edit_button);
+
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(thread.getBodyComment().getHash())) {
+            editButton.setVisibility(View.VISIBLE);
+        }
+
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
                         Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT)
-                                .show();
+                        .show();
                         starButton.setImageResource(R.drawable.ic_rating_marked);
                         FavouritesLog log = FavouritesLog.getInstance(context);
                         log.addThreadComment(thread);
@@ -377,7 +384,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         // Thread creator
         TextView threadBy = (TextView) convertView.findViewById(R.id.thread_view_op_commentBy);
         threadBy.setText("Posted by " + thread.getBodyComment().getUser() + "#"
-                + thread.getBodyComment().getHash());
+                + thread.getBodyComment().getHash()+ "  ");
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(thread.getBodyComment().getHash())) {
+            threadBy.setBackgroundResource(R.drawable.username_background_thread_rect);
+            threadBy.setTextColor(Color.WHITE);
+        }
+
         // Thread body comment
         TextView body = (TextView) convertView.findViewById(R.id.thread_view_op_commentBody);
         body.setText(thread.getBodyComment().getTextPost());
