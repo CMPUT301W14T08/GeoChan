@@ -106,6 +106,9 @@ public class ThreadListAdapter extends BaseAdapter {
             user.setBackgroundResource(R.drawable.username_background_thread_rect);
             user.setTextColor(Color.WHITE);
             user.setText(" " + user.getText() + "  ");
+        } else {
+            user.setBackgroundColor(Color.TRANSPARENT);
+            //user.setTextColor(Color.BLACK);
         }
         
         // Location text
