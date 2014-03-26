@@ -24,10 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
 import com.google.gson.JsonElement;
@@ -76,12 +74,13 @@ public class CommentSerializer implements JsonSerializer<Comment> {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP|Base64.NO_PADDING);
+            object.addProperty("image", encoded);
+            
             byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();
-            String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP);
-            object.addProperty("image", encoded);
+            String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP|Base64.NO_PADDING);
             object.addProperty("imageThumbnail", encodedThumb);
         }
         object.addProperty("depth", comment.getDepth());

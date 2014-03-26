@@ -224,8 +224,8 @@ public class PostCommentFragment extends Fragment {
             if (requestCode == ImageHelper.REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 150, 150);
-                image = imageBitmap;
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
@@ -242,8 +242,8 @@ public class PostCommentFragment extends Fragment {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 150, 150);
-                image = imageBitmap;
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
