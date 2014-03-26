@@ -67,34 +67,21 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
         if (thread.getBodyComment().hasImage()) {
-            Picture picture = thread.getBodyComment().getImage();
-            Picture pictureThumb = thread.getBodyComment().getImageThumb();
-            /*
-             * http://stackoverflow.com/questions/15563021/how-to-convert-a-picture
-             * -object-into-a-bitmap-object-android
-             */
-            PictureDrawable drawable = new PictureDrawable(picture);
-            PictureDrawable drawableThumb = new PictureDrawable(pictureThumb);
-            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-            Bitmap bitmapThumb = Bitmap.createBitmap(drawableThumb.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-            Canvas c = new Canvas(bitmap);
-            Canvas cT = new Canvas(bitmapThumb);
-            picture.draw(c);
-            pictureThumb.draw(cT);
+            Bitmap bitmap = thread.getBodyComment().getImage();
+            Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
+            
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ByteArrayOutputStream streamThumb = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-            bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, streamThumb);
-            byte[] byteArray = stream.toByteArray();
-            byte[] byteArrayThumb = streamThumb.toByteArray();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            String encodedThumb = Base64.encodeToString(byteArrayThumb, Base64.NO_WRAP);
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            byte[] byteThumbArray = byteArrayOutputStream.toByteArray();
+            String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP);
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encodedThumb);
         }

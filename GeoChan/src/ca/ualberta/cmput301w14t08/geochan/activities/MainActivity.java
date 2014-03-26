@@ -195,6 +195,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                 .findFragmentByTag("repFrag");
         fragment.postReply(v);
     }
+    
+    public void attachImageReply(View v) {
+        PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag("repFrag");
+        fragment.attachImageReply(v);
+    }
 
     /**
      * Calls the respective change location method in the fragment.
