@@ -27,6 +27,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class EditCommentFragment extends Fragment {
     private Comment editComment;
     private EditText newTextPost;
+    private static String oldText;
     
     
     @Override
@@ -60,11 +61,13 @@ public class EditCommentFragment extends Fragment {
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
         }
-        String oldText = editComment.getTextPost();
-        TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
-        oldTextView.setText(oldText);
+        if(EditCommentFragment.oldText == null){
+            EditCommentFragment.oldText = editComment.getTextPost();
+            TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
+            oldTextView.setText(EditCommentFragment.oldText);
+        }    
         newTextPost = (EditText) getActivity().findViewById(R.id.editBody);
-        newTextPost.setText(oldText);
+        newTextPost.setText(editComment.getTextPost());
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
     }
     
@@ -72,6 +75,10 @@ public class EditCommentFragment extends Fragment {
     public void onResume(){
         super.onResume();
         Bundle args = getArguments();
+        if (EditCommentFragment.oldText != null){
+            TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
+            oldTextView.setText(EditCommentFragment.oldText);
+        }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
                 Button locButton = (Button) getActivity().findViewById(R.id.edit_location_button);
@@ -98,6 +105,12 @@ public class EditCommentFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
+        editComment.setTextPost(newTextPost.getText().toString());
+    }
+    
+    @Override
+    public void onStop(){
+        super.onStop();
     }
     
     public void getCommentFromId(String id, ArrayList<Comment> comments){
@@ -113,6 +126,7 @@ public class EditCommentFragment extends Fragment {
     }
     
     public void makeEdit(View view){
+        EditCommentFragment.oldText = null;
         editComment.setTextPost(newTextPost.getText().toString());
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
