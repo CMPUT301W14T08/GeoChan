@@ -423,6 +423,11 @@ public class ThreadViewAdapter extends BaseAdapter {
      * 
      */
     private void setCommentFields(View convertView, Comment reply) {
+        if(reply.hasImage()) {
+            ImageButton thumbnail = (ImageButton) convertView.findViewById(R.id.thread_view_comment_thumbnail);
+            thumbnail.setVisibility(View.VISIBLE);
+            thumbnail.setFocusable(false);
+        }
         // Comment body
         TextView replyBody = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentBody);

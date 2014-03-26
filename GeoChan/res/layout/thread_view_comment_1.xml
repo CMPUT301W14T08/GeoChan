@@ -41,6 +41,18 @@
         android:paddingLeft="5dp"
         android:text="@string/placeholder_date"
         android:textColor="#808080" />
+    
+    <ImageButton
+        android:id="@+id/thread_view_comment_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/relative_inflater"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/image_desc"
+        android:onClick="expandImageButton"
+        android:visibility="gone"
+        android:src="@drawable/rect" />
 
     <RelativeLayout
         android:id="@+id/relative_inflater"

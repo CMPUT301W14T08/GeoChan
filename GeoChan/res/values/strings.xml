@@ -43,5 +43,6 @@
     <string name="threads_fav">Threads</string>
     <string name="comments_fav">Comments</string>
     <string name="get_directions_button_text">Get Directions</string>
+    <string name="image_desc">Image Thumbnail</string>
 
 </resources>
