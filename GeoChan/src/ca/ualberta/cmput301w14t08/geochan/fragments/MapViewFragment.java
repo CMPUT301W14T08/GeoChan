@@ -33,11 +33,13 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 /**
  * COMMENT GOES HERE
  * 
- * @author
+ * @author Brad Simons
  * 
  */
 public class MapViewFragment extends Fragment {
 
+    final public static double ZOOM_FACTOR = 1.2;
+    
     private MapView openMapView;
     private LocationListenerService locationListenerService;
     private GeoLocation currentLocation;
@@ -50,8 +52,6 @@ public class MapViewFragment extends Fragment {
     private int maxLong;
     private int minLat;
     private int minLong;
-
-    final public static double ZOOM_FACTOR = 1.2;
 
     /**
      * Async task class. This task is designed to retrieve directions from the
@@ -193,10 +193,8 @@ public class MapViewFragment extends Fragment {
         openMapView.getController().setZoom(18);
 
         if (commentLocationIsValid(comment)) {
-            Log.e("TopComment Location", "is valid");
             GeoLocation geoLocation = comment.getLocation();
-            startGeoPoint = new GeoPoint(geoLocation.getLatitude() * 1E6, 
-                    geoLocation.getLongitude() * 1E6);
+            startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
             handleChildComments(comment);
         }
@@ -210,19 +208,15 @@ public class MapViewFragment extends Fragment {
      * variable
      */
     public void setZoomLevel() {
-        Log.e("maxLong", Integer.toString(maxLat));
-        Log.e("minLong", Integer.toString(minLat));
-        Log.e("maxLat", Integer.toString(maxLat));
-        Log.e("minLat", Integer.toString(minLat));
-
-        Log.e("longSpan", Integer.toString(maxLat - minLat));
-        Log.e("latSpan", Integer.toString(maxLat - minLat));
-
-        // get the mapController and set the zoom and location
+        // get the mapController and set the zoom
         IMapController mapController = openMapView.getController();
-        mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * ZOOM_FACTOR),
-                (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
-        mapController.animateTo(new GeoPoint((maxLat - minLat) / 2, (maxLong - minLong) /2));
+        
+        // set the zoom span
+        //mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * ZOOM_FACTOR),
+        //        (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
+        
+        // set the zoom center
+        mapController.animateTo(geoPoints.get(0));
     }
 
     /**
@@ -243,9 +237,8 @@ public class MapViewFragment extends Fragment {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
-                    Log.e("Child Location", "is valid");
-                    geoPoints.add(new GeoPoint(commentLocation.getLatitude() * 1E6, 
-                            commentLocation.getLongitude() * 1E6));
+                    geoPoints.add(new GeoPoint(commentLocation.getLatitude(), commentLocation
+                            .getLongitude()));
                     handleChildComments(childComment);
                 }
             }
@@ -275,17 +268,8 @@ public class MapViewFragment extends Fragment {
      */
     public void calculateZoomSpan() {
         for (GeoPoint geoPoint : geoPoints) {
-
-            Log.e("maxLong", Integer.toString(maxLat));
-            Log.e("minLong", Integer.toString(minLat));
-            Log.e("maxLat", Integer.toString(maxLat));
-            Log.e("minLat", Integer.toString(minLat));
-            
             int geoLat = geoPoint.getLatitudeE6();
             int geoLong = geoPoint.getLongitudeE6();
-
-            Log.e("geoLat", Integer.toString(geoLat));
-            Log.e("geoLong", Integer.toString(geoLong));
 
             maxLat = Math.max(geoLat, maxLat);
             minLat = Math.min(geoLat, minLat);
@@ -301,6 +285,7 @@ public class MapViewFragment extends Fragment {
      * @param geoPoint
      */
     public void setGeoPointMarkers() {
+        Log.e("Size of geoPoints", Integer.toString(geoPoints.size()));
         for (GeoPoint geoPoint : geoPoints) {
             Marker marker = new Marker(openMapView);
             marker.setPosition(geoPoint);
