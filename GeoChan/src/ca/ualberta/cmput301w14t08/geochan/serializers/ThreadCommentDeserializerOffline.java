@@ -32,10 +32,12 @@ import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.RectF;
 import android.util.Base64;
+import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -74,6 +76,11 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        JsonArray topArray = object.get(id).getAsJsonArray();
+        ArrayList<Comment> topList = new ArrayList<Comment>();
+        for (int i = 0; i < topArray.size(); ++i) {
+            topList.add(GsonHelper.getOfflineGson().fromJson(topArray.get(i), Comment.class));
+        }
         Picture image = new Picture();
         Picture thumbnail = new Picture();
         if (hasImage) {
