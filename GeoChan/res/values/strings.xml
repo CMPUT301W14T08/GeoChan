@@ -47,5 +47,6 @@
     <string name="threads_fav">Threads</string>
     <string name="comments_fav">Comments</string>
     <string name="get_directions_button_text">Get Directions</string>
+    <string name="fullscreen_image_desc">Layout for fullscreen image display</string>
 
 </resources>

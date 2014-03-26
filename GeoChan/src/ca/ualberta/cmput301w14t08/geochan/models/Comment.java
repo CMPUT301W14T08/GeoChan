@@ -415,7 +415,7 @@ public class Comment implements Parcelable {
         dest.writeValue(location.getLatitude());
         dest.writeValue(location.getLongitude());
         dest.writeValue(user);
-        dest.writeParcelable(parent, flags);
+        //dest.writeParcelable(parent, flags);
         dest.writeTypedList(children);
     }
 

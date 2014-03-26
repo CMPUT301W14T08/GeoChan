@@ -472,5 +472,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         TextView replyTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
         replyTime.setText(reply.getCommentDateString());
+        
+        // Images
+        if (reply.hasImage()) {
+            ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.imageButton1);
+            //imageButton.setVisibility(View.VISIBLE);
+            imageButton.setImageBitmap(reply.getImage());
+        }
     }
 }

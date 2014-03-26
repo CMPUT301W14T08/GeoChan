@@ -19,7 +19,9 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentRight="true"
 	    android:layout_alignParentTop="true"
-	    android:src="@android:drawable/presence_offline"
+	    android:src="@drawable/blank_image"
+	    android:onClick="expandImageButton"
+	    android:visibility="gone"
 	    android:contentDescription="@string/image_desc" />
     
     <TextView

@@ -64,6 +64,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author AUTHOR HERE
  */
 public class PostCommentFragment extends Fragment {
+ 
     ThreadComment thread;
     Comment commentToReplyTo;
     private GeoLocation geoLocation;
@@ -86,7 +87,7 @@ public class PostCommentFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
+    
     /**
      * COMMENT GOES HERE
      */
@@ -101,14 +102,13 @@ public class PostCommentFragment extends Fragment {
         bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
         bodyReplyTo.setText(commentToReplyTo.getTextPost());
         replyTo.setText(commentToReplyTo.getUser() + " says:");
-        imageView = (ImageView) getActivity().findViewById(R.id.imageView1);
+        imageView = (ImageView) getActivity().findViewById(R.id.imageViewPost);
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
         imageHelper = new ImageHelper();
-        picture = null;
+        picture = null; 
         thumb = null;
-        
     }
 
     /**
@@ -137,6 +137,11 @@ public class PostCommentFragment extends Fragment {
                             .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
+            if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
+                thumb = args.getParcelable("IMAGE_THUMB");
+                picture = args.getParcelable("IMAGE_FULL");
+                imageView.setImageBitmap(thumb);
+            }
         }
     }
 
@@ -164,10 +169,12 @@ public class PostCommentFragment extends Fragment {
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             } else {
                 // Comment with picture and geolocation
-                Comment newComment = new Comment(comment, picture, geoLocation, thread.getBodyComment());
+                Comment newComment = new Comment(comment, picture, geoLocation, commentToReplyTo);
                 newComment.setImageThumb(thumb);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                client.postComment(thread, thread.getBodyComment(), newComment);
+                client.postComment(thread, commentToReplyTo, newComment);
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+                geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
 
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
@@ -178,6 +185,11 @@ public class PostCommentFragment extends Fragment {
         }
     }
     
+    
+    /**
+     * COMMENT GOES HERE
+     * @param v WHAT DOTH V?
+     */
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
             AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(getActivity());
@@ -190,7 +202,6 @@ public class PostCommentFragment extends Fragment {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             try {
                                 File file = imageHelper.createImageFile();
-                                
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
                                 startActivityForResult(intent, 1); 
                             } catch (IOException e) {
@@ -198,7 +209,6 @@ public class PostCommentFragment extends Fragment {
                             }
                         }
                     });
-
             myAlertDialog.setNegativeButton("Camera",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
@@ -215,7 +225,11 @@ public class PostCommentFragment extends Fragment {
             myAlertDialog.show();             
         }
     }
- /*
+ 
+    /**
+     * COMMENT GOES HERE
+     * 
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -224,11 +238,13 @@ public class PostCommentFragment extends Fragment {
             Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 256, 256);
             picture = imageBitmap;
             thumb = squareBitmap;
+            Bundle bundle = getArguments();
+            bundle.putParcelable("IMAGE_THUMB", thumb);
+            bundle.putParcelable("IMAGE_FULL", picture);
             imageView.setImageBitmap(squareBitmap);
-            Log.d("imagehelper","Image set successfully");
-        }
+        }    
     }
-    */
+    
     @Override
     public void onStop() {
         super.onStop();

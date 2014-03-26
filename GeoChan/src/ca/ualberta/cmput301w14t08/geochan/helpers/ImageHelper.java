@@ -23,35 +23,20 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-
-import ca.ualberta.cmput301w14t08.geochan.R;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import java.util.Date;
+import java.util.Locale;
 import android.os.Environment;
-import android.provider.MediaStore;
-
 
 public class ImageHelper {
-
+    
     String mCurrentPhotoPath;
     public static final int MEDIA_TYPE_IMAGE = 1;
 
     public File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = SimpleDateFormat.getDateInstance().toString();
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-            imageFileName,  /* prefix */
-            ".jpg",         /* suffix */
-            storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
+        Locale locale = Locale.getDefault();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", locale).format(new Date());
+        String imageFileName = "@string/" + timeStamp + ".jpg";
+        File photo = new File(Environment.DIRECTORY_PICTURES,  imageFileName);
+        return photo;
     }    
 }

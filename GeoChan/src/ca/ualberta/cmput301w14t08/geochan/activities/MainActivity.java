@@ -196,6 +196,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.attachImage(v);
     }
     
+    
+    public void expandImageButton(View v) {
+        Intent intent = new Intent(this, ImageActivity.class);
+        this.startActivity(intent);
+    }
+    
     public void postReply(View v) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");

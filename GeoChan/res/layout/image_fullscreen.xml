@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/image_dialog_root" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity = "center">
+
+    <ImageView
+        android:id="@+id/fullscreenImageView"  
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src = "@drawable/blank_image"
+        android:onClick="dismissImage"
+        android:contentDescription="@string/fullscreen_image_desc" />
+       
+</FrameLayout>

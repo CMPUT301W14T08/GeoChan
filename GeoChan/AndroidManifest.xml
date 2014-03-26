@@ -38,6 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301w14t08.geochan.activities.PreferencesActivity" />
         </activity>
+        <activity android:name="ca.ualberta.cmput301w14t08.geochan.activities.ImageActivity" android:label="@string/app_name" android:parentActivityName="ca.ualberta.cmput301w14t08.geochan.activities.MainActivity"></activity>
     </application>
 
 </manifest>
