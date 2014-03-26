@@ -93,7 +93,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             adapter.notifyDataSetChanged();
             locSortFlag = 0;
         }
-        locationListener.startListening();
         super.onResume();
     }
 
@@ -341,17 +340,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             threadView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             return true;
-        case (R.id.comment_sort_location_current):
-            // User wants to push comments near them to the top.
-            prefManager.setCommentSort(SortUtil.SORT_LOCATION);
-            SortUtil.setCommentSortGeo(new GeoLocation(locationListener.getCurrentLocation()));
-            SortUtil.sortComments(SortUtil.SORT_LOCATION, thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            return true;
-        case (R.id.comment_sort_location_other):
+        case (R.id.comment_sort_location):
             // User wants to push comments near a selected location to the top.
             locSortFlag = 1;
             this.getSortingLoc();

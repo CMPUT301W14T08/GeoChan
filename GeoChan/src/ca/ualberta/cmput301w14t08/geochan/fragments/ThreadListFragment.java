@@ -89,7 +89,6 @@ public class ThreadListFragment extends Fragment implements
             adapter.notifyDataSetChanged();
             locSortFlag = 0;
         }
-        locationListener.startListening();
         super.onResume();
     }
 
@@ -146,18 +145,11 @@ public class ThreadListFragment extends Fragment implements
                                 ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
-        case R.id.thread_sort_location_current:
-            //User wants threads with an OP close to their location at the top.
-            prefManager.setThreadSort(SortUtil.SORT_LOCATION);
-            SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
-            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
-                                ThreadList.getThreads());
-            adapter.notifyDataSetChanged();
-            return true;
-        case R.id.thread_sort_location_other:
+        case R.id.thread_sort_location:
             //User wants threads close to a selected location at the top.
             locSortFlag = 1;
             this.getSortingLoc();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
