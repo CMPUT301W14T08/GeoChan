@@ -64,18 +64,24 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
         if (thread.getBodyComment().hasImage()) {
-            Bitmap bitmap = thread.getBodyComment().getImage();
- 
+            Bitmap imageBitmap = thread.getBodyComment().getImage();
+            Bitmap thumbBitmap = thread.getBodyComment().getImageThumb();
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+            
+            ByteArrayOutputStream thumbByteArrayOutputStream = new ByteArrayOutputStream();
+            thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 90, thumbByteArrayOutputStream);
+            byte[] thumbByteArray = thumbByteArrayOutputStream.toByteArray();
+            String thumbEncoded = Base64.encodeToString(thumbByteArray, Base64.NO_WRAP);
+            
             object.addProperty("image", encoded);
-            object.addProperty("imageThumbnail", encoded);
+            object.addProperty("imageThumbnail", thumbEncoded);
         }
         return object;
     }

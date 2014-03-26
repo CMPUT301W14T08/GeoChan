@@ -187,8 +187,8 @@ public class PostCommentFragment extends Fragment {
     
     
     /**
-     * COMMENT GOES HERE
-     * @param v WHAT DOTH V?
+     * Displays dialog and either launches camera or gallery
+     * @param View v
      */
     public void attachImage(View v) {
         if (v.getId() == R.id.attach_image_button) {
@@ -229,6 +229,9 @@ public class PostCommentFragment extends Fragment {
     /**
      * COMMENT GOES HERE
      * 
+     * @param requestCode
+     * @param resultCode
+     *
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
