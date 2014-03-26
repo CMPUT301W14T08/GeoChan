@@ -81,7 +81,7 @@ public class ThreadListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.thread_list_item_no_image, null);
+            convertView = inflater.inflate(R.layout.thread_list_item, null);
         }
         setThreadFields(convertView, thread);
         return convertView;
