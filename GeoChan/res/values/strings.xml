@@ -47,5 +47,6 @@
     <string name="attach_image_title">Attach Image</string>
     <string name="attach_image_dialog">Select a source:</string>
     <string name="image_desc">Image Thumbnail</string>
+    <string name="Image">Image</string>
 
 </resources>
