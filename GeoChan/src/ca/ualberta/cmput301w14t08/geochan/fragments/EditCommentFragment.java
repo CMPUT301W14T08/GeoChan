@@ -1,7 +1,10 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import android.content.Context;
 import android.os.Bundle;
@@ -45,10 +48,14 @@ public class EditCommentFragment extends Fragment {
     public void onStart(){
         super.onStart();
         Bundle bundle = getArguments();
-        int commentIndex = bundle.getInt("commentIndex");
+        String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
-        editComment = ThreadList.getThreads().get(threadIndex)
-                .getBodyComment().getChildAtIndex(commentIndex);
+        ThreadComment thread = ThreadList.getThreads().get(threadIndex);
+        if(thread.getBodyComment().getId() == commentId){
+            editComment = thread.getBodyComment();
+        } else {
+            getCommentFromId(commentId, thread.getBodyComment().getChildren());
+        }
         String oldText = editComment.getTextPost();
         TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
         oldTextView.setText(oldText);
@@ -65,6 +72,17 @@ public class EditCommentFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
+    }
+    
+    public void getCommentFromId(String id, ArrayList<Comment> comments){
+        for(Comment com: comments){
+            if(com.getId() == id){
+                editComment = com;
+                return;
+            } else {
+                getCommentFromId(id, com.getChildren());
+            }
+        }
     }
     
     public void makeEdit(View view){
