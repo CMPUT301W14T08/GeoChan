@@ -2,15 +2,10 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +15,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class EditCommentFragment extends Fragment {
     private Comment editComment;
@@ -51,9 +50,7 @@ public class EditCommentFragment extends Fragment {
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
-        Log.e("EDIT:","Value of commentId:" + commentId);
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
-        Log.e("EDIT:","Body comment of thread:" + thread.getBodyComment().getTextPost());
         if(thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
         } else {
@@ -79,9 +76,7 @@ public class EditCommentFragment extends Fragment {
     
     public void getCommentFromId(String id, ArrayList<Comment> comments){
         for(Comment com: comments){
-            Log.e("EDIT","com's id:" + com.getId());
             if(com.getId().equals(id)){
-                //Log.e("EDIT","com's id:" + com.getId());
                 editComment = com;
                 return;
             } else {
