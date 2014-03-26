@@ -416,7 +416,6 @@ public class Comment implements Parcelable {
         dest.writeValue(location.getLongitude());
         dest.writeValue(user);
         dest.writeParcelable(parent, flags);
-        dest.writeTypedList(children);
     }
 
     /**
@@ -432,7 +431,6 @@ public class Comment implements Parcelable {
         this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
-        in.readTypedList(children, Comment.CREATOR);
     }
 
     public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {

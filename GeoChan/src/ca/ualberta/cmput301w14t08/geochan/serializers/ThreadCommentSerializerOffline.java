@@ -28,6 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -103,7 +104,10 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encodedThumb);
         }
-        object.addProperty("comments", GsonHelper.getGson().toJson(thread.getBodyComment().getChildren()));
+        String comments = GsonHelper.getOnlineGson().toJson(thread.getBodyComment().getChildren());
+        Log.e("comments", comments);
+        object.addProperty("comments", GsonHelper.getOnlineGson().toJson(thread.getBodyComment().getChildren()));
+
         return object;
     }
     

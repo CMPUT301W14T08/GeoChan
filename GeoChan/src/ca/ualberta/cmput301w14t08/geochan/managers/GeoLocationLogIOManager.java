@@ -27,7 +27,7 @@ public class GeoLocationLogIOManager {
 
     private GeoLocationLogIOManager(Context context) {
         this.context = context;
-        this.gson = GsonHelper.getGson();
+        this.gson = GsonHelper.getOnlineGson();
     }
 
     public static GeoLocationLogIOManager getInstance(Context context) {

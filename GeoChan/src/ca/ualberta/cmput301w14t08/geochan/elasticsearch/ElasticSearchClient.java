@@ -59,7 +59,7 @@ public class ElasticSearchClient {
 
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
-        gson = GsonHelper.getGson();
+        gson = GsonHelper.getOnlineGson();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
         client = factory.getObject();

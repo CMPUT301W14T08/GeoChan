@@ -58,7 +58,6 @@ public class CustomLocationFragment extends Fragment {
     private CustomLocationAdapter customLocationAdapter;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
-    private LocationListenerService listener;
     private int postType;
     private FragmentManager fm;
 
@@ -88,12 +87,9 @@ public class CustomLocationFragment extends Fragment {
      * Setups up the Location Log and creates connection to buttons and text
      * fields. Also setups an onItemClickListener for previous location items.
      * 
-     * @author AUTHOR HERE
      */
     public void onStart() {
         super.onStart();
-        listener = new LocationListenerService(getActivity());
-        listener.startListening();
         GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         logArray = log.getLogEntries();
 
@@ -112,15 +108,9 @@ public class CustomLocationFragment extends Fragment {
                 fm.popBackStackImmediate();
             }
         });
-
+        
         customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
-    }
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        listener.stopListening();
     }
 
     /**
@@ -129,7 +119,6 @@ public class CustomLocationFragment extends Fragment {
      * 
      * @param v WHAT DOTH V?
      * 
-     * @author AUTHOR HERE
      */
     public void submitNewLocationFromCoordinates(View v) {
         String latStr = latitudeEditText.getText().toString();
@@ -155,10 +144,10 @@ public class CustomLocationFragment extends Fragment {
      * 
      * @param v WHAT DOTH V?
      * 
-     * @author AUTHOR HERE
      */
     public void submitCurrentLocation(View v) {
-        
+        LocationListenerService listener = new LocationListenerService(getActivity());
+        listener.startListening();
         GeoLocation geoLocation = new GeoLocation(listener);
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not obtain location");
@@ -174,7 +163,6 @@ public class CustomLocationFragment extends Fragment {
      * 
      * @param geoLocation WHAT DOTH geoLocation?
      * 
-     * @author AUTHOR HERE
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
         Bundle bundle = getArguments();

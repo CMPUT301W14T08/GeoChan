@@ -33,7 +33,7 @@ public class FavouritesIOManager {
 
     private FavouritesIOManager(Context context) {
         this.context = context;
-        this.gson = GsonHelper.getGson();
+        this.gson = GsonHelper.getOfflineGson();
     }
 
     public static FavouritesIOManager getInstance(Context context) {
