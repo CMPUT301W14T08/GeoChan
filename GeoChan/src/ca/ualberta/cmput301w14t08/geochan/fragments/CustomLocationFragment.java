@@ -58,6 +58,7 @@ public class CustomLocationFragment extends Fragment {
     private CustomLocationAdapter customLocationAdapter;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
+    private LocationListenerService listener;
     private int postType;
     private FragmentManager fm;
 
@@ -91,6 +92,8 @@ public class CustomLocationFragment extends Fragment {
      */
     public void onStart() {
         super.onStart();
+        listener = new LocationListenerService(getActivity());
+        listener.startListening();
         GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         logArray = log.getLogEntries();
 
@@ -112,6 +115,12 @@ public class CustomLocationFragment extends Fragment {
 
         customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        listener.stopListening();
     }
 
     /**
@@ -149,8 +158,7 @@ public class CustomLocationFragment extends Fragment {
      * @author AUTHOR HERE
      */
     public void submitCurrentLocation(View v) {
-        LocationListenerService listener = new LocationListenerService(getActivity());
-        listener.startListening();
+        
         GeoLocation geoLocation = new GeoLocation(listener);
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not obtain location");
