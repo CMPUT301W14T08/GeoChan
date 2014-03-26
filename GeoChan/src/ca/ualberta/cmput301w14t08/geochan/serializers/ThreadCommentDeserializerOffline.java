@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

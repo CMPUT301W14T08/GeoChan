@@ -8,9 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -37,17 +35,17 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
         Fragment fragment = (PreferencesFragment) waitForFragment("prefFrag", 2000);
         assertNotNull(fragment);
     }
-    
     /**
      * Click the Add Thread action bar item and check if the correct fragment is inflated
      */
+    /*
     public void testInflateAddThread() throws Throwable {
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(activity, ca.ualberta.cmput301w14t08.geochan.R.id.action_add_thread, 0);
-        Fragment fragment = (PostThreadFragment) waitForFragment("postThreadFrag", 2000);
+        Fragment fragment = (Fragment) waitForFragment("postThreadFrag", 2000);
         assertNotNull(fragment);
     }
-    
+    */
     /**
      *  testA.. because tests are run in alphabetical order,
      *  tests visibility of the default listview
@@ -61,6 +59,7 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
     /**
      * Clicks a thread and asserts the correct fragment gets inflated
      */
+    /*
     public void testThreadViewVisibility() {
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -72,6 +71,7 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
         Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 2000);
         assertNotNull(fragment);
     }
+    */
     
     /**
      * http://stackoverflow.com/a/17789933
