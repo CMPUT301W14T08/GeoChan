@@ -67,6 +67,7 @@ public class CustomLocationFragment extends Fragment {
     public static final int REPLY = 3;
     public static final int SORT_THREAD = 4;
     public static final int SORT_COMMENT = 5;
+    public static final int EDIT = 6;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -189,6 +190,13 @@ public class CustomLocationFragment extends Fragment {
             SortUtil.setThreadSortGeo(geoLocation);
         } else if (postType == SORT_COMMENT){
             SortUtil.setCommentSortGeo(geoLocation);
+        } else if (postType == EDIT) {
+            EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
+                    .findFragmentByTag("editFrag");
+            Bundle args = fragment.getArguments();
+            args.putDouble("LATITUDE", geoLocation.getLatitude());
+            args.putDouble("LONGITUDE", geoLocation.getLongitude());
+            args.putString("LocationType", locationType);
         }
     }
 }

@@ -215,6 +215,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             args.putInt("postType", CustomLocationFragment.THREAD);
         } else if (v.getId() == R.id.location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
+        } else if (v.getId() == R.id.edit_location_button) {
+            args.putInt("postType", CustomLocationFragment.EDIT);
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);

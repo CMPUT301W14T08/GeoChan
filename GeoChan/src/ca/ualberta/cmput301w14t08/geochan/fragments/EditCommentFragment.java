@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -13,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -67,6 +71,28 @@ public class EditCommentFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        Bundle args = getArguments();
+        if (args != null) {
+            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+                Button locButton = (Button) getActivity().findViewById(R.id.edit_location_button);
+                if (args.getString("LocationType") == "CURRENT_LOCATION") {
+                    locButton.setText("Current Location");
+                } else {
+                    GeoLocation geoLocation = editComment.getLocation();
+                    Double lat = args.getDouble("LATITUDE");
+                    Double lon = args.getDouble("LONGITUDE");
+                    geoLocation.setCoordinates(lat, lon);
+
+                    DecimalFormat format = new DecimalFormat();
+                    format.setRoundingMode(RoundingMode.HALF_EVEN);
+                    format.setMinimumFractionDigits(0);
+                    format.setMaximumFractionDigits(4);
+
+                    locButton
+                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                }
+            }
+        }
     }
     
     @Override

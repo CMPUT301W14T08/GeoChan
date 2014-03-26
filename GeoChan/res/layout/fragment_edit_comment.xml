@@ -38,7 +38,7 @@
         android:scrollbars="vertical" />
 
     <Button
-        android:id="@+id/location_button"
+        android:id="@+id/edit_location_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -51,7 +51,7 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/location_button"
+        android:layout_above="@+id/edit_location_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
 
