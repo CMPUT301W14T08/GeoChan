@@ -72,7 +72,6 @@ public class ElasticSearchClient {
      * 
      * @return the instance
      * 
-     * @author AUTHOR HERE
      */
     public static ElasticSearchClient getInstance() {
         if (instance == null) {
@@ -88,7 +87,6 @@ public class ElasticSearchClient {
      *            the ThreadComment
      * @return the Thread for the work for monitoring purposes
      * 
-     * @author AUTHOR HERE
      */
     public Thread postThread(final ThreadComment thread) {
         return post(gson.toJson(thread), TYPE_THREAD, thread.getId());
@@ -101,7 +99,6 @@ public class ElasticSearchClient {
      *            the ThreadComment
      * @return the Thread for the work for monitoring purposes
      * 
-     * @author AUTHOR HERE
      */
     public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
             final Comment comment) {
@@ -115,7 +112,6 @@ public class ElasticSearchClient {
      * 
      * @return number of ThreadComments
      * 
-     * @author AUTHOR HERE
      */
     public int getThreadCount() {
         return count(TYPE_THREAD);
@@ -126,7 +122,6 @@ public class ElasticSearchClient {
      * 
      * @return number of Comments
      * 
-     * @author AUTHOR HERE
      */
     public int getCommentCount(Comment parent) {
         return count(TYPE_COMMENT);
@@ -137,7 +132,6 @@ public class ElasticSearchClient {
      * 
      * @return the ThreadComments retrieved from the server.
      * 
-     * @author AUTHOR HERE
      */
     public ArrayList<ThreadComment> getThreads() {
         Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse<ThreadComment>>() {
@@ -160,7 +154,6 @@ public class ElasticSearchClient {
      *            The parent comment to get the children of.
      * @return The passed Comment's children in an ArrayList.
      * 
-     * @author AUTHOR HERE
      */
     public ArrayList<Comment> getComments(Comment topComment) {
         ArrayList<Comment> comments = new ArrayList<Comment>();
@@ -201,7 +194,6 @@ public class ElasticSearchClient {
      *            The id of the Comment to be retrieved.
      * @return The Comment retrieved from the server.
      * 
-     * @author AUTHOR HERE
      */
     public Comment get(final String id) {
         Get get = new Get.Builder(URL_INDEX, id).type(TYPE_COMMENT).build();
@@ -230,7 +222,6 @@ public class ElasticSearchClient {
      *            the record ID
      * @return the network Thread (for monitoring purposes)
      * 
-     * @author AUTHOR HERE
      */
     public Thread post(final String json, final String type, final String id) {
         Thread t = new Thread() {
@@ -260,7 +251,6 @@ public class ElasticSearchClient {
      *            the record ID
      * @return the network Thread (for monitoring purposes)
      * 
-     * @author AUTHOR HERE
      */
     public Thread update(final String query, final String type, final String id) {
         Thread t = new Thread() {
@@ -287,7 +277,6 @@ public class ElasticSearchClient {
      *            the ElasticSearch type
      * @return the count
      * 
-     * @author AUTHOR HERE
      */
     public int count(final String type) {
         Count count = new Count.Builder().addIndex(URL_INDEX).addType(type).build();
@@ -315,7 +304,6 @@ public class ElasticSearchClient {
      *            the ElasticSearch type
      * @return the JSON result string
      * 
-     * @author AUTHOR HERE
      */
     public String searchAll(final String query, final String type) {
         Search search = new Search.Builder(query).addIndex(URL_INDEX).addType(type).build();
