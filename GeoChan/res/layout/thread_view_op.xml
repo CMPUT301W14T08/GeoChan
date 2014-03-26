@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/thread_view_op_threadTitle"
+        android:layout_toLeftOf="@+id/thread_view_comment_thumbnail"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/lorem_ipsum" />
@@ -90,8 +91,8 @@
         <ImageButton
             android:id="@+id/thread_map_button"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"
             android:background="@null"
             android:contentDescription="@string/comment_star_button"
             android:paddingRight="5dp"
@@ -100,14 +101,25 @@
         <ImageButton
             android:id="@+id/thread_edit_button"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"
             android:background="@null"
             android:contentDescription="@string/comment_star_button"
             android:focusable="false"
             android:paddingRight="5dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            android:visibility="gone" />
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/thread_view_comment_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/image_desc"
+        android:onClick="expandImageButton"
+        android:src="@drawable/rect"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -241,6 +241,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 relativeInflater.addView(child);
                 setLocationField(view, comment);
             }
+            
+            if(comment.hasImage()) {
+                ImageButton thumbnail = (ImageButton) view.findViewById(R.id.thread_view_comment_thumbnail);
+                thumbnail.setVisibility(View.VISIBLE);
+                thumbnail.setFocusable(false);
+            }
 
             final ImageButton replyButton = (ImageButton) view
                     .findViewById(R.id.comment_reply_button);
