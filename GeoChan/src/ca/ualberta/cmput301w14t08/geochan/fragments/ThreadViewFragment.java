@@ -219,7 +219,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private OnItemClickListener commentButtonListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            if (position < 2) {
+                return;
+            }
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
             // "+1" is necessary because of PullToRefresh
@@ -232,7 +234,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
              * If the child layout with buttons is already inflated, remove it.
              * If not, inflate it.
              */
-            if (relativeInflater != null &&relativeInflater.getChildCount() > 0) {
+            if (relativeInflater != null && relativeInflater.getChildCount() > 0) {
                 relativeInflater.removeAllViews();
                 return;
             } else {
@@ -286,18 +288,18 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     };
 
     private void resetOtherCommentLayouts(int position) {
-        for (int i = 1; i < threadView.getCount()+1; ++i) {
+        for (int i = 2; i < threadView.getCount() + 1; ++i) {
 
-            if(i == position+1) {
+            if (i == position + 1) {
                 continue;
             }
             View v = threadView.getChildAt(i);
-            if(v == null) {
+            if (v == null) {
                 continue;
             }
             RelativeLayout relativeInflater = (RelativeLayout) v
                     .findViewById(R.id.relative_inflater);
-            if(relativeInflater != null && relativeInflater.getChildCount() > 0) {
+            if (relativeInflater != null && relativeInflater.getChildCount() > 0) {
                 relativeInflater.removeAllViews();
             }
         }
