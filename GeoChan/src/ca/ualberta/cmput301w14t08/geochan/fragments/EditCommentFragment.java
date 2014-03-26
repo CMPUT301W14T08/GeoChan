@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +51,9 @@ public class EditCommentFragment extends Fragment {
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
+        Log.e("EDIT:","Value of commentId:" + commentId);
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
+        Log.e("EDIT:","Body comment of thread:" + thread.getBodyComment().getTextPost());
         if(thread.getBodyComment().getId() == commentId){
             editComment = thread.getBodyComment();
         } else {
@@ -76,13 +79,16 @@ public class EditCommentFragment extends Fragment {
     
     public void getCommentFromId(String id, ArrayList<Comment> comments){
         for(Comment com: comments){
-            if(com.getId() == id){
+            Log.e("EDIT","com's id:" + com.getId());
+            if(com.getId().equals(id)){
+                //Log.e("EDIT","com's id:" + com.getId());
                 editComment = com;
                 return;
             } else {
                 getCommentFromId(id, com.getChildren());
             }
         }
+        return;
     }
     
     public void makeEdit(View view){
