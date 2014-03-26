@@ -43,6 +43,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 /**
  * Handles the deserialization of a ThreadComment object from JSON in the offline cache.
@@ -76,11 +77,8 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
-        JsonArray topArray = object.get(id).getAsJsonArray();
         ArrayList<Comment> topList = new ArrayList<Comment>();
-        for (int i = 0; i < topArray.size(); ++i) {
-            topList.add(GsonHelper.getOfflineGson().fromJson(topArray.get(i), Comment.class));
-        }
+        recursive(object, id, topList);
         Picture image = new Picture();
         Picture thumbnail = new Picture();
         if (hasImage) {
@@ -111,6 +109,7 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
         c.setUser(user);
         c.setHash(hash);
         c.setId(Long.parseLong(id));
+        c.setChildren(topList);
         if (hasImage) {
             c.setImage(image);
             c.setImageThumb(thumbnail);
@@ -121,4 +120,16 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
         return comment;
     }
 
+    private void recursive(JsonObject object, String id, ArrayList<Comment> list) {
+        JsonParser parser = new JsonParser();
+        JsonArray array = parser.parse(object.get(id).getAsString()).getAsJsonArray();
+        for (int i = 0; i < array.size(); ++i) {
+            list.add(GsonHelper.getOfflineGson().fromJson(array.get(i), Comment.class));
+        }
+        for (Comment comment : list) {
+            ArrayList<Comment> childList = new ArrayList<Comment>();
+            recursive(object, comment.getId(), childList);
+            comment.setChildren(childList);
+        }
+    }
 }
