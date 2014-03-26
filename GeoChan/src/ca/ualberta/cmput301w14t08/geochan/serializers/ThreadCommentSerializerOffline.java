@@ -105,7 +105,7 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
             object.addProperty("imageThumbnail", encodedThumb);
         }
         recursive(object, thread.getBodyComment(), thread.getBodyComment().getChildren());
-        Log.e("comments", object);
+        Log.e("comments", object.toString());
         return object;
     }
     
