@@ -22,6 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.serializers;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,7 +34,6 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -104,18 +104,17 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
             object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encodedThumb);
         }
-        String comments = GsonHelper.getOnlineGson().toJson(thread.getBodyComment().getChildren());
-        Log.e("comments", comments);
-        object.addProperty("comments", GsonHelper.getOnlineGson().toJson(thread.getBodyComment().getChildren()));
-
+        recursive(object, thread.getBodyComment(), thread.getBodyComment().getChildren());
+        Log.e("comments", object);
         return object;
     }
     
-    /*
-    private void serializeComments(Comment comment) {
-        
+    private void recursive(JsonObject object, Comment parent, ArrayList<Comment> list) {
+        object.addProperty(parent.getId(), GsonHelper.getOfflineGson().toJson(list));
+        for (Comment comment : list) {
+            recursive(object, comment, comment.getChildren());
+        }
     }
-    */
 }
 
 
