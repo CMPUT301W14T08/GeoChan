@@ -54,7 +54,7 @@ public class EditCommentFragment extends Fragment {
         Log.e("EDIT:","Value of commentId:" + commentId);
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
         Log.e("EDIT:","Body comment of thread:" + thread.getBodyComment().getTextPost());
-        if(thread.getBodyComment().getId() == commentId){
+        if(thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
