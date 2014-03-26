@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +32,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * COMMENT GOES HERE
- * @author 
- *
+ * 
+ * @author
+ * 
  */
 public class MapViewFragment extends Fragment {
 
@@ -42,22 +44,24 @@ public class MapViewFragment extends Fragment {
     private GeoPoint startGeoPoint;
     private Polyline roadOverlay;
     private Comment topComment;
+    private ArrayList<GeoPoint> geoPoints;
 
-    private double MAX_LAT;
-    private double MAX_LONG;
-    private double MIN_LAT;
-    private double MIN_LONG;
+    private int maxLat;
+    private int maxLong;
+    private int minLat;
+    private int minLong;
 
-    final public static int ZOOM_FACTOR = 2000000;
-    
+    final public static double ZOOM_FACTOR = 1.2;
+
     /**
      * Async task class. This task is designed to retrieve directions from the
-     * users current location to the location of the original post of the thread.
-     * It displays a ProgressDialog while the location is being retrieved. 
+     * users current location to the location of the original post of the
+     * thread. It displays a ProgressDialog while the location is being
+     * retrieved.
      * 
      * @author bradsimons
      */
-    class MapAsyncTask extends AsyncTask<Void,Void,Void> {
+    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
 
@@ -72,15 +76,16 @@ public class MapViewFragment extends Fragment {
         }
 
         /**
-         * Calculating the directions from the current to the location 
-         * of the topComment. 
+         * Calculating the directions from the current to the location of the
+         * topComment.
          */
         @Override
-        protected Void doInBackground(Void ... params) {
+        protected Void doInBackground(Void... params) {
             RoadManager roadManager = new OSRMRoadManager();
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
-            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
+                    .getLongitude()));
             waypoints.add(startGeoPoint);
             Road road = roadManager.getRoad(waypoints);
 
@@ -98,18 +103,16 @@ public class MapViewFragment extends Fragment {
             super.onPostExecute(result);
             directionsLoadingDialog.dismiss();
         }
-    }  
+    }
 
     /**
-     * Gets the view when inflated, then calls setZoomLevel to display the correct map area.
+     * Gets the view when inflated, then calls setZoomLevel to display the
+     * correct map area.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
-        setZoomLevel();
-        return view;
-
+        return inflater.inflate(R.layout.fragment_map_view, container, false);
     }
 
     /**
@@ -124,11 +127,11 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * Initiates a location listener which immediately starts listening for 
-     * location updates. Gets the current location as well. Then unpacks the 
+     * Initiates a location listener which immediately starts listening for
+     * location updates. Gets the current location as well. Then unpacks the
      * bundle passed to the fragment. It then gets the map setup and prepares
-     * the min and max latitude and longitude required to display the map 
-     * properly for calculation
+     * the min and max latitude and longitude required to display the map
+     * properly for calculation. Then finally sets the zoom level
      */
     @Override
     public void onStart() {
@@ -141,13 +144,15 @@ public class MapViewFragment extends Fragment {
         Bundle args = getArguments();
         topComment = (Comment) args.getParcelable("thread_comment");
 
+        geoPoints = new ArrayList<GeoPoint>();
+
         // To calculate the max and min latitude and longitude of all
-        // the comments, we set the min's to max's and vice versa
-        // then have values of each comment modify these
-        MAX_LAT = -90;
-        MIN_LAT = 90;
-        MAX_LONG = -180;
-        MIN_LONG = 180;
+        // the comments, we set the min's to max integer values and vice versa
+        // then have values of each comment modify these variables
+        minLat = Integer.MAX_VALUE;
+        maxLat = Integer.MIN_VALUE;
+        minLong = Integer.MAX_VALUE;
+        maxLong = Integer.MIN_VALUE;
 
         GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
@@ -156,13 +161,15 @@ public class MapViewFragment extends Fragment {
             fm.popBackStackImmediate();
         } else {
             this.setupMap(topComment);
+            this.setGeoPointMarkers();
+            this.calculateZoomSpan();
+            this.setZoomLevel();
         }
     }
 
-    
     /**
-     * Calls onStop in the superclass, and tells the locationListener
-     * to stop listening. 
+     * Calls onStop in the superclass, and tells the locationListener to stop
+     * listening.
      */
     @Override
     public void onStop() {
@@ -171,9 +178,11 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * This sets up the comment location the map. The map is centered at the location
-     * of the comment GeoLocation, and places a pin at this point. It then calls 
-     * handleChildComments to place pins for each child comment in the thread. 
+     * This sets up the comment location the map. The map is centered at the
+     * location of the comment GeoLocation, and places a pin at this point. It
+     * then calls handleChildComments to place pins for each child comment in
+     * the thread.
+     * 
      * @param comment
      */
     public void setupMap(Comment comment) {
@@ -183,39 +192,46 @@ public class MapViewFragment extends Fragment {
         openMapView.setMultiTouchControls(true);
         openMapView.getController().setZoom(18);
 
-        GeoLocation geoLocation = comment.getLocation();
-        startGeoPoint = new GeoPoint(geoLocation.getLocation());
-        setGeoPointMarker(startGeoPoint);
-        handleChildComments(comment);
+        if (commentLocationIsValid(comment)) {
+            Log.e("TopComment Location", "is valid");
+            GeoLocation geoLocation = comment.getLocation();
+            startGeoPoint = new GeoPoint(geoLocation.getLatitude() * 1E6, 
+                    geoLocation.getLongitude() * 1E6);
+            geoPoints.add(startGeoPoint);
+            handleChildComments(comment);
+        }
     }
 
     /**
-     * Sets the default zoom level for the mapview. This takes the max and min of 
-     * both lat and long, and zooms to span the area required. It also animates to the
-     * startGeoPoint, which is the location of the topComment. The values must be 
-     * padded with a zoom_factor, which is a static class variable
+     * Sets the default zoom level for the mapview. This takes the max and min
+     * of both lat and long, and zooms to span the area required. It also
+     * animates to the startGeoPoint, which is the location of the topComment.
+     * The values must be padded with a zoom_factor, which is a static class
+     * variable
      */
     public void setZoomLevel() {
-        openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
-        int maxLatitude = (int) Math.round(MAX_LAT);
-        int maxLongitude = (int) Math.round(MAX_LONG);
-        int minLatitude = (int) Math.round(MIN_LAT);
-        int minLongitude = (int) Math.round(MIN_LONG);
+        Log.e("maxLong", Integer.toString(maxLat));
+        Log.e("minLong", Integer.toString(minLat));
+        Log.e("maxLat", Integer.toString(maxLat));
+        Log.e("minLat", Integer.toString(minLat));
+
+        Log.e("longSpan", Integer.toString(maxLat - minLat));
+        Log.e("latSpan", Integer.toString(maxLat - minLat));
 
         // get the mapController and set the zoom and location
         IMapController mapController = openMapView.getController();
-        mapController.zoomToSpan(Math.round(maxLongitude - minLongitude) * ZOOM_FACTOR,
-                Math.round(maxLatitude - minLatitude) * ZOOM_FACTOR);
-        mapController.animateTo(startGeoPoint);
+        mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * ZOOM_FACTOR),
+                (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
+        mapController.animateTo(new GeoPoint((maxLat - minLat) / 2, (maxLong - minLong) /2));
     }
 
     /**
-     * Recursive method for handling all comments in the thread. First checks if the 
-     * comment has any children or not. If none, simply return. Otherwise, call 
-     * setGeoPointMarker for each child of the comment. Call checkCommmentLocation
-     * to calculate the min and max of the lat and long for the entire thread. 
-     * Then finally make a recursive call to check if a child comment has
-     * any children.
+     * Recursive method for handling all comments in the thread. First checks if
+     * the comment has any children or not. If none, simply return. Otherwise,
+     * call setGeoPointMarker for each child of the comment. Call
+     * checkCommmentLocation to calculate the min and max of the lat and long
+     * for the entire thread. Then finally make a recursive call to check if a
+     * child comment has any children.
      * 
      * @param comment
      */
@@ -224,40 +240,57 @@ public class MapViewFragment extends Fragment {
         if (children.size() == 0) {
             return;
         } else {
-            for (Comment c : children) {
-                GeoLocation commentLocation = c.getLocation();
-                setGeoPointMarker(new GeoPoint(commentLocation.getLatitude(), 
-                        commentLocation.getLongitude()));
-                checkCommentLocationDistance(c);
-                handleChildComments(c);
+            for (Comment childComment : children) {
+                GeoLocation commentLocation = childComment.getLocation();
+                if (commentLocationIsValid(childComment)) {
+                    Log.e("Child Location", "is valid");
+                    geoPoints.add(new GeoPoint(commentLocation.getLatitude() * 1E6, 
+                            commentLocation.getLongitude() * 1E6));
+                    handleChildComments(childComment);
+                }
             }
         }
     }
 
     /**
-     * Gets the location of the comment passed in, compares it to the 
-     * minimum latitude and the maximum latitude. This method is called on each
-     * comment in the thread. The end result is that the four min/max lat long vars
-     * will contain their appropriate value for the entire thread. This used
-     * to zoom to include all location pins in the view
+     * Checks to see if a comment in the thread has valid GPS coordinates. Valid
+     * coordinates are -90 < lat < 90, and -180 < longitude < 180. It also does
+     * a null check on location.
      * 
      * @param comment
+     * @return isValidLocation
      */
-    public void checkCommentLocationDistance(Comment comment) {
-        double commentLat = comment.getLocation().getLatitude();
-        double commentLong = comment.getLocation().getLongitude();
+    public boolean commentLocationIsValid(Comment comment) {
+        GeoLocation location = comment.getLocation();
+        if (location.getLocation() == null) {
+            return false;
+        } else {
+            return (location.getLatitude() >= -90.0 || location.getLatitude() <= 90.0
+                    || location.getLongitude() >= -180.0 || location.getLongitude() <= 180.0);
+        }
+    }
 
-        if (commentLat > MAX_LAT) {
-            MAX_LAT = commentLat;
-        }
-        if (commentLat < MIN_LAT) {
-            MIN_LAT = commentLat;
-        }
-        if (commentLong > MAX_LONG) {
-            MAX_LONG = commentLong;
-        }
-        if (commentLong < MIN_LONG) {
-            MIN_LONG = commentLong;
+    /**
+     * 
+     */
+    public void calculateZoomSpan() {
+        for (GeoPoint geoPoint : geoPoints) {
+
+            Log.e("maxLong", Integer.toString(maxLat));
+            Log.e("minLong", Integer.toString(minLat));
+            Log.e("maxLat", Integer.toString(maxLat));
+            Log.e("minLat", Integer.toString(minLat));
+            
+            int geoLat = geoPoint.getLatitudeE6();
+            int geoLong = geoPoint.getLongitudeE6();
+
+            Log.e("geoLat", Integer.toString(geoLat));
+            Log.e("geoLong", Integer.toString(geoLong));
+
+            maxLat = Math.max(geoLat, maxLat);
+            minLat = Math.min(geoLat, minLat);
+            maxLong = Math.max(geoLong, maxLong);
+            minLong = Math.min(geoLong, minLong);
         }
     }
 
@@ -267,21 +300,23 @@ public class MapViewFragment extends Fragment {
      * 
      * @param geoPoint
      */
-    public void setGeoPointMarker(GeoPoint geoPoint) {
-        Marker marker = new Marker(openMapView);
-        marker.setPosition(geoPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        openMapView.getOverlays().add(marker);
+    public void setGeoPointMarkers() {
+        for (GeoPoint geoPoint : geoPoints) {
+            Marker marker = new Marker(openMapView);
+            marker.setPosition(geoPoint);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            openMapView.getOverlays().add(marker);
+        }
     }
 
-
     /**
-     * Called when the get_directions_button is clicked. Displays directions from the users
-     * current location to the comment location. Uses an Async task to get map overlay.
-     * If the users current location cannot be obtained, an error is shown to the screen
-     * and the async task is not called
+     * Called when the get_directions_button is clicked. Displays directions
+     * from the users current location to the comment location. Uses an Async
+     * task to get map overlay. If the users current location cannot be
+     * obtained, an error is shown to the screen and the async task is not
+     * called
      */
-    public void getDirections() {   
+    public void getDirections() {
         if (currentLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
         } else {
