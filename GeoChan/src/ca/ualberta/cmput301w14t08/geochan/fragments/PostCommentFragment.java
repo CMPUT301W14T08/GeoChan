@@ -50,7 +50,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * This class is responsible for the fragment that allows user to post a reply
  * to an existing comment.
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  */
 public class PostCommentFragment extends Fragment {
     ThreadComment thread;

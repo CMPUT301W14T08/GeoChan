@@ -290,6 +290,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton starButton = (ImageButton) convertView
                 .findViewById(R.id.comment_star_button);
+        
         if (FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
             starButton.setImageResource(R.drawable.ic_rating_marked);
         }

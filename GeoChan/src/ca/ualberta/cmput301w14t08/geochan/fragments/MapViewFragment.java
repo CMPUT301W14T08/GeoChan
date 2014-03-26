@@ -196,6 +196,7 @@ public class MapViewFragment extends Fragment {
      * padded with a zoom_factor, which is a static class variable
      */
     public void setZoomLevel() {
+        openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
         int maxLatitude = (int) Math.round(MAX_LAT);
         int maxLongitude = (int) Math.round(MAX_LONG);
         int minLatitude = (int) Math.round(MIN_LAT);

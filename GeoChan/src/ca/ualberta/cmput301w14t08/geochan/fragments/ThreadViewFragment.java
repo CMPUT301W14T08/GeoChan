@@ -286,14 +286,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     };
 
     private void resetOtherCommentLayouts(int position) {
-        for (int i = 0; i < threadView.getCount(); i++) {
+        for (int i = 1; i < threadView.getCount()+1; ++i) {
 
-            if(i == position) {
+            if(i == position+1) {
                 continue;
             }
             View v = threadView.getChildAt(i);
             if(v == null) {
-                Log.e("NULL", "NULL");
                 continue;
             }
             RelativeLayout relativeInflater = (RelativeLayout) v
