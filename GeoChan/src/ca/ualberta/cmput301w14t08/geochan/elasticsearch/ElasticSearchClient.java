@@ -175,7 +175,10 @@ public class ElasticSearchClient {
                 hits.add(array.get(i).getAsString());
             }
             for (String hit : hits) {
-                comments.add(get(hit));
+                Comment comment = get(hit);
+                if (comment != null) {
+                    comments.add(comment);
+                }
             }
             for (Comment comment : comments) {
                 comment.setParent(topComment);

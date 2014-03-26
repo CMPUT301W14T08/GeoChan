@@ -107,8 +107,8 @@ public class ThreadListAdapter extends BaseAdapter {
             user.setTextColor(Color.WHITE);
             user.setText(" " + user.getText() + "  ");
         } else {
-            user.setBackgroundColor(Color.TRANSPARENT);
-            //user.setTextColor(Color.BLACK);
+            user.setBackgroundResource(0);
+            user.setTextColor(Color.RED);
         }
         
         // Location text
