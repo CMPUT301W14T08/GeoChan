@@ -1,8 +1,11 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.Fragment;
@@ -18,7 +21,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
- * COMMENT HERE
+ * COMMENT HERE (I will comment this asap)
  * 
  * @author Brad Simons
  * 
@@ -28,6 +31,7 @@ public class CustomLocationMapFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoLocation currentLocation;
     private MapView openMapView;
+    private Marker marker;
 
     /**
      * COMMENT HERE
@@ -60,13 +64,24 @@ public class CustomLocationMapFragment extends Fragment {
         locationListenerService.startListening();
         currentLocation = new GeoLocation(locationListenerService);
 
-        MapEventsReceiver mapEventsReceiver = new MapEventsReceiver();
-        MapEventsOverlay overlay = new MapEventsOverlay(getActivity(),getActivity());
-        openMapView.getOverlays().add(overlay);
-
-
-        
         openMapView = (MapView) getActivity().findViewById(R.id.select_location_map_view);
+
+        MapEventsReceiver mapReceiver = new MapEventsReceiver() {
+
+            @Override
+            public boolean singleTapUpHelper(IGeoPoint clickedPoint) {
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(IGeoPoint clickPoint) {
+                createNewPin(clickPoint);
+                return false;
+            }
+        };
+
+        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getActivity(), mapReceiver);
+        openMapView.getOverlays().add(mapEventsOverlay);
 
         this.setupMap();
     }
@@ -90,5 +105,19 @@ public class CustomLocationMapFragment extends Fragment {
         openMapView.getController().setZoom(3);
         // openMapView.getController().animateTo(new
         // GeoPoint(currentLocation.getLocation()));
+    }
+
+    /**
+     * COMMENT HERE
+     * 
+     * @param clickedPoint
+     */
+    private void createNewPin(IGeoPoint clickedPoint) {
+        GeoPoint geoPoint = new GeoPoint(clickedPoint.getLatitude(), clickedPoint.getLongitude());
+        marker = new Marker(openMapView);
+        marker.setPosition(geoPoint);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        openMapView.getOverlays().add(marker);
+        openMapView.invalidate();
     }
 }
