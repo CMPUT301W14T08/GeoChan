@@ -1,7 +1,8 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
+import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.Fragment;
@@ -19,7 +20,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 /**
  * COMMENT HERE
  * 
- * @author bradsimons
+ * @author Brad Simons
  * 
  */
 public class CustomLocationMapFragment extends Fragment {
@@ -59,6 +60,12 @@ public class CustomLocationMapFragment extends Fragment {
         locationListenerService.startListening();
         currentLocation = new GeoLocation(locationListenerService);
 
+        MapEventsReceiver mapEventsReceiver = new MapEventsReceiver();
+        MapEventsOverlay overlay = new MapEventsOverlay(getActivity(),getActivity());
+        openMapView.getOverlays().add(overlay);
+
+
+        
         openMapView = (MapView) getActivity().findViewById(R.id.select_location_map_view);
 
         this.setupMap();
@@ -80,7 +87,8 @@ public class CustomLocationMapFragment extends Fragment {
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
-        openMapView.getController().setZoom(12);
-        openMapView.getController().animateTo(new GeoPoint(currentLocation.getLocation()));
+        openMapView.getController().setZoom(3);
+        // openMapView.getController().animateTo(new
+        // GeoPoint(currentLocation.getLocation()));
     }
 }
