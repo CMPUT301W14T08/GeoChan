@@ -48,5 +48,7 @@
     <string name="attach_image_dialog">Select a source:</string>
     <string name="image_desc">Image Thumbnail</string>
     <string name="Image">Image</string>
+    <string name="select_location_from_map">Select Location on Map</string>
+    <string name="submit_location_map_button">Submit</string>
 
 </resources>
