@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PreferencesFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -29,12 +28,14 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
     /**
      * Click the Settings menu item and check if the correct fragment is inflated
      */
+ /*
     public void testInflateSettings() throws Throwable {
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         getInstrumentation().invokeMenuActionSync(activity, ca.ualberta.cmput301w14t08.geochan.R.id.action_settings, 0);
         Fragment fragment = (PreferencesFragment) waitForFragment("prefFrag", 2000);
         assertNotNull(fragment);
     }
+    */
     /**
      * Click the Add Thread action bar item and check if the correct fragment is inflated
      */

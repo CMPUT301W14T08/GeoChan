@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.location.Location;
 import android.location.LocationManager;
@@ -31,11 +32,14 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         locationListenerService = new LocationListenerService(activity);
         locationListenerService.startListening();
     }
-
+    
     public void testHasImage() {
-        Comment comment = new Comment("test", new Picture(), null);
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
+        Comment comment = new Comment("test", bitmap, null);
         assertTrue("Comment has image", comment.hasImage());
     }
+    
 
     @SuppressWarnings("unused")
     public void testAddChild() {
@@ -406,10 +410,16 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         c9.setCommentDate(new Date(currentDate.getTime() - 9*extraTime));
         c10.setCommentDate(new Date(currentDate.getTime() - 10*extraTime));
         
-        c10.setImage(new Picture());
-        c8.setImage(new Picture());
-        c5.setImage(new Picture());
-        c3.setImage(new Picture());
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap0 = Bitmap.createBitmap(256, 256, conf);
+        Bitmap bitmap1 = Bitmap.createBitmap(256, 256, conf);
+        Bitmap bitmap2 = Bitmap.createBitmap(256, 256, conf);
+        Bitmap bitmap3 = Bitmap.createBitmap(256, 256, conf);
+        
+        c10.setImage(bitmap0);
+        c8.setImage(bitmap1);
+        c5.setImage(bitmap2);
+        c3.setImage(bitmap3);
         
         carrier.add(c1);
         carrier.add(c2);

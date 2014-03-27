@@ -1,6 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
@@ -55,7 +55,7 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
         long endTime = SystemClock.uptimeMillis() + timeout;
         while (SystemClock.uptimeMillis() <= endTime) {
 
-            Fragment fragment = getActivity().getFragmentManager().findFragmentByTag(tag);
+            Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(tag);
             if (fragment != null) {
                 return fragment;
             }

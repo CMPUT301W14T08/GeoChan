@@ -1,6 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
@@ -12,7 +12,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    ThreadViewFragment fragment;
+    Fragment fragment;
     ListView threadViewList;
     MainActivity activity;
     
@@ -35,7 +35,7 @@ public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<Mai
                 listView.performItemClick(listView.getAdapter().getView(0, null, null), 0, 0);
             }
         });
-        Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 5000);
+        ThreadViewFragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 5000);
         assertNotNull("fragment not initialized",fragment);
     }
    
@@ -53,7 +53,7 @@ public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<Mai
         long endTime = SystemClock.uptimeMillis() + timeout;
         while (SystemClock.uptimeMillis() <= endTime) {
 
-            Fragment fragment = getActivity().getFragmentManager().findFragmentByTag(tag);
+            Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(tag);
             if (fragment != null) {
                 return fragment;
             }

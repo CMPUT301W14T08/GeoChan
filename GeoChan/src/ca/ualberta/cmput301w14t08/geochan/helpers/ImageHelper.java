@@ -39,4 +39,5 @@ public class ImageHelper {
         File photo = new File(Environment.DIRECTORY_PICTURES,  imageFileName);
         return photo;
     }
+    
 }
