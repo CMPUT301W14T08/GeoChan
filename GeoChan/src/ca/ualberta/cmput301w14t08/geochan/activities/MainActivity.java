@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationMapFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -44,9 +45,10 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 /**
  * This is the main and, so far, only activity in the application. It inflates
  * the default fragment and handles some of the crucial controller methods
+ * 
  * @author henrypabst
  */
- 
+
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return true;
         default:
             return super.onOptionsItemSelected(item);
-            //return false;
+            // return false;
         }
     }
 
@@ -195,7 +197,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                 .findFragmentByTag("repFrag");
         fragment.postReply(v);
     }
-    
+
     public void attachImageReply(View v) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
@@ -248,6 +250,19 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     }
 
     /**
+     * COMMENT HERE
+     * 
+     * @param v
+     */
+    public void selectLocationFromMap(View v) {
+        CustomLocationMapFragment frag = new CustomLocationMapFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, frag, "customLocMapFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
+    }
+
+    /**
      * Checks the back stack for fragments and enables/disables the back button
      * in the action bar accordingly
      */
@@ -265,5 +280,4 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                 "mapFrag");
         fragment.getDirections();
     }
-
 }

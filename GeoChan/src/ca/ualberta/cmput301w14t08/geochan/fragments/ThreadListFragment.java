@@ -50,7 +50,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * Responsible for the UI fragment that displays multiple ThreadComments to the
  * user.
  * 
- * @author Henry Pabst, 
+ * @author Henry Pabst, Artem Chikin
  * 
  */
 public class ThreadListFragment extends Fragment implements

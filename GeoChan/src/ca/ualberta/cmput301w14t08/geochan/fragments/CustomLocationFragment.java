@@ -39,10 +39,10 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
-import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
@@ -108,7 +108,7 @@ public class CustomLocationFragment extends Fragment {
                 fm.popBackStackImmediate();
             }
         });
-        
+
         customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
         lv.setAdapter(customLocationAdapter);
     }
@@ -117,7 +117,8 @@ public class CustomLocationFragment extends Fragment {
      * Called when a user enters custom Long/Lat coordinates and clicks Submit
      * Location
      * 
-     * @param v WHAT DOTH V?
+     * @param v
+     *            WHAT DOTH V?
      * 
      */
     public void submitNewLocationFromCoordinates(View v) {
@@ -142,7 +143,8 @@ public class CustomLocationFragment extends Fragment {
     /**
      * Called when a user clicks the current location button
      * 
-     * @param v WHAT DOTH V?
+     * @param v
+     *            WHAT DOTH V?
      * 
      */
     public void submitCurrentLocation(View v) {
@@ -161,7 +163,8 @@ public class CustomLocationFragment extends Fragment {
      * Sets the Bundle arguments for passing back the location to the previous
      * fragment
      * 
-     * @param geoLocation WHAT DOTH geoLocation?
+     * @param geoLocation
+     *            WHAT DOTH geoLocation?
      * 
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
@@ -183,7 +186,7 @@ public class CustomLocationFragment extends Fragment {
             args.putString("LocationType", locationType);
         } else if (postType == SORT_THREAD) {
             SortUtil.setThreadSortGeo(geoLocation);
-        } else if (postType == SORT_COMMENT){
+        } else if (postType == SORT_COMMENT) {
             SortUtil.setCommentSortGeo(geoLocation);
         }
     }

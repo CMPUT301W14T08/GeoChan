@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
- * COMMENT GOES HERE
+ * A Fragment class for displaying Maps. A Map View will disp
  * 
  * @author Brad Simons
  * 
@@ -39,7 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 public class MapViewFragment extends Fragment {
 
     final public static double ZOOM_FACTOR = 1.2;
-    
+
     private MapView openMapView;
     private LocationListenerService locationListenerService;
     private GeoLocation currentLocation;
@@ -47,6 +46,7 @@ public class MapViewFragment extends Fragment {
     private Polyline roadOverlay;
     private Comment topComment;
     private ArrayList<GeoPoint> geoPoints;
+    private ArrayList<Marker> markers;
 
     private int maxLat;
     private int maxLong;
@@ -90,6 +90,9 @@ public class MapViewFragment extends Fragment {
             Road road = roadManager.getRoad(waypoints);
 
             roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
+            
+            openMapView.getOverlays().clear();
+            openMapView.invalidate();
             openMapView.getOverlays().add(roadOverlay);
 
             return null;
@@ -112,6 +115,10 @@ public class MapViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
+
+        geoPoints = new ArrayList<GeoPoint>();
+        markers = new ArrayList<Marker>();
+
         return inflater.inflate(R.layout.fragment_map_view, container, false);
     }
 
@@ -144,8 +151,6 @@ public class MapViewFragment extends Fragment {
         Bundle args = getArguments();
         topComment = (Comment) args.getParcelable("thread_comment");
 
-        geoPoints = new ArrayList<GeoPoint>();
-
         // To calculate the max and min latitude and longitude of all
         // the comments, we set the min's to max integer values and vice versa
         // then have values of each comment modify these variables
@@ -161,7 +166,7 @@ public class MapViewFragment extends Fragment {
             fm.popBackStackImmediate();
         } else {
             this.setupMap(topComment);
-            this.setGeoPointMarkers();
+            this.setMarkers();
             this.calculateZoomSpan();
             this.setZoomLevel();
         }
@@ -183,21 +188,28 @@ public class MapViewFragment extends Fragment {
      * then calls handleChildComments to place pins for each child comment in
      * the thread.
      * 
-     * @param comment
+     * @param topComment
      */
-    public void setupMap(Comment comment) {
+    public void setupMap(Comment topComment) {
         openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
-        openMapView.getController().setZoom(18);
+        openMapView.getController().setZoom(5);
 
-        if (commentLocationIsValid(comment)) {
-            GeoLocation geoLocation = comment.getLocation();
+        if (commentLocationIsValid(topComment)) {
+            GeoLocation geoLocation = topComment.getLocation();
             startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
-            handleChildComments(comment);
+            
+            Marker startMarker = createMarker(startGeoPoint);
+            startMarker.setTitle("OP");
+            startMarker.showInfoWindow();
+            
+            markers.add(createMarker(startGeoPoint));
+            handleChildComments(topComment);
         }
+        openMapView.invalidate();
     }
 
     /**
@@ -210,11 +222,12 @@ public class MapViewFragment extends Fragment {
     public void setZoomLevel() {
         // get the mapController and set the zoom
         IMapController mapController = openMapView.getController();
-        
+
         // set the zoom span
-        //mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) * ZOOM_FACTOR),
-        //        (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
-        
+        // mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) *
+        // ZOOM_FACTOR),
+        // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
+
         // set the zoom center
         mapController.animateTo(geoPoints.get(0));
     }
@@ -237,8 +250,10 @@ public class MapViewFragment extends Fragment {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
-                    geoPoints.add(new GeoPoint(commentLocation.getLatitude(), commentLocation
-                            .getLongitude()));
+                    GeoPoint childGeoPoint = new GeoPoint(commentLocation.getLatitude(),
+                            commentLocation.getLongitude());
+                    geoPoints.add(childGeoPoint);
+                    markers.add(createMarker(childGeoPoint));
                     handleChildComments(childComment);
                 }
             }
@@ -284,14 +299,17 @@ public class MapViewFragment extends Fragment {
      * 
      * @param geoPoint
      */
-    public void setGeoPointMarkers() {
-        Log.e("Size of geoPoints", Integer.toString(geoPoints.size()));
-        for (GeoPoint geoPoint : geoPoints) {
-            Marker marker = new Marker(openMapView);
-            marker.setPosition(geoPoint);
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+    public void setMarkers() {
+        for (Marker marker : markers) {
             openMapView.getOverlays().add(marker);
         }
+    }
+
+    public Marker createMarker(GeoPoint geoPoint) {
+        Marker marker = new Marker(openMapView);
+        marker.setPosition(geoPoint);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        return marker;
     }
 
     /**
@@ -306,6 +324,7 @@ public class MapViewFragment extends Fragment {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
         } else {
             new MapAsyncTask().execute();
+            setMarkers();
         }
         openMapView.invalidate();
     }

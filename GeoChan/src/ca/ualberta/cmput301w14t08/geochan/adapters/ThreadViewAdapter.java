@@ -200,41 +200,49 @@ public class ThreadViewAdapter extends BaseAdapter {
         case TYPE_COMMENT0:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_0);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT1:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_1);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT2:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_2);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT3:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_3);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT4:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_4);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT5:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_5);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT6:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_6);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_COMMENT7:
             convertView = setConvertView(convertView, R.layout.thread_view_comment_7);
             setCommentFields(convertView, comment);
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         case TYPE_SEPARATOR:
@@ -251,10 +259,31 @@ public class ThreadViewAdapter extends BaseAdapter {
             TextView depthMeter = (TextView) convertView
                     .findViewById(R.id.thread_view_comment_depth_meter);
             depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
+            listenForCommentThumbnail(convertView, comment);
             break;
 
         }
         return convertView;
+    }
+    
+    private void listenForCommentThumbnail(View convertView, final Comment comment) {
+        ImageButton thumbnail = (ImageButton) convertView
+                .findViewById(R.id.thread_view_comment_thumbnail);
+        if(thumbnail != null) {
+            thumbnail.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    Fragment fragment = new ExpandImageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("img", comment.getImage());
+                    fragment.setArguments(bundle);
+                    manager.beginTransaction()
+                            .add(R.id.fragment_container, fragment, "repFrag")
+                            .addToBackStack(null).commit();
+                    manager.executePendingTransactions();
+                }
+            });
+        }
     }
 
     /**
@@ -273,27 +302,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(layout, null);
         }
         return convertView;
-    }
-    
-    private void listenForCommentThumbnail(View convertView, final Comment comment) {
-        final ImageButton thumbnail = (ImageButton) convertView
-                .findViewById(R.id.thread_view_comment_thumbnail);
-        if (thumbnail != null) {
-            thumbnail.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-                    Fragment fragment = new ExpandImageFragment();
-                    Bundle bundle = new Bundle();
-                    fragment.setArguments(bundle);
-
-                    manager.beginTransaction()
-                            .add(R.id.fragment_container, fragment, "repFrag")
-                            .commit();
-                    manager.executePendingTransactions();
-                }
-
-            });
-        }
     }
 
     /**

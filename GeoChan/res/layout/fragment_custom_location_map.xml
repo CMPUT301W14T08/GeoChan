@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/select_location_map_view"
+        android:layout_width="fill_parent"
+        android:layout_height="389dp"
+        android:layout_weight="1.74" />
+
+    <Button
+        android:id="@+id/submit_location_from_map_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="getDirections"
+        android:text="@string/submit_location_map_button" />
+
+</LinearLayout>

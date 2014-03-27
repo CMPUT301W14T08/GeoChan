@@ -8,7 +8,6 @@
     android:id="@+id/custom_location_list_view"
     android:layout_width="match_parent"
     android:layout_height="312dp"
-    android:layout_above="@+id/linearLayout1"
     android:layout_alignParentLeft="true"
     android:layout_below="@+id/textView1" >
 
@@ -78,5 +77,15 @@
         android:layout_below="@+id/linearLayout2"
         android:text="@string/location_log"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/select_from_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/custom_location_list_view"
+        android:onClick="selectLocationFromMap"
+        android:text="@string/select_location_from_map"/>
 
 </RelativeLayout>
