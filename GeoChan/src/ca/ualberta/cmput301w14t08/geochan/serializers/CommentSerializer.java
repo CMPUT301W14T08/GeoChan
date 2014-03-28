@@ -38,7 +38,9 @@ import com.google.gson.JsonSerializer;
  */
 public class CommentSerializer implements JsonSerializer<Comment> {
 
-    public static final int MAX_BITMAP_DIMENSIONS = 700;
+    public static final int MAX_BITMAP_DIMENSIONS_HEIGHT = 800;
+    public static final int MAX_BITMAP_DIMENSIONS_WIDTH = 600;
+
     public static final int MAX_BITMAP_THUMB_DIMENSIONS = 140;
 
     /*
@@ -71,11 +73,11 @@ public class CommentSerializer implements JsonSerializer<Comment> {
 
             // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
             // Scale the pic if it is too large:
-            if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                    || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-                double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS_WIDTH
+                    || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS_HEIGHT) {
+                double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS_WIDTH;
                 if (bitmap.getHeight() > bitmap.getWidth())
-                    scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+                    scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS_HEIGHT;
 
                 int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
                 int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);

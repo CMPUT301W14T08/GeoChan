@@ -56,7 +56,7 @@ public class FavouriteCommentsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         favouritesListView = (ListView) getView().findViewById(R.id.favourites_list);
-        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity());
+        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity(), getFragmentManager());
         // Assign custom adapter to the thread listView.
         favouritesListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

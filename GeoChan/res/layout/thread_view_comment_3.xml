@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/imageView3"
+        android:layout_toLeftOf="@id/thread_view_comment_thumbnail"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:text="@string/lorem_ipsum" />
@@ -71,7 +72,8 @@
         android:layout_alignTop="@+id/thread_view_comment_commentBody"
         android:contentDescription="@string/image_desc"
         android:visibility="gone"
-        android:src="@drawable/rect" />
+        android:background="@null"
+        android:src="@null" />
     
     <RelativeLayout
         android:id="@+id/relative_inflater"

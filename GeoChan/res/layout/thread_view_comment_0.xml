@@ -43,7 +43,8 @@
         android:layout_alignTop="@+id/thread_view_comment_commentBody"
         android:contentDescription="@string/image_desc"
         android:visibility="gone"
-        android:src="@drawable/rect" />
+        android:background="@null"
+        android:src="@null" />
 
 	<RelativeLayout
 	    android:id="@+id/relative_inflater"
