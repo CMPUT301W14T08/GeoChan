@@ -10,6 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:paddingLeft="5dp"
         android:text="@string/hello_world"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -22,6 +23,7 @@
         android:ellipsize="marquee"
         android:maxLines="4"
         android:text="@string/lorem_ipsum"
+        android:paddingLeft="5dp"
         android:textColor="#65000000" />
 
     <TextView
@@ -31,6 +33,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/commentBody"
         android:text="@string/placeholder_postby"
+        android:paddingLeft="5dp"
         android:textColor="#f00" />
 
     <TextView
@@ -40,6 +43,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/commentBy"
         android:text="@string/placeholder_date"
+        android:paddingLeft="5dp"
         android:textColor="#f00" />
 
     <TextView
@@ -48,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/commentDate"
+        android:paddingLeft="5dp"
         android:text="@string/placeholder_location" />
 
 </RelativeLayout>
