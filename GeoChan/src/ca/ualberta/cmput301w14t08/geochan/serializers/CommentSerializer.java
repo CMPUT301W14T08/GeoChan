@@ -38,8 +38,8 @@ import com.google.gson.JsonSerializer;
  */
 public class CommentSerializer implements JsonSerializer<Comment> {
 
-    public static final int MAX_BITMAP_DIMENSIONS = 50;
-    public static final int MAX_BITMAP_THUMB_DIMENSIONS = 20;
+    public static final int MAX_BITMAP_DIMENSIONS = 700;
+    public static final int MAX_BITMAP_THUMB_DIMENSIONS = 140;
 
     /*
      * (non-Javadoc)
