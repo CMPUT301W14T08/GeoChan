@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 
 public class ExpandImageFragment extends Fragment {
@@ -27,10 +29,17 @@ public class ExpandImageFragment extends Fragment {
         imageView.setImageBitmap(image);
         LinearLayout rlayout = (LinearLayout) getView().findViewById(R.id.expanded_image_relative);
         rlayout.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
+            }
+        });
+        Button saveButton = (Button) getView().findViewById(R.id.save_image_button);
+        saveButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "SAVE!? NO.", Toast.LENGTH_SHORT)
+                .show();
             }
         });
     }

@@ -29,9 +29,18 @@
         android:id="@+id/expanded_image_box2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.14"
         android:background="@null"
         android:contentDescription="@string/Image"
         android:src="@drawable/expanded_image_rect" />
+    
+    <Button
+        android:id="@+id/save_image_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.06"
+        android:text="@string/save_image"
+        android:textColor="#E6E6E6"
+        android:background="@drawable/save_image_selector" />
 
 </LinearLayout>

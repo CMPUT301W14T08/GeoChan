@@ -51,5 +51,6 @@
     <string name="select_location_from_map">Select Location on Map</string>
     <string name="submit_location_map_button">Submit</string>
     <string name="depth">Max Depth +1</string>
+    <string name="save_image">Save Image</string>
 
 </resources>
