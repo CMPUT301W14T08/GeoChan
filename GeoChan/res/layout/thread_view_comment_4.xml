@@ -80,10 +80,12 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/thread_view_comment_commentBody"
         android:contentDescription="@string/image_desc"
+        android:paddingTop="5dp"
         android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
+        android:background="@drawable/rounded_corner"
         android:visibility="gone"
-        android:background="@null"
         android:src="@null" />
     
     <RelativeLayout

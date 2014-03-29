@@ -51,43 +51,49 @@
         android:hint="@string/commentHint"
         android:scrollbars="vertical" />
 
-    <Button
-        android:id="@+id/location_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:onClick="changeLocation"
-        android:text="@string/location" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/location_button"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/attach_image_button"
-            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/location_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:text="@string/attach_image"
-            android:onClick="attachImageToReply"
-            android:textSize="12sp" />
+            android:layout_weight="0.33"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/rounded_button_selector"
+            android:onClick="changeLocation"
+            android:text="@string/location" />
+
+        <Button
+            android:id="@+id/attach_image_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.33"
+            android:background="@drawable/rounded_button_selector"
+            android:onClick="attachImageToThread"
+            android:text="@string/attach_image" />
 
         <Button
             android:id="@+id/post_reply_button"
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:onClick="postReply"
-            android:text="@string/post"
-            android:textSize="12sp" />
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.33"
+            android:background="@drawable/rounded_button_selector"
+            android:onClick="postNewThread"
+            android:text="@string/post" />
     </LinearLayout>
 
 </RelativeLayout>
