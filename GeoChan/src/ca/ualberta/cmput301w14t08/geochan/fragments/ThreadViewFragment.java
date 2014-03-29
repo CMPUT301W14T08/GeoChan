@@ -67,6 +67,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private ThreadComment thread = null;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
+    private int container;
     private static int locSortFlag = 0;
 
     /**
@@ -131,6 +132,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if (fav != null) {
+            container = R.id.container;
+        } else {
+            container = R.id.fragment_container;
+        }
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -208,7 +215,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         fragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "repFrag").addToBackStack(null)
+                .replace(container, fragment, "repFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
 
@@ -377,7 +384,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
+                .replace(container, frag, "customLocFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
     }

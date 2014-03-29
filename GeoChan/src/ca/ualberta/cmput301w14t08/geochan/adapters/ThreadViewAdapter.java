@@ -279,8 +279,15 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("img", comment.getImage());
                     fragment.setArguments(bundle);
-                    manager.beginTransaction().add(R.id.fragment_container, fragment, "repFrag")
-                            .addToBackStack(null).commit();
+                    Fragment fav = manager.findFragmentByTag("favThrFragment");
+                    if (fav != null) {
+                        manager.beginTransaction().replace(R.id.container, fragment, "picFrag")
+                                .addToBackStack(null).commit();
+                    } else {
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment, "picFrag")
+                                .addToBackStack(null).commit();
+                    }
                     manager.executePendingTransactions();
                 }
             });
@@ -399,11 +406,16 @@ public class ThreadViewAdapter extends BaseAdapter {
                     bundle.putParcelable("cmt", thread.getBodyComment());
                     bundle.putLong("id", id);
                     fragment.setArguments(bundle);
-
-                    manager.beginTransaction()
-                            .replace(R.id.fragment_container, fragment, "repFrag")
-                            .addToBackStack(null).commit();
-                    manager.executePendingTransactions();
+                    Fragment fav = manager.findFragmentByTag("favThrFragment");
+                    if (fav != null) {
+                        manager.beginTransaction().replace(R.id.container, fragment, "repFrag")
+                        .addToBackStack(null).commit();
+                    } else {
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment, "repFrag")
+                                .addToBackStack(null).commit();
+                        manager.executePendingTransactions();
+                    }
                 }
 
             });
