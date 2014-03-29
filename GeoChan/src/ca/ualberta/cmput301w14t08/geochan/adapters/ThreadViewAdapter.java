@@ -281,11 +281,11 @@ public class ThreadViewAdapter extends BaseAdapter {
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
-                        manager.beginTransaction().replace(R.id.container, fragment, "picFrag")
+                        manager.beginTransaction().add(R.id.container, fragment, "picFrag")
                                 .addToBackStack(null).commit();
                     } else {
                         manager.beginTransaction()
-                                .replace(R.id.fragment_container, fragment, "picFrag")
+                                .add(R.id.fragment_container, fragment, "picFrag")
                                 .addToBackStack(null).commit();
                     }
                     manager.executePendingTransactions();
