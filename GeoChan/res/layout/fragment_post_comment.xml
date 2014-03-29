@@ -80,7 +80,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="attachImageToThread"
+            android:onClick="attachImageToReply"
             android:text="@string/attach_image" />
 
         <Button
@@ -92,7 +92,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="postNewThread"
+            android:onClick="postReply"
             android:text="@string/post" />
     </LinearLayout>
 

@@ -58,15 +58,17 @@
     
     <ImageButton
         android:id="@+id/thread_list_thumbnail"
-        android:layout_width="wrap_content"
+		android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/threadTitle"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/commentBody"
         android:contentDescription="@string/image_desc"
-        android:paddingRight="10dp"
+      	android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
-        android:visibility="gone"
         android:background="@drawable/rounded_corner"
+        android:visibility="gone"
         android:src="@null" />
 
 </RelativeLayout>
