@@ -255,8 +255,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      * @param v
      */
     public void selectLocationFromMap(View v) {
-        CustomLocationMapFragment frag = new CustomLocationMapFragment();
-        getFragmentManager().beginTransaction()
+        Fragment frag = new CustomLocationMapFragment();
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag, "customLocMapFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();

@@ -12,11 +12,10 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,54 +38,10 @@ public class CustomLocationMapFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private MapView openMapView;
     private Marker currentLocationMarker;
-    private Marker newLocationMarker;
-    private String locationDescription;
     private GeoPoint currentGeoPoint;
 
-    class GetPOIAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            directionsLoadingDialog.setMessage("Loading");
-            directionsLoadingDialog.show();
-        }
-
-        /**
-         * Calculating the directions from the current to the location of the
-         * topComment.
-         */
-        @Override
-        protected Void doInBackground(Void... params) {
-            
-            GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("shadowsirens");
-            ArrayList<POI> pois = poiProvider.getPOICloseTo(currentGeoPoint, 30, 20.0);
-            POI poi = pois.get(0);
-            locationDescription = poi.mCategory;
-            
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog
-         */
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            directionsLoadingDialog.dismiss();            
-            currentLocationMarker.setTitle("Current Location");
-            currentLocationMarker.setTitle(locationDescription);
-            currentLocationMarker.showInfoWindow();
-        }
-    }
-    
     /**
-     * COMMENT HERE
+     * Creates and inflates the view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,11 +50,10 @@ public class CustomLocationMapFragment extends Fragment {
     }
 
     /**
-     * COMMENT HERE
+     * Inflates the menu and adds any items to the action bar if present
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
@@ -126,9 +80,9 @@ public class CustomLocationMapFragment extends Fragment {
 
             @Override
             public boolean longPressHelper(IGeoPoint clickedPoint) {
-                newLocationMarker = createNewMarker(clickedPoint.getLatitude(),
+                Marker clickedMarker = createNewMarker(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
-                addNewLocationMarker();
+                addNewLocationMarker(clickedMarker);
                 return false;
             }
         };
@@ -140,7 +94,8 @@ public class CustomLocationMapFragment extends Fragment {
     }
 
     /**
-     * COMMENT HERE
+     * Calls on stop in the super class and tells the locationListener to stop
+     * listening
      */
     @Override
     public void onStop() {
@@ -149,34 +104,35 @@ public class CustomLocationMapFragment extends Fragment {
     }
 
     /**
-     * COMMENT HERE
+     * Sets up the map view. Sets the tile source to Mapnik, gets the users
+     * location, creates a marker for that location, and sends a request for POI
+     * information via an asynch task.
      */
     public void setupMap() {
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
-        openMapView.getController().setZoom(11);
+        openMapView.getController().setZoom(13);
 
         // get users current location and center map around it
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
-        currentGeoPoint = new GeoPoint(geoLocation.getLocation());
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not obtain location");
         } else {
-
-            GeoPoint geoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
+            GeoPoint geoPoint = new GeoPoint(geoLocation.getLocation());
             openMapView.getController().setCenter(geoPoint);
             currentLocationMarker = createNewMarker(geoLocation.getLatitude(),
                     geoLocation.getLongitude());
-            new GetPOIAsyncTask().execute();
-            this.setMarkerOnMap(currentLocationMarker);
+            new GetPOIAsyncTask().execute(currentLocationMarker);
         }
     }
 
     /**
-     * COMMENT HERE
+     * Clears the nodes off of the map, and then re-adds the current location
      */
-    private void addNewLocationMarker() {
+    private void addNewLocationMarker(Marker newMarker) {
+        new GetPOIAsyncTask().execute(newMarker);
+
         // clear existing nodes
         currentLocationMarker.hideInfoWindow();
         openMapView.getOverlays().clear();
@@ -184,37 +140,95 @@ public class CustomLocationMapFragment extends Fragment {
         // add back currentlocation marker and new location marker
         // then refresh map
         openMapView.getOverlays().add(currentLocationMarker);
-        openMapView.getOverlays().add(newLocationMarker);
+        openMapView.getOverlays().add(newMarker);
         openMapView.invalidate();
     }
 
     /**
-     * COMMENT
+     * Creates a marker object by taking in latitude and longitude values and
+     * sets its position on the map view
      * 
      * @param latitude
      * @param longitude
-     * @return
+     * @return marker
      */
     private Marker createNewMarker(double latitude, double longitude) {
-        GeoPoint geoPoint = new GeoPoint(latitude, longitude);
+        currentGeoPoint = new GeoPoint(latitude, longitude);
         Marker marker = new Marker(openMapView);
-        marker.setPosition(geoPoint);
+        marker.setPosition(currentGeoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         return marker;
     }
 
     /**
-     * COMMENT HERE
+     * Takes a marker object as a parameter and sets it on the map view
      * 
-     * @param clickedPoint
+     * @param marker
      */
     private void setMarkerOnMap(Marker marker) {
         openMapView.getOverlays().add(marker);
-        openMapView.invalidate();
-
         openMapView.getController().setCenter(marker.getPosition());
         openMapView.getController().setZoom(12);
-
         openMapView.invalidate();
+    }
+
+    /**
+     * Async task for getting the POI of a location and place a marker on the
+     * map
+     * 
+     * @author bradsimons
+     */
+    class GetPOIAsyncTask extends AsyncTask<Marker, Void, Marker> {
+
+        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
+        POI poi;
+
+        /**
+         * Displays a ProgessDialog while the task is executing
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            directionsLoadingDialog.setMessage("Loading");
+            directionsLoadingDialog.show();
+        }
+
+        /**
+         * Get the points of interest
+         */
+        @Override
+        protected Marker doInBackground(Marker... markers) {
+            for (Marker marker : markers) {
+                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
+                ArrayList<POI> pois = poiProvider.getPOICloseTo(marker.getPosition(), 2, 0.5);
+
+                if (pois.size() > 0) {
+                    poi = pois.get(0);
+                } else {
+                    poi = null;
+                }
+
+                return marker;
+            }
+            return null;
+        }
+
+        /**
+         * Task is now finished, dismiss the ProgressDialog
+         */
+        @Override
+        protected void onPostExecute(Marker marker) {
+            super.onPostExecute(marker);
+            directionsLoadingDialog.dismiss();
+
+            marker.setTitle("Current Location");
+            if (poi != null) {
+                marker.setSubDescription(poi.mType);
+            } else {
+                marker.setSubDescription("Unknown Location");
+            }
+            setMarkerOnMap(marker);
+
+        }
     }
 }
