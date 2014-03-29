@@ -53,6 +53,7 @@
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:text="@string/attach_image"
+            android:onClick="attachImageToThread"
             android:textSize="12sp" />
 
         <Button

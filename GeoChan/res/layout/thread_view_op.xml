@@ -113,13 +113,15 @@
 
     <ImageButton
         android:id="@+id/thread_view_comment_thumbnail"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_op_locationText"
+        android:layout_alignTop="@+id/thread_view_op_commentBody"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:contentDescription="@string/image_desc"
-        android:src="@drawable/rect"
+        android:paddingRight="10dp"
+        android:paddingLeft="5dp"
+        android:src="@null"
+        android:background="@null"
         android:visibility="gone" />
 
 </RelativeLayout>

@@ -20,11 +20,21 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +42,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -49,6 +61,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
+    private Bitmap image = null;
+    private Bitmap imageThumb = null;
+    private ImageView thumbnail;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,14 +106,20 @@ public class PostThreadFragment extends Fragment {
                             .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
+            if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
+                imageThumb = args.getParcelable("IMAGE_THUMB");
+                image = args.getParcelable("IMAGE_FULL");
+                //thumbnail.setImageBitmap(imageThumb);
+            }
         }
     }
 
     /**
-     * COMMENT GOES HERE
+     * onClick method for the post button. Extracts the textView information,
+     * creates the threadComment object and posts it to the server.
      * 
      * @param v
-     *            WHAT DOTH V?
+     *            The post button in the PostThreadFragment
      */
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {
@@ -112,13 +134,13 @@ public class PostThreadFragment extends Fragment {
                     // ErrorDialog.show(getActivity(),
                     // "Could not obtain location.");
                     // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, null);
+                    Comment newComment = new Comment(comment, image, null);
                     // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, geoLocation);
+                    Comment newComment = new Comment(comment, image, geoLocation);
                     // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
@@ -131,6 +153,95 @@ public class PostThreadFragment extends Fragment {
                 inputManager.hideSoftInputFromWindow(v.getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
                 this.getFragmentManager().popBackStackImmediate();
+            }
+        }
+    }
+    
+    /**
+     * Displays dialog and either launches camera or gallery
+     * 
+     * @param View
+     *            the AttachPhoto button in postThreadFragment
+     */
+    public void attachImageToThread(View v) {
+        if (v.getId() == R.id.attach_image_button) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.attach_image_title);
+            dialog.setMessage(R.string.attach_image_dialog);
+
+            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_GALLERY);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_CAMERA);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.show();
+        }
+    }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ImageHelper.REQUEST_CAMERA) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
+                imageThumb = squareBitmap;
+                Bundle bundle = getArguments();
+                bundle.putParcelable("IMAGE_THUMB", imageThumb);
+                bundle.putParcelable("IMAGE_FULL", image);
+                //thumbnail.setImageBitmap(squareBitmap);
+            } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
+                            .getContentResolver(), data.getData());
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
+                imageThumb = squareBitmap;
+                Bundle bundle = getArguments();
+                bundle.putParcelable("IMAGE_THUMB", imageThumb);
+                bundle.putParcelable("IMAGE_FULL", image);
+                //thumbnail.setImageBitmap(squareBitmap);
             }
         }
     }

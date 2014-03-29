@@ -198,10 +198,16 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.postReply(v);
     }
 
-    public void attachImageReply(View v) {
+    public void attachImageToReply(View v) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
         fragment.attachImageReply(v);
+    }
+    
+    public void attachImageToThread(View v) {
+        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
+                .findFragmentByTag("postThreadFrag");
+        fragment.attachImageToThread(v);
     }
 
     /**

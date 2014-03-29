@@ -67,7 +67,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class PostCommentFragment extends Fragment {
     private ThreadComment thread;
     private Comment commentToReplyTo;
-    private ImageView imageView;
+    private ImageView thumbnail;
     private GeoLocation geoLocation;
     private Bitmap image = null;
     private Bitmap imageThumb = null;
@@ -98,7 +98,7 @@ public class PostCommentFragment extends Fragment {
         thread = ThreadList.getThreads().get((int) bundle.getLong("id"));
         TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
         TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
-        imageView = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
+        thumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
         bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
         bodyReplyTo.setText(commentToReplyTo.getTextPost());
         replyTo.setText(commentToReplyTo.getUser() + " says:");
@@ -137,7 +137,7 @@ public class PostCommentFragment extends Fragment {
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
                 imageThumb = args.getParcelable("IMAGE_THUMB");
                 image = args.getParcelable("IMAGE_FULL");
-                imageView.setImageBitmap(imageThumb);
+                thumbnail.setImageBitmap(imageThumb);
             }
         }
     }
@@ -166,6 +166,7 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 commentToReplyTo.addChild(newComment);
+                // log the thread and the geolocation
                 GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);
             }
@@ -243,7 +244,7 @@ public class PostCommentFragment extends Fragment {
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
-                imageView.setImageBitmap(squareBitmap);
+                thumbnail.setImageBitmap(squareBitmap);
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {
@@ -262,7 +263,7 @@ public class PostCommentFragment extends Fragment {
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
-                imageView.setImageBitmap(squareBitmap);
+                thumbnail.setImageBitmap(squareBitmap);
             }
         }
     }

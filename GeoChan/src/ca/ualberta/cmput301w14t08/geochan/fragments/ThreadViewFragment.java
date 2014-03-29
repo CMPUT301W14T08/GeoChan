@@ -331,11 +331,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             // User wants to push comments with images to the top.
             sortByTag(SortUtil.SORT_IMAGE);
             return true;
-        case (R.id.comment_sort_location):
-            // User wants to push comments near a selected location to the top.
-            locSortFlag = 1;
-            this.getSortingLoc();
-            return true;
         case (R.id.comment_sort_score_high):
             // User wants to push comments with a high score/relevance to the
             // top.
@@ -345,6 +340,11 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
             // User wants to push comments with a low score/relevance to the
             // top.
             sortByTag(SortUtil.SORT_USER_SCORE_LOWEST);
+            return true;
+        case (R.id.comment_sort_location):
+            // User wants to push comments near a selected location to the top.
+            locSortFlag = 1;
+            this.getSortingLoc();
             return true;
         default:
             return super.onOptionsItemSelected(item);
