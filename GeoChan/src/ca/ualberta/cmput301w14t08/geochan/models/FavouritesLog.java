@@ -6,8 +6,11 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
- * The class that handles the threads/comments saved by the user as favourite,
- * to be available for later viewing.
+ * Handles the threads/comments saved by the user as favourite, to be available
+ * for later viewing. Contains methods to add, remove and check presence of
+ * favourite comments/threads. Is a singleton.
+ * 
+ * @autor Artem Chikin
  */
 public class FavouritesLog {
     private static FavouritesLog instance = null;

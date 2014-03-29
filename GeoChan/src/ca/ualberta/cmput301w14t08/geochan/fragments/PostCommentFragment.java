@@ -52,6 +52,8 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -59,8 +61,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * This class is responsible for the fragment that allows user to post a reply
- * to an existing comment.
+ * Responsible for the fragment that allows user to post a reply to an existing
+ * comment.
  * 
  * @author Artem Chikin
  */
@@ -108,8 +110,9 @@ public class PostCommentFragment extends Fragment {
     }
 
     /**
-     * Handle returning to the fragment from selecting an image to attach 
-     * or from choosing a custom location. Location/Image are passed back to the fragment through a bundle.
+     * Handle returning to the fragment from selecting an image to attach or
+     * from choosing a custom location. Location/Image are passed back to the
+     * fragment through a bundle.
      */
     @Override
     public void onResume() {
@@ -143,7 +146,8 @@ public class PostCommentFragment extends Fragment {
     }
 
     /**
-     * COMMENT GOES HERE
+     * When post button is pressed, create new comment object, set up the
+     * required params, post it and log it.
      * 
      * @param v
      *            The Post Button
@@ -160,12 +164,16 @@ public class PostCommentFragment extends Fragment {
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 commentToReplyTo.addChild(newComment);
+                int tag = PreferencesManager.getInstance().getCommentSort();
+                SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
             } else {
                 // Create a new comment object and set username
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 client.postComment(thread, commentToReplyTo, newComment);
                 commentToReplyTo.addChild(newComment);
+                int tag = PreferencesManager.getInstance().getCommentSort();
+                SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
                 // log the thread and the geolocation
                 GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                 geoLocationLog.addLogEntry(thread.getTitle(), geoLocation);

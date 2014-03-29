@@ -11,9 +11,10 @@ import android.widget.ArrayAdapter;
 import ca.ualberta.cmput301w14t08.geochan.R;
 
 /**
- * COMMENT HERE
+ * Displays user's favourited threads/comments, provides navigation to each via
+ * a spinner.
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  * 
  */
 public class FavouritesFragment extends Fragment implements ActionBar.OnNavigationListener,
@@ -22,9 +23,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
     /**
-     * COMMENT HERE
+     * Set up the fragment, action bar and the spinner
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,9 +50,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * Restore spinner state from savedInstanceState
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +67,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * Save spinner selection
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -86,9 +84,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * On spinner selection, inflate correct favourites fragment.
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
@@ -108,7 +105,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * enable/disable spinner if in fragment.
      */
     @Override
     public void onBackStackChanged() {
@@ -121,7 +118,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * Enable the spinner
      */
     private void enableSpinner() {
         actionBar.setDisplayShowTitleEnabled(false);
@@ -129,7 +126,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * COMMENT HERE
+     * Disable the spinner
      */
     private void disableSpinner() {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);

@@ -352,20 +352,20 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     }
 
     /**
-     * Given a sorting tag, perform sort, remember chosen sorting method
-     * and reset the adapter to reflect changes.
+     * Given a sorting tag, perform sort, remember chosen sorting method and
+     * reset the adapter to reflect changes.
+     * 
      * @param tag
-     *              tag to sort by. Tags are defined in SortUtil.java
+     *            tag to sort by. Tags are defined in SortUtil.java
      */
     private void sortByTag(int tag) {
         prefManager.setCommentSort(tag);
         SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                threadIndex);
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-    
+
     /**
      * Sends the user into a CustomLocationFragment so they can choose a custom
      * location to sort comments by.

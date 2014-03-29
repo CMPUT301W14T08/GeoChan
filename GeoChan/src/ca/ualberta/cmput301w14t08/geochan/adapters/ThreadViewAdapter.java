@@ -150,10 +150,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (position == 1) {
             return null;
         } else {
+            // -2 because of OP and SEPARATOR
             return comments.get(position - 2);
         }
     }
 
+    // OP, SEPARATOR, 7 COMMENT depths and COMMENT_MAX types in order.
     @Override
     public int getItemViewType(int position) {
         int type = 0;
@@ -305,8 +307,9 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * Listener for the buttons in the TYPE_OP listView item. Comments have
-     * listeners in ThreadViewFragment, threadComment buttons have a listener in
-     * the adapter for ease of access to the permanently displayed buttons.
+     * listeners in ThreadViewFragment because they are only displayed after
+     * onItemClick, threadComment buttons have a listener in the adapter for
+     * ease of access to the permanently displayed buttons.
      * 
      * @param convertView
      * @param thread
@@ -334,7 +337,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 thread.getBodyComment().getHash())) {
             editButton.setVisibility(View.VISIBLE);
         }
-        
+
         if (thread.getBodyComment().hasImage()) {
             listenForThumbnail(convertView, thread.getBodyComment());
         }
@@ -342,6 +345,8 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    // Perform action on click depending on if the thread has
+                    // been favourited
                     if (!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
                         Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT)
                                 .show();
@@ -362,6 +367,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (mapButton != null) {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    // Perform action on click to launch mapFragment
                     Log.e("ButtonClick", "mapView");
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("thread_comment", thread.getBodyComment());
@@ -385,7 +391,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (replyButton != null) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    // Perform action on click
+                    // Perform action on click to launch postCommentFragment
                     Log.e("ButtonClick", "click");
                     Log.e("Comment being replied:", thread.getBodyComment().getTextPost());
                     Fragment fragment = new PostCommentFragment();
@@ -447,7 +453,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         } else {
             origPostLocationText.setText("Error: No location found");
         }
-        
+        // Set the thumbnail is there is an image
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_view_comment_thumbnail);

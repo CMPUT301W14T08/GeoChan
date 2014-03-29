@@ -10,6 +10,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+/**
+ * Deserialize a location object from Json
+ * 
+ * @author Artem Chikin
+ */
 public class LocationDeserializer implements JsonDeserializer<Location> {
 
     /*

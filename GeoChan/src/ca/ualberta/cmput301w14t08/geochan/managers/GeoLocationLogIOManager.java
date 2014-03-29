@@ -19,6 +19,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Responsible for persistency of the log of used geolocations. Contains methdos
+ * to serialize/deserialize log. Is a singleton.
+ * 
+ * @author Artem Chikin
+ */
 public class GeoLocationLogIOManager {
     private static GeoLocationLogIOManager instance;
     private Context context;
@@ -37,6 +43,7 @@ public class GeoLocationLogIOManager {
         return instance;
     }
 
+    // Serialize ArrayList of log entries to JSON
     public void serializeLog(ArrayList<LogEntry> list) {
         try {
             String json = gson.toJson(list);
@@ -53,6 +60,7 @@ public class GeoLocationLogIOManager {
         }
     }
 
+    // Deserialize ArrayList of log entries from JSON
     public ArrayList<LogEntry> deserializeLog() {
         ArrayList<LogEntry> list = new ArrayList<LogEntry>();
         try {

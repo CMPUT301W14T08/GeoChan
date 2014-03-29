@@ -76,24 +76,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_settings:
-            /*
-             * getSupportFragmentManager().beginTransaction()
-             * .replace(R.id.fragment_container, new PreferencesFragment(),
-             * "prefFrag") .addToBackStack(null).commit();
-             * 
-             * // This next line is necessary for JUnit to see fragments
-             * getSupportFragmentManager().executePendingTransactions();
-             */
             Intent intent = new Intent(this.getBaseContext(), PreferencesActivity.class);
             startActivity(intent);
             return true;
 
         case R.id.action_favourites:
-            /*
-             * Intent intent = new
-             * Intent(this.getBaseContext(),FavouritesActivity.class);
-             * startActivity(intent);
-             */
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
                     .addToBackStack(null).commit();
@@ -155,7 +143,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     // This code was taken from the website:
     // http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html
     // Accessed on March 21, 2014
-
     private boolean returnBackStackImmediate(FragmentManager fm) {
         List<Fragment> fragments = fm.getFragments();
         if (fragments != null && fragments.size() > 0) {
@@ -203,7 +190,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                 .findFragmentByTag("repFrag");
         fragment.attachImageReply(v);
     }
-    
+
     public void attachImageToThread(View v) {
         PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
                 .findFragmentByTag("postThreadFrag");
@@ -256,7 +243,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     }
 
     /**
-     * COMMENT HERE
+     * Launches fragment for choosing custom location
      * 
      * @param v
      */

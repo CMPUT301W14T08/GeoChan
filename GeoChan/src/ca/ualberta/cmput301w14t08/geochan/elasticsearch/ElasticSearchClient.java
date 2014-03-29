@@ -33,7 +33,6 @@ import io.searchbox.core.Update;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;

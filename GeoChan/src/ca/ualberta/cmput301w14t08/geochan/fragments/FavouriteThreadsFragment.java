@@ -16,9 +16,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * COMMENT HERE
+ * Display the user's favourited threadComments in a list using
+ * ThreadListAdapter. Allow user to browse and enter threadComments.
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  * 
  */
 public class FavouriteThreadsFragment extends Fragment {
@@ -35,12 +36,11 @@ public class FavouriteThreadsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         return inflater.inflate(R.layout.fragment_favourites_list, container, false);
     }
 
     /**
-     * COMMENT HERE
+     * Set up the listView, adapter and listen for list item clicks
      */
     @Override
     public void onStart() {

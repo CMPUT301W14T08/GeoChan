@@ -75,7 +75,7 @@ public class ThreadListAdapter extends BaseAdapter {
 
     @Override
     /**
-     * 
+     * Inflate thread list item layout
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment thread = getItem(position);
@@ -129,7 +129,7 @@ public class ThreadListAdapter extends BaseAdapter {
         } else {
             location.setText("Error: No location found");
         }
-
+        // Set thumbnail if comment has image.
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_list_thumbnail);

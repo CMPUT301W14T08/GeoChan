@@ -21,8 +21,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * This class is responsible for persistency of favourite threads/comments
+ * Responsible for persistency of favourite threads/comments. Contains methods
+ * to Serialize/Deserialize both comments and threads. Is a singleton.
  * 
+ * @autor Artem Chikin
  */
 public class FavouritesIOManager {
     private static FavouritesIOManager instance;
@@ -43,6 +45,7 @@ public class FavouritesIOManager {
         return instance;
     }
 
+    // Serialize ArrayList of comments to JSON
     public void serializeComments() {
         try {
             String json = gson.toJson(FavouritesLog.getInstance(context).getComments());
@@ -58,6 +61,7 @@ public class FavouritesIOManager {
         }
     }
 
+    // Serialize ArrayList of threads to JSON
     public void serializeThreads() {
         try {
             String json = gson.toJson(FavouritesLog.getInstance(context).getThreads());
@@ -73,6 +77,7 @@ public class FavouritesIOManager {
         }
     }
 
+    // Deserialize ArrayList of comments from JSON
     public ArrayList<Comment> deSerializeComments() {
         ArrayList<Comment> list = new ArrayList<Comment>();
         try {
@@ -98,6 +103,7 @@ public class FavouritesIOManager {
         return list;
     }
 
+    // Deserialize ArrayList of threads from JSON
     public ArrayList<ThreadComment> deSerializeThreads() {
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {

@@ -42,7 +42,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
@@ -56,15 +55,15 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 /**
  * Responsible for the UI fragment that allows a user to post a new thread.
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  */
 public class PostThreadFragment extends Fragment {
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
     private Bitmap image = null;
     private Bitmap imageThumb = null;
-    private ImageView thumbnail;
 
+    // private ImageView thumbnail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,7 +108,7 @@ public class PostThreadFragment extends Fragment {
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
                 imageThumb = args.getParcelable("IMAGE_THUMB");
                 image = args.getParcelable("IMAGE_FULL");
-                //thumbnail.setImageBitmap(imageThumb);
+                // thumbnail.setImageBitmap(imageThumb);
             }
         }
     }
@@ -156,7 +155,7 @@ public class PostThreadFragment extends Fragment {
             }
         }
     }
-    
+
     /**
      * Displays dialog and either launches camera or gallery
      * 
@@ -209,7 +208,7 @@ public class PostThreadFragment extends Fragment {
             dialog.show();
         }
     }
-    
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -222,7 +221,7 @@ public class PostThreadFragment extends Fragment {
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
-                //thumbnail.setImageBitmap(squareBitmap);
+                // thumbnail.setImageBitmap(squareBitmap);
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {
@@ -241,7 +240,7 @@ public class PostThreadFragment extends Fragment {
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
-                //thumbnail.setImageBitmap(squareBitmap);
+                // thumbnail.setImageBitmap(squareBitmap);
             }
         }
     }

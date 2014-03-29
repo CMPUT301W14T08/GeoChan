@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Utility class that stores and manages an arraylist of ThreadComment objects.
  * 
- * @author Henry Pabst
+ * @author Henry Pabst, Artem Chikin
  * 
  */
 public class ThreadList {

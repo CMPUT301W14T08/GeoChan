@@ -9,6 +9,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Serialize a location object to Json
+ * 
+ * @author Artem Chikin
+ */
 public class LocationSerializer implements JsonSerializer<Location> {
 
     /*

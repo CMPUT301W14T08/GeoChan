@@ -54,9 +54,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     @Override
     /**
-     * CLEAN AND COMMENT
+     * Return a location log item view and set fields.
      * 
-     * @author AUTHOUR HERE
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         Comment comment = (Comment) getItem(position);

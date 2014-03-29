@@ -27,9 +27,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.RectF;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;

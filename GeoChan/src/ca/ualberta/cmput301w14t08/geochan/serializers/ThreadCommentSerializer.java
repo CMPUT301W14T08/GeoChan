@@ -24,9 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 

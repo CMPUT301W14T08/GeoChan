@@ -28,7 +28,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -40,7 +39,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
  * A comment within a thread of comments. Contains the text of the comment,
  * possibly an image, and meta-data relating to the Comment.
  * 
- * @author Henry Pabst,
+ * @author Henry Pabst, Artem Chikin
  */
 public class Comment implements Parcelable {
     private String textPost;

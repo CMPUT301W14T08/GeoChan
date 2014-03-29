@@ -25,9 +25,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
