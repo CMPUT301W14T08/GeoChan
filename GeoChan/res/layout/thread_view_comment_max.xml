@@ -14,7 +14,7 @@
         android:paddingLeft="5dp"
         android:textColor="#FF0000"
         android:textStyle="italic"
-        android:text="Max depth + 2" />
+        android:text="@string/depth" />
     
     <TextView
         android:id="@+id/thread_view_comment_commentBody"

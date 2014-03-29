@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import ca.ualberta.cmput301w14t08.geochan.R;
 
-
-
 public class ExpandImageFragment extends Fragment {
     Bitmap image;
 
@@ -21,7 +19,6 @@ public class ExpandImageFragment extends Fragment {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_expand_image, container, false);
     }
-
 
     @Override
     public void onStart() {
@@ -38,8 +35,9 @@ public class ExpandImageFragment extends Fragment {
         });
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
      */
     @Override
@@ -48,5 +46,5 @@ public class ExpandImageFragment extends Fragment {
         Bundle bundle = getArguments();
         image = bundle.getParcelable("img");
     }
-    
+
 }

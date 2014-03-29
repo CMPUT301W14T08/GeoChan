@@ -46,9 +46,10 @@
     <string name="get_directions_button_text">Get Directions</string>
     <string name="attach_image_title">Attach Image</string>
     <string name="attach_image_dialog">Select a source:</string>
-    <string name="image_desc">Image Thumbnail</string>
+    <string name="image_thumb">Image Thumbnail</string>
     <string name="Image">Image</string>
     <string name="select_location_from_map">Select Location on Map</string>
     <string name="submit_location_map_button">Submit</string>
+    <string name="depth">Max Depth +1</string>
 
 </resources>

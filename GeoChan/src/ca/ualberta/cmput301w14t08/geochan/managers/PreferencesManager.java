@@ -66,12 +66,14 @@ public class PreferencesManager {
     public int getThreadSort() {
         return preferences.getInt("thread_sort", SortUtil.SORT_DATE_NEWEST);
     }
-    
+
     /**
      * Chanes the ThreadComment sort type.
-     * @param sortMethod The new ThreadComment sorting method.
+     * 
+     * @param sortMethod
+     *            The new ThreadComment sorting method.
      */
-    public void setThreadSort(int sortMethod){
+    public void setThreadSort(int sortMethod) {
         Editor editor = preferences.edit();
         editor.putInt("thread_sort", sortMethod);
         editor.commit();
@@ -85,12 +87,14 @@ public class PreferencesManager {
     public int getCommentSort() {
         return preferences.getInt("comment_sort", SortUtil.SORT_DATE_NEWEST);
     }
-    
+
     /**
      * Changes the comment sort type.
-     * @param sortMethod The new comment sorting type.
+     * 
+     * @param sortMethod
+     *            The new comment sorting type.
      */
-    public void setCommentSort(int sortMethod){
+    public void setCommentSort(int sortMethod) {
         Editor editor = preferences.edit();
         editor.putInt("comment_sort", sortMethod);
         editor.commit();

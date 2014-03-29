@@ -28,16 +28,16 @@ import java.util.Locale;
 import android.os.Environment;
 
 public class ImageHelper {
-    
+
     public static final int REQUEST_GALLERY = 101;
     public static final int REQUEST_CAMERA = 102;
-    
+
     public static File createImageFile() throws IOException {
         Locale locale = Locale.getDefault();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", locale).format(new Date());
         String imageFileName = "geochan" + timeStamp + ".jpg";
-        File photo = new File(Environment.DIRECTORY_PICTURES,  imageFileName);
+        File photo = new File(Environment.DIRECTORY_PICTURES, imageFileName);
         return photo;
     }
-    
+
 }

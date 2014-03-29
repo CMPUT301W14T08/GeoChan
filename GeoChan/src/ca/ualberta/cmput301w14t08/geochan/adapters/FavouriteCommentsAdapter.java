@@ -19,19 +19,19 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
-
 /**
  * COMMENT HERE
+ * 
  * @author Artem Chikin
- *
+ * 
  */
 public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<Comment> list;
     private Context context;
     private FragmentManager manager;
 
-
-    public FavouriteCommentsAdapter(ArrayList<Comment> list, Context context, FragmentManager manager) {
+    public FavouriteCommentsAdapter(ArrayList<Comment> list, Context context,
+            FragmentManager manager) {
         this.list = list;
         this.context = context;
         this.manager = manager;
@@ -94,7 +94,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         }
 
         if (comment.hasImage()) {
-            ImageButton thumbnail = (ImageButton) convertView.findViewById(R.id.thread_view_comment_thumbnail);
+            ImageButton thumbnail = (ImageButton) convertView
+                    .findViewById(R.id.thread_view_comment_thumbnail);
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(comment.getImageThumb());
@@ -102,11 +103,11 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    
+
     private void listenForCommentThumbnail(View convertView, final Comment comment) {
         ImageButton thumbnail = (ImageButton) convertView
                 .findViewById(R.id.thread_view_comment_thumbnail);
-        if(thumbnail != null) {
+        if (thumbnail != null) {
             thumbnail.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click
@@ -114,8 +115,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("img", comment.getImage());
                     fragment.setArguments(bundle);
-                    manager.beginTransaction()
-                            .add(R.id.fragment_container, fragment, "thumbFrag")
+                    manager.beginTransaction().add(R.id.fragment_container, fragment, "thumbFrag")
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();
                 }

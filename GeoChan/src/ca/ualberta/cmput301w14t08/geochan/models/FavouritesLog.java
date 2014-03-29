@@ -6,8 +6,8 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.FavouritesIOManager;
 
 /**
- * The class that handles the threads/comments saved by the user as favourite, to be
- * available for later viewing.
+ * The class that handles the threads/comments saved by the user as favourite,
+ * to be available for later viewing.
  */
 public class FavouritesLog {
     private static FavouritesLog instance = null;
@@ -40,47 +40,50 @@ public class FavouritesLog {
         comments.add(comment);
         manager.serializeComments();
     }
-    
+
     public void removeThreadComment(ThreadComment threadComment) {
-        for(ThreadComment t : getThreads()) {
-            if(t.getId().equals(threadComment.getId())) {
+        for (ThreadComment t : getThreads()) {
+            if (t.getId().equals(threadComment.getId())) {
                 getThreads().remove(t);
             }
         }
         manager.serializeThreads();
     }
-    
+
     public void removeComment(Comment comment) {
-        for(Comment c : getComments()) {
-            if(c.getId().equals(comment.getId())) {
+        for (Comment c : getComments()) {
+            if (c.getId().equals(comment.getId())) {
                 getComments().remove(c);
             }
         }
         manager.serializeComments();
     }
-    
+
     /**
      * Iterate over the cached favourites and check for comment with given id
+     * 
      * @param id
      * @return
      */
     public boolean hasComment(String id) {
-        for(Comment c : getComments()) {
-            if(c.getId().equals(id)) {
+        for (Comment c : getComments()) {
+            if (c.getId().equals(id)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
-     * Iterate over the cached favourites and check for threadComment with given id
+     * Iterate over the cached favourites and check for threadComment with given
+     * id
+     * 
      * @param id
      * @return
      */
     public boolean hasThreadComment(String id) {
-        for(ThreadComment t : getThreads()) {
-            if(t.getId().equals(id)) {
+        for (ThreadComment t : getThreads()) {
+            if (t.getId().equals(id)) {
                 return true;
             }
         }

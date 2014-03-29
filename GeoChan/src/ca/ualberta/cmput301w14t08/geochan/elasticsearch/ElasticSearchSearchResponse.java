@@ -29,6 +29,7 @@ import java.util.Collection;
 
 /**
  * Represents a search response served by ElasticSearch
+ * 
  * @author AUTHOR HERE
  * 
  */
@@ -45,6 +46,7 @@ public class ElasticSearchSearchResponse<T> {
 
     /**
      * COMMENT HERE
+     * 
      * @return
      */
     public Collection<T> getSources() {

@@ -64,25 +64,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/rect_op_buttons"
         android:layout_below="@+id/thread_view_op_locationText"
+        android:background="@drawable/rect_op_buttons"
         android:orientation="horizontal" >
-        
+
         <ImageButton
             android:id="@+id/comment_reply_button"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"
             android:background="@null"
             android:contentDescription="@string/thread_view_op_reply"
             android:paddingRight="5dp"
             android:src="@drawable/ic_reply" />
-        
+
         <ImageButton
             android:id="@+id/comment_star_button"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"
             android:background="@null"
             android:contentDescription="@string/comment_star_button"
             android:paddingRight="5dp"
@@ -121,4 +121,5 @@
         android:contentDescription="@string/image_desc"
         android:src="@drawable/rect"
         android:visibility="gone" />
+
 </RelativeLayout>

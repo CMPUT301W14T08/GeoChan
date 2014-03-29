@@ -95,7 +95,9 @@ public class PostThreadFragment extends Fragment {
 
     /**
      * COMMENT GOES HERE
-     * @param v WHAT DOTH V?
+     * 
+     * @param v
+     *            WHAT DOTH V?
      */
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {

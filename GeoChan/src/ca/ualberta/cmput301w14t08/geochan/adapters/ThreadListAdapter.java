@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
@@ -86,9 +87,9 @@ public class ThreadListAdapter extends BaseAdapter {
         setThreadFields(convertView, thread);
         return convertView;
     }
-    
+
     private void setThreadFields(View convertView, ThreadComment thread) {
-     // Thread title
+        // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
         // Thread bodyComment snippet
@@ -101,16 +102,19 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
         user.setText("Posted by " + thread.getBodyComment().getUser() + "#"
                 + thread.getBodyComment().getHash());
-        
-        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(thread.getBodyComment().getHash())) {
+
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(
+                thread.getBodyComment().getHash())) {
             user.setBackgroundResource(R.drawable.username_background_thread_rect);
             user.setTextColor(Color.WHITE);
             user.setText(" " + user.getText() + "  ");
         } else {
+            // Hacky, but required for now, unfortunately due to android
+            // recycling list views.
             user.setBackgroundResource(0);
             user.setTextColor(Color.RED);
         }
-        
+
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
@@ -125,6 +129,13 @@ public class ThreadListAdapter extends BaseAdapter {
         } else {
             location.setText("Error: No location found");
         }
-    }
 
+        if (thread.getBodyComment().hasImage()) {
+            ImageButton thumbnail = (ImageButton) convertView
+                    .findViewById(R.id.thread_list_thumbnail);
+            thumbnail.setVisibility(View.VISIBLE);
+            thumbnail.setFocusable(false);
+            thumbnail.setImageBitmap(thread.getBodyComment().getImageThumb());
+        }
+    }
 }

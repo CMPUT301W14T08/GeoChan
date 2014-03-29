@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/threadTitle"
+        android:layout_toLeftOf="@+id/thread_list_thumbnail"
         android:ellipsize="marquee"
         android:maxLines="4"
         android:text="@string/lorem_ipsum"
@@ -54,5 +55,17 @@
         android:layout_below="@+id/commentDate"
         android:paddingLeft="5dp"
         android:text="@string/placeholder_location" />
+    
+    <ImageButton
+        android:id="@+id/thread_list_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/commentBy"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/commentBody"
+        android:contentDescription="@string/image_desc"
+        android:visibility="gone"
+        android:background="@null"
+        android:src="@null" />
 
 </RelativeLayout>

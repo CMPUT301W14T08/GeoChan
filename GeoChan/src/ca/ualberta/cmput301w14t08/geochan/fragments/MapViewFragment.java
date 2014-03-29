@@ -90,7 +90,7 @@ public class MapViewFragment extends Fragment {
             Road road = roadManager.getRoad(waypoints);
 
             roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
-            
+
             openMapView.getOverlays().clear();
             openMapView.invalidate();
             openMapView.getOverlays().add(roadOverlay);
@@ -201,11 +201,11 @@ public class MapViewFragment extends Fragment {
             GeoLocation geoLocation = topComment.getLocation();
             startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
-            
+
             Marker startMarker = createMarker(startGeoPoint);
             startMarker.setTitle("OP");
             startMarker.showInfoWindow();
-            
+
             markers.add(createMarker(startGeoPoint));
             handleChildComments(topComment);
         }

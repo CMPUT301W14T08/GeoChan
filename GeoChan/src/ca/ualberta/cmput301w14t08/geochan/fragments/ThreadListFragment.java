@@ -70,22 +70,20 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //locationListener = new LocationListenerService(getActivity());
+        // locationListener = new LocationListenerService(getActivity());
         setHasOptionsMenu(true);
     }
-    
+
     /**
-     * Starts the location listener listening.
-     * If we're sorting threads by a user-entered location, locSortFlag
-     * will be set to 1, so we sort according to the specified location
-     * and set the flag back to 0.
+     * Starts the location listener listening. If we're sorting threads by a
+     * user-entered location, locSortFlag will be set to 1, so we sort according
+     * to the specified location and set the flag back to 0.
      */
     @Override
-    public void onResume(){
-        if(locSortFlag == 1){
+    public void onResume() {
+        if (locSortFlag == 1) {
             prefManager.setThreadSort(SortUtil.SORT_LOCATION);
-            SortUtil.sortThreads(SortUtil.SORT_LOCATION,
-                                ThreadList.getThreads());
+            SortUtil.sortThreads(SortUtil.SORT_LOCATION, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             locSortFlag = 0;
         }
@@ -108,45 +106,42 @@ public class ThreadListFragment extends Fragment implements
         MenuItem item = menu.findItem(R.id.action_settings);
         item.setVisible(true);
     }
-    
+
     /**
-     * Determines which sorting method was selected
-     * and calls the appropriate sorting method on our
-     * list of threads.
+     * Determines which sorting method was selected and calls the appropriate
+     * sorting method on our list of threads.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
         case R.id.thread_sort_date_new:
-            //User wants to push new threads to the top.
+            // User wants to push new threads to the top.
             prefManager.setThreadSort(SortUtil.SORT_DATE_NEWEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_date_old:
-            //User wants to push old threads to the top.
+            // User wants to push old threads to the top.
             prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_high:
-            //User wants threads with high relevance/score at the top.
+            // User wants threads with high relevance/score at the top.
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_HIGHEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
-            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST,
-                                ThreadList.getThreads());
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_low:
-            //User wants threads with low relevance/score at the top.
+            // User wants threads with low relevance/score at the top.
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_LOWEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
-            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST,
-                                ThreadList.getThreads());
+            SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_location:
-            //User wants threads close to a selected location at the top.
+            // User wants threads close to a selected location at the top.
             locSortFlag = 1;
             this.getSortingLoc();
             return true;
@@ -154,13 +149,13 @@ public class ThreadListFragment extends Fragment implements
             return super.onOptionsItemSelected(item);
         }
     }
-    
+
     /**
-     * Sets the fragment's locSortFlag to 1 so sorting is
-     * done in onResume then sends the user to a CustomLocationFragment
-     * to enter the location they want to sort according to.
+     * Sets the fragment's locSortFlag to 1 so sorting is done in onResume then
+     * sends the user to a CustomLocationFragment to enter the location they
+     * want to sort according to.
      */
-    private void getSortingLoc(){
+    private void getSortingLoc() {
         Bundle args = new Bundle();
         args.putInt("postType", CustomLocationFragment.SORT_THREAD);
         CustomLocationFragment frag = new CustomLocationFragment();
@@ -170,20 +165,20 @@ public class ThreadListFragment extends Fragment implements
                 .commit();
         getFragmentManager().executePendingTransactions();
     }
-    
+
     /**
      * Initializes our fragment with various variables, displays the threads,
-     * sets up a onItemClickListener so the user is sent to the appropriate thread
-     * when they click on it, then sorts the threads according to the method
-     * the user has chosen.
+     * sets up a onItemClickListener so the user is sent to the appropriate
+     * thread when they click on it, then sorts the threads according to the
+     * method the user has chosen.
      */
     @Override
     public void onStart() {
         super.onStart();
-        if(locationListener == null){
+        if (locationListener == null) {
             locationListener = new LocationListenerService(getActivity());
         }
-        if(prefManager == null){
+        if (prefManager == null) {
             prefManager = PreferencesManager.getInstance();
         }
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
@@ -258,7 +253,7 @@ public class ThreadListFragment extends Fragment implements
     public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
         adapter.setList(new ArrayList<ThreadComment>());
     }
-    
+
     private void reload() {
         getLoaderManager().getLoader(0).forceLoad();
     }

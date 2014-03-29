@@ -43,8 +43,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * This class is responsible for all ElasticSearch operations.
- * NEED MORE DETAILED COMMENT
+ * This class is responsible for all ElasticSearch operations. NEED MORE
+ * DETAILED COMMENT
  * 
  * @author AUTHOR HERE
  */
@@ -68,8 +68,8 @@ public class ElasticSearchClient {
 
     /**
      * Returns the single instance of the ElasticSearchClient.
-     * ElasticSearchClient follows the singleton design pattern,
-     * so only one instance of the class exists.
+     * ElasticSearchClient follows the singleton design pattern, so only one
+     * instance of the class exists.
      * 
      * @return the instance
      * 

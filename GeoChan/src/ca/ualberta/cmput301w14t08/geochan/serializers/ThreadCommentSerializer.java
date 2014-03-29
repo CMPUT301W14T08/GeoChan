@@ -69,7 +69,7 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         if (thread.getBodyComment().hasImage()) {
             Bitmap bitmap = thread.getBodyComment().getImage();
             Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
-            
+
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string

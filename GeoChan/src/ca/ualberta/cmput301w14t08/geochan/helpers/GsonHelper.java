@@ -53,7 +53,7 @@ public class GsonHelper {
         }
         return onlineGson;
     }
-    
+
     public static Gson getOfflineGson() {
         if (offlineGson == null) {
             getInstance();

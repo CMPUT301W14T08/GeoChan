@@ -21,9 +21,8 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
 /**
- * A utility class for ElasticSearch.
- * Contains various queries and builders for queries to be used when interacting
- * with ElasticSearch.
+ * A utility class for ElasticSearch. Contains various queries and builders for
+ * queries to be used when interacting with ElasticSearch.
  * 
  * @author AUTHOR HERE
  */

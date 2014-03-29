@@ -240,9 +240,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 relativeInflater.addView(child);
                 setLocationField(view, comment);
             }
-            
-            if(comment.hasImage()) {
-                ImageButton thumbnail = (ImageButton) view.findViewById(R.id.thread_view_comment_thumbnail);
+
+            if (comment.hasImage()) {
+                ImageButton thumbnail = (ImageButton) view
+                        .findViewById(R.id.thread_view_comment_thumbnail);
                 thumbnail.setVisibility(View.VISIBLE);
                 thumbnail.setFocusable(false);
             }
@@ -320,30 +321,15 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         switch (item.getItemId()) {
         case (R.id.comment_sort_date_new):
             // User wants to push newer comments to the top.
-            prefManager.setCommentSort(SortUtil.SORT_DATE_NEWEST);
-            SortUtil.sortComments(SortUtil.SORT_DATE_NEWEST, thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            sortByTag(SortUtil.SORT_DATE_NEWEST);
             return true;
         case (R.id.comment_sort_date_old):
             // User wants to push older comments to the top.
-            prefManager.setCommentSort(SortUtil.SORT_DATE_OLDEST);
-            SortUtil.sortComments(SortUtil.SORT_DATE_OLDEST, thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            sortByTag(SortUtil.SORT_DATE_OLDEST);
             return true;
         case (R.id.comment_sort_image):
             // User wants to push comments with images to the top.
-            prefManager.setCommentSort(SortUtil.SORT_IMAGE);
-            SortUtil.sortComments(SortUtil.SORT_IMAGE, thread.getBodyComment().getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            sortByTag(SortUtil.SORT_IMAGE);
             return true;
         case (R.id.comment_sort_location):
             // User wants to push comments near a selected location to the top.
@@ -353,32 +339,33 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         case (R.id.comment_sort_score_high):
             // User wants to push comments with a high score/relevance to the
             // top.
-            prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_HIGHEST);
-            SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
-            SortUtil.sortComments(SortUtil.SORT_USER_SCORE_HIGHEST, thread.getBodyComment()
-                    .getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            sortByTag(SortUtil.SORT_USER_SCORE_HIGHEST);
             return true;
         case (R.id.comment_sort_score_low):
             // User wants to push comments with a low score/relevance to the
             // top.
-            prefManager.setCommentSort(SortUtil.SORT_USER_SCORE_LOWEST);
-            SortUtil.setCommentSortGeo(new GeoLocation(locationListener));
-            SortUtil.sortComments(SortUtil.SORT_USER_SCORE_LOWEST, thread.getBodyComment()
-                    .getChildren());
-            adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
-                    threadIndex);
-            threadView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            sortByTag(SortUtil.SORT_USER_SCORE_LOWEST);
             return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * Given a sorting tag, perform sort, remember chosen sorting method
+     * and reset the adapter to reflect changes.
+     * @param tag
+     *              tag to sort by. Tags are defined in SortUtil.java
+     */
+    private void sortByTag(int tag) {
+        prefManager.setCommentSort(tag);
+        SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(),
+                threadIndex);
+        threadView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+    
     /**
      * Sends the user into a CustomLocationFragment so they can choose a custom
      * location to sort comments by.

@@ -14,13 +14,12 @@ import ca.ualberta.cmput301w14t08.geochan.R;
  * COMMENT HERE
  * 
  * @author AUTHOR HERE
- *
+ * 
  */
 public class FavouritesFragment extends Fragment implements ActionBar.OnNavigationListener,
         OnBackStackChangedListener {
     private static ActionBar actionBar;
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
-
 
     /**
      * COMMENT HERE

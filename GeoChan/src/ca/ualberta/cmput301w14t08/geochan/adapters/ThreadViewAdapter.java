@@ -265,11 +265,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    
+
     private void listenForCommentThumbnail(View convertView, final Comment comment) {
         ImageButton thumbnail = (ImageButton) convertView
                 .findViewById(R.id.thread_view_comment_thumbnail);
-        if(thumbnail != null) {
+        if (thumbnail != null) {
             thumbnail.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click
@@ -277,8 +277,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("img", comment.getImage());
                     fragment.setArguments(bundle);
-                    manager.beginTransaction()
-                            .add(R.id.fragment_container, fragment, "repFrag")
+                    manager.beginTransaction().add(R.id.fragment_container, fragment, "repFrag")
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();
                 }
@@ -443,6 +442,14 @@ public class ThreadViewAdapter extends BaseAdapter {
                     + " Longitude: " + format.format(loc.getLongitude()));
         } else {
             origPostLocationText.setText("Error: No location found");
+        }
+        
+        if (thread.getBodyComment().hasImage()) {
+            ImageButton thumbnail = (ImageButton) convertView
+                    .findViewById(R.id.thread_view_comment_thumbnail);
+            thumbnail.setVisibility(View.VISIBLE);
+            thumbnail.setFocusable(false);
+            thumbnail.setImageBitmap(thread.getBodyComment().getImageThumb());
         }
     }
 

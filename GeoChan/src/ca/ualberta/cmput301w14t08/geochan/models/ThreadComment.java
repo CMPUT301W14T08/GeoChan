@@ -93,7 +93,6 @@ public class ThreadComment implements Parcelable {
         this.title = title;
     }
 
-
     public void addComment(Comment c) {
         this.bodyComment.addChild(c);
     }
@@ -151,14 +150,15 @@ public class ThreadComment implements Parcelable {
         double minScore = 0.0001;
 
         if (g == null) {
-            Log.e("Thread:" + this.getTitle(), "getScoreFromUser() was incorrectly called with a null location.");
+            Log.e("Thread:" + this.getTitle(),
+                    "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
         double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
         double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if (distScore + timeScore > maxScore) {
             return maxScore;
-        } else if (distScore + timeScore < minScore){
+        } else if (distScore + timeScore < minScore) {
             return minScore;
         } else {
             return distScore + timeScore;

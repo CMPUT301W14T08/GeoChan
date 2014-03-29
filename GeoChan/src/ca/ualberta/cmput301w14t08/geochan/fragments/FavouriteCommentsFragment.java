@@ -15,14 +15,14 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 
 /**
  * COMMENT EXPLAINING THE CLASS HERE
+ * 
  * @author AUTHOR HERE
- *
+ * 
  */
 public class FavouriteCommentsFragment extends Fragment {
     private static ArrayList<Comment> list;
     private FavouritesLog log;
     private ListView favouritesListView;
-
 
     /**
      * COMMENT HERE
@@ -56,7 +56,8 @@ public class FavouriteCommentsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         favouritesListView = (ListView) getView().findViewById(R.id.favourites_list);
-        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity(), getFragmentManager());
+        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity(),
+                getFragmentManager());
         // Assign custom adapter to the thread listView.
         favouritesListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

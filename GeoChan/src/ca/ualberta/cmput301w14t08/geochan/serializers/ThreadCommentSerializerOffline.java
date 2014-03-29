@@ -40,10 +40,11 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Handles the serialization of a ThreadComment object into JSON format for offline caching.
+ * Handles the serialization of a ThreadComment object into JSON format for
+ * offline caching.
  * 
  */
-//TODO: IMPLEMENT
+// TODO: IMPLEMENT
 public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComment> {
 
     /*
@@ -71,11 +72,11 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         object.addProperty("user", thread.getBodyComment().getUser());
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
-        
+
         if (thread.getBodyComment().hasImage()) {
             Bitmap bitmap = thread.getBodyComment().getImage();
             Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
-            
+
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
@@ -95,7 +96,7 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         Log.e("comments", object.toString());
         return object;
     }
-    
+
     private void recursive(JsonObject object, Comment parent, ArrayList<Comment> list) {
         object.addProperty(parent.getId(), GsonHelper.getOfflineGson().toJson(list));
         for (Comment comment : list) {
@@ -103,8 +104,3 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         }
     }
 }
-
-
- 
-
-

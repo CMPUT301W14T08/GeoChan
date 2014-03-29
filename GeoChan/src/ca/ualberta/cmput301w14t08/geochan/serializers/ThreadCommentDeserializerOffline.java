@@ -46,10 +46,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 /**
- * Handles the deserialization of a ThreadComment object from JSON in the offline cache.
+ * Handles the deserialization of a ThreadComment object from JSON in the
+ * offline cache.
  */
 
-//TODO: implement
+// TODO: implement
 public class ThreadCommentDeserializerOffline implements JsonDeserializer<ThreadComment> {
 
     /*

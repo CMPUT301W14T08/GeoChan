@@ -88,7 +88,7 @@ public class PostCommentFragment extends Fragment {
     }
 
     /**
-     * COMMENT GOES HERE
+     * Set up the fragment, its layout and parameters and views.
      */
     @Override
     public void onStart() {
@@ -108,7 +108,8 @@ public class PostCommentFragment extends Fragment {
     }
 
     /**
-     * COMMENT GOES HERE
+     * Handle returning to the fragment from selecting an image to attach 
+     * or from choosing a custom location. Location/Image are passed back to the fragment through a bundle.
      */
     @Override
     public void onResume() {
@@ -143,7 +144,9 @@ public class PostCommentFragment extends Fragment {
 
     /**
      * COMMENT GOES HERE
-     * @param v WHAT DOTH V?
+     * 
+     * @param v
+     *            The Post Button
      */
     public void postReply(View v) {
         if (v.getId() == R.id.post_reply_button) {
@@ -174,10 +177,12 @@ public class PostCommentFragment extends Fragment {
             getFragmentManager().popBackStackImmediate();
         }
     }
-    
+
     /**
      * Displays dialog and either launches camera or gallery
-     * @param View v
+     * 
+     * @param View
+     *            v
      */
     public void attachImageReply(View v) {
         if (v.getId() == R.id.attach_image_button) {
@@ -185,35 +190,43 @@ public class PostCommentFragment extends Fragment {
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
 
-            dialog.setPositiveButton("Gallery",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            try {
-                                File file = ImageHelper.createImageFile();
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                                startActivityForResult(Intent.createChooser(intent, "Test"), ImageHelper.REQUEST_GALLERY); 
-                            } catch (IOException e) {
-                                //do something
-                            }
-                        }
-                    });
-            dialog.setNegativeButton("Camera",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            Intent intent = new Intent();
-                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                            try {
-                                File file = ImageHelper.createImageFile();
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                                startActivityForResult(Intent.createChooser(intent, "Test"), ImageHelper.REQUEST_CAMERA);
-                            } catch (IOException e) {
-                                //do something
-                            }
-                        }
-                    });
+            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_GALLERY);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_CAMERA);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
             dialog.show();
         }
     }
@@ -234,7 +247,8 @@ public class PostCommentFragment extends Fragment {
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {
-                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
+                            .getContentResolver(), data.getData());
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -250,9 +264,9 @@ public class PostCommentFragment extends Fragment {
                 bundle.putParcelable("IMAGE_FULL", image);
                 imageView.setImageBitmap(squareBitmap);
             }
-        }    
+        }
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();

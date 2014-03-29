@@ -19,7 +19,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
  * COMMENT HERE
  * 
  * @author AUTHOR HERE
- *
+ * 
  */
 public class FavouriteThreadsFragment extends Fragment {
     private ArrayList<ThreadComment> list;

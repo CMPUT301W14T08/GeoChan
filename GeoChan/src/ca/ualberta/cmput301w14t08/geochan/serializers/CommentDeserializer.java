@@ -78,15 +78,19 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
              */
             String encodedImage = object.get("image").getAsString();
             byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
-            
-            // http://stackoverflow.com/a/5878773 
+
+            // http://stackoverflow.com/a/5878773
             // Sando's workaround for running out of memory on decoding bitmaps.
             BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inDither=false;                     //Disable Dithering mode
-            opts.inPurgeable=true;                   //Tell to gc that whether it needs free memory, the Bitmap can be cleared
-            opts.inInputShareable=true;              //Which kind of reference will be used to recover the Bitmap data after being clear, when it will be used in the future
-            opts.inTempStorage=new byte[32 * 1024]; 
-            
+            opts.inDither = false; // Disable Dithering mode
+            opts.inPurgeable = true; // Tell to gc that whether it needs free
+                                     // memory, the Bitmap can be cleared
+            opts.inInputShareable = true; // Which kind of reference will be
+                                          // used to recover the Bitmap data
+                                          // after being clear, when it will be
+                                          // used in the future
+            opts.inTempStorage = new byte[32 * 1024];
+
             image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, opts);
 
             String encodedThumb = object.get("imageThumbnail").getAsString();
