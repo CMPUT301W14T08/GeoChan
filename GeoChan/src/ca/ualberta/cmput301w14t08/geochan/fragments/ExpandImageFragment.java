@@ -30,7 +30,7 @@ public class ExpandImageFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                getFragmentManager().popBackStack();
             }
         });
     }
