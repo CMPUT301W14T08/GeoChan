@@ -79,7 +79,7 @@ public class PostThreadFragment extends Fragment {
                 } else {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
-                    String locTitle = args.getString("locationDescription");
+                    String locationDescription = args.getString("locationDescription");
                     geoLocation.setCoordinates(lat, lon);
 
                     DecimalFormat format = new DecimalFormat();
@@ -87,9 +87,12 @@ public class PostThreadFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    //locButton
-                    //        .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
-                    locButton.setText("Location: " + locTitle);
+                    if (locationDescription.equals("Unknown Location")) {
+                        locButton.setText("Lat: " + format.format(lat) + ", Long: "
+                                + format.format(lon));
+                    } else {
+                        locButton.setText("Location: " + locationDescription);
+                    }
                 }
             }
         }

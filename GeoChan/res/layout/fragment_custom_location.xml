@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/custom_location_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1" >
-    </ListView>
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -39,52 +31,35 @@
             android:onClick="submitLocation"
             android:text="@string/new_location_button_text" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-
-        <EditText
-            android:id="@+id/latitude_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="@string/placeholder_latitude"
-            android:inputType="numberSigned|numberDecimal" />
-
-        <EditText
-            android:id="@+id/longitude_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="@string/placeholder_longitude"
-            android:inputType="numberSigned|numberDecimal" />
-    </LinearLayout>
-
+    
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/previous_location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/custom_location_list_view"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayout2"
         android:paddingLeft="5dp"
         android:text="@string/location_log"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
     <org.osmdroid.views.MapView
-        android:id="@+id/select_location_map_view"
+        android:id="@+id/map_view"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_above="@id/previous_location_text"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/custom_location_list_view" >
+        android:layout_alignParentTop="true"
+        android:padding="5dp" >
 
     </org.osmdroid.views.MapView>
+
+    <ListView
+        android:id="@+id/custom_location_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true" >
+
+    </ListView>
 
 </RelativeLayout>

@@ -37,7 +37,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,11 +45,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
-import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationMapFragment.GetPOIAsyncTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
@@ -63,15 +60,13 @@ import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
  * for their post/comment via either a custom long/latt or selecting a
  * previously used location.
  * 
- * @author AUTHOR HERE
+ * @author Brad Simons
  * 
  */
 public class CustomLocationFragment extends Fragment {
 
     private ArrayList<LogEntry> logArray;
     private CustomLocationAdapter customLocationAdapter;
-    private EditText latitudeEditText;
-    private EditText longitudeEditText;
     private int postType;
     private FragmentManager fm;
     private MapView openMapView;
@@ -85,12 +80,18 @@ public class CustomLocationFragment extends Fragment {
     public static final int SORT_THREAD = 4;
     public static final int SORT_COMMENT = 5;
 
+    /**
+     * Inflates the custom location fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_custom_location, container, false);
     }
 
+    /**
+     * Infaltes the menu and adds any action bar items that are present
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,9 +116,6 @@ public class CustomLocationFragment extends Fragment {
 
         fm = getFragmentManager();
 
-        latitudeEditText = (EditText) getView().findViewById(R.id.latitude_edit_text);
-        longitudeEditText = (EditText) getView().findViewById(R.id.longitude_edit_text);
-
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -135,19 +133,30 @@ public class CustomLocationFragment extends Fragment {
         setupMap();
     }
 
+    /**
+     * Sets up the map. Implements a map button receiver so that the user can click
+     * on the map to set their location. Then gets the users current location and 
+     * centers the map around their location
+     */
     private void setupMap() {
-        openMapView = (MapView) getActivity().findViewById(R.id.select_location_map_view);
+        openMapView = (MapView) getActivity().findViewById(R.id.map_view);
 
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
 
+            /**
+             * Called on a single tap
+             */
             @Override
             public boolean singleTapUpHelper(IGeoPoint clickedPoint) {
                 return false;
             }
 
+            /**
+             * Called on a long press on the map. A location marker is created and 
+             * placed on the map where the user clicked
+             */
             @Override
             public boolean longPressHelper(IGeoPoint clickedPoint) {
-                Log.e("clicked", "longpress");
                 createNewMarker(clickedPoint.getLatitude(), clickedPoint.getLongitude());
                 addNewLocationMarker();
                 return false;
@@ -163,44 +172,36 @@ public class CustomLocationFragment extends Fragment {
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
 
-        openMapView.getController().setZoom(13);
-        openMapView.getController().setCenter(new GeoPoint(geoLocation.getLocation()));
+        if (geoLocation.getLocation() != null) {
+            openMapView.getController().setCenter(new GeoPoint(geoLocation.getLocation()));
+            openMapView.getController().setZoom(13);
+        } else {
+            openMapView.getController().setZoom(2);
+        }
     }
 
     /**
-     * Called when a user enters custom Long/Lat coordinates and clicks Submit
-     * Location
+     * Called when a user clicks the submit button. If the user has placed a 
+     * location marker on the map, that location is placeed in a bundle and 
+     * passed back to the previous fragment
      * 
      * @param v
-     *            WHAT DOTH V?
      * 
      */
     public void submitNewLocationFromCoordinates(View v) {
-        /*
-         * String latStr = latitudeEditText.getText().toString(); String longStr
-         * = longitudeEditText.getText().toString();
-         * 
-         * if (latStr.equals("") && longStr.equals("")) {
-         * ErrorDialog.show(getActivity(),
-         * "Coordinates can not be left blank."); } else if (-90 >
-         * Double.valueOf(latStr) || 90 < Double.valueOf(latStr) || -180 >
-         * Double.valueOf(longStr) || 180 < Double.valueOf(longStr)) {
-         * ErrorDialog.show(getActivity(),
-         * "Latitude must be between -90 and 90, " +
-         * "Longitude must be between -180 and 180"); } else { Double latVal =
-         * Double.valueOf(latStr); Double longVal = Double.valueOf(longStr);
-         * GeoLocation geoLocation = new GeoLocation(latVal, longVal);
-         * setBundleArguments(geoLocation, "NEW_LOCATION");
-         * fm.popBackStackImmediate(); }
-         */
-        GeoLocation geoLocation = new GeoLocation(locationMarker.getPosition().getLatitude(),
-                locationMarker.getPosition().getLongitude());
-        setBundleArguments(geoLocation, "NEW_LOCATION");
-        fm.popBackStackImmediate();
+        if (locationMarker == null) {
+            ErrorDialog.show(getActivity(), "Please select a location on the map");
+        } else {
+            GeoLocation geoLocation = new GeoLocation(locationMarker.getPosition().getLatitude(),
+                    locationMarker.getPosition().getLongitude());
+            setBundleArguments(geoLocation, "NEW_LOCATION");
+            fm.popBackStackImmediate();
+        }
     }
 
     /**
-     * COMMENT HERE
+     * Calls onStop in the super class and tells the locationListenerService to
+     * stop listening for location updates
      */
     @Override
     public void onStop() {
@@ -209,16 +210,15 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Called when a user clicks the current location button
+     * Called when a user clicks the current location button. Gets the user's
+     * current location, puts it in a bundle and passes it back to the previous
+     * fragment
      * 
      * @param v
-     *            WHAT DOTH V?
      * 
      */
     public void submitCurrentLocation(View v) {
-        LocationListenerService listener = new LocationListenerService(getActivity());
-        listener.startListening();
-        GeoLocation geoLocation = new GeoLocation(listener);
+        GeoLocation geoLocation = new GeoLocation(locationListenerService);
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not obtain location");
         } else {
@@ -272,7 +272,6 @@ public class CustomLocationFragment extends Fragment {
      * fragment
      * 
      * @param geoLocation
-     *            WHAT DOTH geoLocation?
      * 
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
