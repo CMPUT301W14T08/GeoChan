@@ -79,6 +79,7 @@ public class PostThreadFragment extends Fragment {
                 } else {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
+                    String locTitle = args.getString("locationDescription");
                     geoLocation.setCoordinates(lat, lon);
 
                     DecimalFormat format = new DecimalFormat();
@@ -86,8 +87,9 @@ public class PostThreadFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton
-                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    //locButton
+                    //        .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton.setText("Location: " + locTitle);
                 }
             }
         }
@@ -95,7 +97,9 @@ public class PostThreadFragment extends Fragment {
 
     /**
      * COMMENT GOES HERE
-     * @param v WHAT DOTH V?
+     * 
+     * @param v
+     *            WHAT DOTH V?
      */
     public void postNewThread(View v) {
         if (v.getId() == R.id.post_thread_button) {

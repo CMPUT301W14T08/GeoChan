@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <org.osmdroid.views.MapView
-        android:id="@+id/select_location_map_view"
+        android:id="@+id/select_location_map_view_2"
         android:layout_width="fill_parent"
         android:layout_height="389dp"
         android:layout_weight="1.74" />
