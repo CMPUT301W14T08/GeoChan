@@ -149,11 +149,11 @@ public class PostCommentFragment extends Fragment {
      * When post button is pressed, create new comment object, set up the
      * required params, post it and log it.
      * 
-     * @param v
+     * @param view
      *            The Post Button
      */
-    public void postReply(View v) {
-        if (v.getId() == R.id.post_reply_button) {
+    public void postReply(View view) {
+        if (view.getId() == R.id.post_reply_button) {
             EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
             String comment = editComment.getText().toString();
             if (geoLocation.getLocation() == null) {
@@ -181,7 +181,7 @@ public class PostCommentFragment extends Fragment {
 
             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
             getFragmentManager().popBackStackImmediate();
         }
@@ -193,8 +193,8 @@ public class PostCommentFragment extends Fragment {
      * @param View
      *            v
      */
-    public void attachImageReply(View v) {
-        if (v.getId() == R.id.attach_image_button) {
+    public void attachImageReply(View view) {
+        if (view.getId() == R.id.attach_image_button) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);

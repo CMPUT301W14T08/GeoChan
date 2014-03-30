@@ -164,50 +164,50 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     /**
      * Calls the respective post new thread method in the fragment.
      * 
-     * @param v
+     * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void postNewThread(View v) {
+    public void postNewThread(View view) {
         PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
                 .findFragmentByTag("postThreadFrag");
-        fragment.postNewThread(v);
+        fragment.postNewThread(view);
     }
 
     /**
      * Calls the respective post reply method in the fragment.
      * 
-     * @param v
+     * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void postReply(View v) {
+    public void postReply(View view) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
-        fragment.postReply(v);
+        fragment.postReply(view);
     }
 
-    public void attachImageToReply(View v) {
+    public void attachImageToReply(View view) {
         PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("repFrag");
-        fragment.attachImageReply(v);
+        fragment.attachImageReply(view);
     }
 
-    public void attachImageToThread(View v) {
+    public void attachImageToThread(View view) {
         PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
                 .findFragmentByTag("postThreadFrag");
-        fragment.attachImageToThread(v);
+        fragment.attachImageToThread(view);
     }
 
     /**
      * Calls the respective change location method in the fragment.
      * 
-     * @param v
+     * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void changeLocation(View v) {
+    public void changeLocation(View view) {
         Bundle args = new Bundle();
-        if (v.getId() == R.id.thread_location_button) {
+        if (view.getId() == R.id.thread_location_button) {
             args.putInt("postType", CustomLocationFragment.THREAD);
-        } else if (v.getId() == R.id.location_button) {
+        } else if (view.getId() == R.id.location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
         }
         CustomLocationFragment frag = new CustomLocationFragment();
@@ -221,33 +221,33 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     /**
      * Calls the respective submit location method in the fragment.
      * 
-     * @param v
+     * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void submitLocation(View v) {
+    public void submitLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
-        fragment.submitNewLocationFromCoordinates(v);
+        fragment.submitNewLocationFromCoordinates(view);
     }
 
     /**
      * Calls the respective submit location method in the fragment.
      * 
-     * @param v
+     * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void submitCurrentLocation(View v) {
+    public void submitCurrentLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
-        fragment.submitCurrentLocation(v);
+        fragment.submitCurrentLocation(view);
     }
 
     /**
      * Launches fragment for choosing custom location
      * 
-     * @param v
+     * @param view
      */
-    public void selectLocationFromMap(View v) {
+    public void selectLocationFromMap(View view) {
         CustomLocationMapFragment frag = new CustomLocationMapFragment();
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag, "customLocMapFrag").addToBackStack(null)
@@ -268,7 +268,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
     }
 
-    public void getDirections(View v) {
+    public void getDirections(View view) {
         MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(
                 "mapFrag");
         fragment.getDirections();

@@ -117,11 +117,11 @@ public class CustomLocationFragment extends Fragment {
      * Called when a user enters custom Long/Lat coordinates and clicks Submit
      * Location
      * 
-     * @param v
+     * @param view
      *            WHAT DOTH V?
      * 
      */
-    public void submitNewLocationFromCoordinates(View v) {
+    public void submitNewLocationFromCoordinates(View view) {
         String latStr = latitudeEditText.getText().toString();
         String longStr = longitudeEditText.getText().toString();
 
@@ -143,11 +143,11 @@ public class CustomLocationFragment extends Fragment {
     /**
      * Called when a user clicks the current location button
      * 
-     * @param v
+     * @param view
      *            WHAT DOTH V?
      * 
      */
-    public void submitCurrentLocation(View v) {
+    public void submitCurrentLocation(View view) {
         LocationListenerService listener = new LocationListenerService(getActivity());
         listener.startListening();
         GeoLocation geoLocation = new GeoLocation(listener);
