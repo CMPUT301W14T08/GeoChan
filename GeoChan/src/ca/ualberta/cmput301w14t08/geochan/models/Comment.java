@@ -246,29 +246,29 @@ public class Comment implements Parcelable {
      * Determines the distance between a comment and a GeoLocation in terms of
      * latitude and longitude coordinates.
      * 
-     * @param g
+     * @param geo
      *            The GeoLocation to be compared with.
      * @return The distance between the Comment and the passed GeoLocation in
      *         terms of coordinates.
      */
-    public double getDistanceFrom(GeoLocation g) {
-        return this.getLocation().distance(g);
+    public double getDistanceFrom(GeoLocation geo) {
+        return this.getLocation().distance(geo);
     }
 
     /**
      * Determines the amount of time between when the Comment was posted and the
      * passed date in terms of hours.
      * 
-     * @param d
+     * @param date
      *            The Date to be compared with.
      * @return The number of hours between when the Comment was posted and the
      *         passed Date.
      */
-    public double getTimeFrom(Date d) {
+    public double getTimeFrom(Date date) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(this.getCommentDate());
-        cal2.setTime(d);
+        cal2.setTime(date);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
         if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
@@ -285,6 +285,7 @@ public class Comment implements Parcelable {
      * 
      * @return The score of the Comment in relation to its parent.
      */
+    @Deprecated
     public double getScoreFromParent() {
         int distConst = 25;
         int timeConst = 10;
@@ -312,23 +313,23 @@ public class Comment implements Parcelable {
      * Determines the score of a comment in a thread relevant to the user's
      * current location and time.
      * 
-     * @param g
+     * @param geo
      *            The current GeoLocation of the user. In sorting, the
      *            Thread.sortLoc GeoLocation of the sorting thread is used and
      *            should be set in the fragment.
      * @return The score of the comment in relation to the user's location and
      *         current time.
      */
-    public double getScoreFromUser(GeoLocation g) {
+    public double getScoreFromUser(GeoLocation geo) {
         int distConst = 25;
         int timeConst = 10;
         int maxScore = 10000;
 
-        if (g == null) {
+        if (geo == null) {
             Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(geo)));
         double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if ((distScore + timeScore) > maxScore) {
             return maxScore;

@@ -32,13 +32,6 @@ public class ThreadList {
     private static ArrayList<ThreadComment> threads = null;
 
     /**
-     * A GeoLocation used for our thread sorting methods, should be set by the
-     * fragment whenever the user decides to sort Threads by relevance or
-     * location.
-     */
-    private static GeoLocation sortLoc;
-
-    /**
      * Getters and setters
      */
     public static ArrayList<ThreadComment> getThreads() {
@@ -52,13 +45,6 @@ public class ThreadList {
         threads = listOfThreads;
     }
 
-    public static void setSortLoc(GeoLocation g) {
-        sortLoc = g;
-    }
-
-    public static GeoLocation getSortLoc() {
-        return sortLoc;
-    }
 
     /**
      * Creates a new ThreadComment and adds it to to the ThreadList.
@@ -78,14 +64,14 @@ public class ThreadList {
     /**
      * Adds a new ThreadComment to the ThreadList.
      * 
-     * @param t
+     * @param thread
      *            The ThreadComment to be added.
      */
-    public static void addThread(ThreadComment t) {
+    public static void addThread(ThreadComment thread) {
         if (threads == null) {
             threads = new ArrayList<ThreadComment>();
         }
-        threads.add(t);
+        threads.add(thread);
     }
 
     public static void clearThreads() {

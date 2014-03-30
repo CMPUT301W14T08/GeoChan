@@ -101,29 +101,29 @@ public class ThreadComment implements Parcelable {
      * Determines the distance between the Thread (defined by the GeoLocation of
      * the top comment) and the provided GeoLocation in terms of coordinates.
      * 
-     * @param g
+     * @param geo
      *            The GeoLocation we want to determine the distance from.
      * @return The distance, in terms of coordinates, between the Thread and the
      *         passed GeoLocation.
      */
-    public double getDistanceFrom(GeoLocation g) {
-        return this.getBodyComment().getLocation().distance(g);
+    public double getDistanceFrom(GeoLocation geo) {
+        return this.getBodyComment().getLocation().distance(geo);
     }
 
     /**
      * Determines the time passed between when the Thread was posted and the
      * passed Date in terms of number of hours.
      * 
-     * @param d
+     * @param date
      *            The Date we are comparing with.
      * @return The number of hours between when the Thread was posted and the
      *         passed Date. Returns a minimum of 0.5.
      */
-    public double getTimeFrom(Date d) {
+    public double getTimeFrom(Date date) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(this.getThreadDate());
-        cal2.setTime(d);
+        cal2.setTime(date);
         long t1 = cal1.getTimeInMillis();
         long t2 = cal2.getTimeInMillis();
         if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
@@ -136,25 +136,25 @@ public class ThreadComment implements Parcelable {
     /**
      * Determines the score of a thread relevant to
      * 
-     * @param g
+     * @param geo
      *            The GeoLocation relevant to sorting. In sorting, the
      *            Thread.sortLoc GeoLocation of the sorting thread is used and
      *            should be set in the fragment.
      * @return The score of the comment in relation to the user's location and
      *         current time.
      */
-    public double getScoreFromUser(GeoLocation g) {
+    public double getScoreFromUser(GeoLocation geo) {
         int distConst = 25;
         int timeConst = 10;
         long maxScore = 100000000;
         double minScore = 0.0001;
 
-        if (g == null) {
+        if (geo == null) {
             Log.e("Thread:" + this.getTitle(),
                     "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
-        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(g)));
+        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(geo)));
         double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
         if (distScore + timeScore > maxScore) {
             return maxScore;

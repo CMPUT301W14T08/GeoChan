@@ -65,12 +65,12 @@ public class SortUtil {
         return threadSortGeo;
     }
 
-    public static void setCommentSortGeo(GeoLocation g) {
-        commentSortGeo = g;
+    public static void setCommentSortGeo(GeoLocation geo) {
+        commentSortGeo = geo;
     }
 
-    public static void setThreadSortGeo(GeoLocation g) {
-        threadSortGeo = g;
+    public static void setThreadSortGeo(GeoLocation geo) {
+        threadSortGeo = geo;
     }
 
     /**

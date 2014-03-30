@@ -117,11 +117,11 @@ public class PostThreadFragment extends Fragment {
      * onClick method for the post button. Extracts the textView information,
      * creates the threadComment object and posts it to the server.
      * 
-     * @param v
+     * @param view
      *            The post button in the PostThreadFragment
      */
-    public void postNewThread(View v) {
-        if (v.getId() == R.id.post_thread_button) {
+    public void postNewThread(View view) {
+        if (view.getId() == R.id.post_thread_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String title = editTitle.getText().toString();
@@ -149,7 +149,7 @@ public class PostThreadFragment extends Fragment {
                 }
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                inputManager.hideSoftInputFromWindow(view.getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
                 this.getFragmentManager().popBackStackImmediate();
             }
@@ -162,8 +162,8 @@ public class PostThreadFragment extends Fragment {
      * @param View
      *            the AttachPhoto button in postThreadFragment
      */
-    public void attachImageToThread(View v) {
-        if (v.getId() == R.id.attach_image_button) {
+    public void attachImageToThread(View view) {
+        if (view.getId() == R.id.attach_image_button) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
