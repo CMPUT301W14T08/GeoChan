@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
@@ -37,6 +38,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -53,6 +55,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class EditCommentFragment extends Fragment {
     private Comment editComment;
     private EditText newTextPost;
+    private ImageView oldThumbView;
+    private static Bitmap oldThumbnail;
     private static String oldText;
     
     
@@ -91,7 +95,13 @@ public class EditCommentFragment extends Fragment {
             EditCommentFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
-        }    
+        }
+        if(EditCommentFragment.oldThumbnail == null
+            && editComment.getImageThumb() != null){
+            EditCommentFragment.oldThumbnail = editComment.getImageThumb();
+            oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
+            oldThumbView.setImageBitmap(EditCommentFragment.oldThumbnail);
+        }
         newTextPost = (EditText) getActivity().findViewById(R.id.editBody);
         newTextPost.setText(editComment.getTextPost());
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
@@ -164,6 +174,7 @@ public class EditCommentFragment extends Fragment {
      */
     public void makeEdit(View view){
         EditCommentFragment.oldText = null;
+        EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -171,10 +182,6 @@ public class EditCommentFragment extends Fragment {
                 InputMethodManager.HIDE_NOT_ALWAYS);
         getFragmentManager().popBackStackImmediate();
         
-    }
-    
-    public void changeLocation(View v){
-        //Can probably adapt this from PostCommentFragment.
     }
 
 }
