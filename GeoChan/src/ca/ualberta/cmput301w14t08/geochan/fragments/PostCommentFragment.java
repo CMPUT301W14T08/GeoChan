@@ -257,6 +257,7 @@ public class PostCommentFragment extends Fragment {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
                 image = scaleImage(imageBitmap);
+                //image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, false);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
@@ -276,6 +277,7 @@ public class PostCommentFragment extends Fragment {
                 }
                 Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
                 image = scaleImage(imageBitmap);
+                //image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, false);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
@@ -286,7 +288,7 @@ public class PostCommentFragment extends Fragment {
     }
     
     private Bitmap scaleImage(Bitmap bitmap) {
-     // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
+        // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
         // Scale the pic if it is too large:
         if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
                 || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
@@ -297,7 +299,7 @@ public class PostCommentFragment extends Fragment {
             int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
             int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
         }
         return bitmap;
     }

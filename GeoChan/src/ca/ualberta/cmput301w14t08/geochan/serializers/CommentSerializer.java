@@ -70,17 +70,18 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         if (comment.hasImage()) {
             Bitmap bitmap = comment.getImage();
             Bitmap bitmapThumb = comment.getImageThumb();
-
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
+            // Serialize the image 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP | Base64.NO_PADDING);
             object.addProperty("image", encoded);
-
+            
+            // Serialize the thumbnail
             byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();

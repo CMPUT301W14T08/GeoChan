@@ -12,7 +12,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -49,7 +48,6 @@ public class GeoLocationLogIOManager {
             String json = gson.toJson(list);
             FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
-            Log.e("GGG", "serialized");
             w.write(json);
             w.close();
             f.close();
@@ -82,10 +80,6 @@ public class GeoLocationLogIOManager {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        Log.e("size of location log:", Integer.toString(list.size()));
-        for (LogEntry l : list) {
-            Log.e("WWW", l.getThreadTitle());
         }
         return list;
     }

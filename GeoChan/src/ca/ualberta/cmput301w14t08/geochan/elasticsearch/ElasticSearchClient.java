@@ -106,7 +106,7 @@ public class ElasticSearchClient {
         String query = ElasticSearchQueries.commentListScript(comment.getId());
         update(query, TYPE_INDEX, commentToReplyTo.getId());
         String json = gson.toJson(comment);
-        Log.e("json", json);
+        //Log.e("json", json);
         return post(json, TYPE_COMMENT, comment.getId());
     }
 
@@ -234,9 +234,10 @@ public class ElasticSearchClient {
                 JestResult result = null;
                 try {
                     result = client.execute(index);
-                    Log.e("ELAST", result.getErrorMessage());
+                    Log.e("WWW", result.getErrorMessage());
+                    Log.e("WWW", "TTT");
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    Log.e("WWW", "RRR");
                     e.printStackTrace();
                 }
             }
