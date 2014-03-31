@@ -28,9 +28,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.RectF;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -46,10 +43,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 /**
- * Handles the deserialization of a ThreadComment object from JSON in the offline cache.
+ * Handles the deserialization of a ThreadComment object from JSON in the
+ * offline cache.
  */
 
-//TODO: implement
+// TODO: implement
 public class ThreadCommentDeserializerOffline implements JsonDeserializer<ThreadComment> {
 
     /*
@@ -77,6 +75,10 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        String locationDescription = null;
+        if (object.get("locationDescription") != null) {
+            locationDescription = object.get("locationDescription").getAsString();
+        }
         ArrayList<Comment> topList = new ArrayList<Comment>();
         recursive(object, id, topList);
         Bitmap image = null;
@@ -95,6 +97,7 @@ public class ThreadCommentDeserializerOffline implements JsonDeserializer<Thread
             thumbnail = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
         }
         GeoLocation location = new GeoLocation(latitude, longitude);
+        location.setLocationDescription(locationDescription);
         final Comment c = new Comment(textPost, location);
         c.getCommentDate().setTime(threadDate);
         c.setUser(user);

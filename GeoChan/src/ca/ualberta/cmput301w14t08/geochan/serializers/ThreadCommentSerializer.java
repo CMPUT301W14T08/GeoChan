@@ -24,9 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -60,6 +57,10 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         if (thread.getBodyComment().getLocation() != null) {
             object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
                     + "," + thread.getBodyComment().getLocation().getLongitude());
+            if (thread.getBodyComment().getLocation().getLocationDescription() != null) {
+                object.addProperty("locationDescription", thread.getBodyComment().getLocation()
+                        .getLocationDescription());
+            }
         } else {
             object.addProperty("location", "-999,-999");
         }
@@ -69,7 +70,7 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment> {
         if (thread.getBodyComment().hasImage()) {
             Bitmap bitmap = thread.getBodyComment().getImage();
             Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
-            
+
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string

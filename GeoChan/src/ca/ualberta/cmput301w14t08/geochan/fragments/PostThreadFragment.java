@@ -79,8 +79,10 @@ public class PostThreadFragment extends Fragment {
                 } else {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
-                    String locationDescription = args.getString("locationDescription");
                     geoLocation.setCoordinates(lat, lon);
+                    
+                    String locationDescription = args.getString("locationDescription");
+                    geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);

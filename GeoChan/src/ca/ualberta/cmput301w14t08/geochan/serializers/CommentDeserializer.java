@@ -26,9 +26,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.RectF;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -69,6 +66,10 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         String hash = object.get("hash").getAsString();
         String textPost = object.get("textPost").getAsString();
         String id = object.get("id").getAsString();
+        String locationDescription = null;
+        if (object.get("locationDescription") != null) {
+            locationDescription = object.get("locationDescription").getAsString();
+        }
         Bitmap image = null;
         Bitmap thumbnail = null;
         if (hasImage) {
@@ -87,6 +88,7 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         int depth = object.get("depth").getAsInt();
         // String parent = object.get("parent").getAsString();
         GeoLocation location = new GeoLocation(latitude, longitude);
+        location.setLocationDescription(locationDescription);
         final Comment comment = new Comment(textPost, location);
         comment.getCommentDate().setTime(commentDate);
         comment.setUser(user);

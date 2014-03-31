@@ -124,13 +124,20 @@ public class PostCommentFragment extends Fragment {
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
 
+                    String locationDescription = args.getString("locationDescription");
+                    geoLocation.setLocationDescription(locationDescription);
+
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton
-                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    if (locationDescription.equals("Unknown Location")) {
+                        locButton.setText("Lat: " + format.format(lat) + ", Long: "
+                                + format.format(lon));
+                    } else {
+                        locButton.setText("Location: " + locationDescription);
+                    }
                 }
             }
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
@@ -143,7 +150,9 @@ public class PostCommentFragment extends Fragment {
 
     /**
      * COMMENT GOES HERE
-     * @param v WHAT DOTH V?
+     * 
+     * @param v
+     *            WHAT DOTH V?
      */
     public void postReply(View v) {
         if (v.getId() == R.id.post_reply_button) {
@@ -174,10 +183,12 @@ public class PostCommentFragment extends Fragment {
             getFragmentManager().popBackStackImmediate();
         }
     }
-    
+
     /**
      * Displays dialog and either launches camera or gallery
-     * @param View v
+     * 
+     * @param View
+     *            v
      */
     public void attachImageReply(View v) {
         if (v.getId() == R.id.attach_image_button) {
@@ -185,35 +196,43 @@ public class PostCommentFragment extends Fragment {
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
 
-            dialog.setPositiveButton("Gallery",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            try {
-                                File file = ImageHelper.createImageFile();
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                                startActivityForResult(Intent.createChooser(intent, "Test"), ImageHelper.REQUEST_GALLERY); 
-                            } catch (IOException e) {
-                                //do something
-                            }
-                        }
-                    });
-            dialog.setNegativeButton("Camera",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            Intent intent = new Intent();
-                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                            try {
-                                File file = ImageHelper.createImageFile();
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set the image file name
-                                startActivityForResult(Intent.createChooser(intent, "Test"), ImageHelper.REQUEST_CAMERA);
-                            } catch (IOException e) {
-                                //do something
-                            }
-                        }
-                    });
+            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_GALLERY);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_CAMERA);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
             dialog.show();
         }
     }
@@ -234,7 +253,8 @@ public class PostCommentFragment extends Fragment {
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {
-                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
+                            .getContentResolver(), data.getData());
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -250,9 +270,9 @@ public class PostCommentFragment extends Fragment {
                 bundle.putParcelable("IMAGE_FULL", image);
                 imageView.setImageBitmap(squareBitmap);
             }
-        }    
+        }
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();

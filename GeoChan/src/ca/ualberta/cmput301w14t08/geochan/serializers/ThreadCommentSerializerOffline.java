@@ -25,9 +25,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.graphics.drawable.PictureDrawable;
 import android.util.Base64;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
@@ -40,10 +37,11 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Handles the serialization of a ThreadComment object into JSON format for offline caching.
+ * Handles the serialization of a ThreadComment object into JSON format for
+ * offline caching.
  * 
  */
-//TODO: IMPLEMENT
+// TODO: IMPLEMENT
 public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComment> {
 
     /*
@@ -65,17 +63,21 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         if (thread.getBodyComment().getLocation() != null) {
             object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
                     + "," + thread.getBodyComment().getLocation().getLongitude());
+            if (thread.getBodyComment().getLocation().getLocationDescription() != null) {
+                object.addProperty("locationDescription", thread.getBodyComment().getLocation()
+                        .getLocationDescription());
+            }
         } else {
             object.addProperty("location", "-999,-999");
         }
         object.addProperty("user", thread.getBodyComment().getUser());
         object.addProperty("hash", thread.getBodyComment().getHash());
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
-        
+
         if (thread.getBodyComment().hasImage()) {
             Bitmap bitmap = thread.getBodyComment().getImage();
             Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
-            
+
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
@@ -95,7 +97,7 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         Log.e("comments", object.toString());
         return object;
     }
-    
+
     private void recursive(JsonObject object, Comment parent, ArrayList<Comment> list) {
         object.addProperty(parent.getId(), GsonHelper.getOfflineGson().toJson(list));
         for (Comment comment : list) {
@@ -103,8 +105,3 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         }
     }
 }
-
-
- 
-
-

@@ -134,9 +134,9 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Sets up the map. Implements a map button receiver so that the user can click
-     * on the map to set their location. Then gets the users current location and 
-     * centers the map around their location
+     * Sets up the map. Implements a map button receiver so that the user can
+     * click on the map to set their location. Then gets the users current
+     * location and centers the map around their location
      */
     private void setupMap() {
         openMapView = (MapView) getActivity().findViewById(R.id.map_view);
@@ -152,8 +152,8 @@ public class CustomLocationFragment extends Fragment {
             }
 
             /**
-             * Called on a long press on the map. A location marker is created and 
-             * placed on the map where the user clicked
+             * Called on a long press on the map. A location marker is created
+             * and placed on the map where the user clicked
              */
             @Override
             public boolean longPressHelper(IGeoPoint clickedPoint) {
@@ -181,8 +181,8 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Called when a user clicks the submit button. If the user has placed a 
-     * location marker on the map, that location is placeed in a bundle and 
+     * Called when a user clicks the submit button. If the user has placed a
+     * location marker on the map, that location is placeed in a bundle and
      * passed back to the previous fragment
      * 
      * @param v

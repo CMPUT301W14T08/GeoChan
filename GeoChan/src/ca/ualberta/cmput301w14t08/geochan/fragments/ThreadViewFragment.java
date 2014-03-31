@@ -155,13 +155,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         GeoLocation repLocCom = comment.getLocation();
 
         if (repLocCom != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
+            if (repLocCom.getLocationDescription() != null) {
+                replyLocationText.setText(repLocCom.getLocationDescription());
+            } else {
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
 
-            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
-                    + " Longitude: " + format.format(repLocCom.getLongitude()));
+                replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
+                        + " Longitude: " + format.format(repLocCom.getLongitude()));
+            }
         } else {
             replyLocationText.setText("Error: No location found");
         }
@@ -240,9 +244,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 relativeInflater.addView(child);
                 setLocationField(view, comment);
             }
-            
-            if(comment.hasImage()) {
-                ImageButton thumbnail = (ImageButton) view.findViewById(R.id.thread_view_comment_thumbnail);
+
+            if (comment.hasImage()) {
+                ImageButton thumbnail = (ImageButton) view
+                        .findViewById(R.id.thread_view_comment_thumbnail);
                 thumbnail.setVisibility(View.VISIBLE);
                 thumbnail.setFocusable(false);
             }

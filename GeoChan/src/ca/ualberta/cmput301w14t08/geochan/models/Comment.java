@@ -28,7 +28,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;

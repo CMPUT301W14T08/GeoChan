@@ -86,9 +86,9 @@ public class ThreadListAdapter extends BaseAdapter {
         setThreadFields(convertView, thread);
         return convertView;
     }
-    
+
     private void setThreadFields(View convertView, ThreadComment thread) {
-     // Thread title
+        // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);
         title.setText(thread.getTitle());
         // Thread bodyComment snippet
@@ -101,8 +101,9 @@ public class ThreadListAdapter extends BaseAdapter {
         TextView user = (TextView) convertView.findViewById(R.id.commentBy);
         user.setText("Posted by " + thread.getBodyComment().getUser() + "#"
                 + thread.getBodyComment().getHash());
-        
-        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(thread.getBodyComment().getHash())) {
+
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(
+                thread.getBodyComment().getHash())) {
             user.setBackgroundResource(R.drawable.username_background_thread_rect);
             user.setTextColor(Color.WHITE);
             user.setText(" " + user.getText() + "  ");
@@ -110,18 +111,25 @@ public class ThreadListAdapter extends BaseAdapter {
             user.setBackgroundResource(0);
             user.setTextColor(Color.RED);
         }
-        
+
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
-        if (loc != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
 
-            location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
-                    + format.format(loc.getLongitude()));
+        if (loc != null) {
+            if (loc.getLocationDescription() != null
+                    && loc.getLocationDescription().equals("Unknown Location")) {
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
+
+                location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
+                        + format.format(loc.getLongitude()));
+            } else {
+                location.setText(loc.getLocationDescription());
+            }
+
         } else {
             location.setText("Error: No location found");
         }

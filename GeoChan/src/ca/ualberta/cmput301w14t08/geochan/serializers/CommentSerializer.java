@@ -58,6 +58,10 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         if (comment.getLocation() != null) {
             object.addProperty("location", comment.getLocation().getLatitude() + ","
                     + comment.getLocation().getLongitude());
+            if (comment.getLocation().getLocationDescription() != null) {
+                object.addProperty("locationDescription", comment.getLocation()
+                        .getLocationDescription());
+            }
         } else {
             object.addProperty("location", "-999,-999");
         }
