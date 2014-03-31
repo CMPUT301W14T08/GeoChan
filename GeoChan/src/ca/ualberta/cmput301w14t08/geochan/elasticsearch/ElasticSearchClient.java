@@ -33,6 +33,7 @@ import io.searchbox.core.Update;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -104,7 +105,9 @@ public class ElasticSearchClient {
             final Comment comment) {
         String query = ElasticSearchQueries.commentListScript(comment.getId());
         update(query, TYPE_INDEX, commentToReplyTo.getId());
-        return post(gson.toJson(comment), TYPE_COMMENT, comment.getId());
+        String json = gson.toJson(comment);
+        Log.e("json", json);
+        return post(json, TYPE_COMMENT, comment.getId());
     }
 
     /**
@@ -228,8 +231,10 @@ public class ElasticSearchClient {
             @Override
             public void run() {
                 Index index = new Index.Builder(json).index(URL_INDEX).type(type).id(id).build();
+                JestResult result = null;
                 try {
-                    client.execute(index);
+                    result = client.execute(index);
+                    Log.e("ELAST", result.getErrorMessage());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

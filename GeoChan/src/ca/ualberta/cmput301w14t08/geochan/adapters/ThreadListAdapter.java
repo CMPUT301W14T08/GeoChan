@@ -130,7 +130,7 @@ public class ThreadListAdapter extends BaseAdapter {
                 location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
                         + format.format(loc.getLongitude()));
             } else {
-                location.setText(loc.getLocationDescription());
+                location.setText("near: " + loc.getLocationDescription());
             }
 
         } else {
