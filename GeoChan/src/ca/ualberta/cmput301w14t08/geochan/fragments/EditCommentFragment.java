@@ -20,13 +20,22 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -41,6 +50,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -53,6 +63,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  *
  */
 public class EditCommentFragment extends Fragment {
+    private static final int MAX_BITMAP_DIMENSIONS = 600;
     private Comment editComment;
     private EditText newTextPost;
     private ImageView oldThumbView;
@@ -167,8 +178,114 @@ public class EditCommentFragment extends Fragment {
         return;
     }
     
+    /**
+     * Allows the user to change the image attached to their comment. Copied from
+     * attachImageReply in PostCommentFragment, presumably originally written by
+     * either ArtemC or ArtemH.
+     * @param view
+     */
     public void editImage(View view){
-        
+        if (view.getId() == R.id.attach_image_button) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.attach_image_title);
+            dialog.setMessage(R.string.attach_image_dialog);
+
+            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_GALLERY);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        File file = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+                                                                        // the
+                                                                        // image
+                                                                        // file
+                                                                        // name
+                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                                ImageHelper.REQUEST_CAMERA);
+                    } catch (IOException e) {
+                        // do something
+                    }
+                }
+            });
+            dialog.setNeutralButton("Remove Image", new DialogInterface.OnClickListener(){
+               public void onClick(DialogInterface arg0, int arg1){
+                   editComment.setImage(null);
+                   editComment.setImageThumb(null);
+               }
+            });
+            dialog.show();
+        }
+    }
+    
+    /**
+     * Gets called after the user selects a new image to post from their gallery or one that
+     * they've taken. Sets the image and image thumb in editComment to the new image they want
+     * attached to their comment.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap image = null;
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ImageHelper.REQUEST_CAMERA) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                image = scaleImage(imageBitmap);
+            } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
+                            .getContentResolver(), data.getData());
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                image = scaleImage(imageBitmap);
+            }
+        }
+        editComment.setImage(image);   
+        Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 96, 96);
+        editComment.setImageThumb(imageThumb);
+    }
+    
+    private Bitmap scaleImage(Bitmap bitmap) {
+        // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
+        // Scale the pic if it is too large:
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
+                || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getHeight() > bitmap.getWidth())
+                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+
+            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+        }
+        return bitmap;
     }
     
     /**
