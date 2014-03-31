@@ -45,7 +45,7 @@
 
     <ImageButton
         android:id="@+id/thread_view_comment_thumbnail"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/image_desc"
@@ -59,6 +59,7 @@
         android:background="@drawable/rounded_corner_selector"
         android:visibility="gone"
         android:src="@null" />
+    
     
     <RelativeLayout
         android:id="@+id/relative_inflater"
