@@ -52,5 +52,7 @@
     <string name="submit_location_map_button">Submit</string>
     <string name="depth">Max Depth +1</string>
     <string name="save_image">Save Image</string>
+    <string name="make_edit">Post Edit</string>
+    <string name="comment_being_edited">Comment Being Edited:</string>
 
 </resources>

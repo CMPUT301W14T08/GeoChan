@@ -274,6 +274,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                         .findViewById(R.id.comment_edit_button);
                 editButton.setVisibility(View.VISIBLE);
                 editButton.setFocusable(false);
+                
+                editButton.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v){
+                        //SETUP FOR COMMENT EDITING GOES HERE
+                        editComment(comment);
+                    }
+                });
             }
 
             // Check if the favourites log already has a copy.
@@ -300,8 +307,23 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                     replyToComment(comment, threadIndex);
                 }
             });
+               
         }
     };
+    
+    private void editComment(Comment comment){
+        //Log.e("EDIT:", "The edit comment button was pressed!");
+        //Log.e("EDIT:", "The comment text is:" + c.getTextPost());
+        Fragment fragment = new EditCommentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("threadIndex", threadIndex);
+        bundle.putString("commentId", comment.getId());
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, "editFrag").addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
+    }
 
     private void resetOtherCommentLayouts(int position) {
         for (int i = 2; i < threadView.getCount() + 1; ++i) {

@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -195,6 +196,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                 .findFragmentByTag("postThreadFrag");
         fragment.attachImageToThread(view);
     }
+    
+    public void makeEdit(View view){
+        EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag("editFrag");
+        fragment.makeEdit(view);
+    }
 
     /**
      * Calls the respective change location method in the fragment.
@@ -208,6 +215,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             args.putInt("postType", CustomLocationFragment.THREAD);
         } else if (view.getId() == R.id.location_button) {
             args.putInt("postType", CustomLocationFragment.COMMENT);
+        } else if (view.getId() == R.id.edit_location_button) {
+            args.putInt("postType", CustomLocationFragment.EDIT);
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
