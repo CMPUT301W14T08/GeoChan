@@ -30,6 +30,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 public class GeoLocation {
 
     private Location location;
+    private String locationDescription;
 
     /**
      * Constructs a new GeoLocation object when supplied a
@@ -147,5 +148,13 @@ public class GeoLocation {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 }

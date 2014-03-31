@@ -68,6 +68,10 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         String hash = object.get("hash").getAsString();
         String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        String locationDescription = null;
+        if (object.get("locationDescription") != null) {
+            locationDescription = object.get("locationDescription").getAsString();
+        }
         Bitmap image = null;
         Bitmap thumbnail = null;
         if (hasImage) {
@@ -84,6 +88,7 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
             thumbnail = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
         }
         GeoLocation location = new GeoLocation(latitude, longitude);
+        location.setLocationDescription(locationDescription);
         final Comment c = new Comment(textPost, location);
         c.getCommentDate().setTime(threadDate);
         c.setUser(user);

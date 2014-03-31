@@ -63,6 +63,10 @@ public class ThreadCommentSerializerOffline implements JsonSerializer<ThreadComm
         if (thread.getBodyComment().getLocation() != null) {
             object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
                     + "," + thread.getBodyComment().getLocation().getLongitude());
+            if (thread.getBodyComment().getLocation().getLocationDescription() != null) {
+                object.addProperty("locationDescription", thread.getBodyComment().getLocation()
+                        .getLocationDescription());
+            }
         } else {
             object.addProperty("location", "-999,-999");
         }

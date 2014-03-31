@@ -34,7 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationMapFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
@@ -240,19 +239,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         fragment.submitCurrentLocation(view);
-    }
-
-    /**
-     * Launches fragment for choosing custom location
-     * 
-     * @param view
-     */
-    public void selectLocationFromMap(View view) {
-        CustomLocationMapFragment frag = new CustomLocationMapFragment();
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, frag, "customLocMapFrag").addToBackStack(null)
-                .commit();
-        getFragmentManager().executePendingTransactions();
     }
 
     /**

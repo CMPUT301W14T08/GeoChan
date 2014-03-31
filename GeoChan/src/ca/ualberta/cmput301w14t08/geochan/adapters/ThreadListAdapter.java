@@ -118,14 +118,21 @@ public class ThreadListAdapter extends BaseAdapter {
         // Location text
         TextView location = (TextView) convertView.findViewById(R.id.locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
-        if (loc != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
 
-            location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
-                    + format.format(loc.getLongitude()));
+        if (loc != null) {
+            if (loc.getLocationDescription() != null
+                    && loc.getLocationDescription().equals("Unknown Location")) {
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
+
+                location.setText("Latitude: " + format.format(loc.getLatitude()) + " Longitude: "
+                        + format.format(loc.getLongitude()));
+            } else {
+                location.setText(loc.getLocationDescription());
+            }
+
         } else {
             location.setText("Error: No location found");
         }

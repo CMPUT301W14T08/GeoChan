@@ -162,13 +162,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         GeoLocation repLocCom = comment.getLocation();
 
         if (repLocCom != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
+            if (repLocCom.getLocationDescription() != null) {
+                replyLocationText.setText(repLocCom.getLocationDescription());
+            } else {
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
 
-            replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
-                    + " Longitude: " + format.format(repLocCom.getLongitude()));
+                replyLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
+                        + " Longitude: " + format.format(repLocCom.getLongitude()));
+            }
         } else {
             replyLocationText.setText("Error: No location found");
         }

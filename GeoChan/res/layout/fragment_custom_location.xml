@@ -4,15 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-<ListView
-    android:id="@+id/custom_location_list_view"
-    android:layout_width="match_parent"
-    android:layout_height="312dp"
-    android:layout_alignParentLeft="true"
-    android:layout_below="@+id/textView1" >
-
-    </ListView>
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -25,11 +16,11 @@
             android:id="@+id/current_location_button"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:layout="@+id/new_location_button"
-            android:text="@string/current_location_button_text"
-            android:onClick="submitCurrentLocation" />
+            android:onClick="submitCurrentLocation"
+            android:text="@string/current_location_button_text" />
 
         <Button
             android:id="@+id/new_location_button"
@@ -37,55 +28,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/new_location_button_text"
-            android:onClick="submitLocation" />
-
+            android:onClick="submitLocation"
+            android:text="@string/new_location_button_text" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-        <EditText
-            android:id="@+id/latitude_edit_text"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="numberSigned|numberDecimal"
-            android:hint="@string/placeholder_latitude" />
-
-        <EditText
-            android:id="@+id/longitude_edit_text"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:ems="10"
-	  	    android:inputType="numberSigned|numberDecimal"
-            android:hint="@string/placeholder_longitude" />
-    </LinearLayout>
-
+    
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/previous_location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/custom_location_list_view"
         android:layout_alignParentLeft="true"
         android:paddingLeft="5dp"
-        android:layout_below="@+id/linearLayout2"
         android:text="@string/location_log"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/select_from_map_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    
+    <org.osmdroid.views.MapView
+        android:id="@+id/map_view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/previous_location_text"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/custom_location_list_view"
-        android:onClick="selectLocationFromMap"
-        android:text="@string/select_location_from_map"/>
+        android:layout_alignParentTop="true"
+        android:padding="5dp" >
+
+    </org.osmdroid.views.MapView>
+
+    <ListView
+        android:id="@+id/custom_location_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true" >
+
+    </ListView>
 
 </RelativeLayout>

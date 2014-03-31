@@ -95,14 +95,21 @@ public class PostThreadFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
+                    
+                    String locationDescription = args.getString("locationDescription");
+                    geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton
-                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    if (locationDescription.equals("Unknown Location")) {
+                        locButton.setText("Lat: " + format.format(lat) + ", Long: "
+                                + format.format(lon));
+                    } else {
+                        locButton.setText("Location: " + locationDescription);
+                    }
                 }
             }
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
