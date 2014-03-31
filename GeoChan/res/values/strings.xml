@@ -54,5 +54,7 @@
     <string name="save_image">Save Image</string>
     <string name="make_edit">Post Edit</string>
     <string name="comment_being_edited">Comment Being Edited:</string>
+    <string name="edit_image">Edit Image</string>
+    <string name="edit_location">Edit Location</string>
 
 </resources>

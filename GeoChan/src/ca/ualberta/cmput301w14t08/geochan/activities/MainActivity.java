@@ -197,6 +197,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.attachImageToThread(view);
     }
     
+    public void editImage(View view){
+        EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
+                .findFragmentByTag("editFrag");
+        fragment.editImage(view);
+    }
+    
     public void makeEdit(View view){
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");

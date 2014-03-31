@@ -80,7 +80,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="attachImageToReply"
+            android:onClick="editImage"
             android:text="@string/attach_image" />
 
         <Button

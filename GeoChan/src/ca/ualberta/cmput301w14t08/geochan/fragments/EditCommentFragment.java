@@ -167,6 +167,10 @@ public class EditCommentFragment extends Fragment {
         return;
     }
     
+    public void editImage(View view){
+        
+    }
+    
     /**
      * Returns the user to the previous fragment after the Comment has
      * been altered.
