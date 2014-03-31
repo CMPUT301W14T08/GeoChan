@@ -163,7 +163,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
         if (repLocCom != null) {
             if (repLocCom.getLocationDescription() != null) {
-                replyLocationText.setText(repLocCom.getLocationDescription());
+                replyLocationText.setText("near: " +repLocCom.getLocationDescription());
             } else {
                 DecimalFormat format = new DecimalFormat();
                 format.setRoundingMode(RoundingMode.HALF_EVEN);

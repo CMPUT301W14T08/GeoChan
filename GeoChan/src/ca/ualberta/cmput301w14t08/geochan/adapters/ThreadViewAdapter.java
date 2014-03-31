@@ -453,7 +453,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         TextView origPostLocationText = (TextView) convertView
                 .findViewById(R.id.thread_view_op_locationText);
         GeoLocation loc = thread.getBodyComment().getLocation();
+        String locDescriptor = loc.getLocationDescription();
         if (loc != null) {
+            if (locDescriptor != null) {
+                origPostLocationText.setText("near: " + locDescriptor);
+            } else {
             // The rounding of long and lat for max 4 decimal digits.
             DecimalFormat format = new DecimalFormat();
             format.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -462,9 +466,9 @@ public class ThreadViewAdapter extends BaseAdapter {
 
             origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
                     + " Longitude: " + format.format(loc.getLongitude()));
-        } else {
-            origPostLocationText.setText("Error: No location found");
+            } 
         }
+        
         // Set the thumbnail is there is an image
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
