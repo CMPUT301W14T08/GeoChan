@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,61 +53,6 @@ public class MapViewFragment extends Fragment {
     private int maxLong;
     private int minLat;
     private int minLong;
-
-    /**
-     * Async task class. This task is designed to retrieve directions from the
-     * users current location to the location of the original post of the
-     * thread. It displays a ProgressDialog while the location is being
-     * retrieved.
-     * 
-     * @author bradsimons
-     */
-    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            directionsLoadingDialog.setMessage("Getting Directions");
-            directionsLoadingDialog.show();
-        }
-
-        /**
-         * Calculating the directions from the current to the location of the
-         * topComment.
-         */
-        @Override
-        protected Void doInBackground(Void... params) {
-            RoadManager roadManager = new OSRMRoadManager();
-            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-
-            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
-                    .getLongitude()));
-            waypoints.add(startGeoPoint);
-            Road road = roadManager.getRoad(waypoints);
-
-            roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
-
-            openMapView.getOverlays().clear();
-            openMapView.invalidate();
-            openMapView.getOverlays().add(roadOverlay);
-
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog
-         */
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            directionsLoadingDialog.dismiss();
-        }
-    }
 
     /**
      * Gets the view when inflated, then calls setZoomLevel to display the
@@ -204,9 +150,16 @@ public class MapViewFragment extends Fragment {
 
             Marker startMarker = createMarker(startGeoPoint);
             startMarker.setTitle("OP");
+            
+            if (geoLocation.getLocationDescription() != null) {
+                startMarker.setSubDescription(geoLocation.getLocationDescription());
+            } else {
+                startMarker.setSubDescription("Unknown Location");
+            }
+            
             startMarker.showInfoWindow();
 
-            markers.add(createMarker(startGeoPoint));
+            markers.add(startMarker);
             handleChildComments(topComment);
         }
         openMapView.invalidate();
@@ -300,12 +253,14 @@ public class MapViewFragment extends Fragment {
      * @param geoPoint
      */
     public void setMarkers() {
+        Log.e("size of markers", Integer.toString(markers.size()));
         for (Marker marker : markers) {
             openMapView.getOverlays().add(marker);
         }
     }
 
     public Marker createMarker(GeoPoint geoPoint) {
+        Log.e("creating","a marker");
         Marker marker = new Marker(openMapView);
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -328,4 +283,59 @@ public class MapViewFragment extends Fragment {
         }
         openMapView.invalidate();
     }
+    
+    /**
+     * Async task class. This task is designed to retrieve directions from the
+     * users current location to the location of the original post of the
+     * thread. It displays a ProgressDialog while the location is being
+     * retrieved.
+     * 
+     * @author bradsimons
+     */
+    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
+
+        /**
+         * Displays a ProgessDialog while the task is executing
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            directionsLoadingDialog.setMessage("Getting Directions");
+            directionsLoadingDialog.show();
+        }
+
+        /**
+         * Calculating the directions from the current to the location of the
+         * topComment. Builds a road overlay and adds it to the openMapView
+         * objects overlays
+         */
+        @Override
+        protected Void doInBackground(Void... params) {
+            RoadManager roadManager = new OSRMRoadManager();
+            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+
+            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
+                    .getLongitude()));
+            waypoints.add(startGeoPoint);
+            Road road = roadManager.getRoad(waypoints);
+
+            roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
+            openMapView.getOverlays().add(roadOverlay);
+
+            return null;
+        }
+
+        /**
+         * Task is now finished, dismiss the ProgressDialog and refresh the map
+         */
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            directionsLoadingDialog.dismiss();
+            openMapView.invalidate();
+        }
+    }
+
 }
