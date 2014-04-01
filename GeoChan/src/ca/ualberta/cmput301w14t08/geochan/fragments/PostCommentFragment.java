@@ -67,6 +67,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author Artem Chikin
  */
 public class PostCommentFragment extends Fragment {
+    public static final int MAX_BITMAP_DIMENSIONS = 600;
+
     private ThreadComment thread;
     private Comment commentToReplyTo;
     private ImageView thumbnail;
@@ -253,8 +255,9 @@ public class PostCommentFragment extends Fragment {
             if (requestCode == ImageHelper.REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
-                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 96, 96);
+                image = scaleImage(imageBitmap);
+                //image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, false);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
@@ -272,8 +275,9 @@ public class PostCommentFragment extends Fragment {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
-                image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, true);
+                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 96, 96);
+                image = scaleImage(imageBitmap);
+                //image = Bitmap.createScaledBitmap(imageBitmap, 500, 500, false);
                 imageThumb = squareBitmap;
                 Bundle bundle = getArguments();
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
@@ -281,6 +285,23 @@ public class PostCommentFragment extends Fragment {
                 thumbnail.setImageBitmap(squareBitmap);
             }
         }
+    }
+    
+    private Bitmap scaleImage(Bitmap bitmap) {
+        // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
+        // Scale the pic if it is too large:
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
+                || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getHeight() > bitmap.getWidth())
+                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+
+            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+        }
+        return bitmap;
     }
 
     @Override

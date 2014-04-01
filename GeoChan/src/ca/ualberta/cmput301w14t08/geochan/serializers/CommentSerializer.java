@@ -38,8 +38,6 @@ import com.google.gson.JsonSerializer;
  */
 public class CommentSerializer implements JsonSerializer<Comment> {
 
-    public static final int MAX_BITMAP_DIMENSIONS = 800;
-    public static final int MAX_BITMAP_THUMB_DIMENSIONS = 200;
 
     /*
      * (non-Javadoc)
@@ -72,43 +70,18 @@ public class CommentSerializer implements JsonSerializer<Comment> {
         if (comment.hasImage()) {
             Bitmap bitmap = comment.getImage();
             Bitmap bitmapThumb = comment.getImageThumb();
-
-            // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-            // Scale the pic if it is too large:
-            if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                    || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-                double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
-                if (bitmap.getHeight() > bitmap.getWidth())
-                    scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
-
-                int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
-                int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
-
-                bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-            }
-
-            if (bitmapThumb.getWidth() > MAX_BITMAP_THUMB_DIMENSIONS
-                    || bitmapThumb.getHeight() > MAX_BITMAP_THUMB_DIMENSIONS) {
-                double scalingFactor = bitmapThumb.getWidth() * 1.0 / MAX_BITMAP_THUMB_DIMENSIONS;
-                if (bitmapThumb.getHeight() > bitmapThumb.getWidth())
-                    scalingFactor = bitmapThumb.getHeight() * 1.0 / MAX_BITMAP_THUMB_DIMENSIONS;
-
-                int newWidth = (int) Math.round(bitmapThumb.getWidth() / scalingFactor);
-                int newHeight = (int) Math.round(bitmapThumb.getHeight() / scalingFactor);
-
-                bitmapThumb = Bitmap.createScaledBitmap(bitmapThumb, newWidth, newHeight, false);
-            }
-
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
+            // Serialize the image 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP | Base64.NO_PADDING);
             object.addProperty("image", encoded);
-
+            
+            // Serialize the thumbnail
             byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();

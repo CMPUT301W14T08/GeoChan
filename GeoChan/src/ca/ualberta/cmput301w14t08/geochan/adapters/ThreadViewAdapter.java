@@ -29,7 +29,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -392,7 +391,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click to launch mapFragment
-                    Log.e("ButtonClick", "mapView");
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("thread_comment", thread.getBodyComment());
 
@@ -416,8 +414,6 @@ public class ThreadViewAdapter extends BaseAdapter {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click to launch postCommentFragment
-                    Log.e("ButtonClick", "click");
-                    Log.e("Comment being replied:", thread.getBodyComment().getTextPost());
                     Fragment fragment = new PostCommentFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("cmt", thread.getBodyComment());

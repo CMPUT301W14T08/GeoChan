@@ -37,6 +37,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,12 +48,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 /**
@@ -65,13 +64,14 @@ import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
  */
 public class CustomLocationFragment extends Fragment {
 
-    private ArrayList<LogEntry> logArray;
-    private CustomLocationAdapter customLocationAdapter;
+    // private ArrayList<LogEntry> logArray;
+    // private CustomLocationAdapter customLocationAdapter;
     private int postType;
     private FragmentManager fm;
     private MapView openMapView;
     private LocationListenerService locationListenerService;
     private Marker locationMarker;
+    private GeoLocation geoLocation;
 
     // flags for type of post that initiated this fragment
     public static final int THREAD = 1;
@@ -109,8 +109,8 @@ public class CustomLocationFragment extends Fragment {
      */
     public void onStart() {
         super.onStart();
-        GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
-        logArray = log.getLogEntries();
+        // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
+        // logArray = log.getLogEntries();
 
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
@@ -128,8 +128,9 @@ public class CustomLocationFragment extends Fragment {
             }
         });
 
-        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
-        lv.setAdapter(customLocationAdapter);
+        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
+        // logArray);
+        // lv.setAdapter(customLocationAdapter);
 
         setupMap();
     }
@@ -158,8 +159,11 @@ public class CustomLocationFragment extends Fragment {
              */
             @Override
             public boolean longPressHelper(IGeoPoint clickedPoint) {
-                createNewMarker(clickedPoint.getLatitude(), clickedPoint.getLongitude());
-                addNewLocationMarker();
+                geoLocation = new GeoLocation(clickedPoint.getLatitude(),
+                        clickedPoint.getLongitude());
+                geoLocation.retreivePOIString(getActivity());
+                //createNewMarker(clickedPoint.getLatitude(), clickedPoint.getLongitude());
+                //addNewLocationMarker();
                 return false;
             }
         };
@@ -255,6 +259,10 @@ public class CustomLocationFragment extends Fragment {
         locationMarker = new Marker(openMapView);
         locationMarker.setPosition(new GeoPoint(latitude, longitude));
         locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        openMapView.getOverlays().add(locationMarker);
+        openMapView.getController().setCenter(locationMarker.getPosition());
+        openMapView.invalidate();
     }
 
     /**
@@ -273,7 +281,6 @@ public class CustomLocationFragment extends Fragment {
      * fragment
      * 
      * @param geoLocation
-     * 
      */
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
         Bundle bundle = getArguments();
@@ -309,14 +316,14 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Async task for getting the POI of a location and place a marker on the
-     * map
+     * Async task for getting the POI of a location. Sets the location
+     * description string with result.
      * 
      * @author bradsimons
      */
     class GetPOIAsyncTask extends AsyncTask<Marker, Void, Marker> {
 
-        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
+        ProgressDialog loadingPOIDialog = new ProgressDialog(getActivity());
         POI poi;
 
         /**
@@ -325,18 +332,18 @@ public class CustomLocationFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            directionsLoadingDialog.setMessage("Loading");
-            directionsLoadingDialog.show();
+            loadingPOIDialog.setMessage("Loading");
+            loadingPOIDialog.show();
         }
 
         /**
-         * Get the points of interest
+         * Get the points of interest with 0.3 kilometers of of the location
          */
         @Override
         protected Marker doInBackground(Marker... markers) {
             for (Marker marker : markers) {
                 GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(marker.getPosition(), 2, 0.3);
+                ArrayList<POI> pois = poiProvider.getPOICloseTo(marker.getPosition(), 1, 0.3);
 
                 if (pois.size() > 0 && pois != null) {
                     poi = pois.get(0);
@@ -350,12 +357,13 @@ public class CustomLocationFragment extends Fragment {
         }
 
         /**
-         * Task is now finished, dismiss the ProgressDialog
+         * Task is now finished, dismiss the ProgressDialog Set the
+         * locationDescription string to the Point of Interest mType
          */
         @Override
         protected void onPostExecute(Marker marker) {
             super.onPostExecute(marker);
-            directionsLoadingDialog.dismiss();
+            loadingPOIDialog.dismiss();
 
             if (poi != null) {
                 marker.setSubDescription(poi.mType);

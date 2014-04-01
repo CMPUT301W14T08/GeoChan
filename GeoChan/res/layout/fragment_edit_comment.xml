@@ -7,24 +7,38 @@
     <TextView
         android:id="@+id/comment_editing"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:text="@string/comment_being_edited"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/old_thumb"
+        android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textStyle="bold"
-        android:paddingLeft="5dp" />
-
+        android:text="@string/comment_being_edited"
+        android:textStyle="bold" />
     
     <TextView
         android:id="@+id/old_comment_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:text="@string/hello_world"
+        android:layout_toLeftOf="@+id/old_thumb"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:maxLines ="5"
 		android:scrollbars = "vertical"
         android:layout_below="@+id/comment_editing" />
-
+    
+    <ImageView
+        android:id="@+id/old_thumb"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/old_comment_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/image_desc"
+        android:paddingBottom="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/rect2" />
+    
     <EditText
         android:id="@+id/editBody"
         android:layout_width="match_parent"
@@ -37,42 +51,49 @@
         android:hint="@string/commentHint"
         android:scrollbars="vertical" />
 
-    <Button
-        android:id="@+id/edit_location_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:onClick="changeLocation"
-        android:text="@string/location" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/edit_location_button"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/attach_image_button"
-            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/edit_location_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:text="@string/attach_image"
-            android:textSize="12sp" />
+            android:layout_weight="0.33"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/rounded_button_selector"
+            android:onClick="changeLocation"
+            android:text="@string/location" />
+
+        <Button
+            android:id="@+id/attach_image_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.33"
+            android:background="@drawable/rounded_button_selector"
+            android:onClick="editImage"
+            android:text="@string/attach_image" />
 
         <Button
             android:id="@+id/post_edit_button"
-            style="?android:attr/buttonStyleSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.33"
+            android:background="@drawable/rounded_button_selector"
             android:onClick="makeEdit"
-            android:text="@string/make_edit"
-            android:textSize="12sp" />
+            android:text="@string/make_edit" />
     </LinearLayout>
 
 </RelativeLayout>
