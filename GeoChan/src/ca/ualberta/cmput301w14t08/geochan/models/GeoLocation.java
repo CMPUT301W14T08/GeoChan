@@ -157,6 +157,17 @@ public class GeoLocation {
     }
 
     /**
+     * Helper method to construct and return a GeoPoint object corresponding 
+     * to the location of this object.
+     * 
+     * @return geoPoint
+     */
+    public GeoPoint makeGeoPoint() {
+        return new GeoPoint(getLatitude(), getLongitude());
+    }
+    
+    
+    /**
      * Async task for getting the POI of a location. Sets the location
      * description string with result.
      * 

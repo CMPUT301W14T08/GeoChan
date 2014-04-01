@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -151,15 +150,8 @@ public class MapViewFragment extends Fragment {
             startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
 
-            Marker startMarker = createMarker(startGeoPoint);
+            Marker startMarker = createMarker(geoLocation);
             startMarker.setTitle("OP");
-
-            if (geoLocation.getLocationDescription() != null) {
-                startMarker.setSubDescription(geoLocation.getLocationDescription());
-            } else {
-                startMarker.setSubDescription("Unknown Location");
-            }
-
             startMarker.showInfoWindow();
 
             markers.add(startMarker);
@@ -206,10 +198,8 @@ public class MapViewFragment extends Fragment {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
-                    GeoPoint childGeoPoint = new GeoPoint(commentLocation.getLatitude(),
-                            commentLocation.getLongitude());
-                    geoPoints.add(childGeoPoint);
-                    markers.add(createMarker(childGeoPoint));
+                    geoPoints.add(commentLocation.makeGeoPoint());
+                    markers.add(createMarker(commentLocation));
                     handleChildComments(childComment);
                 }
             }
@@ -256,17 +246,26 @@ public class MapViewFragment extends Fragment {
      * @param geoPoint
      */
     public void setMarkers() {
-        Log.e("size of markers", Integer.toString(markers.size()));
         for (Marker marker : markers) {
             openMapView.getOverlays().add(marker);
         }
     }
 
-    public Marker createMarker(GeoPoint geoPoint) {
-        Log.e("creating", "a marker");
+    public Marker createMarker(GeoLocation geoLocation) {
+        ;
         Marker marker = new Marker(openMapView);
+
+        GeoPoint geoPoint = geoLocation.makeGeoPoint();
         marker.setPosition(geoPoint);
+
+        if (geoLocation.getLocationDescription() != null) {
+            marker.setSubDescription(geoLocation.getLocationDescription());
+        } else {
+            marker.setSubDescription("Unknown Location");
+        }
+
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
         return marker;
     }
 
@@ -293,7 +292,7 @@ public class MapViewFragment extends Fragment {
      * thread. It displays a ProgressDialog while the location is being
      * retrieved.
      * 
-     * @author bradsimons
+     * @author Brad Simons
      */
     class MapAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -337,6 +336,14 @@ public class MapViewFragment extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             directionsLoadingDialog.dismiss();
+
+            GeoLocation currentLocation = new GeoLocation(locationListenerService);
+            Marker currentLocationMarker = createMarker(currentLocation);
+
+            currentLocationMarker.setTitle("Your Location");
+            currentLocationMarker.showInfoWindow();
+
+            openMapView.getOverlays().add(currentLocationMarker);
             openMapView.invalidate();
         }
     }
