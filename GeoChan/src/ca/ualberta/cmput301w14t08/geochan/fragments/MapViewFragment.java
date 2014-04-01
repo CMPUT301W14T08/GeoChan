@@ -294,7 +294,7 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * Creates a marker obejct, sets its position to the GeoPoint location
+     * Creates a marker object, sets its position to the GeoPoint location
      * passed, and then adds the marker to the map overlays.
      * 
      * @param geoPoint

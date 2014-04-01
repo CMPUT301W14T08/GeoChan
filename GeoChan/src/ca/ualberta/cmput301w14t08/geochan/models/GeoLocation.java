@@ -31,7 +31,6 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -208,11 +207,11 @@ public class GeoLocation {
             retrievePOIDialog.dismiss();
 
             if (poi != null) {
-                locationDescription = poi.mType;
+                setLocationDescription(poi.mType);
             } else {
-                locationDescription = "Unknown Location";
+                setLocationDescription("Unknown Location");
             }
-            Log.e("POI", getLocationDescription());
+            
         }
     }
 
