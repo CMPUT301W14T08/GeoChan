@@ -192,9 +192,12 @@ public class GeoLocation {
          * Get the points of interest with 0.3 kilometers of of the location
          */
         @Override
-        protected GeoPoint doInBackground(GeoPoint... geoPoints) {
+        protected GeoPoint doInBackground(GeoPoint...geoPoints) {
+            // get the Geonames provider
+            GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
+            
             for (GeoPoint geoPoint : geoPoints) {
-                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
+                
                 ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.8);
 
                 if (pois.size() > 0 && pois != null) {
