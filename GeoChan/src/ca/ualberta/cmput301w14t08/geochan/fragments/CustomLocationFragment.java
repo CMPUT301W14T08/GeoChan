@@ -31,7 +31,6 @@ import org.osmdroid.views.MapView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -117,7 +116,7 @@ public class CustomLocationFragment extends Fragment {
         // setup all listeners
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        
+
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -184,23 +183,6 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Called when a user clicks the submit button. If the user has placed a
-     * location marker on the map, that location is placed in a bundle and
-     * passed back to the previous fragment
-     * 
-     * @param v
-     * 
-     */
-    public void submitNewLocationFromCoordinates(View v) {
-        if (newLocation == null) {
-            ErrorDialog.show(getActivity(), "Please select a location on the map");
-        } else {
-            setBundleArguments(newLocation, "NEW_LOCATION");
-            fm.popBackStackImmediate();
-        }
-    }
-
-    /**
      * Calls onStop in the super class and tells the locationListenerService to
      * stop listening for location updates
      */
@@ -208,7 +190,6 @@ public class CustomLocationFragment extends Fragment {
     public void onStop() {
         super.onStop();
         locationListenerService.stopListening();
-
     }
 
     /**
@@ -227,6 +208,23 @@ public class CustomLocationFragment extends Fragment {
             setBundleArguments(currentGeoLocation, "CURRENT_LOCATION");
         }
         fm.popBackStackImmediate();
+    }
+    
+    /**
+     * Called when a user clicks the submit button. If the user has placed a
+     * location marker on the map, that location is placed in a bundle and
+     * passed back to the previous fragment
+     * 
+     * @param v
+     * 
+     */
+    public void submitNewLocationFromCoordinates(View v) {
+        if (newLocation == null) {
+            ErrorDialog.show(getActivity(), "Please select a location on the map");
+        } else {
+            setBundleArguments(newLocation, "NEW_LOCATION");
+            fm.popBackStackImmediate();
+        }
     }
 
     /**
@@ -254,31 +252,40 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Sets the Bundle arguments for passing back the location to the previous
-     * fragment
+     * Bundles up all arguments required to be passed to previous fragment. This
+     * depends on the post type. It will attach latitude, longitude and
+     * description of the location to be submitted, as well as the type of
+     * location being returned (current location of user or a new location set
+     * on the map)
      * 
      * @param newLocation
      */
     public void setBundleArguments(GeoLocation locationToSubmit, String locationType) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
+
+        // setup fragment by post type and attach an argument bundle to that
+        // fragment
         if (postType == THREAD) {
             PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
                     .findFragmentByTag("postThreadFrag");
             Bundle args = fragment.getArguments();
+
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
             args.putString("locationDescription", locationToSubmit.getLocationDescription());
-            ;
+
         } else if (postType == COMMENT) {
             PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
                     .findFragmentByTag("repFrag");
             Bundle args = fragment.getArguments();
+
             args.putDouble("LATITUDE", newLocation.getLatitude());
             args.putDouble("LONGITUDE", newLocation.getLongitude());
             args.putString("LocationType", locationType);
             args.putString("locationDescription", locationToSubmit.getLocationDescription());
+
         } else if (postType == SORT_THREAD) {
             SortUtil.setThreadSortGeo(locationToSubmit);
         } else if (postType == SORT_COMMENT) {
@@ -287,9 +294,11 @@ public class CustomLocationFragment extends Fragment {
             EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
                     .findFragmentByTag("editFrag");
             Bundle args = fragment.getArguments();
+
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
+            args.putString("locationDescription", locationToSubmit.getLocationDescription());
         }
     }
 }
