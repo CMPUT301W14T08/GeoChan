@@ -109,8 +109,8 @@ public class CustomLocationFragment extends Fragment {
      */
     public void onStart() {
         super.onStart();
-        GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
-        logArray = log.getLogEntries();
+        //GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
+        //logArray = log.getLogEntries();
 
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
@@ -128,8 +128,8 @@ public class CustomLocationFragment extends Fragment {
             }
         });
 
-        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
-        lv.setAdapter(customLocationAdapter);
+        //customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
+        //lv.setAdapter(customLocationAdapter);
 
         setupMap();
     }

@@ -20,8 +20,17 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
+import java.util.ArrayList;
+
+import org.osmdroid.bonuspack.location.GeoNamesPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
+import org.osmdroid.util.GeoPoint;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -31,6 +40,7 @@ public class GeoLocation {
 
     private Location location;
     private String locationDescription;
+    private Activity activity;
 
     /**
      * Constructs a new GeoLocation object when supplied a
@@ -43,6 +53,7 @@ public class GeoLocation {
         if (this.location == null) {
             this.location = locationListenerService.getLastKnownLocation();
         }
+        this.retreivePOIString();
     }
 
     /**
@@ -62,7 +73,7 @@ public class GeoLocation {
      */
     public GeoLocation(double latitude, double longitude) {
         this.location = new Location(LocationManager.GPS_PROVIDER);
-        setCoordinates(latitude, longitude);
+        this.setCoordinates(latitude, longitude);
     }
 
     /**
@@ -128,6 +139,76 @@ public class GeoLocation {
             newLocation.setLatitude(0);
         }
         this.location = newLocation;
+    }
+
+    /**
+     * perform a request from GeoNames for the location Point of Interest
+     * information. This is done with an async task on the network thread
+     */
+    public void retreivePOIString() {
+        if (getLocation() == null) {
+            this.setLocationDescription("Unknown Location");
+        } else {
+            GeoPoint geoPoint = new GeoPoint(getLatitude(), getLongitude());
+            new GetPOIAsyncTask().execute(geoPoint);
+        }
+    }
+
+    /**
+     * Async task for getting the POI of a location and place a marker on the
+     * map
+     * 
+     * @author bradsimons
+     */
+    private class GetPOIAsyncTask extends AsyncTask<GeoPoint, Void, GeoPoint> {
+
+        ProgressDialog retrievePOIDialog = new ProgressDialog(activity);
+        POI poi;
+
+        /**
+         * Displays a ProgessDialog while the task is executing
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            retrievePOIDialog.setMessage("Loading");
+            retrievePOIDialog.show();
+        }
+
+        /**
+         * Get the points of interest
+         */
+        @Override
+        protected GeoPoint doInBackground(GeoPoint... geoPoints) {
+            for (GeoPoint geoPoint : geoPoints) {
+                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
+                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 2, 0.3);
+
+                if (pois.size() > 0 && pois != null) {
+                    poi = pois.get(0);
+                } else {
+                    poi = null;
+                }
+
+                return geoPoint;
+            }
+            return null;
+        }
+
+        /**
+         * Task is now finished, dismiss the ProgressDialog
+         */
+        @Override
+        protected void onPostExecute(GeoPoint geoPoint) {
+            super.onPostExecute(geoPoint);
+            retrievePOIDialog.dismiss();
+
+            if (poi != null) {
+                locationDescription = poi.mType;
+            } else {
+                locationDescription = "Unknown Location";
+            }
+        }
     }
 
     /**
