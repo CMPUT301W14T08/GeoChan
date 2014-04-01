@@ -52,11 +52,11 @@ public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static Gson gson;
     private static JestClient client;
-    private static final String TYPE_COMMENT = "geoComment";
-    private static final String TYPE_THREAD = "geoThread";
-    private static final String TYPE_INDEX = "geoCommentList";
-    private static final String URL = "http://cmput301.softwareprocess.es:8080";
-    private static final String URL_INDEX = "cmput301w14t08";
+    public static final String TYPE_COMMENT = "geoComment";
+    public static final String TYPE_THREAD = "geoThread";
+    public static final String TYPE_INDEX = "geoCommentList";
+    public static final String URL = "http://cmput301.softwareprocess.es:8080";
+    public static final String URL_INDEX = "cmput301w14t08";
 
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
@@ -79,6 +79,10 @@ public class ElasticSearchClient {
             instance = new ElasticSearchClient();
         }
         return instance;
+    }
+    
+    public JestClient getClient() {
+        return client;
     }
 
     /**

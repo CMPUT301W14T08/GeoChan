@@ -51,6 +51,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -172,13 +173,8 @@ public class PostFragment extends Fragment {
             } else {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                if (commentToReplyTo == null) {
-                    // ThreadList.addThread(newComment, title);
-                    // int tag = PreferencesManager.getInstance().getThreadSort();
-                    // SortUtil.sortThreads(tag, ThreadList.getThreads();
-                    client.postThread(new ThreadComment(newComment, title));
-                } else {
-                    client.postComment(thread, commentToReplyTo, newComment);
+                ThreadManager.startPost(newComment, title);
+                if (commentToReplyTo != null) {
                     commentToReplyTo.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
