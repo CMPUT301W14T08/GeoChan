@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -150,8 +151,7 @@ public class MapViewFragment extends Fragment {
             startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
 
-            Marker startMarker = createMarker(geoLocation);
-            startMarker.setTitle("OP");
+            Marker startMarker = createMarker(geoLocation, "OP");
             startMarker.showInfoWindow();
 
             markers.add(startMarker);
@@ -176,7 +176,22 @@ public class MapViewFragment extends Fragment {
         // ZOOM_FACTOR),
         // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
 
+        int deltaLong = maxLong- minLong;
+        int deltaLat = maxLat - minLat;
+        int maxDelta = Math.max(deltaLong, deltaLat);
+        int zoomFactor;
+        
+        if (maxDelta >= 0 && maxDelta < 1000000) {
+            zoomFactor = 18;
+        } else if (maxDelta >= 1000000 && maxDelta < 2000000) {
+            zoomFactor = 17;
+        } else {
+            zoomFactor = 3;
+        }
+
+        Log.e("zoom factor", Integer.toString(zoomFactor));
         // set the zoom center
+        mapController.setZoom(zoomFactor);
         mapController.animateTo(geoPoints.get(0));
     }
 
@@ -199,7 +214,7 @@ public class MapViewFragment extends Fragment {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
                     geoPoints.add(commentLocation.makeGeoPoint());
-                    markers.add(createMarker(commentLocation));
+                    markers.add(createMarker(commentLocation, "reply"));
                     handleChildComments(childComment);
                 }
             }
@@ -251,9 +266,10 @@ public class MapViewFragment extends Fragment {
         }
     }
 
-    public Marker createMarker(GeoLocation geoLocation) {
-        ;
+    public Marker createMarker(GeoLocation geoLocation, String postType) {
+
         Marker marker = new Marker(openMapView);
+        marker.setTitle(postType);
 
         GeoPoint geoPoint = geoLocation.makeGeoPoint();
         marker.setPosition(geoPoint);
@@ -338,9 +354,8 @@ public class MapViewFragment extends Fragment {
             directionsLoadingDialog.dismiss();
 
             GeoLocation currentLocation = new GeoLocation(locationListenerService);
-            Marker currentLocationMarker = createMarker(currentLocation);
+            Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
 
-            currentLocationMarker.setTitle("Your Location");
             currentLocationMarker.showInfoWindow();
 
             openMapView.getOverlays().add(currentLocationMarker);
