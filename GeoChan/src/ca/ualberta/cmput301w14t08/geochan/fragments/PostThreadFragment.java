@@ -97,7 +97,7 @@ public class PostThreadFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
-                    
+
                     String locationDescription = args.getString("locationDescription");
                     geoLocation.setLocationDescription(locationDescription);
 
@@ -253,23 +253,22 @@ public class PostThreadFragment extends Fragment {
             }
         }
     }
-    
+
     private Bitmap scaleImage(Bitmap bitmap) {
         // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-           // Scale the pic if it is too large:
-           if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                   || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-               double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
-               if (bitmap.getHeight() > bitmap.getWidth())
-                   scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+        // Scale the pic if it is too large:
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getHeight() > bitmap.getWidth())
+                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
 
-               int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
-               int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
 
-               bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-           }
-           return bitmap;
-       }
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+        }
+        return bitmap;
+    }
 
     @Override
     public void onStop() {

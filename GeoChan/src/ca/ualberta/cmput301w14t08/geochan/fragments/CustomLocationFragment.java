@@ -20,11 +20,7 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import java.util.ArrayList;
-
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.bonuspack.location.GeoNamesPOIProvider;
-import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -32,12 +28,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,8 +63,10 @@ public class CustomLocationFragment extends Fragment {
     private FragmentManager fm;
     private MapView openMapView;
     private LocationListenerService locationListenerService;
-    private Marker locationMarker;
-    private GeoLocation geoLocation;
+    // private Marker locationMarker;
+    private GeoLocation newLocation;
+    private GeoLocation currentLocation;
+    private MapEventsOverlay mapEventsOverlay;
 
     // flags for type of post that initiated this fragment
     public static final int POST = 1;
@@ -90,7 +85,7 @@ public class CustomLocationFragment extends Fragment {
     }
 
     /**
-     * Infaltes the menu and adds any action bar items that are present
+     * Inflates the menu and adds any action bar items that are present
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -111,12 +106,16 @@ public class CustomLocationFragment extends Fragment {
         // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         // logArray = log.getLogEntries();
 
+        fm = getFragmentManager();
+
+        // get the views
+        ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
+        openMapView = (MapView) getActivity().findViewById(R.id.map_view);
+
+        // setup all listeners
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
 
-        fm = getFragmentManager();
-
-        ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -126,21 +125,6 @@ public class CustomLocationFragment extends Fragment {
                 fm.popBackStackImmediate();
             }
         });
-
-        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
-        // logArray);
-        // lv.setAdapter(customLocationAdapter);
-
-        setupMap();
-    }
-
-    /**
-     * Sets up the map. Implements a map button receiver so that the user can
-     * click on the map to set their location. Then gets the users current
-     * location and centers the map around their location
-     */
-    private void setupMap() {
-        openMapView = (MapView) getActivity().findViewById(R.id.map_view);
 
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
 
@@ -158,48 +142,42 @@ public class CustomLocationFragment extends Fragment {
              */
             @Override
             public boolean longPressHelper(IGeoPoint clickedPoint) {
-                geoLocation = new GeoLocation(clickedPoint.getLatitude(),
+                newLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
-                geoLocation.retreivePOIString(getActivity());
-                //createNewMarker(clickedPoint.getLatitude(), clickedPoint.getLongitude());
-                //addNewLocationMarker();
+                newLocation.retreivePOIString(getActivity());
+                handleNewLocationPressed(newLocation);
                 return false;
             }
         };
 
-        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getActivity(), mapEventsReceiver);
-        openMapView.getOverlays().add(mapEventsOverlay);
+        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
+        // logArray);
+        // lv.setAdapter(customLocationAdapter);
 
-        GeoLocation geoLocation = new GeoLocation(locationListenerService);
+        setupMap(mapEventsReceiver);
+    }
+
+    /**
+     * Sets up the map. Implements a map button receiver so that the user can
+     * click on the map to set their location. Then gets the users current
+     * location and centers the map around their location
+     */
+    private void setupMap(MapEventsReceiver mapEventsReceiver) {
+
+        mapEventsOverlay = new MapEventsOverlay(getActivity(), mapEventsReceiver);
+        openMapView.getOverlays().add(mapEventsOverlay);
 
         openMapView.setTileSource(TileSourceFactory.MAPNIK);
         openMapView.setBuiltInZoomControls(true);
         openMapView.setMultiTouchControls(true);
 
-        if (geoLocation.getLocation() != null) {
-            openMapView.getController().setCenter(new GeoPoint(geoLocation.getLocation()));
+        currentLocation = new GeoLocation(locationListenerService);
+
+        if (currentLocation.getLocation() != null) {
+            openMapView.getController().setCenter(new GeoPoint(currentLocation.getLocation()));
             openMapView.getController().setZoom(13);
         } else {
             openMapView.getController().setZoom(2);
-        }
-    }
-
-    /**
-     * Called when a user clicks the submit button. If the user has placed a
-     * location marker on the map, that location is placeed in a bundle and
-     * passed back to the previous fragment
-     * 
-     * @param v
-     * 
-     */
-    public void submitNewLocationFromCoordinates(View v) {
-        if (locationMarker == null) {
-            ErrorDialog.show(getActivity(), "Please select a location on the map");
-        } else {
-            GeoLocation geoLocation = new GeoLocation(locationMarker.getPosition().getLatitude(),
-                    locationMarker.getPosition().getLongitude());
-            setBundleArguments(geoLocation, "NEW_LOCATION");
-            fm.popBackStackImmediate();
         }
     }
 
@@ -222,148 +200,90 @@ public class CustomLocationFragment extends Fragment {
      * 
      */
     public void submitCurrentLocation(View v) {
-        GeoLocation geoLocation = new GeoLocation(locationListenerService);
-        if (geoLocation.getLocation() == null) {
+        GeoLocation currentGeoLocation = new GeoLocation(locationListenerService);
+        if (currentGeoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not obtain location");
         } else {
-            setBundleArguments(geoLocation, "CURRENT_LOCATION");
+            setBundleArguments(currentGeoLocation, "CURRENT_LOCATION");
         }
         fm.popBackStackImmediate();
     }
-
+    
     /**
-     * Clears the nodes off of the map, and then re-adds the current location
+     * Called when a user clicks the submit button. If the user has placed a
+     * location marker on the map, that location is placed in a bundle and
+     * passed back to the previous fragment
+     * 
+     * @param v
+     * 
      */
-    private void addNewLocationMarker() {
-        openMapView.getOverlays().clear();
-
-        new GetPOIAsyncTask().execute(locationMarker);
-        locationMarker.setTitle("Dropped Pin");
-
-        // add back currentlocation marker and new location marker
-        // then refresh map
-        openMapView.getOverlays().add(locationMarker);
-        openMapView.invalidate();
+    public void submitNewLocationFromCoordinates(View v) {
+        if (newLocation == null) {
+            ErrorDialog.show(getActivity(), "Please select a location on the map");
+        } else {
+            setBundleArguments(newLocation, "NEW_LOCATION");
+            fm.popBackStackImmediate();
+        }
     }
 
     /**
      * Creates a marker object by taking in latitude and longitude values and
      * sets its position on the map view
      * 
-     * @param latitude
-     * @param longitude
+     * @oaram geoLocation
      * @return marker
      */
-    private void createNewMarker(double latitude, double longitude) {
-        locationMarker = new Marker(openMapView);
-        locationMarker.setPosition(new GeoPoint(latitude, longitude));
+    private void handleNewLocationPressed(GeoLocation geoLocation) {
+
+        // create the marker and set its position
+        Marker locationMarker = new Marker(openMapView);
+        locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(), geoLocation
+                .getLongitude()));
         locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
+        // clear map, then re-add events Overlay and add new location marker,
+        // then refresh
+        // the map
+        openMapView.getOverlays().clear();
+        openMapView.getOverlays().add(mapEventsOverlay);
         openMapView.getOverlays().add(locationMarker);
-        openMapView.getController().setCenter(locationMarker.getPosition());
         openMapView.invalidate();
     }
 
     /**
-     * Takes a marker object as a parameter and sets it on the map view
+     * Bundles up all arguments required to be passed to previous fragment. This
+     * depends on the post type. It will attach latitude, longitude and
+     * description of the location to be submitted, as well as the type of
+     * location being returned (current location of user or a new location set
+     * on the map)
      * 
-     * @param marker
+     * @param newLocation
      */
-    private void setMarkerOnMap() {
-        openMapView.getOverlays().add(locationMarker);
-        openMapView.getController().setCenter(locationMarker.getPosition());
-        openMapView.invalidate();
-    }
-
-    /**
-     * Sets the Bundle arguments for passing back the location to the previous
-     * fragment
-     * 
-     * @param geoLocation
-     */
-    public void setBundleArguments(GeoLocation geoLocation, String locationType) {
+    public void setBundleArguments(GeoLocation locationToSubmit, String locationType) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == POST) {
             PostFragment fragment = (PostFragment) getFragmentManager()
                     .findFragmentByTag("postFrag");
             Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", geoLocation.getLatitude());
-            args.putDouble("LONGITUDE", geoLocation.getLongitude());
+
+            args.putDouble("LATITUDE", locationToSubmit.getLatitude());
+            args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
-            args.putString("locationDescription", locationMarker.getSubDescription());
+            args.putString("locationDescription", locationToSubmit.getLocationDescription());
         } else if (postType == SORT_THREAD) {
-            SortUtil.setThreadSortGeo(geoLocation);
+            SortUtil.setThreadSortGeo(locationToSubmit);
         } else if (postType == SORT_COMMENT) {
-            SortUtil.setCommentSortGeo(geoLocation);
+            SortUtil.setCommentSortGeo(locationToSubmit);
         } else if (postType == EDIT) {
             EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
                     .findFragmentByTag("editFrag");
             Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", geoLocation.getLatitude());
-            args.putDouble("LONGITUDE", geoLocation.getLongitude());
+
+            args.putDouble("LATITUDE", locationToSubmit.getLatitude());
+            args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
-        }
-    }
-
-    /**
-     * Async task for getting the POI of a location. Sets the location
-     * description string with result.
-     * 
-     * @author bradsimons
-     */
-    class GetPOIAsyncTask extends AsyncTask<Marker, Void, Marker> {
-
-        ProgressDialog loadingPOIDialog = new ProgressDialog(getActivity());
-        POI poi;
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingPOIDialog.setMessage("Loading");
-            loadingPOIDialog.show();
-        }
-
-        /**
-         * Get the points of interest with 0.3 kilometers of of the location
-         */
-        @Override
-        protected Marker doInBackground(Marker... markers) {
-            for (Marker marker : markers) {
-                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(marker.getPosition(), 1, 0.3);
-
-                if (pois.size() > 0 && pois != null) {
-                    poi = pois.get(0);
-                } else {
-                    poi = null;
-                }
-
-                return marker;
-            }
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog Set the
-         * locationDescription string to the Point of Interest mType
-         */
-        @Override
-        protected void onPostExecute(Marker marker) {
-            super.onPostExecute(marker);
-            loadingPOIDialog.dismiss();
-
-            if (poi != null) {
-                marker.setSubDescription(poi.mType);
-            } else {
-                marker.setSubDescription("Unknown Location");
-            }
-
-            marker.showInfoWindow();
-            setMarkerOnMap();
+            args.putString("locationDescription", locationToSubmit.getLocationDescription());
         }
     }
 }

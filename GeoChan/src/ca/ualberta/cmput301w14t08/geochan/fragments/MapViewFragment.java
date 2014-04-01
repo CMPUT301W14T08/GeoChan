@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +31,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
- * A Fragment class for displaying Maps. A Map View will disp
+ * A Fragment class for displaying Maps. The Map will display the locations of
+ * each comment in the thread, and will center around the original post. It will
+ * provide the feature of getting directions from the users current location to
+ * the location of the original post.
  * 
  * @author Brad Simons
  * 
@@ -52,61 +56,6 @@ public class MapViewFragment extends Fragment {
     private int maxLong;
     private int minLat;
     private int minLong;
-
-    /**
-     * Async task class. This task is designed to retrieve directions from the
-     * users current location to the location of the original post of the
-     * thread. It displays a ProgressDialog while the location is being
-     * retrieved.
-     * 
-     * @author bradsimons
-     */
-    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            directionsLoadingDialog.setMessage("Getting Directions");
-            directionsLoadingDialog.show();
-        }
-
-        /**
-         * Calculating the directions from the current to the location of the
-         * topComment.
-         */
-        @Override
-        protected Void doInBackground(Void... params) {
-            RoadManager roadManager = new OSRMRoadManager();
-            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-
-            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
-                    .getLongitude()));
-            waypoints.add(startGeoPoint);
-            Road road = roadManager.getRoad(waypoints);
-
-            roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
-
-            openMapView.getOverlays().clear();
-            openMapView.invalidate();
-            openMapView.getOverlays().add(roadOverlay);
-
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog
-         */
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            directionsLoadingDialog.dismiss();
-        }
-    }
 
     /**
      * Gets the view when inflated, then calls setZoomLevel to display the
@@ -202,11 +151,10 @@ public class MapViewFragment extends Fragment {
             startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
             geoPoints.add(startGeoPoint);
 
-            Marker startMarker = createMarker(startGeoPoint);
-            startMarker.setTitle("OP");
+            Marker startMarker = createMarker(geoLocation, "OP");
             startMarker.showInfoWindow();
 
-            markers.add(createMarker(startGeoPoint));
+            markers.add(startMarker);
             handleChildComments(topComment);
         }
         openMapView.invalidate();
@@ -228,7 +176,22 @@ public class MapViewFragment extends Fragment {
         // ZOOM_FACTOR),
         // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
 
+        int deltaLong = maxLong- minLong;
+        int deltaLat = maxLat - minLat;
+        int maxDelta = Math.max(deltaLong, deltaLat);
+        int zoomFactor;
+        
+        if (maxDelta >= 0 && maxDelta < 1000000) {
+            zoomFactor = 18;
+        } else if (maxDelta >= 1000000 && maxDelta < 2000000) {
+            zoomFactor = 17;
+        } else {
+            zoomFactor = 3;
+        }
+
+        Log.e("zoom factor", Integer.toString(zoomFactor));
         // set the zoom center
+        mapController.setZoom(zoomFactor);
         mapController.animateTo(geoPoints.get(0));
     }
 
@@ -250,10 +213,8 @@ public class MapViewFragment extends Fragment {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
-                    GeoPoint childGeoPoint = new GeoPoint(commentLocation.getLatitude(),
-                            commentLocation.getLongitude());
-                    geoPoints.add(childGeoPoint);
-                    markers.add(createMarker(childGeoPoint));
+                    geoPoints.add(commentLocation.makeGeoPoint());
+                    markers.add(createMarker(commentLocation, "reply"));
                     handleChildComments(childComment);
                 }
             }
@@ -294,7 +255,7 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * Creates a marker obejct, sets its position to the GeoPoint location
+     * Creates a marker object, sets its position to the GeoPoint location
      * passed, and then adds the marker to the map overlays.
      * 
      * @param geoPoint
@@ -305,10 +266,22 @@ public class MapViewFragment extends Fragment {
         }
     }
 
-    public Marker createMarker(GeoPoint geoPoint) {
+    public Marker createMarker(GeoLocation geoLocation, String postType) {
+
         Marker marker = new Marker(openMapView);
+        marker.setTitle(postType);
+
+        GeoPoint geoPoint = geoLocation.makeGeoPoint();
         marker.setPosition(geoPoint);
+
+        if (geoLocation.getLocationDescription() != null) {
+            marker.setSubDescription(geoLocation.getLocationDescription());
+        } else {
+            marker.setSubDescription("Unknown Location");
+        }
+
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
         return marker;
     }
 
@@ -328,4 +301,66 @@ public class MapViewFragment extends Fragment {
         }
         openMapView.invalidate();
     }
+
+    /**
+     * Async task class. This task is designed to retrieve directions from the
+     * users current location to the location of the original post of the
+     * thread. It displays a ProgressDialog while the location is being
+     * retrieved.
+     * 
+     * @author Brad Simons
+     */
+    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
+
+        /**
+         * Displays a ProgessDialog while the task is executing
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            directionsLoadingDialog.setMessage("Getting Directions");
+            directionsLoadingDialog.show();
+        }
+
+        /**
+         * Calculating the directions from the current to the location of the
+         * topComment. Builds a road overlay and adds it to the openMapView
+         * objects overlays
+         */
+        @Override
+        protected Void doInBackground(Void... params) {
+            RoadManager roadManager = new OSRMRoadManager();
+            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+
+            waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
+                    .getLongitude()));
+            waypoints.add(startGeoPoint);
+            Road road = roadManager.getRoad(waypoints);
+
+            roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
+            openMapView.getOverlays().add(roadOverlay);
+
+            return null;
+        }
+
+        /**
+         * Task is now finished, dismiss the ProgressDialog and refresh the map
+         */
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            directionsLoadingDialog.dismiss();
+
+            GeoLocation currentLocation = new GeoLocation(locationListenerService);
+            Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
+
+            currentLocationMarker.showInfoWindow();
+
+            openMapView.getOverlays().add(currentLocationMarker);
+            openMapView.invalidate();
+        }
+    }
+
 }

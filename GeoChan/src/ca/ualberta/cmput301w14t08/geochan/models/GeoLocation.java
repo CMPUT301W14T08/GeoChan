@@ -31,7 +31,6 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -158,6 +157,17 @@ public class GeoLocation {
     }
 
     /**
+     * Helper method to construct and return a GeoPoint object corresponding 
+     * to the location of this object.
+     * 
+     * @return geoPoint
+     */
+    public GeoPoint makeGeoPoint() {
+        return new GeoPoint(getLatitude(), getLongitude());
+    }
+    
+    
+    /**
      * Async task for getting the POI of a location. Sets the location
      * description string with result.
      * 
@@ -182,10 +192,13 @@ public class GeoLocation {
          * Get the points of interest with 0.3 kilometers of of the location
          */
         @Override
-        protected GeoPoint doInBackground(GeoPoint... geoPoints) {
+        protected GeoPoint doInBackground(GeoPoint...geoPoints) {
+            // get the Geonames provider
+            GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
+            
             for (GeoPoint geoPoint : geoPoints) {
-                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.5);
+                
+                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.8);
 
                 if (pois.size() > 0 && pois != null) {
                     poi = pois.get(0);
@@ -208,11 +221,11 @@ public class GeoLocation {
             retrievePOIDialog.dismiss();
 
             if (poi != null) {
-                locationDescription = poi.mType;
+                setLocationDescription(poi.mType);
             } else {
-                locationDescription = "Unknown Location";
+                setLocationDescription("Unknown Location");
             }
-            Log.e("POI", getLocationDescription());
+            
         }
     }
 
