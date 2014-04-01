@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.Gson;
@@ -25,10 +26,13 @@ public class CacheManager {
     private Gson commentGson;
     private Gson threadGson;
     private static final String EXTENSION = ".sav";
+    private static final String FILENAME = "threads.sav";
+
 
     private CacheManager(Context context) {
         this.context = context;
         this.commentGson = GsonHelper.getOfflineGson();
+        // thread Gson is same as online - all the data except for the comments.
         this.threadGson = GsonHelper.getOnlineGson();
     }
 
@@ -45,16 +49,47 @@ public class CacheManager {
      * @param list
      */
     public void serializeThreadList(ArrayList<ThreadComment> list) {
-        
+        try {
+            String json = threadGson.toJson(list);
+            FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+            w.write(json);
+            w.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    
+
     /**
      * Deserialise a list of ThreadComment objects without comments.
      * @return
      */
     public ArrayList<ThreadComment> deserializeThreadList() {
-        
-        return null;
+        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+        try {
+            FileInputStream f = context.openFileInput(FILENAME);
+            BufferedReader r = new BufferedReader(new InputStreamReader(f));
+            String json = "";
+            String temp = "";
+            temp = r.readLine();
+            while (temp != null) {
+                json = json + temp;
+                temp = r.readLine();
+            }
+            r.close();
+            f.close();
+            Type type = new TypeToken<ArrayList<ThreadComment>>() {
+            }.getType();
+            list = threadGson.fromJson(json, type);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
     
     /**
