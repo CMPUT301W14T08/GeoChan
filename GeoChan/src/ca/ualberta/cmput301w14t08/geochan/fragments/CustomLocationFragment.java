@@ -64,7 +64,7 @@ public class CustomLocationFragment extends Fragment {
     private FragmentManager fm;
     private MapView openMapView;
     private LocationListenerService locationListenerService;
-    //private Marker locationMarker;
+    // private Marker locationMarker;
     private GeoLocation newLocation;
     private GeoLocation currentLocation;
     private MapEventsOverlay mapEventsOverlay;
@@ -108,12 +108,16 @@ public class CustomLocationFragment extends Fragment {
         // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         // logArray = log.getLogEntries();
 
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-
         fm = getFragmentManager();
 
+        // get the views
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
+        openMapView = (MapView) getActivity().findViewById(R.id.map_view);
+
+        // setup all listeners
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,21 +127,6 @@ public class CustomLocationFragment extends Fragment {
                 fm.popBackStackImmediate();
             }
         });
-
-        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
-        // logArray);
-        // lv.setAdapter(customLocationAdapter);
-
-        setupMap();
-    }
-
-    /**
-     * Sets up the map. Implements a map button receiver so that the user can
-     * click on the map to set their location. Then gets the users current
-     * location and centers the map around their location
-     */
-    private void setupMap() {
-        openMapView = (MapView) getActivity().findViewById(R.id.map_view);
 
         MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
 
@@ -163,6 +152,20 @@ public class CustomLocationFragment extends Fragment {
             }
         };
 
+        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
+        // logArray);
+        // lv.setAdapter(customLocationAdapter);
+
+        setupMap(mapEventsReceiver);
+    }
+
+    /**
+     * Sets up the map. Implements a map button receiver so that the user can
+     * click on the map to set their location. Then gets the users current
+     * location and centers the map around their location
+     */
+    private void setupMap(MapEventsReceiver mapEventsReceiver) {
+
         mapEventsOverlay = new MapEventsOverlay(getActivity(), mapEventsReceiver);
         openMapView.getOverlays().add(mapEventsOverlay);
 
@@ -171,7 +174,7 @@ public class CustomLocationFragment extends Fragment {
         openMapView.setMultiTouchControls(true);
 
         currentLocation = new GeoLocation(locationListenerService);
-        
+
         if (currentLocation.getLocation() != null) {
             openMapView.getController().setCenter(new GeoPoint(currentLocation.getLocation()));
             openMapView.getController().setZoom(13);
@@ -205,7 +208,7 @@ public class CustomLocationFragment extends Fragment {
     public void onStop() {
         super.onStop();
         locationListenerService.stopListening();
-        
+
     }
 
     /**
@@ -234,14 +237,15 @@ public class CustomLocationFragment extends Fragment {
      * @return marker
      */
     private void handleNewLocationPressed(GeoLocation geoLocation) {
-        
-        //create the marker and set its position
+
+        // create the marker and set its position
         Marker locationMarker = new Marker(openMapView);
         locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(), geoLocation
                 .getLongitude()));
         locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        // clear map, then re-add events Overlay and add new location marker, then refresh
+        // clear map, then re-add events Overlay and add new location marker,
+        // then refresh
         // the map
         openMapView.getOverlays().clear();
         openMapView.getOverlays().add(mapEventsOverlay);
@@ -265,7 +269,8 @@ public class CustomLocationFragment extends Fragment {
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
-            args.putString("locationDescription",locationToSubmit.getLocationDescription());;
+            args.putString("locationDescription", locationToSubmit.getLocationDescription());
+            ;
         } else if (postType == COMMENT) {
             PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
                     .findFragmentByTag("repFrag");
