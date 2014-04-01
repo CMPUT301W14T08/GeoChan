@@ -69,7 +69,10 @@
             android:layout_marginRight="2dp"
             android:background="@drawable/rounded_button_selector"
             android:onClick="changeLocation"
-            android:text="@string/location" />
+            android:text="@string/location"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
         <Button
             android:id="@+id/attach_image_button"

@@ -143,7 +143,8 @@ public class EditCommentFragment extends Fragment {
                     format.setMaximumFractionDigits(4);
 
                     locButton
-                            .setText("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                            .setText(format.format(lat) +", " + format.format(lon));
+                    locButton.setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
