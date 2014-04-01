@@ -53,7 +53,7 @@ public class ElasticSearchPostRunnable implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            task.handlePostState(STATE_POST_COMPLETED);
+            task.handlePostState(STATE_POST_COMPLETE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

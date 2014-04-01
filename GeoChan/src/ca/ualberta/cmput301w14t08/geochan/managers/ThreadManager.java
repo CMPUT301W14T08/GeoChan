@@ -78,7 +78,7 @@ public class ThreadManager {
     
     public void handleState(ElasticSearchTask task, int state) {
         switch(state) {
-        case POST_COMPLETED:
+        case POST_COMPLETE:
             // handle completion
             break;
         default:
