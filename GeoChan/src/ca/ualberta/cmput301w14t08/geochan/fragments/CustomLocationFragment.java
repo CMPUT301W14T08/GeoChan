@@ -20,11 +20,7 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import java.util.ArrayList;
-
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.bonuspack.location.GeoNamesPOIProvider;
-import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -32,12 +28,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -162,8 +155,9 @@ public class CustomLocationFragment extends Fragment {
                 geoLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
                 geoLocation.retreivePOIString(getActivity());
-                //createNewMarker(clickedPoint.getLatitude(), clickedPoint.getLongitude());
-                //addNewLocationMarker();
+                createNewMarker(geoLocation);
+                setMarkerOnMap();
+                // addNewLocationMarker();
                 return false;
             }
         };
@@ -237,8 +231,6 @@ public class CustomLocationFragment extends Fragment {
      */
     private void addNewLocationMarker() {
         openMapView.getOverlays().clear();
-
-        new GetPOIAsyncTask().execute(locationMarker);
         locationMarker.setTitle("Dropped Pin");
 
         // add back currentlocation marker and new location marker
@@ -255,14 +247,12 @@ public class CustomLocationFragment extends Fragment {
      * @param longitude
      * @return marker
      */
-    private void createNewMarker(double latitude, double longitude) {
+    private void createNewMarker(GeoLocation geoLocation) {
         locationMarker = new Marker(openMapView);
-        locationMarker.setPosition(new GeoPoint(latitude, longitude));
+        locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(), geoLocation
+                .getLongitude()));
+        locationMarker.setSubDescription(geoLocation.getLocationDescription());
         locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-        openMapView.getOverlays().add(locationMarker);
-        openMapView.getController().setCenter(locationMarker.getPosition());
-        openMapView.invalidate();
     }
 
     /**
@@ -271,6 +261,8 @@ public class CustomLocationFragment extends Fragment {
      * @param marker
      */
     private void setMarkerOnMap() {
+        openMapView.getOverlays().clear();
+        
         openMapView.getOverlays().add(locationMarker);
         openMapView.getController().setCenter(locationMarker.getPosition());
         openMapView.invalidate();
@@ -315,64 +307,31 @@ public class CustomLocationFragment extends Fragment {
         }
     }
 
-    /**
-     * Async task for getting the POI of a location. Sets the location
-     * description string with result.
+    /*
+     * class GetPOIAsyncTask extends AsyncTask<Marker, Void, Marker> {
      * 
-     * @author bradsimons
+     * ProgressDialog loadingPOIDialog = new ProgressDialog(getActivity()); POI
+     * poi;
+     * 
+     * @Override protected void onPreExecute() { super.onPreExecute();
+     * loadingPOIDialog.setMessage("Loading"); loadingPOIDialog.show(); }
+     * 
+     * @Override protected Marker doInBackground(Marker... markers) { for
+     * (Marker marker : markers) { GeoNamesPOIProvider poiProvider = new
+     * GeoNamesPOIProvider("bradleyjsimons"); ArrayList<POI> pois =
+     * poiProvider.getPOICloseTo(marker.getPosition(), 1, 0.3);
+     * 
+     * if (pois.size() > 0 && pois != null) { poi = pois.get(0); } else { poi =
+     * null; }
+     * 
+     * return marker; } return null; }
+     * 
+     * @Override protected void onPostExecute(Marker marker) {
+     * super.onPostExecute(marker); loadingPOIDialog.dismiss();
+     * 
+     * if (poi != null) { marker.setSubDescription(poi.mType); } else {
+     * marker.setSubDescription("Unknown Location"); }
+     * 
+     * marker.showInfoWindow(); setMarkerOnMap(); } }
      */
-    class GetPOIAsyncTask extends AsyncTask<Marker, Void, Marker> {
-
-        ProgressDialog loadingPOIDialog = new ProgressDialog(getActivity());
-        POI poi;
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingPOIDialog.setMessage("Loading");
-            loadingPOIDialog.show();
-        }
-
-        /**
-         * Get the points of interest with 0.3 kilometers of of the location
-         */
-        @Override
-        protected Marker doInBackground(Marker... markers) {
-            for (Marker marker : markers) {
-                GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(marker.getPosition(), 1, 0.3);
-
-                if (pois.size() > 0 && pois != null) {
-                    poi = pois.get(0);
-                } else {
-                    poi = null;
-                }
-
-                return marker;
-            }
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog Set the
-         * locationDescription string to the Point of Interest mType
-         */
-        @Override
-        protected void onPostExecute(Marker marker) {
-            super.onPostExecute(marker);
-            loadingPOIDialog.dismiss();
-
-            if (poi != null) {
-                marker.setSubDescription(poi.mType);
-            } else {
-                marker.setSubDescription("Unknown Location");
-            }
-
-            marker.showInfoWindow();
-            setMarkerOnMap();
-        }
-    }
 }

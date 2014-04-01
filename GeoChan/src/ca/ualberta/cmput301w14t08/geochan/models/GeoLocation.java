@@ -185,7 +185,7 @@ public class GeoLocation {
         protected GeoPoint doInBackground(GeoPoint... geoPoints) {
             for (GeoPoint geoPoint : geoPoints) {
                 GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.5);
+                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.8);
 
                 if (pois.size() > 0 && pois != null) {
                     poi = pois.get(0);
