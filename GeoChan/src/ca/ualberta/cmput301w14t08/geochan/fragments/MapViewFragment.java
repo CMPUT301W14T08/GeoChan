@@ -31,7 +31,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
- * A Fragment class for displaying Maps. A Map View will disp
+ * A Fragment class for displaying Maps. The Map will display the locations of
+ * each comment in the thread, and will center around the original post. It will
+ * provide the feature of getting directions from the users current location to
+ * the location of the original post.
  * 
  * @author Brad Simons
  * 
@@ -150,13 +153,13 @@ public class MapViewFragment extends Fragment {
 
             Marker startMarker = createMarker(startGeoPoint);
             startMarker.setTitle("OP");
-            
+
             if (geoLocation.getLocationDescription() != null) {
                 startMarker.setSubDescription(geoLocation.getLocationDescription());
             } else {
                 startMarker.setSubDescription("Unknown Location");
             }
-            
+
             startMarker.showInfoWindow();
 
             markers.add(startMarker);
@@ -260,7 +263,7 @@ public class MapViewFragment extends Fragment {
     }
 
     public Marker createMarker(GeoPoint geoPoint) {
-        Log.e("creating","a marker");
+        Log.e("creating", "a marker");
         Marker marker = new Marker(openMapView);
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -283,7 +286,7 @@ public class MapViewFragment extends Fragment {
         }
         openMapView.invalidate();
     }
-    
+
     /**
      * Async task class. This task is designed to retrieve directions from the
      * users current location to the location of the original post of the
