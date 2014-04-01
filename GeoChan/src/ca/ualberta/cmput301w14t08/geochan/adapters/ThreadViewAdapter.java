@@ -40,7 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
@@ -414,18 +414,18 @@ public class ThreadViewAdapter extends BaseAdapter {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click to launch postCommentFragment
-                    Fragment fragment = new PostCommentFragment();
+                    Fragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("cmt", thread.getBodyComment());
                     bundle.putLong("id", id);
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
-                        manager.beginTransaction().replace(R.id.container, fragment, "repFrag")
+                        manager.beginTransaction().replace(R.id.container, fragment, "postFrag")
                         .addToBackStack(null).commit();
                     } else {
                         manager.beginTransaction()
-                                .replace(R.id.fragment_container, fragment, "repFrag")
+                                .replace(R.id.fragment_container, fragment, "postFrag")
                                 .addToBackStack(null).commit();
                         manager.executePendingTransactions();
                     }

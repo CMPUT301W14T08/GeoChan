@@ -38,7 +38,7 @@
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/thread_location_button"
+            android:id="@+id/location_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,11 +58,11 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="attachImageToThread"
+            android:onClick="attachImage"
             android:text="@string/attach_image" />
 
         <Button
-            android:id="@+id/post_thread_button"
+            android:id="@+id/post_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="postNewThread"
+            android:onClick="post"
             android:text="@string/post" />
     </LinearLayout>
 

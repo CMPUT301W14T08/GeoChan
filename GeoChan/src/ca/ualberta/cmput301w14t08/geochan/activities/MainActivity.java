@@ -37,8 +37,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
@@ -93,10 +92,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return true;
 
         case R.id.action_add_thread:
-            PostThreadFragment frag = new PostThreadFragment();
-            frag.setArguments(new Bundle());
+            PostFragment frag = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", -1);
+            frag.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, frag, "postThreadFrag").addToBackStack(null)
+                    .replace(R.id.fragment_container, frag, "postFrag").addToBackStack(null)
                     .commit();
 
             // This next line is necessary for JUnit to see fragments
@@ -169,34 +170,16 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      * @param view
      *            View passed to the activity to check which button was pressed
      */
-    public void postNewThread(View view) {
-        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
-                .findFragmentByTag("postThreadFrag");
-        fragment.postNewThread(view);
+    public void post(View view) {
+        PostFragment fragment = (PostFragment) getSupportFragmentManager()
+                .findFragmentByTag("postFrag");
+        fragment.post(view);
     }
 
-    /**
-     * Calls the respective post reply method in the fragment.
-     * 
-     * @param view
-     *            View passed to the activity to check which button was pressed
-     */
-    public void postReply(View view) {
-        PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
-                .findFragmentByTag("repFrag");
-        fragment.postReply(view);
-    }
-
-    public void attachImageToReply(View view) {
-        PostCommentFragment fragment = (PostCommentFragment) getSupportFragmentManager()
-                .findFragmentByTag("repFrag");
-        fragment.attachImageReply(view);
-    }
-
-    public void attachImageToThread(View view) {
-        PostThreadFragment fragment = (PostThreadFragment) getSupportFragmentManager()
-                .findFragmentByTag("postThreadFrag");
-        fragment.attachImageToThread(view);
+    public void attachImage(View view) {
+        PostFragment fragment = (PostFragment) getSupportFragmentManager()
+                .findFragmentByTag("postFrag");
+        fragment.attachImage(view);
     }
     
     public void editImage(View view){
@@ -219,10 +202,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      */
     public void changeLocation(View view) {
         Bundle args = new Bundle();
-        if (view.getId() == R.id.thread_location_button) {
-            args.putInt("postType", CustomLocationFragment.THREAD);
-        } else if (view.getId() == R.id.location_button) {
-            args.putInt("postType", CustomLocationFragment.COMMENT);
+        if (view.getId() == R.id.location_button) {
+            args.putInt("postType", CustomLocationFragment.POST);
         } else if (view.getId() == R.id.edit_location_button) {
             args.putInt("postType", CustomLocationFragment.EDIT);
         }

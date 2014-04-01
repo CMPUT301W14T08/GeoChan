@@ -57,46 +57,6 @@ public class Comment implements Parcelable {
     private long id;
 
     /**
-     * a comment without an image and without a parent
-     */
-    public Comment(String textPost, GeoLocation location) {
-        super();
-        this.manager = PreferencesManager.getInstance();
-        this.setTextPost(textPost);
-        this.setCommentDate(new Date());
-        this.setImage(null);
-        this.setImageThumb(null);
-        this.setLocation(location);
-        this.setUser(manager.getUser());
-        this.setHash(HashHelper.getHash(manager.getUser()));
-        this.depth = -1;
-        this.setParent(null);
-        this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getCommentIdHash();
-        this.commentIds = new ArrayList<String>();
-    }
-
-    /**
-     * a comment with an image and without a parent
-     */
-    public Comment(String textPost, Bitmap image, GeoLocation location) {
-        super();
-        this.manager = PreferencesManager.getInstance();
-        this.setTextPost(textPost);
-        this.setCommentDate(new Date());
-        this.setImage(image);
-        this.setImageThumb(ThumbnailUtils.extractThumbnail(image, 150, 150));
-        this.setLocation(location);
-        this.setUser(manager.getUser());
-        this.setHash(HashHelper.getHash(manager.getUser()));
-        this.depth = -1;
-        this.setParent(null);
-        this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getCommentIdHash();
-        this.commentIds = new ArrayList<String>();
-    }
-
-    /**
      * a comment with an image, with a parent
      */
     public Comment(String textPost, Bitmap image, GeoLocation location, Comment parent) {
@@ -109,7 +69,11 @@ public class Comment implements Parcelable {
         this.setLocation(location);
         this.setUser(manager.getUser());
         this.setHash(HashHelper.getHash(manager.getUser()));
-        this.depth = parent.depth + 1;
+        if (parent == null) {
+            this.depth = -1;
+        } else {
+            this.depth = parent.depth + 1;
+        }
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
         this.id = HashHelper.getCommentIdHash();
@@ -129,7 +93,11 @@ public class Comment implements Parcelable {
         this.setLocation(location);
         this.setUser(manager.getUser());
         this.setHash(HashHelper.getHash(manager.getUser()));
-        this.depth = parent.depth + 1;
+        if (parent == null) {
+            this.depth = -1;
+        } else {
+            this.depth = parent.depth + 1;
+        }
         this.setParent(parent);
         this.setChildren(new ArrayList<Comment>());
         this.id = HashHelper.getCommentIdHash();
@@ -195,7 +163,11 @@ public class Comment implements Parcelable {
     }
 
     public void setLocation(GeoLocation location) {
-        this.location = location;
+        if (location.getLocation() == null) {
+            this.location = null;
+        } else {
+            this.location = location;
+        }
     }
 
     public Date getCommentDate() {

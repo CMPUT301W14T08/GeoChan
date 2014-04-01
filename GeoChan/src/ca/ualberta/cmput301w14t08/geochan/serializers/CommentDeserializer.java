@@ -102,7 +102,7 @@ public class CommentDeserializer implements JsonDeserializer<Comment> {
         // String parent = object.get("parent").getAsString();
         GeoLocation location = new GeoLocation(latitude, longitude);
         location.setLocationDescription(locationDescription);
-        final Comment comment = new Comment(textPost, location);
+        final Comment comment = new Comment(textPost, null, location, null);
         comment.getCommentDate().setTime(commentDate);
         comment.setUser(user);
         comment.setHash(hash);

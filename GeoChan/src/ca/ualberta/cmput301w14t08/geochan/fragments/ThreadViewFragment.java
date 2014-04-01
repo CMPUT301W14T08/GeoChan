@@ -212,14 +212,14 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
      * @param threadIndex
      */
     public void replyToComment(Comment comment, int threadIndex) {
-        Fragment fragment = new PostCommentFragment();
+        Fragment fragment = new PostFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("cmt", comment);
         bundle.putLong("id", threadIndex);
         fragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
-                .replace(container, fragment, "repFrag").addToBackStack(null)
+                .replace(container, fragment, "postFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
 

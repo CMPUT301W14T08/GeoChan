@@ -74,8 +74,7 @@ public class CustomLocationFragment extends Fragment {
     private GeoLocation geoLocation;
 
     // flags for type of post that initiated this fragment
-    public static final int THREAD = 1;
-    public static final int COMMENT = 2;
+    public static final int POST = 1;
     public static final int REPLY = 3;
     public static final int SORT_THREAD = 4;
     public static final int SORT_COMMENT = 5;
@@ -285,17 +284,9 @@ public class CustomLocationFragment extends Fragment {
     public void setBundleArguments(GeoLocation geoLocation, String locationType) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
-        if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-                    .findFragmentByTag("postThreadFrag");
-            Bundle args = fragment.getArguments();
-            args.putDouble("LATITUDE", geoLocation.getLatitude());
-            args.putDouble("LONGITUDE", geoLocation.getLongitude());
-            args.putString("LocationType", locationType);
-            args.putString("locationDescription", locationMarker.getSubDescription());
-        } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                    .findFragmentByTag("repFrag");
+        if (postType == POST) {
+            PostFragment fragment = (PostFragment) getFragmentManager()
+                    .findFragmentByTag("postFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", geoLocation.getLatitude());
             args.putDouble("LONGITUDE", geoLocation.getLongitude());
