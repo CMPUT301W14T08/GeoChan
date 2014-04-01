@@ -8,22 +8,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class CacheManager {
     private static CacheManager instance;
     private Context context;
-    private Gson gson;
+    private Gson commentGson;
+    private Gson threadGson;
     private static final String EXTENSION = ".sav";
 
     private CacheManager(Context context) {
         this.context = context;
-        this.gson = GsonHelper.getOfflineGson();
+        this.commentGson = GsonHelper.getOfflineGson();
+        this.threadGson = GsonHelper.getOnlineGson();
     }
 
     public static CacheManager getInstance(Context context) {
@@ -34,13 +40,31 @@ public class CacheManager {
     }
     
     /**
-     * Serialize a threadComment into a file with the file's name being the
+     * Serialize the list of threads with all the data with the exception of all
+     * the comment children of the Thread body comment.
+     * @param list
+     */
+    public void serializeThreadList(ArrayList<ThreadComment> list) {
+        
+    }
+    
+    /**
+     * Deserialise a list of ThreadComment objects without comments.
+     * @return
+     */
+    public ArrayList<ThreadComment> deserializeThreadList() {
+        
+        return null;
+    }
+    
+    /**
+     * Serialize threadComment child comments into a file with the file's name being the
      * threadComment's id.
      * @param thread
      */
-    public void serializeThreadById(ThreadComment thread) {
+    public void serializeThreadCommentsById(ThreadComment thread) {
         try {
-            String json = gson.toJson(thread);
+            String json = commentGson.toJson(thread.getBodyComment().getChildren());
             FileOutputStream f = context.openFileOutput(thread.getId()+EXTENSION, Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
             w.write(json);
@@ -54,13 +78,13 @@ public class CacheManager {
     }
     
     /**
-     * Read a ThreadComment object from json from the file with tread's id
+     * Read ThreadComment child comments from json from the file with tread's id
      * as filename. 
      * @param id
      * @return
      */
-    public ThreadComment deserializeThreadById(String id) {
-        ThreadComment thread = new ThreadComment();
+    public ArrayList<Comment> deserializeThreadCommentsById(String id) {
+        ArrayList<Comment> list = new ArrayList<Comment>();
         try {
             FileInputStream f = context.openFileInput(id+EXTENSION);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
@@ -73,12 +97,14 @@ public class CacheManager {
             }
             r.close();
             f.close();
-            thread = gson.fromJson(json, ThreadComment.class);
+            Type type = new TypeToken<ArrayList<Comment>>() {
+            }.getType();
+            list = commentGson.fromJson(json, type);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return thread;
+        return list;
     }
 }
