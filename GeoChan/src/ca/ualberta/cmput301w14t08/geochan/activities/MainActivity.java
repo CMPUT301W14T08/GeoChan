@@ -40,6 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostThreadFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
@@ -58,6 +59,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return;
         }
         // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
+        ConnectivityHelper.generateInstance(this);
         PreferencesManager.generateInstance(this);
         ThreadListFragment fragment = new ThreadListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
