@@ -1,12 +1,12 @@
-package ca.ualberta.cmput301w14t08.geochan.tasks;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
 import android.graphics.Bitmap;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchEditImageRunnable;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchEditRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.EditImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.EditRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchEditImageRunnable;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchEditRunnable;
 
 public class ElasticSearchEditTask implements EditRunnableInterface, EditImageRunnableInterface {
     private Comment comment;

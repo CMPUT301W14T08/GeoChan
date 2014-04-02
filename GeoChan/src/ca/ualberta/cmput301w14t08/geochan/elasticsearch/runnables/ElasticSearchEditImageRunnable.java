@@ -1,7 +1,7 @@
-package ca.ualberta.cmput301w14t08.geochan.runnables;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchEditTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchEditTask;
 
 public class ElasticSearchEditImageRunnable implements Runnable {
     

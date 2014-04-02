@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.runnables;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Get;
@@ -6,8 +6,8 @@ import io.searchbox.core.Get;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentListTask;
 
 import com.google.gson.JsonArray;
 
