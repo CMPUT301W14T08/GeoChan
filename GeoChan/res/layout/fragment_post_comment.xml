@@ -40,7 +40,7 @@
         android:src="@drawable/rect2" />
     
     <EditText
-        android:id="@+id/replyBody"
+        android:id="@+id/commentBody"
         android:layout_width="match_parent"
         android:layout_height="300sp"
         android:layout_above="@+id/linearLayout1"
@@ -80,11 +80,11 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="attachImageToReply"
+            android:onClick="attachImage"
             android:text="@string/attach_image" />
 
         <Button
-            android:id="@+id/post_reply_button"
+            android:id="@+id/post_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="0.33"
             android:background="@drawable/rounded_button_selector"
-            android:onClick="postReply"
+            android:onClick="post"
             android:text="@string/post" />
     </LinearLayout>
 

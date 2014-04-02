@@ -69,8 +69,7 @@ public class CustomLocationFragment extends Fragment {
     private MapEventsOverlay mapEventsOverlay;
 
     // flags for type of post that initiated this fragment
-    public static final int THREAD = 1;
-    public static final int COMMENT = 2;
+    public static final int POST = 1;
     public static final int REPLY = 3;
     public static final int SORT_THREAD = 4;
     public static final int SORT_COMMENT = 5;
@@ -263,29 +262,15 @@ public class CustomLocationFragment extends Fragment {
     public void setBundleArguments(GeoLocation locationToSubmit, String locationType) {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
-
-        // setup fragment by post type and attach an argument bundle to that
-        // fragment
-        if (postType == THREAD) {
-            PostThreadFragment fragment = (PostThreadFragment) getFragmentManager()
-                    .findFragmentByTag("postThreadFrag");
+        if (postType == POST) {
+            PostFragment fragment = (PostFragment) getFragmentManager()
+                    .findFragmentByTag("postFrag");
             Bundle args = fragment.getArguments();
 
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
             args.putString("locationDescription", locationToSubmit.getLocationDescription());
-
-        } else if (postType == COMMENT) {
-            PostCommentFragment fragment = (PostCommentFragment) getFragmentManager()
-                    .findFragmentByTag("repFrag");
-            Bundle args = fragment.getArguments();
-
-            args.putDouble("LATITUDE", newLocation.getLatitude());
-            args.putDouble("LONGITUDE", newLocation.getLongitude());
-            args.putString("LocationType", locationType);
-            args.putString("locationDescription", locationToSubmit.getLocationDescription());
-
         } else if (postType == SORT_THREAD) {
             SortUtil.setThreadSortGeo(locationToSubmit);
         } else if (postType == SORT_COMMENT) {

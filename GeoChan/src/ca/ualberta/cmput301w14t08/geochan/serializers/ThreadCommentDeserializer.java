@@ -89,7 +89,7 @@ public class ThreadCommentDeserializer implements JsonDeserializer<ThreadComment
         }
         GeoLocation location = new GeoLocation(latitude, longitude);
         location.setLocationDescription(locationDescription);
-        final Comment c = new Comment(textPost, location);
+        final Comment c = new Comment(textPost, null, location, null);
         c.getCommentDate().setTime(threadDate);
         c.setUser(user);
         c.setHash(hash);
