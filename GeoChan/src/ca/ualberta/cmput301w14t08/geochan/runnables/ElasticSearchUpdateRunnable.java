@@ -5,18 +5,18 @@ import io.searchbox.client.JestResult;
 import io.searchbox.core.Update;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchPostTask;
 
 public class ElasticSearchUpdateRunnable implements Runnable {
 
-    private ElasticSearchTask task;
+    private ElasticSearchPostTask task;
     private String id;
     private String type = ElasticSearchClient.TYPE_INDEX;
     public static final int STATE_UPDATE_FAILED = -1;
     public static final int STATE_UPDATE_RUNNING = 0;
     public static final int STATE_UPDATE_COMPLETE = 1;
     
-    public ElasticSearchUpdateRunnable(ElasticSearchTask task) {
+    public ElasticSearchUpdateRunnable(ElasticSearchPostTask task) {
         this.task = task;
     }
     

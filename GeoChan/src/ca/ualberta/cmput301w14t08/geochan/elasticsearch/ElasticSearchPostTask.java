@@ -9,7 +9,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchPostRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchUpdateRunnable;
 
-public class ElasticSearchTask implements ImageRunnableInterface, PostRunnableInterface, UpdateRunnableInterface {
+public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnableInterface, UpdateRunnableInterface {
     private Comment comment;
     private String title;
     private ThreadManager manager;
@@ -18,7 +18,7 @@ public class ElasticSearchTask implements ImageRunnableInterface, PostRunnableIn
     private Runnable postRunnable;
     private Runnable updateRunnable;
     
-   public ElasticSearchTask() {
+   public ElasticSearchPostTask() {
         imageRunnable = new ElasticSearchImageRunnable(this);
         postRunnable = new ElasticSearchPostRunnable(this);
         updateRunnable = new ElasticSearchUpdateRunnable(this);
@@ -55,7 +55,7 @@ public class ElasticSearchTask implements ImageRunnableInterface, PostRunnableIn
     }
     
     public void handleState(int state) {
-        manager.handleState(this, state);
+        manager.handlePostState(this, state);
     }
     
     @Override
@@ -122,6 +122,12 @@ public class ElasticSearchTask implements ImageRunnableInterface, PostRunnableIn
             break;
         }
         handleState(outState);
+    }
+    
+    public void recycle() {
+        comment = null;
+        manager = null;
+        title = null;
     }
     
     public Comment getComment() {

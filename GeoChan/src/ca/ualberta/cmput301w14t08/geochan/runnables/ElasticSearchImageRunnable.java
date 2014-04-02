@@ -4,19 +4,19 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchPostTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 
 public class ElasticSearchImageRunnable implements Runnable {
 
-    private ElasticSearchTask task;
+    private ElasticSearchPostTask task;
     private String id;
     private String type = ElasticSearchClient.TYPE_IMAGE;
     public static final int STATE_IMAGE_FAILED = -1;
     public static final int STATE_IMAGE_RUNNING = 0;
     public static final int STATE_IMAGE_COMPLETE = 1;
     
-    public ElasticSearchImageRunnable(ElasticSearchTask task) {
+    public ElasticSearchImageRunnable(ElasticSearchPostTask task) {
         this.task = task;
     }
 
