@@ -27,7 +27,7 @@ public class ThreadManager {
     public static final int TASK_COMPLETE = 9001;
     
     private static final int KEEP_ALIVE_TIME = 1;
-    private static final TimeUnit KEEP_ALIVE_TIME_UNIT;
+    private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
     private static final int CORE_POOL_SIZE = 5;
     private static final int MAXIMUM_POOL_SIZE = 5;
     private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at 10MB??
@@ -41,12 +41,6 @@ public class ThreadManager {
     
     private Handler handler;
     private static ThreadManager instance = null;    
-    
-    // A static block that sets class fields
-    static {
-        instance = new ThreadManager();
-        KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
-    }
     
     /**
      * Private constructor due to singleton pattern.
@@ -67,12 +61,20 @@ public class ThreadManager {
         };
     }
     
+    public static void generateInstance() {
+        instance = new ThreadManager();
+    }
+    
     public static ElasticSearchTask startPost(Comment comment, String title) {
+        if (instance == null) {
+            generateInstance();
+        }
         ElasticSearchTask task = instance.ElasticSearchTaskQueue.poll();
         if (task == null) {
             task = new ElasticSearchTask();
         }
         task.initPostTask(ThreadManager.instance, comment, title);
+        instance.ElasticSearchPostPool.execute(task.getRunnable());
         return task;
     }
     
