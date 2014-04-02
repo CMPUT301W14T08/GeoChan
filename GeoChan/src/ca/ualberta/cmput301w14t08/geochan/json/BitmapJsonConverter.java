@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.serializers;
+package ca.ualberta.cmput301w14t08.geochan.json;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
@@ -15,7 +15,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class BitmapSerializer implements JsonSerializer<Bitmap>, JsonDeserializer<Bitmap> {
+public class BitmapJsonConverter implements JsonSerializer<Bitmap>, JsonDeserializer<Bitmap> {
 
     @Override
     public Bitmap deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsc)

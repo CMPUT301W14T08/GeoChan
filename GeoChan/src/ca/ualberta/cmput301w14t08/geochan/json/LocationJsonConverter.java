@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.serializers;
+package ca.ualberta.cmput301w14t08.geochan.json;
 
 import java.lang.reflect.Type;
 
@@ -17,7 +17,7 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Artem Chikin
  */
-public class LocationSerializer implements JsonSerializer<Location>, JsonDeserializer<Location> {
+public class LocationJsonConverter implements JsonSerializer<Location>, JsonDeserializer<Location> {
 
     /*
      * (non-Javadoc)

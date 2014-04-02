@@ -1,13 +1,15 @@
 package ca.ualberta.cmput301w14t08.geochan.helpers;
 
+import android.graphics.Bitmap;
 import android.location.Location;
+import ca.ualberta.cmput301w14t08.geochan.json.BitmapJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.CommentJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.CommentOfflineJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.LocationJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.ThreadCommentJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.ThreadCommentOfflineJsonConverter;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializerOffline;
-import ca.ualberta.cmput301w14t08.geochan.serializers.LocationSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializerOffline;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,14 +22,15 @@ public class GsonHelper {
 
     private GsonHelper() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentSerializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
-        builder.registerTypeAdapter(Location.class, new LocationSerializer());
+        builder.registerTypeAdapter(Comment.class, new CommentJsonConverter());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentJsonConverter());
+        builder.registerTypeAdapter(Bitmap.class, new BitmapJsonConverter());
+        builder.registerTypeAdapter(Location.class, new LocationJsonConverter());
         onlineGson = builder.create();
         builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentSerializerOffline());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializerOffline());
-        builder.registerTypeAdapter(Location.class, new LocationSerializer());
+        builder.registerTypeAdapter(Comment.class, new CommentOfflineJsonConverter());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentOfflineJsonConverter());
+        builder.registerTypeAdapter(Location.class, new LocationJsonConverter());
         offlineGson = builder.create();
     }
 

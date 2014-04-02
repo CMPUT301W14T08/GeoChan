@@ -18,12 +18,11 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan.serializers;
+package ca.ualberta.cmput301w14t08.geochan.json;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -31,7 +30,6 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -42,10 +40,11 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Handles the serialization of a ThreadComment object into JSON format.
+ * Handles the serialization of Comment objects into JSON format.
  * 
  */
-public class ThreadCommentSerializer implements JsonSerializer<ThreadComment>, JsonDeserializer<ThreadComment> {
+public class CommentJsonConverter implements JsonSerializer<Comment>, JsonDeserializer<Comment> {
+
 
     /*
      * (non-Javadoc)
@@ -54,53 +53,56 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment>, J
      * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
      */
     /**
-     * Serializes a ThreadComment object into JSON format.
+     * Serializes a Comment object into JSON format.
      */
     @Override
-    public JsonElement serialize(ThreadComment thread, Type type, JsonSerializationContext context) {
+    public JsonElement serialize(Comment comment, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty("title", thread.getTitle());
-        object.addProperty("threadDate", thread.getThreadDate().getTime());
-        object.addProperty("hasImage", thread.getBodyComment().hasImage());
-        object.addProperty("id", thread.getId());
-        if (thread.getBodyComment().getLocation() != null) {
-            object.addProperty("location", thread.getBodyComment().getLocation().getLatitude()
-                    + "," + thread.getBodyComment().getLocation().getLongitude());
-            if (thread.getBodyComment().getLocation().getLocationDescription() != null) {
-                object.addProperty("locationDescription", thread.getBodyComment().getLocation()
+        object.addProperty("commentDate", comment.getCommentDate().getTime());
+        object.addProperty("hasImage", comment.hasImage());
+        if (comment.getLocation() != null) {
+            object.addProperty("location", comment.getLocation().getLatitude() + ","
+                    + comment.getLocation().getLongitude());
+            if (comment.getLocation().getLocationDescription() != null) {
+                object.addProperty("locationDescription", comment.getLocation()
                         .getLocationDescription());
             }
         } else {
             object.addProperty("location", "-999,-999");
         }
-        object.addProperty("user", thread.getBodyComment().getUser());
-        object.addProperty("hash", thread.getBodyComment().getHash());
-        object.addProperty("textPost", thread.getBodyComment().getTextPost());
-        if (thread.getBodyComment().hasImage()) {
-            Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
-
+        object.addProperty("user", comment.getUser());
+        object.addProperty("hash", comment.getHash());
+        object.addProperty("id", comment.getId());
+        object.addProperty("textPost", comment.getTextPost());
+        if (comment.hasImage()) {
+            Bitmap bitmapThumb = comment.getImageThumb();
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
+           
+            // Serialize the thumbnail
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();
             String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP);
             object.addProperty("imageThumbnail", encodedThumb);
         }
+        object.addProperty("depth", comment.getDepth());
+        if (comment.getParent() != null) {
+            object.addProperty("parent", comment.getParent().getId());
+        }
         return object;
     }
     
     /**
-     * Deserializes a ThreadComment object from JSON format.
+     * Deserializes a Comment object from JSON format.
      */
     @Override
-    public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+    public Comment deserialize(JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        String title = object.get("title").getAsString();
-        long threadDate = object.get("threadDate").getAsLong();
+        long commentDate = object.get("commentDate").getAsLong();
         boolean hasImage = object.get("hasImage").getAsBoolean();
         String locationString = object.get("location").getAsString();
         List<String> locationEntries = Arrays.asList(locationString.split(","));
@@ -108,8 +110,8 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment>, J
         double longitude = Double.parseDouble(locationEntries.get(1));
         String user = object.get("user").getAsString();
         String hash = object.get("hash").getAsString();
-        String id = object.get("id").getAsString();
         String textPost = object.get("textPost").getAsString();
+        String id = object.get("id").getAsString();
         String locationDescription = null;
         if (object.get("locationDescription") != null) {
             locationDescription = object.get("locationDescription").getAsString();
@@ -136,19 +138,20 @@ public class ThreadCommentSerializer implements JsonSerializer<ThreadComment>, J
             byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);
             thumbnail = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length, opts);
         }
+        int depth = object.get("depth").getAsInt();
+        // String parent = object.get("parent").getAsString();
         GeoLocation location = new GeoLocation(latitude, longitude);
         location.setLocationDescription(locationDescription);
-        final Comment c = new Comment(textPost, null, location, null);
-        c.getCommentDate().setTime(threadDate);
-        c.setUser(user);
-        c.setHash(hash);
-        c.setId(Long.parseLong(id));
-        if (hasImage) {
-            c.setImageThumb(thumbnail);
-        }
-        final ThreadComment comment = new ThreadComment(c, title);
-        comment.setThreadDate(new Date(threadDate));
+        final Comment comment = new Comment(textPost, null, location, null);
+        comment.getCommentDate().setTime(commentDate);
+        comment.setUser(user);
+        comment.setHash(hash);
+        comment.setDepth(depth);
         comment.setId(Long.parseLong(id));
+        if (hasImage) {
+            comment.setImageThumb(thumbnail);
+        }
         return comment;
     }
+
 }
