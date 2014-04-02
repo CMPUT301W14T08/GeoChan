@@ -5,6 +5,7 @@
 			"threadDate" : {"type" : "date", "format" : "date_time"},
 			"hasImage" : {"type" : "boolean", "null_value" : false},
 			"location" : {"type" : "geo_point", "lat_lon" : true},
+			"locationDescription": {"type": "string"},
 			"user" : {"type" : "string", "index" : "not_analyzed"},
 			"hash" : {"type" : "string", "index" : "not_analyzed"},
 			"textPost" : {"type" : "string", "store" : true},
