@@ -34,7 +34,7 @@ public class PostThreadFragmentTest extends ActivityInstrumentationTestCase2<Mai
             public void run() {
                 int size = ThreadList.getThreads().size();
                 View view = fragment.getView();
-                Button button = (Button) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_thread_button);
+                Button button = (Button) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_button);
                 EditText title = (EditText) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.titlePrompt);
                 title.setText("Thread Title.");
                 EditText comment = (EditText) view.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.commentBody);

@@ -24,7 +24,7 @@ public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<Mai
     protected void setUp() throws Exception {
         super.setUp();
         this.activity = getActivity();
-        Comment testComment = new Comment("hello", null);
+        Comment testComment = new Comment("hello", null, null);
         //testComment.addChild(new Comment("test", null));
         ThreadList.addThread(testComment, "test thread");
         //Click the thread to open the fragment

@@ -90,7 +90,7 @@ public class PostThreadFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                Button locButton = (Button) getActivity().findViewById(R.id.thread_location_button);
+                Button locButton = (Button) getActivity().findViewById(R.id.current_location_button);
                 if (args.getString("LocationType") == "CURRENT_LOCATION") {
                     locButton.setText("Current Location");
                 } else {
@@ -130,7 +130,7 @@ public class PostThreadFragment extends Fragment {
      *            The post button in the PostThreadFragment
      */
     public void postNewThread(View view) {
-        if (view.getId() == R.id.post_thread_button) {
+        if (view.getId() == R.id.post_button) {
             EditText editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String title = editTitle.getText().toString();
@@ -142,13 +142,13 @@ public class PostThreadFragment extends Fragment {
                     // ErrorDialog.show(getActivity(),
                     // "Could not obtain location.");
                     // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, image, null);
+                    Comment newComment = new Comment(comment, image, null, null);
                     // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));
                 } else {
                     // Create a new comment object and set username
-                    Comment newComment = new Comment(comment, image, geoLocation);
+                    Comment newComment = new Comment(comment, image, geoLocation, null);
                     // ThreadList.addThread(newComment, title);
                     ElasticSearchClient client = ElasticSearchClient.getInstance();
                     client.postThread(new ThreadComment(newComment, title));

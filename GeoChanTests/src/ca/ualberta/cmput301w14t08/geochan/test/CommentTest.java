@@ -2,9 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
@@ -36,20 +34,20 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testHasImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
-        Comment comment = new Comment("test", bitmap, null);
+        Comment comment = new Comment("test", bitmap, null, null);
         assertTrue("Comment has image", comment.hasImage());
     }
     
 
     @SuppressWarnings("unused")
     public void testAddChild() {
-        Comment parent = new Comment("test", null);
+        Comment parent = new Comment("test", null, null);
         Comment reply = new Comment("test_reply", null, parent);
         assertNotNull("comment has a reply", parent.getChildren());
     }
     
     public void testConstruct() {
-        Comment comment = new Comment("Hola", null);
+        Comment comment = new Comment("Hola", null, null);
         assertNull(comment.getParent());
     }
     
@@ -109,7 +107,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
-    
+    /**
+     * Test comments according to oldest date
+     */
     public void testSortByDateOldest(){
         long extraTime = 1320000;
         ArrayList<Comment> carrier = new ArrayList<Comment>();
@@ -164,6 +164,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);
     }
     
+    /**
+     * Comment sorting by closest location.
+     */
     public void testSortByLocation(){
         ArrayList<Comment> carrier = new ArrayList<Comment>();
         Comment c1 = new Comment();
@@ -228,6 +231,10 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);     
     }
     
+    /**
+     * Test sorting by highest score. 
+     * Score is a combination of location and time since posting.
+     */
     public void testSortByScoreHighest(){
         long extraTime = 1320000;
         ArrayList<Comment> carrier = new ArrayList<Comment>();
@@ -306,6 +313,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c8);  
     }
     
+    /**
+     * Test comment sorting by lowest score.
+     */
     public void testSortByScoreLowest(){
         long extraTime = 1320000;
         ArrayList<Comment> carrier = new ArrayList<Comment>();
@@ -384,6 +394,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
     
+    /**
+     * Test sorting of images by those with and without comments.
+     */
     public void testSortByImage(){
         long extraTime = 1320000;
         ArrayList<Comment> carrier = new ArrayList<Comment>();
@@ -532,6 +545,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
                     c1.getScoreFromUser(g1) > c2.getScoreFromUser(g1));
     }
     
+    /**
+     * Test correctness of calculating distance between two points.
+     */
     public void testGetDistanceFrom(){
         Comment c1 = new Comment();
         GeoLocation g1 = new GeoLocation(5,5);
@@ -544,6 +560,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("Distance calculated correctly.", dist == Math.sqrt(50));
     }
     
+    /**
+     * Test correct calculation of time differences between comment postings.
+     */
     public void testGetTimeFrom(){
         Comment c1 = new Comment();
         Date d1 = new Date();

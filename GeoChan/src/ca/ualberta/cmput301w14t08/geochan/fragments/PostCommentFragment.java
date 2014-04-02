@@ -162,8 +162,8 @@ public class PostCommentFragment extends Fragment {
      *            The Post Button
      */
     public void postReply(View view) {
-        if (view.getId() == R.id.post_reply_button) {
-            EditText editComment = (EditText) this.getView().findViewById(R.id.replyBody);
+        if (view.getId() == R.id.post_button) {
+            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
             String comment = editComment.getText().toString();
             if (geoLocation.getLocation() == null) {
                 // ErrorDialog.show(getActivity(),

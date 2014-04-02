@@ -7,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostCommentFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -23,7 +22,7 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Ma
     public void setUp() throws Exception {
         super.setUp();
         this.activity = getActivity();
-        Comment testComment = new Comment("hello", null);
+        Comment testComment = new Comment("hello", null, null);
         ThreadList.addThread(testComment, "test thread");
         //Click the thread to open the thread View fragment and then click the reply button
         activity.runOnUiThread(new Runnable() {
@@ -36,7 +35,7 @@ public class PostCommentFragmentTest extends ActivityInstrumentationTestCase2<Ma
                 // DUE TO REFACTORING OF FRAGMENTS THIS DONT WORK SO GOOD
                 //Fragment fragment = (ThreadViewFragment) waitForFragment("thread_view_fragment", 2000);
                 assertNotNull("threadViewFragment is null", fragment);
-                ImageButton reply = (ImageButton) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_reply_button);
+                ImageButton reply = (ImageButton) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.post_button);
                 assertNotNull("reply button is null", reply);
                 //reply.performClick();
             }

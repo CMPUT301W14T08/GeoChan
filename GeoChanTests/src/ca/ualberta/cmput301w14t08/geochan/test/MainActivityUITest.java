@@ -22,7 +22,7 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
     protected void setUp() throws Exception {
         super.setUp();
         this.activity = getActivity();
-        ThreadList.addThread(new Comment("Hello", null), "test thread");
+        ThreadList.addThread(new Comment("Hello", null, null), "test thread");
     }
 
     /**

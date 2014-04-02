@@ -21,9 +21,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     
     public void testAddFavouriteComment() {
         String commentText = "test";
-        Comment comment1 = new Comment(commentText, null);
-        Comment comment2 = new Comment(commentText, null);
-        Comment comment3 = new Comment(commentText, null);
+        Comment comment1 = new Comment(commentText, null, null);
+        Comment comment2 = new Comment(commentText, null, null);
+        Comment comment3 = new Comment(commentText, null, null);
         favLog.addComment(comment1);
         favLog.addComment(comment2);
         favLog.addComment(comment3);
@@ -39,9 +39,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     public void testAddFavouriteThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
-        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null), threadText);
+        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null, null), threadText);
         favLog.addThreadComment(thread1);
         favLog.addThreadComment(thread2);
         favLog.addThreadComment(thread3);
@@ -57,9 +57,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     
     public void testHasComment() {
         String commentText = "test";
-        Comment comment1 = new Comment(commentText, null);
-        Comment comment2 = new Comment(commentText, null);
-        Comment comment3 = new Comment(commentText, null);
+        Comment comment1 = new Comment(commentText, null, null);
+        Comment comment2 = new Comment(commentText, null, null);
+        Comment comment3 = new Comment(commentText, null, null);
         favLog.addComment(comment1);
         favLog.addComment(comment2);
         favLog.addComment(comment3);
@@ -71,9 +71,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     public void testHasThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
-        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null), threadText);
+        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null, null), threadText);
         favLog.addThreadComment(thread1);
         favLog.addThreadComment(thread2);
         favLog.addThreadComment(thread3);
@@ -84,9 +84,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     
     public void testRemoveComment() {
         String commentText = "test";
-        Comment comment1 = new Comment(commentText, null);
-        Comment comment2 = new Comment(commentText, null);
-        Comment comment3 = new Comment(commentText, null);
+        Comment comment1 = new Comment(commentText, null, null);
+        Comment comment2 = new Comment(commentText, null, null);
+        Comment comment3 = new Comment(commentText, null, null);
         favLog.addComment(comment1);
         favLog.addComment(comment2);
         favLog.addComment(comment3);
@@ -100,9 +100,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     public void testRemoveThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
-        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null), threadText);
-        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null), threadText);
+        ThreadComment thread1 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread2 = new ThreadComment(new Comment(commentText, null, null), threadText);
+        ThreadComment thread3 = new ThreadComment(new Comment(commentText, null, null), threadText);
         favLog.addThreadComment(thread1);
         favLog.addThreadComment(thread2);
         favLog.addThreadComment(thread3);
