@@ -1,18 +1,23 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
-import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableMethodsInterface;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchPostRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchUpdateRunnable;
 
-public class ElasticSearchTask implements PostRunnableMethodsInterface {
+public class ElasticSearchTask implements PostRunnableInterface, UpdateRunnableInterface {
     private Comment comment;
     private String title;
     private ThreadManager manager;
     private Thread thread;
-    private Runnable runnable;
+    private Runnable postRunnable;
+    private Runnable updateRunnable;
     
    public ElasticSearchTask() {
-        runnable = new ElasticSearchPostRunnable(this);
+        postRunnable = new ElasticSearchPostRunnable(this);
+        updateRunnable = new ElasticSearchUpdateRunnable(this);
     }
     
     public void initPostTask(ThreadManager manager, Comment comment, String title) {
@@ -33,8 +38,12 @@ public class ElasticSearchTask implements PostRunnableMethodsInterface {
         }
     }
     
-    public Runnable getRunnable() {
-        return runnable;
+    public Runnable getPostRunnable() {
+        return postRunnable;
+    }
+    
+    public Runnable getUpdateRunnable() {
+        return updateRunnable;
     }
     
     public void handleState(int state) {
@@ -51,13 +60,39 @@ public class ElasticSearchTask implements PostRunnableMethodsInterface {
         int outState;
         switch(state) {
         case ElasticSearchPostRunnable.STATE_POST_COMPLETE:
-            outState = ThreadManager.POST_COMPLETE;
+            if (title != null) {
+                outState = ThreadManager.TASK_COMPLETE;
+            } else {
+                outState = ThreadManager.POST_COMPLETE;
+            }
             break;
         case ElasticSearchPostRunnable.STATE_POST_FAILED:
             outState = ThreadManager.POST_FAILED;
             break;
         default:
             outState = ThreadManager.POST_RUNNING;
+            break;
+        }
+        handleState(outState);
+    }
+    
+    @Override
+    public void setUpdateThread(Thread thread) {
+        setCurrentThread(thread);
+    }
+
+    @Override
+    public void handleUpdateState(int state) {
+        int outState;
+        switch(state) {
+        case ElasticSearchUpdateRunnable.STATE_UPDATE_COMPLETE:
+            outState = ThreadManager.TASK_COMPLETE;
+            break;
+        case ElasticSearchUpdateRunnable.STATE_UPDATE_FAILED:
+            outState = ThreadManager.UPDATE_FAILED;
+            break;
+        default:
+            outState = ThreadManager.UPDATE_RUNNING;
             break;
         }
         handleState(outState);

@@ -10,7 +10,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
+import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchTask;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
 public class ThreadManager {
@@ -36,8 +38,10 @@ public class ThreadManager {
     private final LruCache<Long, byte[]> ElasticSearchCache;
     
     private final BlockingQueue<Runnable> ElasticSearchPostRunnableQueue;
+    private final BlockingQueue<Runnable> ElasticSearchUpdateRunnableQueue;
     private final Queue<ElasticSearchTask> ElasticSearchTaskQueue;
     private final ThreadPoolExecutor ElasticSearchPostPool;
+    private final ThreadPoolExecutor ElasticSearchUpdatePool;
     
     private Handler handler;
     private static ThreadManager instance = null;    
@@ -48,14 +52,23 @@ public class ThreadManager {
     private ThreadManager() {
         ElasticSearchCache = new LruCache<Long, byte[]>(MAXIMUM_CACHE_SIZE);
         ElasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        ElasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
         ElasticSearchTaskQueue = new LinkedBlockingQueue<ElasticSearchTask>();
         ElasticSearchPostPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, ElasticSearchPostRunnableQueue);
+        ElasticSearchUpdatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, ElasticSearchUpdateRunnableQueue);
+
         
         handler = new Handler(Looper.getMainLooper()) {
             
             @Override
             public void handleMessage(Message inputMessage) {
-                // Some code here...
+                switch (inputMessage.what) {
+                case TASK_COMPLETE:
+                    Toaster.toastShort("YAY!!! :D");
+                    break;
+                default:
+                    super.handleMessage(inputMessage);
+                }
             }
             
         };
@@ -74,17 +87,21 @@ public class ThreadManager {
             task = new ElasticSearchTask();
         }
         task.initPostTask(ThreadManager.instance, comment, title);
-        instance.ElasticSearchPostPool.execute(task.getRunnable());
+        instance.ElasticSearchPostPool.execute(task.getPostRunnable());
         return task;
     }
     
     public void handleState(ElasticSearchTask task, int state) {
         switch(state) {
         case POST_COMPLETE:
-            // handle completion
+            instance.ElasticSearchUpdatePool.execute(task.getUpdateRunnable());
+            break;
+        case TASK_COMPLETE:
+            handler.obtainMessage(state, task).sendToTarget();
             break;
         default:
             handler.obtainMessage(state, task).sendToTarget();
+            break;
         }
     }
 }
