@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
-import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -37,9 +36,11 @@ public class ThreadManager {
     
     private final LruCache<Long, byte[]> ElasticSearchCache;
     
+    private final BlockingQueue<Runnable> ElasticSearchImageRunnableQueue;
     private final BlockingQueue<Runnable> ElasticSearchPostRunnableQueue;
     private final BlockingQueue<Runnable> ElasticSearchUpdateRunnableQueue;
     private final Queue<ElasticSearchTask> ElasticSearchTaskQueue;
+    private final ThreadPoolExecutor ElasticSearchImagePool;
     private final ThreadPoolExecutor ElasticSearchPostPool;
     private final ThreadPoolExecutor ElasticSearchUpdatePool;
     
@@ -51,9 +52,11 @@ public class ThreadManager {
      */
     private ThreadManager() {
         ElasticSearchCache = new LruCache<Long, byte[]>(MAXIMUM_CACHE_SIZE);
+        ElasticSearchImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
         ElasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
         ElasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
         ElasticSearchTaskQueue = new LinkedBlockingQueue<ElasticSearchTask>();
+        ElasticSearchImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, ElasticSearchImageRunnableQueue);
         ElasticSearchPostPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, ElasticSearchPostRunnableQueue);
         ElasticSearchUpdatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, ElasticSearchUpdateRunnableQueue);
 
@@ -94,7 +97,20 @@ public class ThreadManager {
     public void handleState(ElasticSearchTask task, int state) {
         switch(state) {
         case POST_COMPLETE:
-            instance.ElasticSearchUpdatePool.execute(task.getUpdateRunnable());
+            if (task.getComment().hasImage()) {
+                instance.ElasticSearchImagePool.execute(task.getImageRunnable());
+            } else if (task.getTitle() == null) {
+                instance.ElasticSearchUpdatePool.execute(task.getUpdateRunnable());
+            } else {
+                handler.obtainMessage(state, task).sendToTarget();
+            }
+            break;
+        case POST_IMAGE_COMPLETE:
+            if (task.getTitle() == null) {
+                instance.ElasticSearchUpdatePool.execute(task.getUpdateRunnable());
+            } else {
+                handler.obtainMessage(state, task).sendToTarget();
+            }
             break;
         case TASK_COMPLETE:
             handler.obtainMessage(state, task).sendToTarget();

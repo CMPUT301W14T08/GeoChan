@@ -1,21 +1,25 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
+import ca.ualberta.cmput301w14t08.geochan.interfaces.ImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchPostRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchUpdateRunnable;
 
-public class ElasticSearchTask implements PostRunnableInterface, UpdateRunnableInterface {
+public class ElasticSearchTask implements ImageRunnableInterface, PostRunnableInterface, UpdateRunnableInterface {
     private Comment comment;
     private String title;
     private ThreadManager manager;
     private Thread thread;
+    private Runnable imageRunnable;
     private Runnable postRunnable;
     private Runnable updateRunnable;
     
    public ElasticSearchTask() {
+        imageRunnable = new ElasticSearchImageRunnable(this);
         postRunnable = new ElasticSearchPostRunnable(this);
         updateRunnable = new ElasticSearchUpdateRunnable(this);
     }
@@ -38,6 +42,10 @@ public class ElasticSearchTask implements PostRunnableInterface, UpdateRunnableI
         }
     }
     
+    public Runnable getImageRunnable() {
+        return imageRunnable;
+    }
+
     public Runnable getPostRunnable() {
         return postRunnable;
     }
@@ -51,6 +59,28 @@ public class ElasticSearchTask implements PostRunnableInterface, UpdateRunnableI
     }
     
     @Override
+    public void setImageThread(Thread thread) {
+        setCurrentThread(thread);
+    }
+    
+    @Override
+    public void handleImageState(int state) {
+        int outState;
+        switch(state) {
+        case ElasticSearchImageRunnable.STATE_IMAGE_COMPLETE:
+            outState = ThreadManager.POST_IMAGE_COMPLETE;
+            break;
+        case ElasticSearchImageRunnable.STATE_IMAGE_FAILED:
+            outState = ThreadManager.POST_IMAGE_FAILED;
+            break;
+        default:
+            outState = ThreadManager.POST_IMAGE_RUNNING;
+            break;
+        }
+        handleState(outState);
+    }
+    
+    @Override
     public void setPostThread(Thread thread) {
         setCurrentThread(thread);
     }
@@ -60,11 +90,7 @@ public class ElasticSearchTask implements PostRunnableInterface, UpdateRunnableI
         int outState;
         switch(state) {
         case ElasticSearchPostRunnable.STATE_POST_COMPLETE:
-            if (title != null) {
-                outState = ThreadManager.TASK_COMPLETE;
-            } else {
-                outState = ThreadManager.POST_COMPLETE;
-            }
+            outState = ThreadManager.POST_COMPLETE;
             break;
         case ElasticSearchPostRunnable.STATE_POST_FAILED:
             outState = ThreadManager.POST_FAILED;

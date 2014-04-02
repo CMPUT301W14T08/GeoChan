@@ -134,7 +134,7 @@ public class Comment implements Parcelable {
     }
 
     public boolean hasImage() {
-        return !(image == null);
+        return !(imageThumb == null);
     }
 
     public void addChild(Comment comment) {

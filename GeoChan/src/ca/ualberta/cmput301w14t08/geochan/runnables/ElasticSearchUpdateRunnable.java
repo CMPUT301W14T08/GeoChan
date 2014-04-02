@@ -3,7 +3,6 @@ package ca.ualberta.cmput301w14t08.geochan.runnables;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Update;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchTask;
@@ -23,7 +22,6 @@ public class ElasticSearchUpdateRunnable implements Runnable {
     
     @Override
     public void run() {
-        Log.e("???", "STarting a runnable");
         task.setUpdateThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         JestResult jestResult = null;
@@ -35,7 +33,6 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             JestClient client = ElasticSearchClient.getInstance().getClient();
             id = task.getComment().getId();
             String query = ElasticSearchQueries.commentListScript(id);
-            Log.e("???", query);
             Update update = new Update.Builder(query).index(ElasticSearchClient.URL_INDEX).type(type).id(task.getComment().getParent().getId()).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();

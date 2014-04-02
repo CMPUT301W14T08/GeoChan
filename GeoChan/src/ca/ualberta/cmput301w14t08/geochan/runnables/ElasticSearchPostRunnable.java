@@ -22,6 +22,7 @@ public class ElasticSearchPostRunnable implements Runnable {
         this.task = task;
     }
     
+    @Override
     public void run() {
         task.setPostThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);

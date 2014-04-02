@@ -88,35 +88,6 @@ public class ElasticSearchClient {
     }
 
     /**
-     * Posts a ThreadComment to the ElasticSearch server.
-     * 
-     * @param thread
-     *            the ThreadComment
-     * @return the Thread for the work for monitoring purposes
-     * 
-     */
-    public Thread postThread(final ThreadComment thread) {
-        return post(gson.toJson(thread), TYPE_THREAD, thread.getId());
-    }
-
-    /**
-     * Posts a Comment to the ElasticSearch server.
-     * 
-     * @param thread
-     *            the ThreadComment
-     * @return the Thread for the work for monitoring purposes
-     * 
-     */
-    public Thread postComment(final ThreadComment thread, final Comment commentToReplyTo,
-            final Comment comment) {
-        String query = ElasticSearchQueries.commentListScript(comment.getId());
-        update(query, TYPE_INDEX, commentToReplyTo.getId());
-        String json = gson.toJson(comment);
-        //Log.e("json", json);
-        return post(json, TYPE_COMMENT, comment.getId());
-    }
-
-    /**
      * Returns the total number of ThreadComments on the server
      * 
      * @return number of ThreadComments
@@ -218,38 +189,6 @@ public class ElasticSearchClient {
             e.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * Posts a JSON string request to the ElasticSearch server.
-     * 
-     * @param json
-     *            the JSON query string
-     * @param type
-     *            the ElasticSearch type
-     * @param id
-     *            the record ID
-     * @return the network Thread (for monitoring purposes)
-     * 
-     */
-    public Thread post(final String json, final String type, final String id) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                Index index = new Index.Builder(json).index(URL_INDEX).type(type).id(id).build();
-                JestResult result = null;
-                try {
-                    result = client.execute(index);
-                    Log.e("WWW", result.getErrorMessage());
-                    Log.e("WWW", "TTT");
-                } catch (Exception e) {
-                    Log.e("WWW", "RRR");
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
-        return t;
     }
 
     /**
