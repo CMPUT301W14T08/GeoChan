@@ -27,13 +27,20 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+/**
+ * Location Listener Service handles location updates from the Android framework
+ * Used to update geoLocation objects and return the current location when asked
+ * 
+ * @author bradsimons
+ */
 public class LocationListenerService {
 
     private static Location location;
     private LocationListener locationListener;
     private LocationManager locationManager;
-    private static final int TWO_MINUTES = 1000 * 60 * 2; // taken from Android
-                                                          // Location Strategy
+
+    // taken from Android Location Strategy
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     /**
      * Constructs a new service object. Creates a locationListener object within
