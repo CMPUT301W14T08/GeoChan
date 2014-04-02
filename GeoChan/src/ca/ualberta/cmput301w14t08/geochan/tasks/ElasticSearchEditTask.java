@@ -105,6 +105,10 @@ public class ElasticSearchEditTask implements EditRunnableInterface, EditImageRu
         return bitmap;
     }
     
+    public Boolean getIsThread() {
+        return isThread;
+    }
+    
     public void recycle() {
         comment = null;
         manager = null;
