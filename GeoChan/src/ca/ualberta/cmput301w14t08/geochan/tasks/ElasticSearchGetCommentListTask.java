@@ -3,13 +3,13 @@ package ca.ualberta.cmput301w14t08.geochan.tasks;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
-import ca.ualberta.cmput301w14t08.geochan.models.CommentHitsList;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentListRunnable;
 
 public class ElasticSearchGetCommentListTask implements GetCommentListRunnableInterface {
 
     private String id;
-    private CommentHitsList cache;
+    private CommentList cache;
     private CommentLoader loader;
     private Runnable getCommentListRunnable;
     private ThreadManager manager;
@@ -52,12 +52,12 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
     }
 
     @Override
-    public void setCommentListCache(CommentHitsList cache) {
+    public void setCommentListCache(CommentList cache) {
         this.cache = cache;
     }
 
     @Override
-    public CommentHitsList getCommentListCache() {
+    public CommentList getCommentListCache() {
         return cache;
     }
     
