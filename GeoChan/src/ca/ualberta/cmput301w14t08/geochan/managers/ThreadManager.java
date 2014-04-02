@@ -13,7 +13,7 @@ import android.support.v4.util.LruCache;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.CommentHitsList;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
@@ -42,7 +42,7 @@ public class ThreadManager {
     private static final int MAXIMUM_POOL_SIZE = 5;
     private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at 10MB??
     
-    private final LruCache<String, CommentHitsList> elasticSearchCommentListCache;
+    private final LruCache<String, CommentList> elasticSearchCommentListCache;
     private final LruCache<String, Comment> elasticSearchCommentCache;
     
     private final BlockingQueue<Runnable> elasticSearchCommentListRunnableQueue;
@@ -66,7 +66,7 @@ public class ThreadManager {
      * Private constructor due to singleton pattern.
      */
     private ThreadManager() {
-        elasticSearchCommentListCache = new LruCache<String, CommentHitsList>(MAXIMUM_CACHE_SIZE);
+        elasticSearchCommentListCache = new LruCache<String, CommentList>(MAXIMUM_CACHE_SIZE);
         elasticSearchCommentCache = new LruCache<String, Comment>(MAXIMUM_CACHE_SIZE);
         
         elasticSearchCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();

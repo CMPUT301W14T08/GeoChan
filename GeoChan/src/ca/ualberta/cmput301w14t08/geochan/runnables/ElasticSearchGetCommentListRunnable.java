@@ -6,7 +6,7 @@ import io.searchbox.core.Get;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.models.CommentHitsList;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentListTask;
 
 import com.google.gson.JsonArray;
@@ -29,7 +29,7 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
         task.setGetCommentListThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         task.handleGetCommentListState(STATE_GET_LIST_RUNNING);
-        CommentHitsList cache = task.getCommentListCache();
+        CommentList cache = task.getCommentListCache();
         JestResult result = null;
         try {
             if (Thread.interrupted()) {
@@ -52,7 +52,7 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            cache = new CommentHitsList(task.getId(), hits);
+            cache = new CommentList(task.getId(), hits);
             task.handleGetCommentListState(STATE_GET_LIST_COMPLETE);
         } catch (Exception e) {
             //
