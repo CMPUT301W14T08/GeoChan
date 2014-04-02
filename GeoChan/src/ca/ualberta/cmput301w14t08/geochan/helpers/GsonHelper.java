@@ -18,6 +18,7 @@ public class GsonHelper {
 
     private static Gson offlineGson = null;
     private static Gson onlineGson = null;
+    private static Gson exposeGson = null;
     private static GsonHelper instance = null;
 
     private GsonHelper() {
@@ -32,6 +33,8 @@ public class GsonHelper {
         builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentOfflineJsonConverter());
         builder.registerTypeAdapter(Location.class, new LocationJsonConverter());
         offlineGson = builder.create();
+        builder = new GsonBuilder();
+        exposeGson = builder.excludeFieldsWithoutExposeAnnotation().create();
     }
 
     public static GsonHelper getInstance() {
@@ -55,4 +58,11 @@ public class GsonHelper {
         return offlineGson;
     }
 
+    public static Gson getExposeGson() {
+        if (exposeGson == null) {
+            getInstance();
+        }
+        return exposeGson;
+    }
+    
 }
