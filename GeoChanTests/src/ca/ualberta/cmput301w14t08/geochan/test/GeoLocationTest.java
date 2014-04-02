@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -223,5 +224,57 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         // get the description and check for the correct string
         assertEquals("the descriptions should be the same", "test description",
                 geoLocation.getLocationDescription());
+    }
+
+    /**
+     * Checks for the correct POI string from the GeoNames.org service. 
+     * Uses known GPS coordinates and checks their values with what 
+     * is in the database.
+     */
+    public void testGetPOIString() {
+        // create a geoLocation, set its coordinates, and retrieve the POI
+        // string. Coordinates correspond to Campus Tower Suite in Edmonton
+        final GeoLocation geoLocation = new GeoLocation(53.5228, -113.5202);
+        geoLocation.retreivePOIString(getActivity());
+
+        // create a runnable and handler to allow the network request to
+        // complete then check for the appropriate POI string
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                assertEquals("the descriptions should be the same", "Campus Tower Suite Hotel",
+                        geoLocation.getLocationDescription());
+
+            }
+        };
+        handler.postDelayed(runnable, 2000);
+
+        // change the coordinates to New York City Hall
+        geoLocation.setCoordinates(-74.00597, 40.7126);
+
+        // again check the POI
+        Handler handler2 = new Handler();
+        Runnable runnable2 = new Runnable() {
+            public void run() {
+                assertEquals("the descriptions should be the same", "New York City Hall",
+                        geoLocation.getLocationDescription());
+
+            }
+        };
+        handler2.postDelayed(runnable2, 2000);
+        
+        // one more check on location, set coordinates to Larry King Square
+        geoLocation.setCoordinates(34.09806, -118.32944);
+        
+        // again check the POI
+        Handler handler3 = new Handler();
+        Runnable runnable3 = new Runnable() {
+            public void run() {
+                assertEquals("the descriptions should be the same", "Larry King Square",
+                        geoLocation.getLocationDescription());
+
+            }
+        };
+        handler3.postDelayed(runnable3, 2000);
     }
 }
