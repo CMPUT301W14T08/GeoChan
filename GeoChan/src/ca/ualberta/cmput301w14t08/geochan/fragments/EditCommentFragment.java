@@ -58,7 +58,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
  * Allows the user to edit the text, location, and image of a comment
- * they have made.
+ * they have made. The user can only edit a comment that they have made if
+ * their current hash (based on device ID and current username) matches the
+ * hash stored in the Comment being edited.
  * @author Henry Pabst
  *
  */
@@ -125,6 +127,10 @@ public class EditCommentFragment extends Fragment {
         if (EditCommentFragment.oldText != null){
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
+        }
+        if (EditCommentFragment.oldThumbnail != null){
+            oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
+            oldThumbView.setImageBitmap(EditCommentFragment.oldThumbnail);
         }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
