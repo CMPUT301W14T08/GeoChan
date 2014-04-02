@@ -151,22 +151,20 @@ public class GeoLocation {
         if (getLocation() == null) {
             this.setLocationDescription("Unknown Location");
         } else {
-            GeoPoint geoPoint = new GeoPoint(getLatitude(), getLongitude());
-            new GetPOIAsyncTask().execute(geoPoint);
+            new GetPOIAsyncTask().execute(makeGeoPoint());
         }
     }
 
     /**
-     * Helper method to construct and return a GeoPoint object corresponding 
-     * to the location of this object.
+     * Helper method to construct and return a GeoPoint object corresponding to
+     * the location of this object.
      * 
      * @return geoPoint
      */
     public GeoPoint makeGeoPoint() {
         return new GeoPoint(getLatitude(), getLongitude());
     }
-    
-    
+
     /**
      * Async task for getting the POI of a location. Sets the location
      * description string with result.
@@ -192,12 +190,12 @@ public class GeoLocation {
          * Get the points of interest with 0.3 kilometers of of the location
          */
         @Override
-        protected GeoPoint doInBackground(GeoPoint...geoPoints) {
+        protected GeoPoint doInBackground(GeoPoint... geoPoints) {
             // get the Geonames provider
             GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-            
+
             for (GeoPoint geoPoint : geoPoints) {
-                
+
                 ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.8);
 
                 if (pois.size() > 0 && pois != null) {
@@ -225,14 +223,14 @@ public class GeoLocation {
             } else {
                 setLocationDescription("Unknown Location");
             }
-            
+
         }
     }
 
     /**
      * Getters and Setters
      */
-    
+
     public double getLatitude() {
         return location.getLatitude();
     }
