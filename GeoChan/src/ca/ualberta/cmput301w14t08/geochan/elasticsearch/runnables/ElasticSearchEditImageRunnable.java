@@ -1,10 +1,10 @@
-package ca.ualberta.cmput301w14t08.geochan.runnables;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import android.graphics.Bitmap;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchEditTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchEditTask;
 
 public class ElasticSearchEditImageRunnable implements Runnable {
     

@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.runnables;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Get;
@@ -7,9 +7,9 @@ import java.lang.reflect.Type;
 
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchResponse;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

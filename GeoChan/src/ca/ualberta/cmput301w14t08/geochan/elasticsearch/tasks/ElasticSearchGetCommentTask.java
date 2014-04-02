@@ -1,63 +1,63 @@
-package ca.ualberta.cmput301w14t08.geochan.tasks;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
-import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentRunnable;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
-import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentListRunnable;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
-public class ElasticSearchGetCommentListTask implements GetCommentListRunnableInterface {
+public class ElasticSearchGetCommentTask implements GetCommentRunnableInterface {
 
     private String id;
-    private CommentList cache;
+    private Comment cache;
     private CommentLoader loader;
-    private Runnable getCommentListRunnable;
+    private Runnable getCommentRunnable;
     private ThreadManager manager;
     private Thread thread;
     
-    public ElasticSearchGetCommentListTask() {
-        this.getCommentListRunnable = new ElasticSearchGetCommentListRunnable(this);
+    public ElasticSearchGetCommentTask() {
+        this.getCommentRunnable = new ElasticSearchGetCommentRunnable(this);
     }
     
-    public void initCommentListTask(ThreadManager manager, CommentLoader loader, String id) {
+    public void initCommentTask(ThreadManager manager, CommentLoader loader, String id) {
         this.manager = manager;
         this.loader = loader;
         this.id = id;
     }
     
     public void handleState(int state) {
-        manager.handleGetCommentListState(this, state);
+        manager.handleGetCommentState(this, state);
     }
     
     @Override
-    public void setGetCommentListThread(Thread thread) {
+    public void setGetCommentThread(Thread thread) {
         setCurrentThread(thread);
     }
 
     @Override
-    public void handleGetCommentListState(int state) {
+    public void handleGetCommentState(int state) {
         int outState;
         switch(state) {
-        case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_COMPLETE:
+        case ElasticSearchGetCommentRunnable.STATE_GET_COMMENT_COMPLETE:
             outState = ThreadManager.TASK_COMPLETE;
             break;
-        case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_FAILED:
-            outState = ThreadManager.GET_COMMENT_LIST_FAILED;
+        case ElasticSearchGetCommentRunnable.STATE_GET_COMMENT_FAILED:
+            outState = ThreadManager.GET_COMMENT_FAILED;
             break;
         default:
-            outState = ThreadManager.GET_COMMENT_LIST_RUNNING;
+            outState = ThreadManager.GET_COMMENT_RUNNING;
             break;
         }
         handleState(outState);
     }
 
     @Override
-    public void setCommentListCache(CommentList cache) {
+    public void setCommentCache(Comment cache) {
         this.cache = cache;
     }
 
     @Override
-    public CommentList getCommentListCache() {
+    public Comment getCommentCache() {
         return cache;
     }
     
@@ -81,8 +81,8 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
         }
     }
     
-    public Runnable getGetCommentListRunnable() {
-        return getCommentListRunnable;
+    public Runnable getGetCommentRunnable() {
+        return getCommentRunnable;
     }
     
     public void recycle() {

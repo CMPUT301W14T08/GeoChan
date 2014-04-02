@@ -1,12 +1,11 @@
-package ca.ualberta.cmput301w14t08.geochan.runnables;
+package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
-import io.searchbox.core.Update;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchEditTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchEditTask;
 
 public class ElasticSearchEditRunnable implements Runnable {
 

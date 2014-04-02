@@ -11,14 +11,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchEditTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchPostTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchEditTask;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentListTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
 
 public class ThreadManager {
 
