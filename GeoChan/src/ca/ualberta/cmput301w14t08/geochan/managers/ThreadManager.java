@@ -36,8 +36,10 @@ public class ThreadManager {
     public static final int GET_COMMENT_FAILED = 12;
     public static final int GET_COMMENT_RUNNING = 13;
     public static final int EDIT_FAILED = 14;
-    public static final int EDIT_RUNNING = 14;
-    public static final int EDIT_COMPLETE = 14;
+    public static final int EDIT_RUNNING = 15;
+    public static final int EDIT_COMPLETE = 16;
+    public static final int EDIT_IMAGE_FAILED = 17;
+    public static final int EDIT_IMAGE_RUNNING = 18;
 
     // Space for map task states
     public static final int TASK_COMPLETE = 9001;
@@ -229,6 +231,24 @@ public class ThreadManager {
         }
     }
     
+    public void handleEditState(ElasticSearchEditTask task, int state) {
+        switch(state) {
+        case EDIT_COMPLETE:
+            if (task.getBitmap() != null) {
+                instance.elasticSearchEditImagePool.execute(task.getEditImageRunnable());
+            } else {
+                handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
+            }
+            break;
+        case TASK_COMPLETE:
+            handler.obtainMessage(state, task).sendToTarget();
+            break;
+        default:
+            handler.obtainMessage(state, task).sendToTarget();
+            break;            
+        }
+    }
+    
     void recycleCommentTask(ElasticSearchGetCommentTask task) {
         task.recycle();
         elasticSearchCommentTaskQueue.offer(task);
@@ -237,5 +257,10 @@ public class ThreadManager {
     void recyclePostTask(ElasticSearchPostTask task) {
         task.recycle();
         elasticSearchPostTaskQueue.offer(task);
+    }
+    
+    void recycleEditTask(ElasticSearchEditTask task) {
+        task.recycle();
+        elasticSearchEditTaskQueue.offer(task);
     }
 }
