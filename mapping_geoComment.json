@@ -7,7 +7,7 @@
 			"user" : {"type" : "string", "index" : "not_analyzed"},
 			"hash" : {"type" : "string", "index" : "not_analyzed"},
 			"textPost" : {"type" : "string", "store" : true},
-			"imageThumbnail" : {"type" : "binary"},
+			"imageThumbnail" : {"type" : "string", "index" : "not_analyzed"},
 			"depth" : {"type" : "integer"},
 			"parent" : {"type" : "string", "null_value" : "0"},
 			"id" : {"type" : "string"}
