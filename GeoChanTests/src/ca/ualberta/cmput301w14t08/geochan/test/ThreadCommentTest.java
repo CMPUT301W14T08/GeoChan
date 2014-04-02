@@ -12,12 +12,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-public class ThreadTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
     private LocationListenerService locationListenerService;
     
-    public ThreadTest(){
+    public ThreadCommentTest(){
         super(MainActivity.class);
     }
     

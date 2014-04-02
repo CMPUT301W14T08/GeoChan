@@ -36,20 +36,20 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testHasImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
-        Comment comment = new Comment("test", bitmap, null);
+        Comment comment = new Comment("test", bitmap, null, null);
         assertTrue("Comment has image", comment.hasImage());
     }
     
 
     @SuppressWarnings("unused")
     public void testAddChild() {
-        Comment parent = new Comment("test", null);
+        Comment parent = new Comment("test", null, null);
         Comment reply = new Comment("test_reply", null, parent);
         assertNotNull("comment has a reply", parent.getChildren());
     }
     
     public void testConstruct() {
-        Comment comment = new Comment("Hola", null);
+        Comment comment = new Comment("Hola", null, null);
         assertNull(comment.getParent());
     }
     
