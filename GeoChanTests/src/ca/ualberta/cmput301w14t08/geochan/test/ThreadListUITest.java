@@ -1,15 +1,11 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.regex.Pattern;
-
-import io.searchbox.indices.settings.GetSettings;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.activities.PreferencesActivity;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ListView;
@@ -20,7 +16,7 @@ import com.robotium.solo.Solo;
 
 /**
  * Tests for the UI components of the main ThreadList.
- *
+ * Simplified using Robotium library
  * 
  * @author Thomas Krywitsky
  */
@@ -36,7 +32,6 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
     }
-    
     
     /**
      * Launch the preferences activity and check that activity displays correctly
@@ -73,17 +68,6 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnText("Change Username");
         solo.clearEditText(0);
         solo.enterText(0, "Anon");
-    }
-    
-    /**
-     * Test that the change username dialog is reflected in the preferences view
-     */
-    public void testListDisplay() {
-        
-        // Robotium clickOnList() method does not work with pull to refresh list
-        // Must click on text contained within each list item
-        
-        
     }
     
     /**
@@ -126,7 +110,19 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnActionBarItem(R.id.thead_sort);
         
         solo.clickOnMenuItem(Pattern.quote(solo.getString(R.string.sort_location)));
-        solo.goBack();
+        assertTrue("Sort by location fragment did not open", solo.waitForFragmentByTag("customLocFrag"));
+        
+        solo.clickOnButton(solo.getString(R.string.current_location_button_text));
+        assertTrue("Sort by location fragment did not return", solo.waitForFragmentById(R.id.fragment_container));
+        
+        //Set custom location buttons
+        solo.clickOnActionBarItem(R.id.thead_sort);
+        solo.clickOnMenuItem(Pattern.quote(solo.getString(R.string.sort_location)));
+        assertTrue("Sort by location fragment did not open", solo.waitForFragmentByTag("customLocFrag"));
+        solo.clickLongOnView(solo.getView(R.id.map_view), 1000);
+        solo.clickOnButton(solo.getString(R.string.new_location_button_text));
+        assertTrue("Sort by location fragment did not return", solo.waitForFragmentById(R.id.fragment_container));
+        
     }
     
     /**
@@ -154,8 +150,28 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         int midY = size.y / 2;
         int dragLength = size.y / 5;
         solo.drag(midX, midX, midY - dragLength, midY + dragLength, 10);
-
+        assertTrue("List did not refresh correctly", solo.waitForView(R.id.thread_list));
     }
+    
+    /**
+     * Test that the list UI is scrollable and clickable
+     */
+    public void testListDisplay() {
+        solo.scrollDownList(0);
+        solo.scrollUpList(0);
+        
+        // Get number of list items
+        ListView list = (ListView) solo.getView(R.id.thread_list);
+        int count = list.getChildCount();
+        // First 2 views are PullToRefresh views
+        for (int i = 2; i <= count; ++i) {
+            solo.clickInList(i, 0);
+            assertTrue("Thread view frag did not launch", solo.waitForFragmentByTag("thread_view_fragment"));
+            solo.goBack();
+            assertTrue("Did not return to thread list fragment", solo.waitForFragmentById(R.id.fragment_container));
+        }
+    }
+    
     
     @Override
     public void tearDown() throws Exception {
