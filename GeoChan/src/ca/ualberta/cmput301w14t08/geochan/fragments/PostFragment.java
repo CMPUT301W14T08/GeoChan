@@ -178,6 +178,10 @@ public class PostFragment extends Fragment {
                     commentToReplyTo.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
+                } else {
+                    ThreadList.addThread(newComment, title);
+                    int tag = PreferencesManager.getInstance().getThreadSort();
+                    SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
                 // log the thread and the geolocation
                 if (geoLocation.getLocation() == null) {
