@@ -2,8 +2,12 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.ArrayList;
 
+import com.google.gson.annotations.Expose;
+
 public class CommentList {
+    @Expose
     private ArrayList<CommentList> comments;
+    @Expose
     private String id;
     private Comment comment;
     
