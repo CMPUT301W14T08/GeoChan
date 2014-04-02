@@ -34,7 +34,10 @@ import android.os.AsyncTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
- * Responsible for GeoLocation services for Comment objects
+ * Responsible for GeoLocation services for Comment objects Responsible for
+ * keeping track of location, latitude and longitude values, point of interest
+ * string (location description), and calculating distance between itself and
+ * another geoLocation object.
  * 
  * @author Brad Simons
  */
