@@ -4,9 +4,9 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchPostTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
 
 
 public class ElasticSearchPostRunnable implements Runnable {

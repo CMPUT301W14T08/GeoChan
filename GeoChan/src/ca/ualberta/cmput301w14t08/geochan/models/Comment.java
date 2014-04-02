@@ -213,6 +213,19 @@ public class Comment implements Parcelable {
     public void setId(long id) {
         this.id = id;
     }
+    
+    public Comment findCommentById(Comment parent, String id) {
+        if (parent.getId() == id) {
+            return parent;
+        }
+        for (Comment child : parent.getChildren()) {
+            if (child.getId() == id) {
+                return child;
+            }
+            findCommentById(child, id);
+        }
+        return null;
+    }
 
     /**
      * Determines the distance between a comment and a GeoLocation in terms of

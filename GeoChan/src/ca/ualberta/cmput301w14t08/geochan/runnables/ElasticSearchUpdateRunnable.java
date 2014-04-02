@@ -5,7 +5,8 @@ import io.searchbox.client.JestResult;
 import io.searchbox.core.Update;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
 
 public class ElasticSearchUpdateRunnable implements Runnable {
 
@@ -31,7 +32,11 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             }
             task.handleUpdateState(STATE_UPDATE_RUNNING);
             JestClient client = ElasticSearchClient.getInstance().getClient();
-            id = task.getComment().getId();
+            Comment currentComment = task.getComment();
+            while (currentComment.getParent() != null) {
+                currentComment = currentComment.getParent();
+            }
+            id = currentComment.getId();
             String query = ElasticSearchQueries.commentListScript(id);
             Update update = new Update.Builder(query).index(ElasticSearchClient.URL_INDEX).type(type).id(task.getComment().getParent().getId()).build();
             if (Thread.interrupted()) {

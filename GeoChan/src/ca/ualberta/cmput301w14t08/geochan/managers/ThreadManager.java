@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.managers;
 
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -11,10 +10,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchGetTask;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchPostTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentHitsList;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentListTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
 
 public class ThreadManager {
 
@@ -40,41 +42,45 @@ public class ThreadManager {
     private static final int MAXIMUM_POOL_SIZE = 5;
     private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at 10MB??
     
-    private final LruCache<String, ArrayList<Comment>> elasticSearchCache;
+    private final LruCache<String, CommentHitsList> elasticSearchCommentListCache;
+    private final LruCache<String, Comment> elasticSearchCommentCache;
     
-    private final BlockingQueue<Runnable> elasticSearchGetCommentListRunnableQueue;
-    private final BlockingQueue<Runnable> elasticSearchGetCommentRunnableQueue;
+    private final BlockingQueue<Runnable> elasticSearchCommentListRunnableQueue;
+    private final BlockingQueue<Runnable> elasticSearchCommentRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchImageRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchPostRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchUpdateRunnableQueue;
-    private final Queue<ElasticSearchGetTask> elasticSearchGetTaskQueue;
+    private final Queue<ElasticSearchGetCommentListTask> elasticSearchCommentListTaskQueue;
+    private final Queue<ElasticSearchGetCommentTask> elasticSearchCommentTaskQueue;
     private final Queue<ElasticSearchPostTask> elasticSearchPostTaskQueue;
-    private final ThreadPoolExecutor elasticSearchGetCommentListPool;
-    private final ThreadPoolExecutor elasticSearchGetCommentPool;
+    private final ThreadPoolExecutor elasticSearchCommentListPool;
+    private final ThreadPoolExecutor elasticSearchCommentPool;
     private final ThreadPoolExecutor elasticSearchImagePool;
     private final ThreadPoolExecutor elasticSearchPostPool;
     private final ThreadPoolExecutor elasticSeachUpdatePool;
     
     private Handler handler;
-    private static ThreadManager instance = null;    
+    private static ThreadManager instance = null;
     
     /**
      * Private constructor due to singleton pattern.
      */
     private ThreadManager() {
-        elasticSearchCache = new LruCache<String, ArrayList<Comment>>(MAXIMUM_CACHE_SIZE);
+        elasticSearchCommentListCache = new LruCache<String, CommentHitsList>(MAXIMUM_CACHE_SIZE);
+        elasticSearchCommentCache = new LruCache<String, Comment>(MAXIMUM_CACHE_SIZE);
         
-        elasticSearchGetCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchGetCommentRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        elasticSearchCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        elasticSearchCommentRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
         
-        elasticSearchGetTaskQueue = new LinkedBlockingQueue<ElasticSearchGetTask>();
+        elasticSearchCommentListTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentListTask>();
+        elasticSearchCommentTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentTask>();
         elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
         
-        elasticSearchGetCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetCommentListRunnableQueue);
-        elasticSearchGetCommentPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetCommentRunnableQueue);
+        elasticSearchCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchCommentListRunnableQueue);
+        elasticSearchCommentPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchCommentRunnableQueue);
         elasticSearchImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchImageRunnableQueue);
         elasticSearchPostPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchPostRunnableQueue);
         elasticSeachUpdatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchUpdateRunnableQueue);
@@ -100,17 +106,31 @@ public class ThreadManager {
         instance = new ThreadManager();
     }
     
-    public static ElasticSearchGetTask startGet(Comment topComment) {
+    public static ElasticSearchGetCommentListTask startGetCommentList(CommentLoader loader, String id) {
         if (instance == null) {
             generateInstance();
         }
-        ElasticSearchGetTask task = instance.elasticSearchGetTaskQueue.poll();
+        ElasticSearchGetCommentListTask task = instance.elasticSearchCommentListTaskQueue.poll();
         if (task == null) {
-            task = new ElasticSearchGetTask();
+            task = new ElasticSearchGetCommentListTask();
         }
-        task.initGetTask(ThreadManager.instance, topComment);
-        task.setCache(instance.elasticSearchCache.get(topComment.getId()));
-        instance.elasticSearchGetCommentListPool.execute(task.getGetCommentListRunnable());
+        task.initCommentListTask(ThreadManager.instance, loader, id);
+        task.setCommentListCache(instance.elasticSearchCommentListCache.get(id));
+        instance.elasticSearchCommentListPool.execute(task.getGetCommentListRunnable());
+        return task;
+    }
+    
+    public static ElasticSearchGetCommentTask startGetComment(CommentLoader loader, String id) {
+        if (instance == null) {
+            generateInstance();
+        }
+        ElasticSearchGetCommentTask task = instance.elasticSearchCommentTaskQueue.poll();
+        if (task == null) {
+            task = new ElasticSearchGetCommentTask();
+        }
+        task.initCommentTask(ThreadManager.instance, loader, id);
+        task.setCommentCache(instance.elasticSearchCommentCache.get(id));
+        instance.elasticSearchCommentListPool.execute(task.getGetCommentRunnable());
         return task;
     }
     
@@ -127,11 +147,20 @@ public class ThreadManager {
         return task;
     }
     
-    public void handleGetState(ElasticSearchGetTask task, int state) {
+    public void handleGetCommentListState(ElasticSearchGetCommentListTask task, int state) {
         switch(state) {
-        case GET_COMMENT_LIST_COMPLETE:
-            instance.elasticSearchGetCommentListPool.execute(task.getGetCommentRunnable());
+        case TASK_COMPLETE:
+            
+            handler.obtainMessage(state, task).sendToTarget();
             break;
+        default:
+            handler.obtainMessage(state, task).sendToTarget();
+            break;
+        }
+    }
+    
+    public void handleGetCommentState(ElasticSearchGetCommentTask task, int state) {
+        switch(state) {
         case TASK_COMPLETE:
             handler.obtainMessage(state, task).sendToTarget();
             break;
@@ -168,9 +197,9 @@ public class ThreadManager {
         }
     }
     
-    void recycleGetTask(ElasticSearchGetTask task) {
+    void recycleCommentTask(ElasticSearchGetCommentTask task) {
         task.recycle();
-        elasticSearchGetTaskQueue.offer(task);
+        elasticSearchCommentTaskQueue.offer(task);
     }
     
     void recyclePostTask(ElasticSearchPostTask task) {
