@@ -43,6 +43,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
@@ -81,6 +82,7 @@ public class PostFragment extends Fragment {
         if (args.getLong("id") != -1) {
             commentToReplyTo = (Comment) args.getParcelable("cmt");
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
+            //Bitmap comImage = commentToReplyTo.getImage();
         }
     }
     
@@ -106,6 +108,9 @@ public class PostFragment extends Fragment {
             bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
             bodyReplyTo.setText(commentToReplyTo.getTextPost());
             replyTo.setText(commentToReplyTo.getUser() + " says:");
+            Bitmap comThumbnail = commentToReplyTo.getImageThumb();
+            ImageView postThumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
+            postThumbnail.setImageBitmap(comThumbnail);
         }
     }
 
