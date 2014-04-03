@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Update;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchPostTask;
@@ -44,7 +45,8 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             CommentList list = currentComment.makeCommentList(new CommentList(currentComment));
             String json = gson.toJson(list);
             String query = ElasticSearchQueries.commentListScript(json);
-            Update update = new Update.Builder(query).index(ElasticSearchClient.URL_INDEX).type(type).id(task.getComment().getParent().getId()).build();
+            Log.e("??", query);
+            Update update = new Update.Builder(query).index(ElasticSearchClient.URL_INDEX).type(type).id(currentComment.getId()).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
