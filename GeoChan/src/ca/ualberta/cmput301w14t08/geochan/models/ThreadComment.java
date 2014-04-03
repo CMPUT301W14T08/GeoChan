@@ -28,6 +28,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the
@@ -91,6 +92,25 @@ public class ThreadComment implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    // Should only be called on bodyComment, returns the bodyComment with the children all set.
+    // depth first traverasl
+    public Comment reconsructFromCommentList(CommentList list, Comment comment) {
+        if(list.getId() != comment.getId()) {
+            
+            Toaster.toastLong("We are doomed!");
+            return comment;
+        } else if (list.getComments().size() == 0) {
+            
+            return comment;
+        } else {
+            
+            for(CommentList cl : list.getComments()) {
+                comment.addChild(reconsructFromCommentList(cl, cl.getComment()));
+            }
+        }
+        return comment;
     }
 
     /**
