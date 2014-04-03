@@ -6,7 +6,10 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import android.graphics.Point;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.Display;
+import android.view.View;
+import android.widget.ListView;
 
 /**
  * Tests for the threadView fragment UI
@@ -89,6 +92,7 @@ public class ThreadViewUITest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void testCommentReply() {
         getToThreadViewFrag();
+        
         // Click on first comment
         solo.sleep(1000);
         solo.clickInList(4, 0);
