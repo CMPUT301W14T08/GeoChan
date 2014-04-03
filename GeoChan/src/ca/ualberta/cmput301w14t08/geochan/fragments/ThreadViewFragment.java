@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -221,6 +222,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "postFrag").addToBackStack(null)
                 .commit();
+        Log.e("DEBUG","About to start PostFragment postFrag.");
         getFragmentManager().executePendingTransactions();
 
     }
@@ -312,7 +314,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     };
     
     private void editComment(Comment comment){
-        //Log.e("EDIT:", "The edit comment button was pressed!");
+        Log.e("EDIT:", "The edit comment button was pressed!");
+        Log.e("EDIT:", comment.toString());
         //Log.e("EDIT:", "The comment text is:" + c.getTextPost());
         Fragment fragment = new EditCommentFragment();
         Bundle bundle = new Bundle();
@@ -320,7 +323,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         bundle.putString("commentId", comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "editFrag").addToBackStack(null)
+                .replace(container, fragment, "editFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
     }
