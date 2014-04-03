@@ -45,7 +45,7 @@ public class ThreadComment implements Parcelable {
     public ThreadComment(Comment bodyComment, String title) {
         super();
         this.setTitle(title);
-        this.id = Long.parseLong(bodyComment.getId());
+        this.id = HashHelper.getCommentIdHash();
         this.commentList = new CommentList(bodyComment);
         
     }
@@ -55,9 +55,7 @@ public class ThreadComment implements Parcelable {
         super();
         this.title = "This thread is being used to test!";
         this.id = HashHelper.getCommentIdHash();
-        Comment comment = new Comment();
-        comment.setId(this.id);
-        this.commentList = new CommentList(comment);
+        this.commentList = new CommentList(new Comment());
     }
 
     /**

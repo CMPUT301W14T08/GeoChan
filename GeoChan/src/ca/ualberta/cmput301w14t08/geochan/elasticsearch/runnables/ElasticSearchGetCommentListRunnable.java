@@ -52,7 +52,7 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            cache = new CommentList(task.getId(), hits);
+            //cache = new CommentList(task.getId(), hits);
             task.handleGetCommentListState(STATE_GET_LIST_COMPLETE);
         } catch (Exception e) {
             //
