@@ -93,7 +93,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     }
     
     public void recursiveGetComments(CommentList list) {
-        for (CommentList cl: list.getComments()) {
+        for (CommentList cl: list.getChildren()) {
             ThreadManager.startGetComment(this, cl.getId());
             recursiveGetComments(cl);
         }
