@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
@@ -70,6 +71,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         while (commentList == null) {};
         recursiveGetComments(commentList);
         while (loading) {};
+        reconsructFromCommentList(commentList, thread.getBodyComment());
         return list;
     }
 
@@ -93,10 +95,26 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     }
     
     public void recursiveGetComments(CommentList list) {
-        for (CommentList cl: list.getComments()) {
+        for (CommentList cl: list.getChildren()) {
             ThreadManager.startGetComment(this, cl.getId());
             recursiveGetComments(cl);
         }
+    }
+    
+    // Should only be called on bodyComment, returns the bodyComment with the children all set.
+    // depth first traverasl
+    public Comment reconsructFromCommentList(CommentList list, Comment comment) {
+        if(list.getId() != comment.getId()) {
+            Log.e("reconstruct", "should not be called on this comment object");
+            return comment;
+        } else if (list.getChildren().size() == 0) {
+            return comment;
+        } else {
+            for(CommentList cl : list.getChildren()) {
+                comment.addChild(reconsructFromCommentList(cl, cl.getComment()));
+            }
+        }
+        return comment;
     }
 
     /**

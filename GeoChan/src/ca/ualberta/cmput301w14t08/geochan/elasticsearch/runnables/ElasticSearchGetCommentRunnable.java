@@ -10,6 +10,7 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,7 +49,8 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            task.getLoader().getCommentList().findCommentListById(task.getId()).setComment(esResponse.getSource());
+            CommentList list = task.getLoader().getCommentList();
+            list.findCommentListById(list, task.getId()).setComment(esResponse.getSource());
             task.handleGetCommentState(STATE_GET_COMMENT_COMPLETE);
         } catch (Exception e) {
             e.printStackTrace();

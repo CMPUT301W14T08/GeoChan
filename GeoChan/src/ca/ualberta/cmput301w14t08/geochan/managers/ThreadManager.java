@@ -52,6 +52,7 @@ public class ThreadManager {
     // Retrieve single comment from elasticSearch
     public static final int GET_COMMENT_FAILED = 12;
     public static final int GET_COMMENT_RUNNING = 13;
+    public static final int GET_COMMENTS_COMPLETE = 21;
     // Edit a comment or thread on elasticSearch
     public static final int EDIT_FAILED = 14;
     public static final int EDIT_RUNNING = 15;
@@ -157,8 +158,13 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
+                case GET_COMMENTS_COMPLETE:
+                    ElasticSearchGetCommentTask task = (ElasticSearchGetCommentTask) inputMessage.obj;
+                    task.getLoader().setLoading(false);
+                    break;
                 default:
                     super.handleMessage(inputMessage);
+                    break;
                 }
             }
             
@@ -304,7 +310,9 @@ public class ThreadManager {
     public void handleGetCommentState(ElasticSearchGetCommentTask task, int state) {
         switch(state) {
         case TASK_COMPLETE:
-            handler.obtainMessage(state, task).sendToTarget();
+            if (elasticSearchCommentListPool.getActiveCount() == 0) {
+                handler.obtainMessage(GET_COMMENTS_COMPLETE, task).sendToTarget();
+            }
             break;
         default:
             handler.obtainMessage(state, task).sendToTarget();

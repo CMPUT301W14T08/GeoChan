@@ -39,7 +39,7 @@ public class CommentList {
         return comment;
     }
     
-    public void setComments(ArrayList<CommentList> comments) {
+    public void setChildren(ArrayList<CommentList> comments) {
         this.comments = comments;
     }
     
