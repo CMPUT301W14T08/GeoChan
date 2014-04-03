@@ -45,8 +45,7 @@ public class ElasticSearchQueries {
      */
     private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" +
                                                             "   \"doc\" : {\n";
-    private static final String UPDATE_COMMENT_LIST_END =   "        \"name\" : \"new_name\"\n" +
-                                                            "   },\n" +
+    private static final String UPDATE_COMMENT_LIST_END =   "   },\n" +
                                                             "   \"doc_as_upsert\" : true\n" +
                                                             "}";
 
