@@ -30,15 +30,24 @@ public class ElasticSearchQueries {
     /**
      * A query string to search for all results in a type.
      */
-    public static final String SEARCH_MATCH_ALL = "{\n" + "   \"size\" : 9999,  \n"
-            + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n" + "}";
+    public static final String SEARCH_MATCH_ALL =           "{\n" +
+                                                            "   \"size\" : 9999,  \n" +
+                                                            "   \"query\": {\n" +
+                                                            "       \"match_all\" : { } \n" +
+                                                            "   }\n" +
+                                                            "}";
 
     /**
      * A query string to search for all results based on a parent ID.
      */
-    private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
-            + "       \"match\" : {\n" + "           \"parent\" : \"";
-    private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n" + "}";
+    private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + 
+                                                            "   \"query\": {\n" +
+                                                            "       \"match\" : {\n" +
+                                                            "           \"parent\" : \"";
+    private static final String SEARCH_MATCH_PARENT_END =   "\" \n" +
+                                                            "       }\n" +
+                                                            "   }\n" +
+                                                            "}";
 
     /**
      * A query string to update the list of comments when a new comment is posted.
