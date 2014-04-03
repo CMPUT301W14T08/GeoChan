@@ -12,6 +12,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * Tests for the functionality of ThreadComment methods
+ *
+ */
 public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
@@ -30,6 +34,10 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
         locationListenerService.startListening();
     }
     
+    /**
+     * Tests adding a comment reply, adds a comment as a child, 
+     * verifies its presence in the children list
+     */
     public void testAddComment(){
         ThreadComment t1 = new ThreadComment();
         Comment c1 = new Comment();

@@ -8,6 +8,9 @@ import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
+/**
+ * Tests the functionality of the GeoLocation IO manager
+ */
 public class GeoLocationLogIOManagerTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     public GeoLocationLogIOManagerTest(Class<MainActivity> activityClass) {
@@ -24,6 +27,11 @@ public class GeoLocationLogIOManagerTest extends ActivityInstrumentationTestCase
         this.manager = GeoLocationLogIOManager.getInstance(activity);
     }
     
+    /**
+     * Test serialization/deserialization by serializing a log of LogEntry 
+     * object, deserializing it and verifying that the result matches the
+     * log that was serialized.
+     */
     public void testSerializeDeserialize() {
         LogEntry log1 = new LogEntry("log1", new GeoLocation(22,22));
         LogEntry log2 = new LogEntry("log1", new GeoLocation(22,22));

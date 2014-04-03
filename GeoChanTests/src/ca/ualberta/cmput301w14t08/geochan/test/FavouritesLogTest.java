@@ -6,6 +6,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
+/**
+ * Tests for the functionality of the FavouritesLog
+ *
+ */
 public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private FavouritesLog favLog = null;
 
@@ -19,6 +23,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         super.setUp();
     }
     
+    /**
+     * test adding a comment as a favourite, assert it is logged in the comments log
+     */
     public void testAddFavouriteComment() {
         String commentText = "test";
         Comment comment1 = new Comment(commentText, null, null);
@@ -36,6 +43,9 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("count must be 3", count == 3);
     }
     
+    /**
+     * test adding a thread as a favourite, assert it is logged in the threads log
+     */
     public void testAddFavouriteThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
@@ -55,6 +65,11 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("count must be 3", count == 3);
     }
     
+    /**
+     * Test the hasComment method by adding comments to the log
+     * and calling the hasComment method on the log with those comments
+     * to verify that it works
+     */
     public void testHasComment() {
         String commentText = "test";
         Comment comment1 = new Comment(commentText, null, null);
@@ -68,6 +83,11 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("Must Have Comment", favLog.hasComment(comment3.getId()));
     }
     
+    /**
+     * Test the hasThreadComment method by adding threadComments to the log
+     * and calling the hasThreadComment method on the log with those threadComments
+     * to verify that it works
+     */
     public void testHasThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
@@ -82,6 +102,11 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("Must Have Thread", favLog.hasThreadComment(thread3.getId()));
     }
     
+    /**
+     * Test removing a comment from the log by first adding it,
+     * then calling the remove method and then verifying that the log
+     * no longer contains said comment.
+     */
     public void testRemoveComment() {
         String commentText = "test";
         Comment comment1 = new Comment(commentText, null, null);
@@ -97,6 +122,11 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("count must be 0", favLog.getComments().size() == 0);
     }
     
+    /**
+     * Test removing a threadComment from the log by first adding it,
+     * then calling the remove method and then verifying that the log
+     * no longer contains said threadComment.
+     */
     public void testRemoveThreadComment() {
         String commentText = "comment";
         String threadText = "thread";
