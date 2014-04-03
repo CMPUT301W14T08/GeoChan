@@ -44,8 +44,8 @@ public class ElasticSearchQueries {
      * A query string to update the list of comments when a new comment is posted.
      */
     private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" +
-                                                            "   \"doc\" : {\n";
-    private static final String UPDATE_COMMENT_LIST_END =   "   },\n" +
+                                                            "   \"doc\" : \n";
+    private static final String UPDATE_COMMENT_LIST_END =   "   ,\n" +
                                                             "   \"doc_as_upsert\" : true\n" +
                                                             "}";
 
