@@ -11,17 +11,10 @@ public class CommentList {
     private String id;
     private Comment comment;
     
-    public CommentList(String id) {
+    public CommentList(String id, Comment comment) {
         comments = new ArrayList<CommentList>();
         this.id = id;
-    }
-    
-    public CommentList(String id, ArrayList<String> hits) {
-        comments = new ArrayList<CommentList>();
-        this.id = id;
-        for (String hit : hits) {
-            comments.add(new CommentList(hit));
-        }
+        this.comment = comment;
     }
     
     public void setId(String id) {

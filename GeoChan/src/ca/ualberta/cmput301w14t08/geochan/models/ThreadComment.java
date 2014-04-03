@@ -38,23 +38,26 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
  * 
  */
 public class ThreadComment implements Parcelable {
-    private Comment bodyComment;
+    private CommentList commentList;
     private String title;
     private long id;
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
-        this.bodyComment = bodyComment;
         this.setTitle(title);
-        this.id = HashHelper.getCommentIdHash();
+        this.id = Long.parseLong(bodyComment.getId());
+        this.commentList = new CommentList(Long.toString(this.id), bodyComment);
+        
     }
 
     /* This constructor is only used for testing. */
     public ThreadComment() {
         super();
-        this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
         this.id = HashHelper.getCommentIdHash();
+        Comment comment = new Comment();
+        comment.setId(this.id);
+        this.commentList = new CommentList(Long.toString(this.id), comment);
     }
 
     /**
@@ -62,11 +65,11 @@ public class ThreadComment implements Parcelable {
      */
 
     public Date getThreadDate() {
-        return bodyComment.getCommentDate();
+        return commentList.getComment().getCommentDate();
     }
 
     public void setThreadDate(Date threadDate) {
-        bodyComment.setCommentDate(threadDate);
+        commentList.getComment().setCommentDate(threadDate);
     }
 
     public String getId() {
@@ -78,11 +81,11 @@ public class ThreadComment implements Parcelable {
     }
 
     public Comment getBodyComment() {
-        return bodyComment;
+        return commentList.getComment();
     }
 
     public void setBodyComment(Comment bodyComment) {
-        this.bodyComment = bodyComment;
+        commentList.setComment(bodyComment);
     }
 
     public String getTitle() {
@@ -94,7 +97,7 @@ public class ThreadComment implements Parcelable {
     }
 
     public void addComment(Comment c) {
-        this.bodyComment.addChild(c);
+        commentList.getComments().add(new CommentList(c.getId(), c));
     }
 
     /**
@@ -172,7 +175,7 @@ public class ThreadComment implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(bodyComment, flags);
+        dest.writeParcelable(getBodyComment(), flags);
         dest.writeValue(title);
         dest.writeValue(id);
     }
