@@ -98,15 +98,12 @@ public class ThreadComment implements Parcelable {
     // depth first traverasl
     public Comment reconsructFromCommentList(CommentList list, Comment comment) {
         if(list.getId() != comment.getId()) {
-            
-            Toaster.toastLong("We are doomed!");
+            Log.e("reconstruct", "should not be called on this comment object");
             return comment;
-        } else if (list.getComments().size() == 0) {
-            
+        } else if (list.getChildren().size() == 0) {
             return comment;
         } else {
-            
-            for(CommentList cl : list.getComments()) {
+            for(CommentList cl : list.getChildren()) {
                 comment.addChild(reconsructFromCommentList(cl, cl.getComment()));
             }
         }
