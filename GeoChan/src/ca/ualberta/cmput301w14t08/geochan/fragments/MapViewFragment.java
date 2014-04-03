@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,25 +170,48 @@ public class MapViewFragment extends Fragment {
         // get the mapController and set the zoom
         IMapController mapController = openMapView.getController();
 
-        // set the zoom span
-        // mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) *
-        // ZOOM_FACTOR),
-        // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
-
-        int deltaLong = maxLong- minLong;
+        int deltaLong = maxLong - minLong;
         int deltaLat = maxLat - minLat;
         int maxDelta = Math.max(deltaLong, deltaLat);
         int zoomFactor;
-        
-        if (maxDelta >= 0 && maxDelta < 1000000) {
+
+        // unfortunately, the zoomToSpan method of the OSMDroid pack
+        // is very buggy! (as confirmed by stack overflow and other 
+        // forums). Therefore this ugly code had to be done
+        if (maxDelta >= 0 && maxDelta < 2000) {
             zoomFactor = 18;
-        } else if (maxDelta >= 1000000 && maxDelta < 2000000) {
+        } else if (maxDelta >= 2000 && maxDelta < 4000) {
             zoomFactor = 17;
-        } else {
+        } else if (maxDelta >= 4000 && maxDelta < 9000) {
+            zoomFactor = 16;
+        } else if (maxDelta >= 9000 && maxDelta < 20000) {
+            zoomFactor = 15;
+        } else if (maxDelta >= 20000 && maxDelta < 35000) {
+            zoomFactor = 14;
+        } else if (maxDelta >= 35000 && maxDelta < 80000) {
+            zoomFactor = 13;
+        } else if (maxDelta >= 80000 && maxDelta < 140000) {
+            zoomFactor = 12;
+        } else if (maxDelta >= 140000 && maxDelta < 250000) {
+            zoomFactor = 11;
+        } else if (maxDelta >= 250000 && maxDelta < 480000) {
+            zoomFactor = 10;
+        } else if (maxDelta >= 480000 && maxDelta < 1300000) {
+            zoomFactor = 9;
+        } else if (maxDelta >= 1300000 && maxDelta < 2000000) {
+            zoomFactor = 8;
+        } else if (maxDelta >= 2000000 && maxDelta < 5000000) {
+            zoomFactor = 7;
+        } else if (maxDelta >= 5000000 && maxDelta < 8000000) {
+            zoomFactor = 6;
+        } else if (maxDelta >= 8000000 && maxDelta < 20000000) {
+            zoomFactor = 5;
+        } else if (maxDelta >= 20000000 && maxDelta < 50000000) {
+            zoomFactor = 4;
+        }else {
             zoomFactor = 3;
         }
 
-        Log.e("zoom factor", Integer.toString(zoomFactor));
         // set the zoom center
         mapController.setZoom(zoomFactor);
         mapController.animateTo(geoPoints.get(0));
@@ -240,8 +262,8 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * 
-     */
+         * 
+         */
     public void calculateZoomSpan() {
         for (GeoPoint geoPoint : geoPoints) {
             int geoLat = geoPoint.getLatitudeE6();

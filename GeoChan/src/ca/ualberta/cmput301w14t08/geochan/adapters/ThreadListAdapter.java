@@ -143,6 +143,12 @@ public class ThreadListAdapter extends BaseAdapter {
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(thread.getBodyComment().getImageThumb());
+        } else {
+            ImageButton thumbnail = (ImageButton) convertView
+                    .findViewById(R.id.thread_list_thumbnail);
+            thumbnail.setVisibility(View.GONE);
+            thumbnail.setFocusable(false);
         }
+        
     }
 }

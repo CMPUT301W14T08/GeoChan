@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -43,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -519,7 +521,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         // Comment creator
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
         replyBy.setText(reply.getUser() + "#" + reply.getHash() + "  ");
-        String username = reply.getUser();
+        String username = PreferencesManager.getInstance().getUser();
         if (HashHelper.getHash(username).equals(reply.getHash())) {
             replyBy.setBackgroundResource(R.drawable.username_background_rect);
             replyBy.setTextColor(Color.WHITE);
