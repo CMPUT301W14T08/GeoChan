@@ -56,5 +56,7 @@
     <string name="comment_being_edited">Comment Being Edited:</string>
     <string name="edit_image">Edit Image</string>
     <string name="edit_location">Edit Location</string>
+    <string name="camera_dialog">Camera</string>
+    <string name="gallery_dialog">Gallery</string>
 
 </resources>
