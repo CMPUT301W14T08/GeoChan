@@ -117,7 +117,7 @@ public class EditCommentFragment extends Fragment {
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
         Log.e("DEBUG","thread not null" + thread.toString());
         Log.e("DEBUG","id not null" + commentId);
-        Log.e("DEBUG", "children not null" + thread.getBodyComment().getChildren().toString());
+        Log.e("DEBUG", "children not empty" + String.valueOf(thread.getBodyComment().getChildren().size()));
         if(thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
         } else {
