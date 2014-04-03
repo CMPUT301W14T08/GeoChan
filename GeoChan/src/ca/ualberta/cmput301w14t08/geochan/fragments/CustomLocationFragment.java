@@ -31,6 +31,7 @@ import org.osmdroid.views.MapView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -115,6 +117,13 @@ public class CustomLocationFragment extends Fragment {
         // setup all listeners
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        
+        // get the OP
+        Bundle args = getArguments();
+        Comment topComment = (Comment) args.getParcelable("original post");
+        if (topComment != null) {
+         
+        }
 
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
