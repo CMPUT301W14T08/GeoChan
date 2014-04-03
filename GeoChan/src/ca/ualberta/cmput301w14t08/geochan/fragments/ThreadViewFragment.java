@@ -321,6 +321,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         Bundle bundle = new Bundle();
         bundle.putInt("threadIndex", threadIndex);
         bundle.putString("commentId", comment.getId());
+        Log.e("EDIT:", "Id of comment being passed."+comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "editFrag").addToBackStack(null)

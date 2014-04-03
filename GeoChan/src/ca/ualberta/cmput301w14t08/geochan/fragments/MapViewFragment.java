@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -204,14 +205,17 @@ public class MapViewFragment extends Fragment {
             zoomFactor = 7;
         } else if (maxDelta >= 5000000 && maxDelta < 8000000) {
             zoomFactor = 6;
-        } else if (maxDelta >= 8000000 && maxDelta < 20000000) {
+        } else if (maxDelta >= 8000000 && maxDelta < 15000000) {
             zoomFactor = 5;
-        } else if (maxDelta >= 20000000 && maxDelta < 50000000) {
+        } else if (maxDelta >= 15000000 && maxDelta < 50000000) {
             zoomFactor = 4;
         }else {
             zoomFactor = 3;
         }
 
+        Log.e("zoomFactor", Integer.toString(zoomFactor));
+        Log.e("maxDelta", Integer.toString(maxDelta));
+        
         // set the zoom center
         mapController.setZoom(zoomFactor);
         mapController.animateTo(geoPoints.get(0));
