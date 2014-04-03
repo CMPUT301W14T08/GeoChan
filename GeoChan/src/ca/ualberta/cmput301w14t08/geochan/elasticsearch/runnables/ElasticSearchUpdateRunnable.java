@@ -6,7 +6,11 @@ import io.searchbox.core.Update;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
+
+import com.google.gson.Gson;
 
 public class ElasticSearchUpdateRunnable implements Runnable {
 
@@ -36,8 +40,10 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             while (currentComment.getParent() != null) {
                 currentComment = currentComment.getParent();
             }
-            id = currentComment.getId();
-            String query = ElasticSearchQueries.commentListScript(id);
+            Gson gson = GsonHelper.getExposeGson();
+            CommentList list = currentComment.makeCommentList(new CommentList(currentComment));
+            String json = gson.toJson(list);
+            String query = ElasticSearchQueries.commentListScript(json);
             Update update = new Update.Builder(query).index(ElasticSearchClient.URL_INDEX).type(type).id(task.getComment().getParent().getId()).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();

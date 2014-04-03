@@ -24,7 +24,7 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
  * A utility class for ElasticSearch. Contains various queries and builders for
  * queries to be used when interacting with ElasticSearch.
  * 
- * @author AUTHOR HERE
+ * @author Artem Herasymchuk
  */
 public class ElasticSearchQueries {
     /**
@@ -34,33 +34,21 @@ public class ElasticSearchQueries {
             + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n" + "}";
 
     /**
-     * COMMENT HERE
+     * A query string to search for all results based on a parent ID.
      */
     private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
             + "       \"match\" : {\n" + "           \"parent\" : \"";
-
-    /**
-     * COMMENT HERE
-     */
     private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n" + "}";
 
     /**
-     * COMMENT HERE
+     * A query string to update the list of comments when a new comment is posted.
      */
-    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" + "    \"upsert\" : {\n"
-            + "       \"comments\" : [\"";
-
-    /**
-     * COMMENT HERE
-     */
-    private static final String UPDATE_COMMENT_LIST_MIDDLE = "\"]\n" + "    },\n"
-            + "    \"script\": \"ctx._source.comments += comment\",\n" + "    \"params\" : {\n"
-            + "        \"comment\" : \"";
-
-    /**
-     * COMMENT HERE
-     */
-    private static final String UPDATE_COMMENT_LIST_END = "\"\n" + "    }\n" + "}";
+    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" +
+                                                            "   \"doc\" : {\n";
+    private static final String UPDATE_COMMENT_LIST_END =   "        \"name\" : \"new_name\"\n" +
+                                                            "   },\n" +
+                                                            "   \"doc_as_upsert\" : true\n" +
+                                                            "}";
 
     /**
      * Returns a query string to search by parent ID
@@ -69,23 +57,20 @@ public class ElasticSearchQueries {
      *            the parent ID
      * @return the JSON query string
      * 
-     * @author AUTHOR HERE
      */
     public static String getMatchParent(String id) {
         return SEARCH_MATCH_PARENT_BEGIN + id + SEARCH_MATCH_PARENT_END;
     }
 
     /**
-     * Returns a query string to add an ID to a list of comments
+     * Returns a query string to replace the list of comments
      * 
-     * @param id
-     *            the comment ID
+     * @param json
+     *            the list of comments in JSON format
      * @return the JSON query string
      * 
-     * @author AUTHOR HERE
      */
-    public static String commentListScript(String id) {
-        return UPDATE_COMMENT_LIST_BEGIN + id + UPDATE_COMMENT_LIST_MIDDLE + id
-                + UPDATE_COMMENT_LIST_END;
+    public static String commentListScript(String json) {
+        return UPDATE_COMMENT_LIST_BEGIN + json + UPDATE_COMMENT_LIST_END;
     }
 }

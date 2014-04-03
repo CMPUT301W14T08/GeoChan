@@ -124,6 +124,19 @@ public class Comment implements Parcelable {
         this.id = -1;
         this.commentIds = new ArrayList<String>();
     }
+    
+    // Should be called on a Thread's bodyComment only!
+    // TODO: Put this somewhere else later.
+    public CommentList makeCommentList(CommentList list) {
+        if (list.getComment().getChildren().size() == 0) {
+            return list;
+        } else {
+            for (Comment c : list.getComment().getChildren()) {
+                list.addCommentList(makeCommentList(new CommentList(c)));
+            }
+        }
+        return list;
+    }
 
     public ArrayList<String> getCommentIds() {
         return commentIds;

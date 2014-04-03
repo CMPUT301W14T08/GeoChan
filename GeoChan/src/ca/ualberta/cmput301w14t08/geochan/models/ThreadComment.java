@@ -38,15 +38,15 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
  * 
  */
 public class ThreadComment implements Parcelable {
-    private CommentList commentList;
+    private Comment bodyComment;
     private String title;
     private long id;
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
-        this.setTitle(title);
+        this.title = title;
         this.id = HashHelper.getCommentIdHash();
-        this.commentList = new CommentList(bodyComment);
+        this.bodyComment = bodyComment;
         
     }
 
@@ -55,30 +55,18 @@ public class ThreadComment implements Parcelable {
         super();
         this.title = "This thread is being used to test!";
         this.id = HashHelper.getCommentIdHash();
-        this.commentList = new CommentList(new Comment());
-    }
-    
-    // Should be called with list attribute new CommentList(getBodyComment())
-    public CommentList makeCommentList(CommentList list) {
-        if (list.getComment().getChildren().size() == 0) {
-            return list;
-        } else {
-            for (Comment c : list.getComment().getChildren()) {
-                list.addCommentList(makeCommentList(new CommentList(c)));
-            }
-        }
-        return list;
+        this.bodyComment = new Comment();
     }
 
     /**
      * Getters and setters
      */
     public Date getThreadDate() {
-        return commentList.getComment().getCommentDate();
+        return getBodyComment().getCommentDate();
     }
 
     public void setThreadDate(Date threadDate) {
-        commentList.getComment().setCommentDate(threadDate);
+        getBodyComment().setCommentDate(threadDate);
     }
 
     public String getId() {
@@ -90,11 +78,11 @@ public class ThreadComment implements Parcelable {
     }
 
     public Comment getBodyComment() {
-        return commentList.getComment();
+        return bodyComment;
     }
 
     public void setBodyComment(Comment bodyComment) {
-        commentList.setComment(bodyComment);
+        this.bodyComment = bodyComment;
     }
 
     public String getTitle() {
