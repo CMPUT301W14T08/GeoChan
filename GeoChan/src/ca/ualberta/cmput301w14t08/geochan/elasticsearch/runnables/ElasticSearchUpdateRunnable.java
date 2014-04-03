@@ -44,7 +44,7 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             }
             id = currentComment.getId();
             Gson gson = GsonHelper.getExposeGson();
-            CommentList list = currentComment.makeCommentList(new CommentList(currentComment));
+            CommentList list = makeCommentList(new CommentList(currentComment));
             String json = gson.toJson(list);
             Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type).id(id).build();
             if (Thread.interrupted()) {
@@ -68,6 +68,17 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             task.setUpdateThread(null);
             Thread.interrupted();
         }
+    }
+
+    public CommentList makeCommentList(CommentList list) {
+        if (list.getComment().getChildren().size() == 0) {
+            return list;
+        } else {
+            for (Comment c : list.getComment().getChildren()) {
+                list.addCommentList(makeCommentList(new CommentList(c)));
+            }
+        }
+        return list;
     }
 
 }
