@@ -1,14 +1,16 @@
 package ca.ualberta.cmput301w14t08.geochan.interfaces;
 
+import android.graphics.Bitmap;
+
 
 public interface GetImageRunnableInterface {
     void setGetImageThread(Thread thread);
     
     void handleGetImageState(int state);
     
-    void setImageCache(Byte[] cache);
+    void setImageCache(Bitmap cache);
     
-    Byte[] getImageCache();
+    Bitmap getImageCache();
 }
 
 

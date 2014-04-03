@@ -55,7 +55,7 @@ public class ThreadManager {
     
     private final LruCache<String, CommentList> elasticSearchCommentListCache;
     private final LruCache<String, Comment> elasticSearchCommentCache;
-    private final LruCache<String, Byte[]> elasticSearchGetImageCache;
+    private final LruCache<String, Bitmap> elasticSearchGetImageCache;
 
     
     private final BlockingQueue<Runnable> elasticSearchCommentListRunnableQueue;
@@ -95,7 +95,7 @@ public class ThreadManager {
     private ThreadManager() {
         elasticSearchCommentListCache = new LruCache<String, CommentList>(MAXIMUM_CACHE_SIZE);
         elasticSearchCommentCache = new LruCache<String, Comment>(MAXIMUM_CACHE_SIZE);
-        elasticSearchGetImageCache = new LruCache<String, Byte[]>(MAXIMUM_CACHE_SIZE);
+        elasticSearchGetImageCache = new LruCache<String, Bitmap>(MAXIMUM_CACHE_SIZE);
         
         elasticSearchCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchCommentRunnableQueue = new LinkedBlockingQueue<Runnable>();
@@ -145,20 +145,6 @@ public class ThreadManager {
         instance = new ThreadManager();
     }
     
-    public static ElasticSearchGetCommentListTask startGetCommentList(CommentLoader loader, String id) {
-        if (instance == null) {
-            generateInstance();
-        }
-        ElasticSearchGetCommentListTask task = instance.elasticSearchCommentListTaskQueue.poll();
-        if (task == null) {
-            task = new ElasticSearchGetCommentListTask();
-        }
-        task.initCommentListTask(ThreadManager.instance, loader, id);
-        task.setCommentListCache(instance.elasticSearchCommentListCache.get(id));
-        instance.elasticSearchCommentListPool.execute(task.getGetCommentListRunnable());
-        return task;
-    }
-    
     public static ElasticSearchGetImageTask startGetImage(String id) {
         if (instance == null) {
             generateInstance();
@@ -170,6 +156,20 @@ public class ThreadManager {
         task.initGetImageTask(ThreadManager.instance, id);
         task.setImageCache(instance.elasticSearchGetImageCache.get(id));
         instance.elasticSearchGetImagePool.execute(task.getGetImageRunnable());
+        return task;
+    }
+    
+    public static ElasticSearchGetCommentListTask startGetCommentList(CommentLoader loader, String id) {
+        if (instance == null) {
+            generateInstance();
+        }
+        ElasticSearchGetCommentListTask task = instance.elasticSearchCommentListTaskQueue.poll();
+        if (task == null) {
+            task = new ElasticSearchGetCommentListTask();
+        }
+        task.initCommentListTask(ThreadManager.instance, loader, id);
+        task.setCommentListCache(instance.elasticSearchCommentListCache.get(id));
+        instance.elasticSearchCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
     }
     

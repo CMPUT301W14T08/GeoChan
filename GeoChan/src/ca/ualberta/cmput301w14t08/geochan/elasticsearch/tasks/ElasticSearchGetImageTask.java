@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
+import android.graphics.Bitmap;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
@@ -10,7 +11,7 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
     private Runnable getImageRunnable;
     private ThreadManager manager;
     private Thread thread;
-    private Byte[] cache;
+    private Bitmap cache;
     
     public ElasticSearchGetImageTask() {
         this.getImageRunnable = new ElasticSearchGetImageRunnable(this);
@@ -28,16 +29,6 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
     @Override
     public void setGetImageThread(Thread thread) {
         setCurrentThread(thread);
-    }
-    
-    @Override
-    public void setImageCache(Byte[] cache) {
-        this.cache = cache;
-    }
-
-    @Override
-    public Byte[] getImageCache() {
-        return cache;
     }
     
     @Override
@@ -75,6 +66,17 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
     
     public Runnable getGetImageRunnable() {
         return getImageRunnable;
+    }
+    
+    
+    @Override
+    public void setImageCache(Bitmap cache) {
+        this.cache = cache;
+    }
+
+    @Override
+    public Bitmap getImageCache() {
+        return cache;
     }
     
     public void recycle() {

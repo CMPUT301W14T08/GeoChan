@@ -52,7 +52,6 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
             cache = esResponse.getSource();
             task.handleGetCommentState(STATE_GET_COMMENT_COMPLETE);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (result == null || !result.isSucceeded()) {
