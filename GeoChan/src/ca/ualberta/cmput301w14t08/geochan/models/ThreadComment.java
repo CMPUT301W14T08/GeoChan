@@ -57,11 +57,22 @@ public class ThreadComment implements Parcelable {
         this.id = HashHelper.getCommentIdHash();
         this.commentList = new CommentList(new Comment());
     }
+    
+    // Should be called with list attribute new CommentList(getBodyComment())
+    public CommentList makeCommentList(CommentList list) {
+        if (list.getComment().getChildren().size() == 0) {
+            return list;
+        } else {
+            for (Comment c : list.getComment().getChildren()) {
+                list.addCommentList(makeCommentList(new CommentList(c)));
+            }
+        }
+        return list;
+    }
 
     /**
      * Getters and setters
      */
-
     public Date getThreadDate() {
         return commentList.getComment().getCommentDate();
     }
@@ -92,10 +103,6 @@ public class ThreadComment implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void addComment(Comment c) {
-        commentList.getComments().add(new CommentList(c));
     }
 
     /**

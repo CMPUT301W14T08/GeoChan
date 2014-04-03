@@ -43,6 +43,10 @@ public class CommentList {
         this.comments = comments;
     }
     
+    public void addCommentList(CommentList commentList) {
+        comments.add(commentList);
+    }
+    
     public ArrayList<CommentList> getComments() {
         return comments;
     }
