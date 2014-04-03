@@ -27,7 +27,9 @@ import android.support.v4.content.AsyncTaskLoader;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
@@ -40,6 +42,8 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     private ElasticSearchClient client;
     private PreferencesManager manager;
     private ThreadComment thread;
+    private Boolean loading = false;
+    private CommentList commentList = null;
 
     public static final int LOADER_ID = 1;
 
@@ -60,9 +64,13 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list == null) {
             list = new ArrayList<Comment>();
         }
-        ArrayList<Comment> result = client.getComments(thread.getBodyComment());
-        SortUtil.sortComments(manager.getCommentSort(), result);
-        return result;
+        loading = true;
+        commentList = null;
+        ThreadManager.startGetCommentList(this, thread.getId());
+        while (commentList == null) {};
+        recursiveGetComments(commentList);
+        while (loading) {};
+        return list;
     }
 
     @Override
@@ -82,5 +90,54 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (list == null) {
             forceLoad();
         }
+    }
+    
+    public void recursiveGetComments(CommentList list) {
+        for (CommentList cl: list.getComments()) {
+            ThreadManager.startGetComment(this, cl.getId());
+            recursiveGetComments(cl);
+        }
+    }
+
+    /**
+     * @return the list
+     */
+    public ArrayList<Comment> getList() {
+        return list;
+    }
+
+    /**
+     * @param list the list to set
+     */
+    public void setList(ArrayList<Comment> list) {
+        this.list = list;
+    }
+
+    /**
+     * @return the loading
+     */
+    public Boolean getLoading() {
+        return loading;
+    }
+
+    /**
+     * @param loading the loading to set
+     */
+    public void setLoading(Boolean loading) {
+        this.loading = loading;
+    }
+
+    /**
+     * @return the commentList
+     */
+    public CommentList getCommentList() {
+        return commentList;
+    }
+
+    /**
+     * @param commentList the commentList to set
+     */
+    public void setCommentList(CommentList commentList) {
+        this.commentList = commentList;
     }
 }

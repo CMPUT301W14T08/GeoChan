@@ -30,7 +30,6 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
     public void run() {
         task.setGetCommentThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        Comment cache = task.getCommentCache();
         JestResult result = null;
         try {
             if (Thread.interrupted()) {
@@ -49,7 +48,7 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            cache = esResponse.getSource();
+            task.getLoader().getCommentList().findCommentListById(task.getId()).setComment(esResponse.getSource());
             task.handleGetCommentState(STATE_GET_COMMENT_COMPLETE);
         } catch (Exception e) {
             e.printStackTrace();
