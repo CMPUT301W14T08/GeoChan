@@ -208,7 +208,7 @@ public class PostCommentFragment extends Fragment {
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
 
-            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+            dialog.setPositiveButton(R.string.gallery_dialog, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
@@ -227,7 +227,7 @@ public class PostCommentFragment extends Fragment {
                     }
                 }
             });
-            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+            dialog.setNegativeButton(R.string.camera_dialog, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
