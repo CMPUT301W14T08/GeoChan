@@ -66,6 +66,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * 
  * @author Artem Chikin
  */
+@Deprecated
 public class PostCommentFragment extends Fragment {
     public static final int MAX_BITMAP_DIMENSIONS = 600;
 

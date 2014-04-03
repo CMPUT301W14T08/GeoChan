@@ -82,7 +82,6 @@ public class PostFragment extends Fragment {
         if (args.getLong("id") != -1) {
             commentToReplyTo = (Comment) args.getParcelable("cmt");
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
-            //Bitmap comImage = commentToReplyTo.getImage();
         }
     }
     
@@ -150,7 +149,6 @@ public class PostFragment extends Fragment {
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
                 imageThumb = args.getParcelable("IMAGE_THUMB");
                 image = args.getParcelable("IMAGE_FULL");
-                // thumbnail.setImageBitmap(imageThumb);
             }
         }
     }

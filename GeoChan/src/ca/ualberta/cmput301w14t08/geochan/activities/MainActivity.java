@@ -175,7 +175,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         getSupportFragmentManager();
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
                 .findFragmentByTag("postFrag");
-        Log.e("DEBUG", "Value of fragment:" + fragment.toString());
         fragment.post(view);//Null ptr exception caused here if accessing from favourites.
     }
 
