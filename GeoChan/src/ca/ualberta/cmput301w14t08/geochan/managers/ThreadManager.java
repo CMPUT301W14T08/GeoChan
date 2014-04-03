@@ -21,30 +21,49 @@ import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 
+/**
+ * Responsible for managing various threads that require to run
+ * in the background and communicate with the network. 
+ * Can set up, launch given tasks, monitor their state, and react
+ * to state changes by communicating with the UI. Is a singleton.
+ * 
+ * Created using the tutorial at http://developer.android.com/training/multiple-threads/create-threadpool.html
+ * 
+ * @author Artem Herasymchuk, Artem Chikin
+ *
+ */
 public class ThreadManager {
-
+    // These are the states of all tasks this manager handles
+    // Post a comment to elasticSearch
     public static final int POST_FAILED = 1;
     public static final int POST_RUNNING = 2;
     public static final int POST_COMPLETE = 3;
+    // Update the commentList on elasticSearch
     public static final int UPDATE_FAILED = 4;
     public static final int UPDATE_RUNNING = 5;
+    // Post an image to elasticSearch
     public static final int POST_IMAGE_FAILED = 6;
     public static final int POST_IMAGE_RUNNING = 7;
     public static final int POST_IMAGE_COMPLETE = 8;
+    // Retrieve commentList from elasticSearch
     public static final int GET_COMMENT_LIST_FAILED = 9;
     public static final int GET_COMMENT_LIST_RUNNING = 10;
     public static final int GET_COMMENT_LIST_COMPLETE = 11;
+    // Retrieve single comment from elasticSearch
     public static final int GET_COMMENT_FAILED = 12;
     public static final int GET_COMMENT_RUNNING = 13;
+    // Edit a comment or thread on elasticSearch
     public static final int EDIT_FAILED = 14;
     public static final int EDIT_RUNNING = 15;
     public static final int EDIT_COMPLETE = 16;
+    // Edit an image on elasticSearch
     public static final int EDIT_IMAGE_FAILED = 17;
     public static final int EDIT_IMAGE_RUNNING = 18;
+    // Retrieve an bitmap image from elasticSearch
     public static final int GET_IMAGE_FAILED = 19;
     public static final int GET_IMAGE_RUNNING = 20;
-
     // Space for map task states
+    
     public static final int TASK_COMPLETE = 9001;
     
     private static final int KEEP_ALIVE_TIME = 1;
@@ -53,29 +72,35 @@ public class ThreadManager {
     private static final int MAXIMUM_POOL_SIZE = 5;
     private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at 10MB??
     
+    // Caches for download tasks
     private final LruCache<String, CommentList> elasticSearchCommentListCache;
     private final LruCache<String, Comment> elasticSearchCommentCache;
     private final LruCache<String, Bitmap> elasticSearchGetImageCache;
 
-    
+    // Queues of runnables required by tasks
+    // es GetCommentList task
     private final BlockingQueue<Runnable> elasticSearchCommentListRunnableQueue;
+    // es GetComment task
     private final BlockingQueue<Runnable> elasticSearchCommentRunnableQueue;
+    // es Post task
     private final BlockingQueue<Runnable> elasticSearchImageRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchPostRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchUpdateRunnableQueue;
+    // es Edit task
     private final BlockingQueue<Runnable> elasticSearchEditRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchEditImageRunnableQueue;
+    // es GetImage task
     private final BlockingQueue<Runnable> elasticSearchGetImageRunnableQueue;
 
 
-
+    // Queues of tasks this manager is responsible for
     private final Queue<ElasticSearchGetCommentListTask> elasticSearchCommentListTaskQueue;
     private final Queue<ElasticSearchGetCommentTask> elasticSearchCommentTaskQueue;
     private final Queue<ElasticSearchPostTask> elasticSearchPostTaskQueue;
     private final Queue<ElasticSearchEditTask> elasticSearchEditTaskQueue;
     private final Queue<ElasticSearchGetImageTask> elasticSearchGetImageTaskQueue;
 
-
+    // Thread pools for all the possible threads, one pool per each runnable
     private final ThreadPoolExecutor elasticSearchCommentListPool;
     private final ThreadPoolExecutor elasticSearchCommentPool;
     private final ThreadPoolExecutor elasticSearchImagePool;
@@ -107,7 +132,6 @@ public class ThreadManager {
         elasticSearchGetImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
 
 
-        
         elasticSearchCommentListTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentListTask>();
         elasticSearchCommentTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentTask>();
         elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
@@ -145,6 +169,12 @@ public class ThreadManager {
         instance = new ThreadManager();
     }
     
+    /**
+     * Start the get image from elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * @param id
+     *          the image id under which the bitmap is stored on es
+     */
     public static ElasticSearchGetImageTask startGetImage(String id) {
         if (instance == null) {
             generateInstance();
@@ -159,6 +189,14 @@ public class ThreadManager {
         return task;
     }
     
+    /**
+     * Start the get commentList from elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * @param loader
+     *              commentLoader object required
+     * @param id
+     *          id of the commentList used on the server
+     */
     public static ElasticSearchGetCommentListTask startGetCommentList(CommentLoader loader, String id) {
         if (instance == null) {
             generateInstance();
@@ -173,6 +211,14 @@ public class ThreadManager {
         return task;
     }
     
+    /**
+     * Start the get comment from elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * @param loader
+     *              commentLoader object required
+     * @param id
+     *          id of the commentList used on the server
+     */
     public static ElasticSearchGetCommentTask startGetComment(CommentLoader loader, String id) {
         if (instance == null) {
             generateInstance();
@@ -187,6 +233,15 @@ public class ThreadManager {
         return task;
     }
     
+    /**
+     * Start the post comment to elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * @param comment
+     *              comment object to be posted
+     * @param title
+     *          title of the threadComment, if it is a threadComment. 
+     *          if it is a Comment, not a threadComment, the title field is null 
+     */
     public static ElasticSearchPostTask startPost(Comment comment, String title) {
         if (instance == null) {
             generateInstance();
@@ -200,6 +255,16 @@ public class ThreadManager {
         return task;
     }
     
+    /**
+     * Start the edit comment on elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * @param comment
+     *              comment object to be edited
+     * @param bitmap
+     *          edited image of the comment, left null if image has not been edited
+     * @param isThread
+     *          boolean used to determine if we are editing a comment or a threadComment bodyComment         
+     */
     public static ElasticSearchEditTask startEdit(Comment comment, Bitmap bitmap, Boolean isThread) {
         if (instance == null) {
             generateInstance();
@@ -213,6 +278,12 @@ public class ThreadManager {
         return task;
     }
     
+    /** 
+     * Handle the possible states of the getCommentList task. 
+     * As of now, just wait until task is complete.
+     * @param task
+     * @param state
+     */
     public void handleGetCommentListState(ElasticSearchGetCommentListTask task, int state) {
         switch(state) {
         case TASK_COMPLETE:
@@ -224,6 +295,12 @@ public class ThreadManager {
         }
     }
     
+    /** 
+     * Handle the possible states of the getComment task. 
+     * As of now, just wait until task is complete.
+     * @param task
+     * @param state
+     */
     public void handleGetCommentState(ElasticSearchGetCommentTask task, int state) {
         switch(state) {
         case TASK_COMPLETE:
@@ -235,6 +312,12 @@ public class ThreadManager {
         }
     }
     
+    /** 
+     * Handle the possible states of the getImage task. 
+     * As of now, just wait until task is complete.
+     * @param task
+     * @param state
+     */
     public void handleGetImageState(ElasticSearchGetImageTask task, int state) {
         switch(state) {
         case TASK_COMPLETE:
@@ -246,6 +329,15 @@ public class ThreadManager {
         }
     }
     
+    /** 
+     * Handle the possible states of the Post task. 
+     * Once post is complete, if there is an image, start the Image runnable, which
+     * posts the attached image to elasticSearch.
+     * If not, or after the image is complete, start the update runnable, 
+     * which updates the commentList on elasticSearch
+     * @param task
+     * @param state
+     */
     public void handlePostState(ElasticSearchPostTask task, int state) {
         switch(state) {
         case POST_COMPLETE:
@@ -273,6 +365,13 @@ public class ThreadManager {
         }
     }
     
+    /** 
+     * Handle the possible states of the Edit task. 
+     * Once Edit is complete, if there is an edited image, start the 
+     * EditImage runnable. Otherwise, the task is complete.
+     * @param task
+     * @param state
+     */
     public void handleEditState(ElasticSearchEditTask task, int state) {
         switch(state) {
         case EDIT_COMPLETE:
@@ -290,6 +389,7 @@ public class ThreadManager {
             break;            
         }
     }
+    
     
     void recycleCommentTask(ElasticSearchGetCommentTask task) {
         task.recycle();
