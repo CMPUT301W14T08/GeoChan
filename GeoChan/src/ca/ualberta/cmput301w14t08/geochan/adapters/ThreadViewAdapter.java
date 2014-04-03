@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -421,9 +422,12 @@ public class ThreadViewAdapter extends BaseAdapter {
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
+                        Log.e("DEBUG","Attempting reply from favourites fragment.");
                         manager.beginTransaction().replace(R.id.container, fragment, "postFrag")
                         .addToBackStack(null).commit();
+                        manager.executePendingTransactions();//Added this to see if it works.
                     } else {
+                        Log.e("DEBUG", "Attempting reply from non-favourites fragment.");
                         manager.beginTransaction()
                                 .replace(R.id.fragment_container, fragment, "postFrag")
                                 .addToBackStack(null).commit();

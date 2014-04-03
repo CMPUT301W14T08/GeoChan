@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,12 +115,16 @@ public class EditCommentFragment extends Fragment {
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
+        Log.e("DEBUG","thread not null" + thread.toString());
+        Log.e("DEBUG","id not null" + commentId);
+        Log.e("DEBUG", "children not null" + thread.getBodyComment().getChildren().toString());
         if(thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
         }
         if(EditCommentFragment.oldText == null){
+            Log.e("DEBUG","comment not null" + editComment.toString());
             EditCommentFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);

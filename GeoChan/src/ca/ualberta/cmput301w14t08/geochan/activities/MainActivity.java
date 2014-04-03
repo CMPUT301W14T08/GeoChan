@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -171,14 +172,21 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      *            View passed to the activity to check which button was pressed
      */
     public void post(View view) {
+        getSupportFragmentManager();
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
                 .findFragmentByTag("postFrag");
-        fragment.post(view);
+        Log.e("DEBUG", "Value of fragment:" + fragment.toString());
+        fragment.post(view);//Null ptr exception caused here if accessing from favourites.
     }
 
     public void attachImage(View view) {
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
-                .findFragmentByTag("postFrag");
+                .findFragmentByTag("postFrag");//Null ptr exception caused here if accessing from favourites.
+//        if(fragment == null){
+//            FavouritesFragment favFragment = (FavouritesFragment) getSupportFragmentManager()
+//                    .findFragmentByTag("favouritesFrag");
+//            favFragment.attachImage(view);
+//        }
         fragment.attachImage(view);
     }
     
