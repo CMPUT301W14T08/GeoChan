@@ -47,7 +47,18 @@ public class CommentList {
         comments.add(commentList);
     }
     
-    public ArrayList<CommentList> getComments() {
+    public ArrayList<CommentList> getChildren() {
         return comments;
     }
+    
+    public CommentList findCommentListById(CommentList commentList, String id) {
+        for (CommentList child : commentList.getChildren()) {
+            if (child.getId() == id) {
+                return child;
+            }
+            findCommentListById(child, id);
+        }
+        return null;
+    }
+
 }
