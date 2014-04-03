@@ -6,7 +6,6 @@ import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.activities.PreferencesActivity;
 import android.graphics.Point;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ListView;
