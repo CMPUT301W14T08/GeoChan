@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchEditTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetImageTask;
@@ -53,13 +52,6 @@ public class ThreadManager {
     public static final int GET_COMMENT_FAILED = 12;
     public static final int GET_COMMENT_RUNNING = 13;
     public static final int GET_COMMENTS_COMPLETE = 21;
-    // Edit a comment or thread on elasticSearch
-    public static final int EDIT_FAILED = 14;
-    public static final int EDIT_RUNNING = 15;
-    public static final int EDIT_COMPLETE = 16;
-    // Edit an image on elasticSearch
-    public static final int EDIT_IMAGE_FAILED = 17;
-    public static final int EDIT_IMAGE_RUNNING = 18;
     // Retrieve an bitmap image from elasticSearch
     public static final int GET_IMAGE_FAILED = 19;
     public static final int GET_IMAGE_RUNNING = 20;
@@ -87,9 +79,6 @@ public class ThreadManager {
     private final BlockingQueue<Runnable> elasticSearchImageRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchPostRunnableQueue;
     private final BlockingQueue<Runnable> elasticSearchUpdateRunnableQueue;
-    // es Edit task
-    private final BlockingQueue<Runnable> elasticSearchEditRunnableQueue;
-    private final BlockingQueue<Runnable> elasticSearchEditImageRunnableQueue;
     // es GetImage task
     private final BlockingQueue<Runnable> elasticSearchGetImageRunnableQueue;
 
@@ -98,7 +87,6 @@ public class ThreadManager {
     private final Queue<ElasticSearchGetCommentListTask> elasticSearchCommentListTaskQueue;
     private final Queue<ElasticSearchGetCommentTask> elasticSearchCommentTaskQueue;
     private final Queue<ElasticSearchPostTask> elasticSearchPostTaskQueue;
-    private final Queue<ElasticSearchEditTask> elasticSearchEditTaskQueue;
     private final Queue<ElasticSearchGetImageTask> elasticSearchGetImageTaskQueue;
 
     // Thread pools for all the possible threads, one pool per each runnable
@@ -107,10 +95,7 @@ public class ThreadManager {
     private final ThreadPoolExecutor elasticSearchImagePool;
     private final ThreadPoolExecutor elasticSearchPostPool;
     private final ThreadPoolExecutor elasticSearchUpdatePool;
-    private final ThreadPoolExecutor elasticSearchEditPool;
-    private final ThreadPoolExecutor elasticSearchEditImagePool;
     private final ThreadPoolExecutor elasticSearchGetImagePool;
-
     
     private Handler handler;
     private static ThreadManager instance = null;
@@ -128,25 +113,18 @@ public class ThreadManager {
         elasticSearchImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchEditRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchEditImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchGetImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
-
 
         elasticSearchCommentListTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentListTask>();
         elasticSearchCommentTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentTask>();
         elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
-        elasticSearchEditTaskQueue = new LinkedBlockingQueue<ElasticSearchEditTask>();
         elasticSearchGetImageTaskQueue = new LinkedBlockingQueue<ElasticSearchGetImageTask>();
-
 
         elasticSearchCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchCommentListRunnableQueue);
         elasticSearchCommentPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchCommentRunnableQueue);
         elasticSearchImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchImageRunnableQueue);
         elasticSearchPostPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchPostRunnableQueue);
         elasticSearchUpdatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchUpdateRunnableQueue);
-        elasticSearchEditPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchEditRunnableQueue);
-        elasticSearchEditImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchEditImageRunnableQueue);
         elasticSearchGetImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetImageRunnableQueue);
 
         
@@ -261,29 +239,6 @@ public class ThreadManager {
         return task;
     }
     
-    /**
-     * Start the edit comment on elasticSearch task, initialize a task instance
-     * and add the appropriate runnable to the thread pool
-     * @param comment
-     *              comment object to be edited
-     * @param bitmap
-     *          edited image of the comment, left null if image has not been edited
-     * @param isThread
-     *          boolean used to determine if we are editing a comment or a threadComment bodyComment         
-     */
-    public static ElasticSearchEditTask startEdit(Comment comment, Bitmap bitmap, Boolean isThread) {
-        if (instance == null) {
-            generateInstance();
-        }
-        ElasticSearchEditTask task = instance.elasticSearchEditTaskQueue.poll();
-        if (task == null) {
-            task = new ElasticSearchEditTask();
-        }
-        task.initEditTask(ThreadManager.instance, comment, bitmap, isThread);
-        instance.elasticSearchEditPool.execute(task.getEditRunnable());
-        return task;
-    }
-    
     /** 
      * Handle the possible states of the getCommentList task. 
      * As of now, just wait until task is complete.
@@ -373,32 +328,6 @@ public class ThreadManager {
         }
     }
     
-    /** 
-     * Handle the possible states of the Edit task. 
-     * Once Edit is complete, if there is an edited image, start the 
-     * EditImage runnable. Otherwise, the task is complete.
-     * @param task
-     * @param state
-     */
-    public void handleEditState(ElasticSearchEditTask task, int state) {
-        switch(state) {
-        case EDIT_COMPLETE:
-            if (task.getBitmap() != null) {
-                instance.elasticSearchEditImagePool.execute(task.getEditImageRunnable());
-            } else {
-                handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
-            }
-            break;
-        case TASK_COMPLETE:
-            handler.obtainMessage(state, task).sendToTarget();
-            break;
-        default:
-            handler.obtainMessage(state, task).sendToTarget();
-            break;            
-        }
-    }
-    
-    
     void recycleCommentTask(ElasticSearchGetCommentTask task) {
         task.recycle();
         elasticSearchCommentTaskQueue.offer(task);
@@ -412,10 +341,5 @@ public class ThreadManager {
     void recyclePostTask(ElasticSearchPostTask task) {
         task.recycle();
         elasticSearchPostTaskQueue.offer(task);
-    }
-    
-    void recycleEditTask(ElasticSearchEditTask task) {
-        task.recycle();
-        elasticSearchEditTaskQueue.offer(task);
     }
 }
