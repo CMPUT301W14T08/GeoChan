@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -103,7 +104,7 @@ public class PostFragment extends Fragment {
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
         // Retrieve POI
-        ThreadManager.startGetPOI(geoLocation);
+        // ThreadManager.startGetPOI(geoLocation);
         
         if (commentToReplyTo != null) {
             TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
@@ -163,6 +164,8 @@ public class PostFragment extends Fragment {
      */
     public void post(View view) {
         if (view.getId() == R.id.post_button) {
+            // Retrieve POI
+            ThreadManager.startGetPOI(geoLocation);
             String title = null;
             EditText editTitle = null;
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);

@@ -6,6 +6,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
@@ -162,7 +164,11 @@ public class ThreadManager {
                     ElasticSearchGetCommentTask task = (ElasticSearchGetCommentTask) inputMessage.obj;
                     task.getLoader().setLoading(false);
                     break;
+                case GET_POI_RUNNING:
+                    // Put a spinner here
                 case GET_POI_COMPLETE:
+                    GetPOITask poiTaskComplete = (GetPOITask) inputMessage.obj;
+                    poiTaskComplete.getLocation().setLocationDescription(poiTaskComplete.getPOICache());
                     Toaster.toastShort("Get POI task complete.");
                     break;
                 default:
@@ -289,10 +295,9 @@ public class ThreadManager {
             handler.obtainMessage(state, task).sendToTarget();
             break;
         case GET_POI_RUNNING:
-            Log.e("POI", "RUN");
             break;
         case GET_POI_FAILED:
-            Log.e("POI", "FAIL");
+            break;
         default:
             handler.obtainMessage(state, task).sendToTarget();
             break;

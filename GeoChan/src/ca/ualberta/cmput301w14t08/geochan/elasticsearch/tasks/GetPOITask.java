@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentRunnable;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.GetPOIRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetPOIRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
@@ -61,7 +60,7 @@ public class GetPOITask implements GetPOIRunnableInterface {
     public GeoLocation getLocation() {
         return location;
     }
-    
+
     public void setCurrentThread(Thread thread) {
         synchronized (manager) {
             this.thread = thread;

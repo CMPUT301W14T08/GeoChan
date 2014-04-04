@@ -44,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -144,6 +145,7 @@ public class CustomLocationFragment extends Fragment {
             public boolean longPressHelper(IGeoPoint clickedPoint) {
                 newLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
+                //ThreadManager.startGetPOI(newLocation, getActivity());
                 newLocation.retreivePOIString(getActivity());
                 handleNewLocationPressed(newLocation);
                 return false;

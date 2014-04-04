@@ -228,6 +228,7 @@ public class ThreadListFragment extends Fragment implements
             public void onRefresh() {
                 if (!connectHelper.isConnected()) {
                     Toaster.toastShort("No network connection.");
+                    //onLoadFinished(loader, ThreadList.getThreads());
                 } else {
                     reload();
                 }
