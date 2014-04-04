@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class CacheManager {
-    private static CacheManager instance;
+    private static CacheManager instance = null;
     private Context context;
     private Gson commentGson;
     private Gson threadGson;
