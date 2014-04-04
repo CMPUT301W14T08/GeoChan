@@ -51,6 +51,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -301,6 +302,7 @@ public class EditCommentFragment extends Fragment {
         EditCommentFragment.oldText = null;
         EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
+        ThreadManager.startPost(editComment, null);
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),
