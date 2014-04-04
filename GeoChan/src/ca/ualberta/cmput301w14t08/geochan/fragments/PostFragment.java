@@ -174,8 +174,6 @@ public class PostFragment extends Fragment {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 if (commentToReplyTo != null) {
-                    Log.e("comment to reply to:", commentToReplyTo.getId());
-                    Log.e("body comment:", thread.getBodyComment().getId());
                     Comment c = thread.findCommentById(thread.getBodyComment(), commentToReplyTo.getId());
                     c.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();

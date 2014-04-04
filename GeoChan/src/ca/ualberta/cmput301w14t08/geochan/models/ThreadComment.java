@@ -28,7 +28,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
-import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the
@@ -163,13 +162,15 @@ public class ThreadComment implements Parcelable {
     }
     
     public Comment findCommentById(Comment parent, String id) {
+        Comment c = null;
+        Log.e("??", "Searching comment " + parent.getId()+ " for " + id);
         if (parent.getId().equals(id)) {
-            return parent;
+            c = parent;
         }
         for (Comment child : parent.getChildren()) {
-            findCommentById(child, id);
+            c = findCommentById(child, id);
         }
-        return null;
+        return c;
     }
 
     @Override

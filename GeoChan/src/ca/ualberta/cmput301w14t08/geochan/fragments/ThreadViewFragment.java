@@ -52,7 +52,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
@@ -109,7 +108,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         threadIndex = (int) bundle.getLong("id");
-        thread = ThreadList.getThreads().get(threadIndex);
+        thread = bundle.getParcelable("thread");
         getLoaderManager().initLoader(CommentLoader.LOADER_ID, null, this);
     }
 
