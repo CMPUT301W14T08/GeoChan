@@ -97,11 +97,11 @@ public class ThreadListFragment extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
         // On start, get the threadList from the cache
-        ArrayList<ThreadComment> list = cacheManager.deserializeThreadList();
+        /*ArrayList<ThreadComment> list = cacheManager.deserializeThreadList();
         ThreadList.setThreads(list);
         // After the load is finished, serialize the thread list to the local cache
         adapter.setList(ThreadList.getThreads());
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
         getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 

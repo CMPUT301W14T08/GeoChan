@@ -138,6 +138,7 @@ public class Comment implements Parcelable {
     }
 
     public void addChild(Comment comment) {
+        comment.setParent(this);
         children.add(comment);
     }
 
@@ -215,14 +216,11 @@ public class Comment implements Parcelable {
     }
     
     public Comment findCommentById(Comment parent, String id) {
-        if (parent.getId() == id) {
+        if (parent.getId().equals(id)) {
             return parent;
         }
         for (Comment child : parent.getChildren()) {
-            if (child.getId() == id) {
-                return child;
-            }
-            findCommentById(child, id);
+            return findCommentById(child, id);
         }
         return null;
     }
@@ -403,6 +401,7 @@ public class Comment implements Parcelable {
         dest.writeValue(location.getLatitude());
         dest.writeValue(location.getLongitude());
         dest.writeValue(user);
+        dest.writeValue(id);
         dest.writeParcelable(parent, flags);
     }
 
@@ -419,6 +418,7 @@ public class Comment implements Parcelable {
         this.setImageThumb((Bitmap) in.readValue(getClass().getClassLoader()));
         this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
+        this.setId(Long.parseLong((String) in.readValue(getClass().getClassLoader())));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
     }
 

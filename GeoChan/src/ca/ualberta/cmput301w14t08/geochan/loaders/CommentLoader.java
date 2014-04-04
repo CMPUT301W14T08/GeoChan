@@ -104,7 +104,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     // Should only be called on bodyComment, returns the bodyComment with the children all set.
     // depth first traverasl
     public Comment reconsructFromCommentList(CommentList list, Comment comment) {
-        if(list.getId() != comment.getId()) {
+        if(list.getId().equals(comment.getId())) {
             Log.e("reconstruct", "should not be called on this comment object");
             return comment;
         } else if (list.getChildren().size() == 0) {

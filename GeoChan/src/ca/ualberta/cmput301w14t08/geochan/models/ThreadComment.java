@@ -161,6 +161,16 @@ public class ThreadComment implements Parcelable {
             return distScore + timeScore;
         }
     }
+    
+    public Comment findCommentById(Comment parent, String id) {
+        if (parent.getId().equals(id)) {
+            return parent;
+        }
+        for (Comment child : parent.getChildren()) {
+            findCommentById(child, id);
+        }
+        return null;
+    }
 
     @Override
     public int describeContents() {

@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,9 +173,11 @@ public class PostFragment extends Fragment {
             } else {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
-                ThreadManager.startPost(newComment, title);
                 if (commentToReplyTo != null) {
-                    commentToReplyTo.addChild(newComment);
+                    Log.e("comment to reply to:", commentToReplyTo.getId());
+                    Log.e("body comment:", thread.getBodyComment().getId());
+                    Comment c = thread.findCommentById(thread.getBodyComment(), commentToReplyTo.getId());
+                    c.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
                 } else {
@@ -187,6 +190,7 @@ public class PostFragment extends Fragment {
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(title, geoLocation);
                 }
+                ThreadManager.startPost(newComment, title);
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(),

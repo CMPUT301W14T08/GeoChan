@@ -42,6 +42,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -340,7 +341,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         final ImageButton editButton = (ImageButton) convertView
                 .findViewById(R.id.thread_edit_button);
 
-        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(
+        if (HashHelper.getHash(PreferencesManager.getInstance().getUser()).equals(
                 thread.getBodyComment().getHash())) {
             editButton.setVisibility(View.VISIBLE);
         }

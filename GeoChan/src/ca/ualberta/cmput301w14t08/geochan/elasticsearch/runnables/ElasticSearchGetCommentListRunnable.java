@@ -2,7 +2,6 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Get;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
@@ -45,8 +44,6 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
             }
             Gson gson = GsonHelper.getExposeGson();
             CommentList list = gson.fromJson(object, CommentList.class);
-            Log.e("???", object.toString());
-            Log.e("???", list.getId());
             task.setCommentListCache(list);
             task.handleGetCommentListState(STATE_GET_LIST_COMPLETE);
         } catch (Exception e) {

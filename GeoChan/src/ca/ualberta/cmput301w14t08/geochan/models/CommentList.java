@@ -52,11 +52,11 @@ public class CommentList {
     }
     
     public CommentList findCommentListById(CommentList commentList, String id) {
+        if (commentList.getId().equals(id)) {
+            return commentList;
+        }
         for (CommentList child : commentList.getChildren()) {
-            if (child.getId() == id) {
-                return child;
-            }
-            findCommentListById(child, id);
+            return findCommentListById(child, id);
         }
         return null;
     }
