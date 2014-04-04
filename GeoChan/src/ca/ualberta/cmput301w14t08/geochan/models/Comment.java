@@ -216,13 +216,14 @@ public class Comment implements Parcelable {
     }
     
     public Comment findCommentById(Comment parent, String id) {
+        Comment c = null;
         if (parent.getId().equals(id)) {
-            return parent;
+            c = parent;
         }
         for (Comment child : parent.getChildren()) {
-            return findCommentById(child, id);
+            c =  findCommentById(child, id);
         }
-        return null;
+        return c;
     }
 
     /**
