@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetImageTask;
@@ -277,6 +278,7 @@ public class ThreadManager {
             task = new GetPOITask();
         }
         task.initGetPOITask(ThreadManager.instance, location);
+        task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
     }
@@ -286,6 +288,11 @@ public class ThreadManager {
         case GET_POI_COMPLETE:
             handler.obtainMessage(state, task).sendToTarget();
             break;
+        case GET_POI_RUNNING:
+            Log.e("POI", "RUN");
+            break;
+        case GET_POI_FAILED:
+            Log.e("POI", "FAIL");
         default:
             handler.obtainMessage(state, task).sendToTarget();
             break;

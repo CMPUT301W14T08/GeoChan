@@ -32,6 +32,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
 /**
  * Responsible for GeoLocation services for Comment objects
@@ -152,6 +153,7 @@ public class GeoLocation {
             this.setLocationDescription("Unknown Location");
         } else {
             GeoPoint geoPoint = new GeoPoint(getLatitude(), getLongitude());
+            //ThreadManager.startGetPOI(this);
             new GetPOIAsyncTask().execute(geoPoint);
         }
     }

@@ -102,6 +102,9 @@ public class PostFragment extends Fragment {
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
+        // Retrieve POI
+        ThreadManager.startGetPOI(geoLocation);
+        
         if (commentToReplyTo != null) {
             TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
             TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);

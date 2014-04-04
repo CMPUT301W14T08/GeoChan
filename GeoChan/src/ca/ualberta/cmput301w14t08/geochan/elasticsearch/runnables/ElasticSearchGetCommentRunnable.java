@@ -52,12 +52,14 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
             }
             CommentList list = task.getLoader().getCommentList();
             list.findCommentListById(list, task.getId()).setComment(esResponse.getSource());
-            task.handleGetCommentState(STATE_GET_COMMENT_COMPLETE);
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (result == null || !result.isSucceeded()) {
                 task.handleGetCommentState(STATE_GET_COMMENT_FAILED);
+            } else {
+                task.handleGetCommentState(STATE_GET_COMMENT_COMPLETE);
             }
             task.setGetCommentThread(null);
             Thread.interrupted();
