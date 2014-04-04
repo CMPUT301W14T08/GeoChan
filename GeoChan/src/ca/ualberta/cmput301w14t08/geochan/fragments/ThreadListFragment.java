@@ -36,8 +36,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
@@ -60,6 +62,7 @@ public class ThreadListFragment extends Fragment implements
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
     private CacheManager cacheManager = null;
+    private ConnectivityHelper connectHelper = null;
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
 
@@ -95,7 +98,12 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
+        connectHelper = ConnectivityHelper.getInstance();
+        if (!connectHelper.isConnected()) {
+            Toaster.toastShort("No network connection.");
+        } else {
+            getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -191,7 +199,7 @@ public class ThreadListFragment extends Fragment implements
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
-        
+
         threadListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             /*
@@ -217,7 +225,11 @@ public class ThreadListFragment extends Fragment implements
 
             @Override
             public void onRefresh() {
-                reload();
+                if (!connectHelper.isConnected()) {
+                    Toaster.toastShort("No network connection.");
+                } else {
+                    reload();
+                }
             }
         });
 
@@ -245,7 +257,8 @@ public class ThreadListFragment extends Fragment implements
     public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
             ArrayList<ThreadComment> list) {
         ThreadList.setThreads(list);
-        // After the load is finished, serialize the thread list to the local cache
+        // After the load is finished, serialize the thread list to the local
+        // cache
         cacheManager.serializeThreadList(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();

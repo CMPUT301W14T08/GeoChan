@@ -18,11 +18,10 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
     public static final int STATE_GET_LIST_RUNNING = 0;
     public static final int STATE_GET_LIST_COMPLETE = 1;
 
-    
     public ElasticSearchGetCommentListRunnable(ElasticSearchGetCommentListTask task) {
         this.task = task;
     }
-    
+
     @Override
     public void run() {
         task.setGetCommentListThread(Thread.currentThread());
@@ -33,7 +32,8 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, task.getId()).type(type).build();
+            Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, task.getId()).type(type)
+                    .build();
             result = ElasticSearchClient.getInstance().getClient().execute(get);
             if (Thread.interrupted()) {
                 throw new InterruptedException();

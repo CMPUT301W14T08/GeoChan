@@ -27,7 +27,6 @@ public class CacheManager {
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
 
-
     private CacheManager(Context context) {
         this.context = context;
         this.commentGson = GsonHelper.getOfflineGson();
@@ -41,10 +40,11 @@ public class CacheManager {
         }
         return instance;
     }
-    
+
     /**
      * Serialize the list of threads with all the data with the exception of all
      * the comment children of the Thread body comment.
+     * 
      * @param list
      */
     public void serializeThreadList(ArrayList<ThreadComment> list) {
@@ -64,6 +64,7 @@ public class CacheManager {
 
     /**
      * Deserialise a list of ThreadComment objects without comments.
+     * 
      * @return
      */
     public ArrayList<ThreadComment> deserializeThreadList() {
@@ -90,16 +91,18 @@ public class CacheManager {
         }
         return list;
     }
-    
+
     /**
-     * Serialize threadComment child comments into a file with the file's name being the
-     * threadComment's id.
+     * Serialize threadComment child comments into a file with the file's name
+     * being the threadComment's id.
+     * 
      * @param thread
      */
     public void serializeThreadCommentsById(ThreadComment thread) {
         try {
             String json = commentGson.toJson(thread.getBodyComment().getChildren());
-            FileOutputStream f = context.openFileOutput(thread.getId()+EXTENSION, Context.MODE_PRIVATE);
+            FileOutputStream f = context.openFileOutput(thread.getId() + EXTENSION,
+                    Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
             w.write(json);
             w.close();
@@ -110,17 +113,18 @@ public class CacheManager {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Read ThreadComment child comments from json from the file with tread's id
-     * as filename. 
+     * as filename.
+     * 
      * @param id
      * @return
      */
     public ArrayList<Comment> deserializeThreadCommentsById(String id) {
         ArrayList<Comment> list = new ArrayList<Comment>();
         try {
-            FileInputStream f = context.openFileInput(id+EXTENSION);
+            FileInputStream f = context.openFileInput(id + EXTENSION);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
             String json = "";
             String temp = "";

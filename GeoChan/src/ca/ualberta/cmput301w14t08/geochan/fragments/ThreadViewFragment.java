@@ -163,7 +163,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
         if (repLocCom != null) {
             if (repLocCom.getLocationDescription() != null) {
-                replyLocationText.setText("near: " +repLocCom.getLocationDescription());
+                replyLocationText.setText("near: " + repLocCom.getLocationDescription());
             } else {
                 DecimalFormat format = new DecimalFormat();
                 format.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -218,9 +218,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         bundle.putLong("id", threadIndex);
         fragment.setArguments(bundle);
 
-        getFragmentManager().beginTransaction()
-                .replace(container, fragment, "postFrag").addToBackStack(null)
-                .commit();
+        getFragmentManager().beginTransaction().replace(container, fragment, "postFrag")
+                .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
 
     }
@@ -274,10 +273,10 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                         .findViewById(R.id.comment_edit_button);
                 editButton.setVisibility(View.VISIBLE);
                 editButton.setFocusable(false);
-                
-                editButton.setOnClickListener(new View.OnClickListener(){
-                    public void onClick(View v){
-                        //SETUP FOR COMMENT EDITING GOES HERE
+
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // SETUP FOR COMMENT EDITING GOES HERE
                         editComment(comment);
                     }
                 });
@@ -307,13 +306,13 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                     replyToComment(comment, threadIndex);
                 }
             });
-               
+
         }
     };
-    
-    private void editComment(Comment comment){
-        //Log.e("EDIT:", "The edit comment button was pressed!");
-        //Log.e("EDIT:", "The comment text is:" + c.getTextPost());
+
+    private void editComment(Comment comment) {
+        // Log.e("EDIT:", "The edit comment button was pressed!");
+        // Log.e("EDIT:", "The comment text is:" + c.getTextPost());
         Fragment fragment = new EditCommentFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("threadIndex", threadIndex);
@@ -409,9 +408,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         args.putInt("postType", CustomLocationFragment.SORT_COMMENT);
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
-        getFragmentManager().beginTransaction()
-                .replace(container, frag, "customLocFrag").addToBackStack(null)
-                .commit();
+        getFragmentManager().beginTransaction().replace(container, frag, "customLocFrag")
+                .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
 

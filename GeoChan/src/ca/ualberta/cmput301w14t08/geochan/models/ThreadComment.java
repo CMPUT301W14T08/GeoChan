@@ -47,7 +47,7 @@ public class ThreadComment implements Parcelable {
         this.title = title;
         this.id = HashHelper.getCommentIdHash();
         this.bodyComment = bodyComment;
-        
+
     }
 
     /* This constructor is only used for testing. */
@@ -160,10 +160,10 @@ public class ThreadComment implements Parcelable {
             return distScore + timeScore;
         }
     }
-    
+
     public Comment findCommentById(Comment parent, String id) {
         Comment c = null;
-        Log.e("??", "Searching comment " + parent.getId()+ " for " + id);
+        Log.e("??", "Searching comment " + parent.getId() + " for " + id);
         if (parent.getId().equals(id)) {
             c = parent;
         }

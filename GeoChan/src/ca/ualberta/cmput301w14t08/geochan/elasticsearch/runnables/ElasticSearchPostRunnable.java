@@ -8,7 +8,6 @@ import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchPostT
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
-
 public class ElasticSearchPostRunnable implements Runnable {
 
     private ElasticSearchPostTask task;
@@ -17,11 +16,11 @@ public class ElasticSearchPostRunnable implements Runnable {
     public static final int STATE_POST_FAILED = -1;
     public static final int STATE_POST_RUNNING = 0;
     public static final int STATE_POST_COMPLETE = 1;
-    
+
     public ElasticSearchPostRunnable(ElasticSearchPostTask task) {
         this.task = task;
     }
-    
+
     @Override
     public void run() {
         task.setPostThread(Thread.currentThread());
@@ -44,7 +43,8 @@ public class ElasticSearchPostRunnable implements Runnable {
                 id = thread.getId();
                 json = GsonHelper.getOnlineGson().toJson(thread);
             }
-            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type).id(id).build();
+            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type)
+                    .id(id).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }

@@ -22,11 +22,11 @@ public class ElasticSearchUpdateRunnable implements Runnable {
     public static final int STATE_UPDATE_FAILED = -1;
     public static final int STATE_UPDATE_RUNNING = 0;
     public static final int STATE_UPDATE_COMPLETE = 1;
-    
+
     public ElasticSearchUpdateRunnable(ElasticSearchPostTask task) {
         this.task = task;
     }
-    
+
     @Override
     public void run() {
         task.setUpdateThread(Thread.currentThread());
@@ -46,7 +46,8 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             Gson gson = GsonHelper.getExposeGson();
             CommentList list = makeCommentList(new CommentList(currentComment));
             String json = gson.toJson(list);
-            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type).id(id).build();
+            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type)
+                    .id(id).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }

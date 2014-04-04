@@ -6,34 +6,39 @@ import android.net.NetworkInfo;
 
 /**
  * Provides status about the user's current Internet connection.
+ * 
  * @author Artem Herasymchuk
- *
+ * 
  */
 public class ConnectivityHelper {
-    
+
     private static ConnectivityHelper instance = null;
     private static ConnectivityManager connectivityManager;
-    
+
     /**
-     * Constructor, sets up the connectivity manager.
-     * Private to avoid usage outside of as a singleton.
+     * Constructor, sets up the connectivity manager. Private to avoid usage
+     * outside of as a singleton.
+     * 
      * @param context
      */
     private ConnectivityHelper(Context context) {
         connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
     }
-    
+
     /**
      * Generates a singleton instance of this helper.
-     * @param context the context
+     * 
+     * @param context
+     *            the context
      */
     public static void generateInstance(Context context) {
         instance = new ConnectivityHelper(context);
     }
-    
+
     /**
      * Returns the singleton instance of this helper
+     * 
      * @return the instance
      */
     public static ConnectivityHelper getInstance() {
@@ -69,5 +74,5 @@ public class ConnectivityHelper {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return (isConnected() && (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE));
     }
-    
+
 }

@@ -176,11 +176,11 @@ public class MapViewFragment extends Fragment {
         // ZOOM_FACTOR),
         // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
 
-        int deltaLong = maxLong- minLong;
+        int deltaLong = maxLong - minLong;
         int deltaLat = maxLat - minLat;
         int maxDelta = Math.max(deltaLong, deltaLat);
         int zoomFactor;
-        
+
         if (maxDelta >= 0 && maxDelta < 1000000) {
             zoomFactor = 18;
         } else if (maxDelta >= 1000000 && maxDelta < 2000000) {

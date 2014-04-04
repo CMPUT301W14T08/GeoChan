@@ -208,7 +208,7 @@ public class CustomLocationFragment extends Fragment {
         }
         fm.popBackStackImmediate();
     }
-    
+
     /**
      * Called when a user clicks the submit button. If the user has placed a
      * location marker on the map, that location is placed in a bundle and
@@ -263,8 +263,8 @@ public class CustomLocationFragment extends Fragment {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == POST) {
-            PostFragment fragment = (PostFragment) getFragmentManager()
-                    .findFragmentByTag("postFrag");
+            PostFragment fragment = (PostFragment) getFragmentManager().findFragmentByTag(
+                    "postFrag");
             Bundle args = fragment.getArguments();
 
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());

@@ -52,7 +52,8 @@ import com.google.gson.JsonSerializer;
  * 
  */
 // TODO: IMPLEMENT
-public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadComment>, JsonDeserializer<ThreadComment> {
+public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadComment>,
+        JsonDeserializer<ThreadComment> {
 
     /*
      * (non-Javadoc)
@@ -164,14 +165,14 @@ public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadC
         comment.setId(Long.parseLong(id));
         return comment;
     }
-    
+
     private void recursiveSerialize(JsonObject object, Comment parent, ArrayList<Comment> list) {
         object.addProperty(parent.getId(), GsonHelper.getOfflineGson().toJson(list));
         for (Comment comment : list) {
             recursiveSerialize(object, comment, comment.getChildren());
         }
     }
-    
+
     private void recursiveDeserialize(JsonObject object, String id, ArrayList<Comment> list) {
         JsonParser parser = new JsonParser();
         JsonArray array = parser.parse(object.get(id).getAsString()).getAsJsonArray();

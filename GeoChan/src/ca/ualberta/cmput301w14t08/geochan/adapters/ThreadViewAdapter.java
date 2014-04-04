@@ -371,20 +371,20 @@ public class ThreadViewAdapter extends BaseAdapter {
                 }
             });
         }
-        
-        if(editButton != null){
-            editButton.setOnClickListener(new View.OnClickListener(){
-               public void onClick(View v){
-                   Fragment fragment = new EditCommentFragment();
-                   Bundle bundle = new Bundle();
-                   bundle.putInt("threadIndex", id);
-                   bundle.putString("commentId", thread.getBodyComment().getId());
-                   fragment.setArguments(bundle);
-                   manager.beginTransaction()
-                           .replace(R.id.fragment_container, fragment, "editFrag").addToBackStack(null)
-                           .commit();
-                   manager.executePendingTransactions();
-               }
+
+        if (editButton != null) {
+            editButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Fragment fragment = new EditCommentFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("threadIndex", id);
+                    bundle.putString("commentId", thread.getBodyComment().getId());
+                    fragment.setArguments(bundle);
+                    manager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "editFrag")
+                            .addToBackStack(null).commit();
+                    manager.executePendingTransactions();
+                }
             });
         }
 
@@ -423,7 +423,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
                         manager.beginTransaction().replace(R.id.container, fragment, "postFrag")
-                        .addToBackStack(null).commit();
+                                .addToBackStack(null).commit();
                     } else {
                         manager.beginTransaction()
                                 .replace(R.id.fragment_container, fragment, "postFrag")
@@ -472,17 +472,17 @@ public class ThreadViewAdapter extends BaseAdapter {
             if (locDescriptor != null) {
                 origPostLocationText.setText("near: " + locDescriptor);
             } else {
-            // The rounding of long and lat for max 4 decimal digits.
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
+                // The rounding of long and lat for max 4 decimal digits.
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
 
-            origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
-                    + " Longitude: " + format.format(loc.getLongitude()));
-            } 
+                origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
+                        + " Longitude: " + format.format(loc.getLongitude()));
+            }
         }
-        
+
         // Set the thumbnail is there is an image
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView

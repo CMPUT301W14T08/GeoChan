@@ -22,11 +22,11 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
     public static final int STATE_GET_COMMENT_FAILED = -1;
     public static final int STATE_GET_COMMENT_RUNNING = 0;
     public static final int STATE_GET_COMMENT_COMPLETE = 1;
-    
+
     public ElasticSearchGetCommentRunnable(ElasticSearchGetCommentTask task) {
         this.task = task;
     }
-    
+
     @Override
     public void run() {
         task.setGetCommentThread(Thread.currentThread());
@@ -37,7 +37,8 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
                 throw new InterruptedException();
             }
             task.handleGetCommentState(STATE_GET_COMMENT_RUNNING);
-            Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, task.getId()).type(type).build();
+            Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, task.getId()).type(type)
+                    .build();
             result = ElasticSearchClient.getInstance().getClient().execute(get);
             if (Thread.interrupted()) {
                 throw new InterruptedException();
@@ -61,7 +62,7 @@ public class ElasticSearchGetCommentRunnable implements Runnable {
             task.setGetCommentThread(null);
             Thread.interrupted();
         }
-        
+
     }
 
 }

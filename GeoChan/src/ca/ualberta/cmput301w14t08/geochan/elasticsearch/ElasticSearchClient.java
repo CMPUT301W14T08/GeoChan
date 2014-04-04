@@ -82,7 +82,7 @@ public class ElasticSearchClient {
         }
         return instance;
     }
-    
+
     public JestClient getClient() {
         return client;
     }

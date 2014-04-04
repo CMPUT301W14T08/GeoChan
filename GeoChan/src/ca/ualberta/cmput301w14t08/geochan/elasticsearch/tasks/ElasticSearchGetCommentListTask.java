@@ -14,21 +14,21 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
     private Runnable getCommentListRunnable;
     private ThreadManager manager;
     private Thread thread;
-    
+
     public ElasticSearchGetCommentListTask() {
         this.getCommentListRunnable = new ElasticSearchGetCommentListRunnable(this);
     }
-    
+
     public void initCommentListTask(ThreadManager manager, CommentLoader loader, String id) {
         this.manager = manager;
         this.loader = loader;
         this.id = id;
     }
-    
+
     public void handleState(int state) {
         manager.handleGetCommentListState(this, state);
     }
-    
+
     @Override
     public void setGetCommentListThread(Thread thread) {
         setCurrentThread(thread);
@@ -37,7 +37,7 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
     @Override
     public void handleGetCommentListState(int state) {
         int outState;
-        switch(state) {
+        switch (state) {
         case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_COMPLETE:
             outState = ThreadManager.TASK_COMPLETE;
             break;
@@ -60,31 +60,31 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
     public CommentList getCommentListCache() {
         return cache;
     }
-    
+
     public String getId() {
         return id;
     }
-    
+
     public CommentLoader getLoader() {
         return loader;
     }
-    
+
     public void setCurrentThread(Thread thread) {
-        synchronized(manager) {
+        synchronized (manager) {
             this.thread = thread;
         }
     }
-    
+
     public Thread getCurrentThread() {
-        synchronized(manager) {
+        synchronized (manager) {
             return thread;
         }
     }
-    
+
     public Runnable getGetCommentListRunnable() {
         return getCommentListRunnable;
     }
-    
+
     public void recycle() {
         this.id = null;
         this.cache = null;

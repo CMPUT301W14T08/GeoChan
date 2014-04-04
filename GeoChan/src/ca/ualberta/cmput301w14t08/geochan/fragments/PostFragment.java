@@ -85,7 +85,7 @@ public class PostFragment extends Fragment {
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -127,7 +127,7 @@ public class PostFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
-                    
+
                     String locationDescription = args.getString("locationDescription");
                     geoLocation.setLocationDescription(locationDescription);
 
@@ -174,7 +174,8 @@ public class PostFragment extends Fragment {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
                 ElasticSearchClient client = ElasticSearchClient.getInstance();
                 if (commentToReplyTo != null) {
-                    Comment c = thread.findCommentById(thread.getBodyComment(), commentToReplyTo.getId());
+                    Comment c = thread.findCommentById(thread.getBodyComment(),
+                            commentToReplyTo.getId());
                     c.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
@@ -286,23 +287,22 @@ public class PostFragment extends Fragment {
             }
         }
     }
-    
+
     private Bitmap scaleImage(Bitmap bitmap) {
         // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-           // Scale the pic if it is too large:
-           if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                   || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-               double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
-               if (bitmap.getHeight() > bitmap.getWidth())
-                   scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+        // Scale the pic if it is too large:
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getHeight() > bitmap.getWidth())
+                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
 
-               int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
-               int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
 
-               bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-           }
-           return bitmap;
-       }
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+        }
+        return bitmap;
+    }
 
     @Override
     public void onStop() {

@@ -6,7 +6,6 @@ import android.content.Intent;
 
 public class ConnectivityListenerService extends BroadcastReceiver {
 
-
     /**
      * called when BroacastReceiver receives an intent broadcast
      */

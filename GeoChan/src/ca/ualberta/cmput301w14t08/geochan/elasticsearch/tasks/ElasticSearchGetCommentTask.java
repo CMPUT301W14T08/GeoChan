@@ -14,21 +14,21 @@ public class ElasticSearchGetCommentTask implements GetCommentRunnableInterface 
     private Runnable getCommentRunnable;
     private ThreadManager manager;
     private Thread thread;
-    
+
     public ElasticSearchGetCommentTask() {
         this.getCommentRunnable = new ElasticSearchGetCommentRunnable(this);
     }
-    
+
     public void initCommentTask(ThreadManager manager, CommentLoader loader, String id) {
         this.manager = manager;
         this.loader = loader;
         this.id = id;
     }
-    
+
     public void handleState(int state) {
         manager.handleGetCommentState(this, state);
     }
-    
+
     @Override
     public void setGetCommentThread(Thread thread) {
         setCurrentThread(thread);
@@ -37,7 +37,7 @@ public class ElasticSearchGetCommentTask implements GetCommentRunnableInterface 
     @Override
     public void handleGetCommentState(int state) {
         int outState;
-        switch(state) {
+        switch (state) {
         case ElasticSearchGetCommentRunnable.STATE_GET_COMMENT_COMPLETE:
             outState = ThreadManager.TASK_COMPLETE;
             break;
@@ -60,31 +60,31 @@ public class ElasticSearchGetCommentTask implements GetCommentRunnableInterface 
     public Comment getCommentCache() {
         return cache;
     }
-    
+
     public String getId() {
         return id;
     }
-    
+
     public CommentLoader getLoader() {
         return loader;
     }
-    
+
     public void setCurrentThread(Thread thread) {
-        synchronized(manager) {
+        synchronized (manager) {
             this.thread = thread;
         }
     }
-    
+
     public Thread getCurrentThread() {
-        synchronized(manager) {
+        synchronized (manager) {
             return thread;
         }
     }
-    
+
     public Runnable getGetCommentRunnable() {
         return getCommentRunnable;
     }
-    
+
     public void recycle() {
         this.id = null;
         this.cache = null;

@@ -173,24 +173,24 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      *            View passed to the activity to check which button was pressed
      */
     public void post(View view) {
-        PostFragment fragment = (PostFragment) getSupportFragmentManager()
-                .findFragmentByTag("postFrag");
+        PostFragment fragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(
+                "postFrag");
         fragment.post(view);
     }
 
     public void attachImage(View view) {
-        PostFragment fragment = (PostFragment) getSupportFragmentManager()
-                .findFragmentByTag("postFrag");
+        PostFragment fragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(
+                "postFrag");
         fragment.attachImage(view);
     }
-    
-    public void editImage(View view){
+
+    public void editImage(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         fragment.editImage(view);
     }
-    
-    public void makeEdit(View view){
+
+    public void makeEdit(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         fragment.makeEdit(view);

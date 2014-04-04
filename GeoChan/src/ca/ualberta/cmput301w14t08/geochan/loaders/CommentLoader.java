@@ -68,9 +68,13 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         loading = true;
         commentList = null;
         ThreadManager.startGetCommentList(this, thread.getId());
-        while (commentList == null) {};
+        while (commentList == null) {
+        }
+        ;
         recursiveGetComments(commentList);
-        while (loading) {};
+        while (loading) {
+        }
+        ;
         reconsructFromCommentList(commentList, thread.getBodyComment());
         return list;
     }
@@ -93,24 +97,25 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
             forceLoad();
         }
     }
-    
+
     public void recursiveGetComments(CommentList list) {
-        for (CommentList cl: list.getChildren()) {
+        for (CommentList cl : list.getChildren()) {
             ThreadManager.startGetComment(this, cl.getId());
             recursiveGetComments(cl);
         }
     }
-    
-    // Should only be called on bodyComment, returns the bodyComment with the children all set.
+
+    // Should only be called on bodyComment, returns the bodyComment with the
+    // children all set.
     // depth first traverasl
     public Comment reconsructFromCommentList(CommentList list, Comment comment) {
-        if(list.getId().equals(comment.getId())) {
+        if (list.getId().equals(comment.getId())) {
             Log.e("reconstruct", "should not be called on this comment object");
             return comment;
         } else if (list.getChildren().size() == 0) {
             return comment;
         } else {
-            for(CommentList cl : list.getChildren()) {
+            for (CommentList cl : list.getChildren()) {
                 comment.addChild(reconsructFromCommentList(cl, cl.getComment()));
             }
         }
@@ -125,7 +130,8 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     }
 
     /**
-     * @param list the list to set
+     * @param list
+     *            the list to set
      */
     public void setList(ArrayList<Comment> list) {
         this.list = list;
@@ -139,7 +145,8 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     }
 
     /**
-     * @param loading the loading to set
+     * @param loading
+     *            the loading to set
      */
     public void setLoading(Boolean loading) {
         this.loading = loading;
@@ -153,7 +160,8 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
     }
 
     /**
-     * @param commentList the commentList to set
+     * @param commentList
+     *            the commentList to set
      */
     public void setCommentList(CommentList commentList) {
         this.commentList = commentList;

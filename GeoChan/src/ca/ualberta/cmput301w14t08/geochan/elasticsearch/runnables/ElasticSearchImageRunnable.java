@@ -15,7 +15,7 @@ public class ElasticSearchImageRunnable implements Runnable {
     public static final int STATE_IMAGE_FAILED = -1;
     public static final int STATE_IMAGE_RUNNING = 0;
     public static final int STATE_IMAGE_COMPLETE = 1;
-    
+
     public ElasticSearchImageRunnable(ElasticSearchPostTask task) {
         this.task = task;
     }
@@ -33,7 +33,8 @@ public class ElasticSearchImageRunnable implements Runnable {
             id = task.getComment().getId();
             JestClient client = ElasticSearchClient.getInstance().getClient();
             String json = GsonHelper.getOnlineGson().toJson(task.getComment().getImage());
-            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type).id(id).build();
+            Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type)
+                    .id(id).build();
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }

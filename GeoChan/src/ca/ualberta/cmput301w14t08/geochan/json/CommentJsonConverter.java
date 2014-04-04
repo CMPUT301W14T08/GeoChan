@@ -45,7 +45,6 @@ import com.google.gson.JsonSerializer;
  */
 public class CommentJsonConverter implements JsonSerializer<Comment>, JsonDeserializer<Comment> {
 
-
     /*
      * (non-Javadoc)
      * 
@@ -80,7 +79,7 @@ public class CommentJsonConverter implements JsonSerializer<Comment>, JsonDeseri
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
-           
+
             // Serialize the thumbnail
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
@@ -94,7 +93,7 @@ public class CommentJsonConverter implements JsonSerializer<Comment>, JsonDeseri
         }
         return object;
     }
-    
+
     /**
      * Deserializes a Comment object from JSON format.
      */

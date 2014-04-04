@@ -57,10 +57,11 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * Allows the user to edit the text, location, and image of a comment
- * they have made.
+ * Allows the user to edit the text, location, and image of a comment they have
+ * made.
+ * 
  * @author Henry Pabst
- *
+ * 
  */
 public class EditCommentFragment extends Fragment {
     private static final int MAX_BITMAP_DIMENSIONS = 600;
@@ -69,14 +70,13 @@ public class EditCommentFragment extends Fragment {
     private ImageView oldThumbView;
     private static Bitmap oldThumbnail;
     private static String oldText;
-    
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_edit_comment, container, false);
     }
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -84,31 +84,30 @@ public class EditCommentFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
-       super.onCreate(savedInstanceState); 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
-    
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
         ThreadComment thread = ThreadList.getThreads().get(threadIndex);
-        if(thread.getBodyComment().getId().equals(commentId)){
+        if (thread.getBodyComment().getId().equals(commentId)) {
             editComment = thread.getBodyComment();
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
         }
-        if(EditCommentFragment.oldText == null){
+        if (EditCommentFragment.oldText == null) {
             EditCommentFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
         }
-        if(EditCommentFragment.oldThumbnail == null
-            && editComment.getImageThumb() != null){
+        if (EditCommentFragment.oldThumbnail == null && editComment.getImageThumb() != null) {
             EditCommentFragment.oldThumbnail = editComment.getImageThumb();
             oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
             oldThumbView.setImageBitmap(EditCommentFragment.oldThumbnail);
@@ -117,12 +116,12 @@ public class EditCommentFragment extends Fragment {
         newTextPost.setText(editComment.getTextPost());
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
     }
-    
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Bundle args = getArguments();
-        if (EditCommentFragment.oldText != null){
+        if (EditCommentFragment.oldText != null) {
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
         }
@@ -142,34 +141,37 @@ public class EditCommentFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
+                    locButton.setText(format.format(lat) + ", " + format.format(lon));
                     locButton
-                            .setText(format.format(lat) +", " + format.format(lon));
-                    locButton.setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                            .setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
     }
-    
+
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         editComment.setTextPost(newTextPost.getText().toString());
     }
-    
+
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
     }
-    
+
     /**
-     * Recursively finds the comment with the passed ID and sets it to
-     * the variable editComment.
-     * @param id The ID of the comment to be found.
-     * @param comments An ArrayList of Comments to start searching.
-     */ 
-    public void getCommentFromId(String id, ArrayList<Comment> comments){
-        for(Comment com: comments){
-            if(com.getId().equals(id)){
+     * Recursively finds the comment with the passed ID and sets it to the
+     * variable editComment.
+     * 
+     * @param id
+     *            The ID of the comment to be found.
+     * @param comments
+     *            An ArrayList of Comments to start searching.
+     */
+    public void getCommentFromId(String id, ArrayList<Comment> comments) {
+        for (Comment com : comments) {
+            if (com.getId().equals(id)) {
                 editComment = com;
                 return;
             } else {
@@ -178,14 +180,15 @@ public class EditCommentFragment extends Fragment {
         }
         return;
     }
-    
+
     /**
-     * Allows the user to change the image attached to their comment. Copied from
-     * attachImageReply in PostCommentFragment, presumably originally written by
-     * either ArtemC or ArtemH.
+     * Allows the user to change the image attached to their comment. Copied
+     * from attachImageReply in PostCommentFragment, presumably originally
+     * written by either ArtemC or ArtemH.
+     * 
      * @param view
      */
-    public void editImage(View view){
+    public void editImage(View view) {
         if (view.getId() == R.id.attach_image_button) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
@@ -228,20 +231,20 @@ public class EditCommentFragment extends Fragment {
                     }
                 }
             });
-            dialog.setNeutralButton("Remove Image", new DialogInterface.OnClickListener(){
-               public void onClick(DialogInterface arg0, int arg1){
-                   editComment.setImage(null);
-                   editComment.setImageThumb(null);
-               }
+            dialog.setNeutralButton("Remove Image", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    editComment.setImage(null);
+                    editComment.setImageThumb(null);
+                }
             });
             dialog.show();
         }
     }
-    
+
     /**
-     * Gets called after the user selects a new image to post from their gallery or one that
-     * they've taken. Sets the image and image thumb in editComment to the new image they want
-     * attached to their comment.
+     * Gets called after the user selects a new image to post from their gallery
+     * or one that they've taken. Sets the image and image thumb in editComment
+     * to the new image they want attached to their comment.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -267,16 +270,15 @@ public class EditCommentFragment extends Fragment {
                 image = scaleImage(imageBitmap);
             }
         }
-        editComment.setImage(image);   
+        editComment.setImage(image);
         Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 96, 96);
         editComment.setImageThumb(imageThumb);
     }
-    
+
     private Bitmap scaleImage(Bitmap bitmap) {
         // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
         // Scale the pic if it is too large:
-        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
             double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
             if (bitmap.getHeight() > bitmap.getWidth())
                 scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
@@ -288,13 +290,14 @@ public class EditCommentFragment extends Fragment {
         }
         return bitmap;
     }
-    
+
     /**
-     * Returns the user to the previous fragment after the Comment has
-     * been altered.
+     * Returns the user to the previous fragment after the Comment has been
+     * altered.
+     * 
      * @param view
      */
-    public void makeEdit(View view){
+    public void makeEdit(View view) {
         EditCommentFragment.oldText = null;
         EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
@@ -303,7 +306,7 @@ public class EditCommentFragment extends Fragment {
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         getFragmentManager().popBackStackImmediate();
-        
+
     }
 
 }

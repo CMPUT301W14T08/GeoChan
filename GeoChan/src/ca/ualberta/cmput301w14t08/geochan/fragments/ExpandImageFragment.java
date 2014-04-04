@@ -38,8 +38,7 @@ public class ExpandImageFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "SAVE!? NO.", Toast.LENGTH_SHORT)
-                .show();
+                Toast.makeText(getActivity(), "SAVE!? NO.", Toast.LENGTH_SHORT).show();
             }
         });
     }

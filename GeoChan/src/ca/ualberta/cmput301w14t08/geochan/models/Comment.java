@@ -214,7 +214,7 @@ public class Comment implements Parcelable {
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public Comment findCommentById(Comment parent, String id) {
         Comment c = null;
         if (parent.getId().equals(id)) {

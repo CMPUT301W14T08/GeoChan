@@ -36,7 +36,7 @@ public class LocationJsonConverter implements JsonSerializer<Location>, JsonDese
         jo.addProperty("longitude", t.getLongitude());
         return jo;
     }
-    
+
     /*
      * (non-Javadoc)
      * 

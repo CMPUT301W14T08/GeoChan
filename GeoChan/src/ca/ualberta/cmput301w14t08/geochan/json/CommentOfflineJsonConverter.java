@@ -43,8 +43,8 @@ import com.google.gson.JsonSerializer;
  * Handles the serialization of Comment objects into JSON format.
  * 
  */
-public class CommentOfflineJsonConverter implements JsonSerializer<Comment>, JsonDeserializer<Comment> {
-
+public class CommentOfflineJsonConverter implements JsonSerializer<Comment>,
+        JsonDeserializer<Comment> {
 
     /*
      * (non-Javadoc)
@@ -81,13 +81,13 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>, Jso
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
-            // Serialize the image 
+            // Serialize the image
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             object.addProperty("image", encoded);
-            
+
             // Serialize the thumbnail
             byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
@@ -102,7 +102,6 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>, Jso
         return object;
     }
 
-    
     /**
      * Deserializes a Comment object from JSON format.
      */

@@ -9,7 +9,8 @@ import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 
-public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnableInterface, UpdateRunnableInterface {
+public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnableInterface,
+        UpdateRunnableInterface {
     private Comment comment;
     private String title;
     private ThreadManager manager;
@@ -17,31 +18,31 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
     private Runnable imageRunnable;
     private Runnable postRunnable;
     private Runnable updateRunnable;
-    
-   public ElasticSearchPostTask() {
+
+    public ElasticSearchPostTask() {
         imageRunnable = new ElasticSearchImageRunnable(this);
         postRunnable = new ElasticSearchPostRunnable(this);
         updateRunnable = new ElasticSearchUpdateRunnable(this);
     }
-    
+
     public void initPostTask(ThreadManager manager, Comment comment, String title) {
         this.manager = manager;
         this.comment = comment;
         this.title = title;
     }
-    
+
     public Thread getCurrentThread() {
-        synchronized(manager) {
+        synchronized (manager) {
             return thread;
         }
     }
 
     public void setCurrentThread(Thread thread) {
-        synchronized(manager) {
+        synchronized (manager) {
             this.thread = thread;
         }
     }
-    
+
     public Runnable getImageRunnable() {
         return imageRunnable;
     }
@@ -49,24 +50,24 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
     public Runnable getPostRunnable() {
         return postRunnable;
     }
-    
+
     public Runnable getUpdateRunnable() {
         return updateRunnable;
     }
-    
+
     public void handleState(int state) {
         manager.handlePostState(this, state);
     }
-    
+
     @Override
     public void setImageThread(Thread thread) {
         setCurrentThread(thread);
     }
-    
+
     @Override
     public void handleImageState(int state) {
         int outState;
-        switch(state) {
+        switch (state) {
         case ElasticSearchImageRunnable.STATE_IMAGE_COMPLETE:
             outState = ThreadManager.POST_IMAGE_COMPLETE;
             break;
@@ -79,7 +80,7 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
         }
         handleState(outState);
     }
-    
+
     @Override
     public void setPostThread(Thread thread) {
         setCurrentThread(thread);
@@ -88,7 +89,7 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
     @Override
     public void handlePostState(int state) {
         int outState;
-        switch(state) {
+        switch (state) {
         case ElasticSearchPostRunnable.STATE_POST_COMPLETE:
             outState = ThreadManager.POST_COMPLETE;
             break;
@@ -101,7 +102,7 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
         }
         handleState(outState);
     }
-    
+
     @Override
     public void setUpdateThread(Thread thread) {
         setCurrentThread(thread);
@@ -110,7 +111,7 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
     @Override
     public void handleUpdateState(int state) {
         int outState;
-        switch(state) {
+        switch (state) {
         case ElasticSearchUpdateRunnable.STATE_UPDATE_COMPLETE:
             outState = ThreadManager.TASK_COMPLETE;
             break;
@@ -123,17 +124,17 @@ public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnab
         }
         handleState(outState);
     }
-    
+
     public void recycle() {
         comment = null;
         manager = null;
         title = null;
     }
-    
+
     public Comment getComment() {
         return comment;
     }
-    
+
     public String getTitle() {
         return title;
     }
