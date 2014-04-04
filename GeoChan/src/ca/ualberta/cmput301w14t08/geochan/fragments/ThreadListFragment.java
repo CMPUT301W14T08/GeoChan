@@ -39,6 +39,7 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -58,6 +59,7 @@ public class ThreadListFragment extends Fragment implements
     private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
+    private CacheManager cacheManager = null;
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
 
@@ -94,7 +96,12 @@ public class ThreadListFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
-
+        // On start, get the threadList from the cache
+        ArrayList<ThreadComment> list = cacheManager.deserializeThreadList();
+        ThreadList.setThreads(list);
+        // After the load is finished, serialize the thread list to the local cache
+        adapter.setList(ThreadList.getThreads());
+        adapter.notifyDataSetChanged();
         getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
     }
 
@@ -181,6 +188,9 @@ public class ThreadListFragment extends Fragment implements
         if (prefManager == null) {
             prefManager = PreferencesManager.getInstance();
         }
+        if (cacheManager == null) {
+            cacheManager = CacheManager.getInstance(getActivity());
+        }
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
@@ -237,6 +247,8 @@ public class ThreadListFragment extends Fragment implements
     public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
             ArrayList<ThreadComment> list) {
         ThreadList.setThreads(list);
+        // After the load is finished, serialize the thread list to the local cache
+        cacheManager.serializeThreadList(list);
         adapter.setList(list);
         adapter.notifyDataSetChanged();
         threadListView.onRefreshComplete();

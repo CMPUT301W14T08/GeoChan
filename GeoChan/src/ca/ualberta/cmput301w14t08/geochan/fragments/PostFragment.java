@@ -136,10 +136,9 @@ public class PostFragment extends Fragment {
                     format.setMaximumFractionDigits(4);
 
                     if (locationDescription.equals("Unknown Location")) {
-                        locButton.setText("Lat: " + format.format(lat) + ", Long: "
-                                + format.format(lon));
+                        locButton.setText("Location: Set");
                     } else {
-                        locButton.setText("Location: " + locationDescription);
+                        locButton.setText("Location: Set");
                     }
                 }
             }
