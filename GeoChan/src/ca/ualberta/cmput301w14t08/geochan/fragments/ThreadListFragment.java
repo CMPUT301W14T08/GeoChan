@@ -221,6 +221,7 @@ public class ThreadListFragment extends Fragment implements
         int sort = prefManager.getThreadSort();
         SortUtil.sortThreads(sort, ThreadList.getThreads());
         adapter.notifyDataSetChanged();
+        
         threadListView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
@@ -278,6 +279,11 @@ public class ThreadListFragment extends Fragment implements
     }
 
     private void reload() {
-        getLoaderManager().getLoader(0).forceLoad();
+        if(getLoaderManager().getLoader(0) != null) {
+            getLoaderManager().getLoader(0).forceLoad();
+        } else {
+            getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
+            getLoaderManager().getLoader(0).forceLoad();
+        }
     }
 }
