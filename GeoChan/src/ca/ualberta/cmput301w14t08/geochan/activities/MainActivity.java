@@ -175,6 +175,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         getSupportFragmentManager();
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
                 .findFragmentByTag("postFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (PostFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("postFrag");
+        }
         fragment.post(view);//Null ptr exception caused here if accessing from favourites.
     }
 
@@ -232,7 +238,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         fragment.submitNewLocationFromCoordinates(view);
-    }
+     }
 
     /**
      * Calls the respective submit location method in the fragment.
