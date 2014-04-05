@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,7 @@ public class ExpandImageFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         id = bundle.getString("id");
-        image = bundle.getParcelable("img");
+        image = bundle.getParcelable("image");
     }
 
     @Override
@@ -42,9 +43,10 @@ public class ExpandImageFragment extends Fragment {
         super.onStart();
         ImageView imageView = (ImageView) getView().findViewById(R.id.expanded_image);
         // Start the image getter thread.
-        ThreadManager.startGetImage(id, imageView);
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Downloading Image");
+        ThreadManager.startGetImage(id, imageView, dialog);
         
-        imageView.setImageBitmap(image);
         LinearLayout rlayout = (LinearLayout) getView().findViewById(R.id.expanded_image_relative);
         rlayout.setOnClickListener(new OnClickListener() {
             @Override

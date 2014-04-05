@@ -30,12 +30,12 @@ public class ElasticSearchGetImageRunnable implements Runnable {
     public void run() {
         task.setGetImageThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        task.handleGetImageState(STATE_GET_IMAGE_RUNNING);
         JestResult result = null;
         try {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            task.handleGetImageState(STATE_GET_IMAGE_RUNNING);
             Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, task.getId()).type(type)
                     .build();
             result = ElasticSearchClient.getInstance().getClient().execute(get);

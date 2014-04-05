@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
 import java.lang.ref.WeakReference;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetImageRunnable;
@@ -14,6 +15,7 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
      * Id of the image as stored on elasticSearch
      */
     private String id;
+    private ProgressDialog dialog;
     /*
      * Creates a weak reference to the ImageView that this Task will populate.
      * The weak reference prevents memory leaks and crashes, because it
@@ -35,9 +37,10 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
         this.getImageRunnable = new ElasticSearchGetImageRunnable(this);
     }
 
-    public void initGetImageTask(ThreadManager manager, String id, ImageView imageView) {
+    public void initGetImageTask(ThreadManager manager, String id, ImageView imageView, ProgressDialog dialog) {
         this.manager = manager;
         this.id = id;
+        this.dialog = dialog;
         // Instantiates the weak reference to the incoming view
         setmImageWeakRef(new WeakReference<ImageView>(imageView));
     }
@@ -70,6 +73,10 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
 
     public String getId() {
         return id;
+    }
+
+    public ProgressDialog getDialog() {
+        return dialog;
     }
 
     public WeakReference<ImageView> getmImageWeakRef() {

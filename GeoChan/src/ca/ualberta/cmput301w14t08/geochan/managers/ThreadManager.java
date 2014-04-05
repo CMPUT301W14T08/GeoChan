@@ -7,13 +7,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
@@ -67,7 +65,7 @@ public class ThreadManager {
     public static final int GET_POI_FAILED = 18;
     public static final int GET_POI_RUNNING = 19;
     public static final int GET_POI_COMPLETE = 20;
-    
+
     public static final int TASK_COMPLETE = 9001;
 
     private static final int KEEP_ALIVE_TIME = 1;
@@ -82,7 +80,7 @@ public class ThreadManager {
     private final LruCache<String, Comment> elasticSearchCommentCache;
     private final LruCache<String, Bitmap> elasticSearchGetImageCache;
     private final LruCache<String, String> getPOICache;
-    
+
     // Queues of runnables required by tasks
     // es GetCommentList task
     private final BlockingQueue<Runnable> elasticSearchCommentListRunnableQueue;
@@ -96,7 +94,7 @@ public class ThreadManager {
     private final BlockingQueue<Runnable> elasticSearchGetImageRunnableQueue;
     // get Point of Interest Task
     private final BlockingQueue<Runnable> GetPOIRunnableQueue;
-    
+
     // Queues of tasks this manager is responsible for
     private final Queue<ElasticSearchGetCommentListTask> elasticSearchCommentListTaskQueue;
     private final Queue<ElasticSearchGetCommentTask> elasticSearchCommentTaskQueue;
@@ -112,7 +110,7 @@ public class ThreadManager {
     private final ThreadPoolExecutor elasticSearchUpdatePool;
     private final ThreadPoolExecutor elasticSearchGetImagePool;
     private final ThreadPoolExecutor getPOIPool;
-    
+
     private Handler handler;
     private static ThreadManager instance = null;
 
@@ -124,7 +122,7 @@ public class ThreadManager {
         elasticSearchCommentCache = new LruCache<String, Comment>(MAXIMUM_CACHE_SIZE);
         elasticSearchGetImageCache = new LruCache<String, Bitmap>(MAXIMUM_CACHE_SIZE);
         getPOICache = new LruCache<String, String>(MAXIMUM_CACHE_SIZE);
-        
+
         elasticSearchCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchCommentRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
@@ -132,13 +130,13 @@ public class ThreadManager {
         elasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchGetImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
         GetPOIRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        
+
         elasticSearchCommentListTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentListTask>();
         elasticSearchCommentTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentTask>();
         elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
         elasticSearchGetImageTaskQueue = new LinkedBlockingQueue<ElasticSearchGetImageTask>();
         getPOITaskQueue = new LinkedBlockingQueue<GetPOITask>();
-        
+
         elasticSearchCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
                 KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchCommentListRunnableQueue);
         elasticSearchCommentPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
@@ -151,9 +149,9 @@ public class ThreadManager {
                 KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchUpdateRunnableQueue);
         elasticSearchGetImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
                 KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetImageRunnableQueue);
-        getPOIPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, GetPOIRunnableQueue);
-        
+        getPOIPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME,
+                KEEP_ALIVE_TIME_UNIT, GetPOIRunnableQueue);
+
         handler = new Handler(Looper.getMainLooper()) {
 
             @Override
@@ -162,33 +160,34 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
-                    
+
                 case GET_COMMENTS_COMPLETE:
                     ElasticSearchGetCommentTask task = (ElasticSearchGetCommentTask) inputMessage.obj;
                     task.getLoader().setLoading(false);
                     recycleCommentTask(task);
                     break;
 
-                case GET_IMAGE_COMPLETE:
+                case GET_IMAGE_RUNNING:
+                    ElasticSearchGetImageTask imageTask = (ElasticSearchGetImageTask) inputMessage.obj;
+                    imageTask.getDialog().show();
 
+                case GET_IMAGE_FAILED:
+                    ElasticSearchGetImageTask imageTaskFail = (ElasticSearchGetImageTask) inputMessage.obj;
+                    imageTaskFail.getDialog().dismiss();
+                    recycleGetImageTask(imageTaskFail);
+                    
+                case GET_IMAGE_COMPLETE:
+                    ElasticSearchGetImageTask imageTaskComplete = (ElasticSearchGetImageTask) inputMessage.obj;
+                    imageTaskComplete.getDialog().dismiss();
+                    Bitmap bitmap = imageTaskComplete.getImageCache();
+                    imageTaskComplete.getmImageWeakRef().get().setImageBitmap(bitmap);
+                    recycleGetImageTask(imageTaskComplete);
                     break;
 
                 case GET_POI_RUNNING:
                     GetPOITask poiTaskRunning = (GetPOITask) inputMessage.obj;
                     if (poiTaskRunning.getDialog() != null) {
                         poiTaskRunning.getDialog().show();
-                        /*
-                        if (poiTaskRunning.getCurrentThread().isAlive()) {
-                            try {
-                                synchronized(poiTaskRunning.getCurrentThread()) {
-                                    poiTaskRunning.getCurrentThread().wait();
-                                }
-                            } catch (InterruptedException e) {
-                                Log.e("POI", "Couldn't join thread.");
-                                e.printStackTrace();
-                            }
-                        }
-                        */
                     }
                     break;
                 case GET_POI_COMPLETE:
@@ -196,8 +195,8 @@ public class ThreadManager {
                     if (poiTaskComplete.getDialog() != null) {
                         poiTaskComplete.getDialog().dismiss();
                     }
-                    poiTaskComplete.getLocation().setLocationDescription(poiTaskComplete.getPOICache());
-                    Toaster.toastShort("Get POI task complete.");
+                    poiTaskComplete.getLocation().setLocationDescription(
+                            poiTaskComplete.getPOICache());
                     recycleGetPOITask(poiTaskComplete);
                     break;
                 case GET_POI_FAILED:
@@ -206,7 +205,6 @@ public class ThreadManager {
                         poiTaskFailed.getDialog().dismiss();
                     }
                     poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
-                    Toaster.toastShort("Get POI task failed.");
                     recycleGetPOITask(poiTaskFailed);
                     break;
                 default:
@@ -229,7 +227,8 @@ public class ThreadManager {
      * @param id
      *            the image id under which the bitmap is stored on es
      */
-    public static ElasticSearchGetImageTask startGetImage(String id, ImageView imageView) {
+    public static ElasticSearchGetImageTask startGetImage(String id, ImageView imageView,
+            ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
@@ -237,7 +236,7 @@ public class ThreadManager {
         if (task == null) {
             task = new ElasticSearchGetImageTask();
         }
-        task.initGetImageTask(ThreadManager.instance, id, imageView);
+        task.initGetImageTask(ThreadManager.instance, id, imageView, dialog);
         task.setImageCache(instance.elasticSearchGetImageCache.get(id));
         instance.elasticSearchGetImagePool.execute(task.getGetImageRunnable());
         return task;
@@ -312,7 +311,7 @@ public class ThreadManager {
         instance.elasticSearchPostPool.execute(task.getPostRunnable());
         return task;
     }
-    
+
     public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
@@ -326,7 +325,7 @@ public class ThreadManager {
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
     }
-    
+
     public void handleGetPOIState(GetPOITask task, int state) {
         switch (state) {
         case GET_POI_COMPLETE:
@@ -394,6 +393,12 @@ public class ThreadManager {
         case GET_IMAGE_COMPLETE:
             handler.obtainMessage(state, task).sendToTarget();
             break;
+        case GET_IMAGE_RUNNING:
+            handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_IMAGE_FAILED:
+            handler.obtainMessage(state, task).sendToTarget();
+            break;
         default:
             handler.obtainMessage(state, task).sendToTarget();
             break;
@@ -450,7 +455,7 @@ public class ThreadManager {
         task.recycle();
         elasticSearchPostTaskQueue.offer(task);
     }
-    
+
     void recycleGetPOITask(GetPOITask task) {
         task.recycle();
         getPOITaskQueue.offer(task);
