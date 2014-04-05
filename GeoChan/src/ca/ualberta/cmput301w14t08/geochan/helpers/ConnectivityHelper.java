@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 /**
  * Provides status about the user's current Internet connection.
  * 
- * @author Artem Herasymchuk
+ * @author Artem Herasymchuk, Brad Simons
  * 
  */
 public class ConnectivityHelper {
