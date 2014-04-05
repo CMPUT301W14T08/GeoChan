@@ -58,5 +58,6 @@
     <string name="edit_location">Edit Location</string>
     <string name="camera_dialog">Camera</string>
     <string name="gallery_dialog">Gallery</string>
+    <string name="legal_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~`!@#$%^&amp;*()_-+={[}]|\ \\:; \&quot;\'\"&lt;,&gt;.?\\ \\	/</string>
 
 </resources>

@@ -12,13 +12,15 @@
         android:ems="10"
         android:hint="@string/titleHint"
         android:maxLength="45"
-        android:singleLine="true" >
+        android:singleLine="true"
+        android:digits="@string/legal_chars" >
 
         <requestFocus />
     </EditText>
 
     <EditText
         android:id="@+id/commentBody"
+        android:digits="@string/legal_chars"
         android:layout_width="match_parent"
         android:layout_height="300sp"
         android:layout_above="@+id/linearLayout1"
