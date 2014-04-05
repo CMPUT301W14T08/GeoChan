@@ -175,44 +175,15 @@ public class MapViewFragment extends Fragment {
         int deltaLat = maxLat - minLat;
         int maxDelta = Math.max(deltaLong, deltaLat);
         int zoomFactor;
-
-        // unfortunately, the zoomToSpan method of the OSMDroid pack
-        // is very buggy! (as confirmed by stack overflow and other 
-        // forums). Therefore this ugly code had to be done
-        if (maxDelta >= 0 && maxDelta < 2000) {
+        
+        // calculates the appropriate zoom level 
+        zoomFactor = 19 - (int) (Math.log10(maxDelta) * 1.7);
+        if (zoomFactor > 18 || maxDelta < 1) {
             zoomFactor = 18;
-        } else if (maxDelta >= 2000 && maxDelta < 4000) {
-            zoomFactor = 17;
-        } else if (maxDelta >= 4000 && maxDelta < 9000) {
-            zoomFactor = 16;
-        } else if (maxDelta >= 9000 && maxDelta < 20000) {
-            zoomFactor = 15;
-        } else if (maxDelta >= 20000 && maxDelta < 35000) {
-            zoomFactor = 14;
-        } else if (maxDelta >= 35000 && maxDelta < 80000) {
-            zoomFactor = 13;
-        } else if (maxDelta >= 80000 && maxDelta < 140000) {
-            zoomFactor = 12;
-        } else if (maxDelta >= 140000 && maxDelta < 250000) {
-            zoomFactor = 11;
-        } else if (maxDelta >= 250000 && maxDelta < 480000) {
-            zoomFactor = 10;
-        } else if (maxDelta >= 480000 && maxDelta < 1300000) {
-            zoomFactor = 9;
-        } else if (maxDelta >= 1300000 && maxDelta < 2000000) {
-            zoomFactor = 8;
-        } else if (maxDelta >= 2000000 && maxDelta < 5000000) {
-            zoomFactor = 7;
-        } else if (maxDelta >= 5000000 && maxDelta < 8000000) {
-            zoomFactor = 6;
-        } else if (maxDelta >= 8000000 && maxDelta < 15000000) {
-            zoomFactor = 5;
-        } else if (maxDelta >= 15000000 && maxDelta < 50000000) {
-            zoomFactor = 4;
-        }else {
-            zoomFactor = 3;
+        } else if (zoomFactor < 2) {
+            zoomFactor = 2;
         }
-
+        
         Log.e("zoomFactor", Integer.toString(zoomFactor));
         Log.e("maxDelta", Integer.toString(maxDelta));
         
