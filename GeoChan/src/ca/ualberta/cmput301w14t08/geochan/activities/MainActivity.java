@@ -235,10 +235,21 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
+        FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                .findFragmentByTag("favouritesFrag");
+        if(favFrag != null){
+            //This bit here solves the issue of a crash when changing location
+            //in a reply to a comment in a favourited thread.
+            FragmentManager childMan = favFrag.getChildFragmentManager();
+            childMan.beginTransaction()
+            .replace(R.id.container, frag, "customLocFrag").addToBackStack(null)
+            .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
                 .commit();
-        getSupportFragmentManager().executePendingTransactions();
+            getSupportFragmentManager().executePendingTransactions();
+        }
     }
 
     /**

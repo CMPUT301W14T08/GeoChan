@@ -107,8 +107,13 @@ public class CustomLocationFragment extends Fragment {
         super.onStart();
         // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         // logArray = log.getLogEntries();
-
-        fm = getFragmentManager();
+        FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
+                .findFragmentByTag("favouritesFrag");
+        if(favFrag != null){
+            fm = getChildFragmentManager();
+        } else {
+            fm = getFragmentManager();
+        }
 
         // get the views
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
@@ -239,7 +244,7 @@ public class CustomLocationFragment extends Fragment {
      * Creates a marker object by taking in latitude and longitude values and
      * sets its position on the map view
      * 
-     * @oaram geoLocation
+     * @param geoLocation
      * @return marker
      */
     private void handleNewLocationPressed(GeoLocation geoLocation) {
@@ -272,9 +277,18 @@ public class CustomLocationFragment extends Fragment {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == POST) {
+//            PostFragment fragment = (PostFragment) getFragmentManager()
+//                    .findFragmentByTag("postFrag");
             PostFragment fragment = (PostFragment) getFragmentManager()
                     .findFragmentByTag("postFrag");
-            Bundle args = fragment.getArguments();
+            if(fragment == null){
+                fragment = (PostFragment) getChildFragmentManager()
+                        .findFragmentByTag("postFrag");
+            }
+            if(fragment == null){
+                Log.e("LOCDEBUG","fragment is null when we try to get arguements.");
+            }
+            Bundle args = fragment.getArguments();//The problem is here, fragment is always null no matter what manager is used in favourites.
 
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
@@ -285,8 +299,10 @@ public class CustomLocationFragment extends Fragment {
         } else if (postType == SORT_COMMENT) {
             SortUtil.setCommentSortGeo(locationToSubmit);
         } else if (postType == EDIT) {
-            EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
-                    .findFragmentByTag("editFrag");
+//            EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
+//                    .findFragmentByTag("editFrag");
+            EditCommentFragment fragment = (EditCommentFragment) fm.findFragmentByTag("editFrag");
+            Log.e("LOCDEBUG", "Is the fragment null when editing as well?");
             Bundle args = fragment.getArguments();
 
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
