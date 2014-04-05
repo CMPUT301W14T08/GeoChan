@@ -187,23 +187,36 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void attachImage(View view) {
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
                 .findFragmentByTag("postFrag");//Null ptr exception caused here if accessing from favourites.
-//        if(fragment == null){
-//            FavouritesFragment favFragment = (FavouritesFragment) getSupportFragmentManager()
-//                    .findFragmentByTag("favouritesFrag");
-//            favFragment.attachImage(view);
-//        }
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (PostFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("postFrag");
+        }
         fragment.attachImage(view);
     }
     
     public void editImage(View view){
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("editFrag");
+        }
         fragment.editImage(view);
     }
     
     public void makeEdit(View view){
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("editFrag");
+        }
         fragment.makeEdit(view);
     }
 
@@ -237,6 +250,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void submitLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
+        if(fragment == null){
+            Log.e("DEBUG","submitLocation called for favourites fragment.");
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("customLocFrag");
+        }
         fragment.submitNewLocationFromCoordinates(view);
      }
 
@@ -249,6 +269,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void submitCurrentLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
+        if(fragment == null){
+            Log.e("DEBUG","submitCurrentLocation called for favourites fragment.");
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("customLocFrag");
+        }
         fragment.submitCurrentLocation(view);
     }
 
@@ -268,6 +295,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void getDirections(View view) {
         MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(
                 "mapFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (MapViewFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("mapFrag");
+        }
         fragment.getDirections();
     }
 }
