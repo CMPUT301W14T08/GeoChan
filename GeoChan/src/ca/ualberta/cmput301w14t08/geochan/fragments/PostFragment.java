@@ -45,6 +45,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
@@ -113,6 +114,9 @@ public class PostFragment extends Fragment {
             bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
             bodyReplyTo.setText(commentToReplyTo.getTextPost());
             replyTo.setText(commentToReplyTo.getUser() + " says:");
+            Bitmap comThumbnail = commentToReplyTo.getImageThumb();
+            ImageView postThumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
+            postThumbnail.setImageBitmap(comThumbnail);
         }
     }
 
@@ -153,7 +157,6 @@ public class PostFragment extends Fragment {
             if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
                 imageThumb = args.getParcelable("IMAGE_THUMB");
                 image = args.getParcelable("IMAGE_FULL");
-                // thumbnail.setImageBitmap(imageThumb);
             }
         }
     }
@@ -223,9 +226,15 @@ public class PostFragment extends Fragment {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
-
             dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
+                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
+                    boolean fromFav;
+                    if(favFrag != null){
+                        fromFav = true;
+                    } else {
+                        fromFav = false;
+                    }
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -236,8 +245,13 @@ public class PostFragment extends Fragment {
                                                                         // image
                                                                         // file
                                                                         // name
-                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                        if(fromFav == true){
+                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+                                    ImageHelper.REQUEST_GALLERY);
+                        } else {
+                            startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_GALLERY);
+                        }
                     } catch (IOException e) {
                         // do something
                     }
@@ -245,6 +259,14 @@ public class PostFragment extends Fragment {
             });
             dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
+                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
+                    Log.e("PICDEBUG", "Value of favFragment." + String.valueOf(favFrag));
+                    boolean fromFav;
+                    if(favFrag != null){
+                        fromFav = true;
+                    } else {
+                        fromFav = false;
+                    }
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
@@ -254,8 +276,13 @@ public class PostFragment extends Fragment {
                                                                         // image
                                                                         // file
                                                                         // name
-                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                        if(fromFav == true){
+                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
+                        } else {
+                            startActivityForResult(Intent.createChooser(intent, "Test"),
+                                    ImageHelper.REQUEST_CAMERA);
+                        }
                     } catch (IOException e) {
                         // do something
                     }
@@ -267,6 +294,7 @@ public class PostFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("PICDEBUG","Value of resultCode:" + String.valueOf(resultCode));
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ImageHelper.REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
@@ -278,6 +306,12 @@ public class PostFragment extends Fragment {
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
                 // thumbnail.setImageBitmap(squareBitmap);
+                if(image == null){
+                    Log.e("PICDEBUG","image variable is null.");
+                }
+                if(imageThumb == null){
+                    Log.e("PICDEBUG","imagethumb variable is null.");
+                }
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {

@@ -1,9 +1,12 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +84,15 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     public void onPause() {
         super.onPause();
         disableSpinner();
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.e("PICDEBUG","onActivityResult called in FavouritesFragment.");
+        super.onActivityResult(requestCode, resultCode, data);
+        FragmentManager childManager = getChildFragmentManager();
+        PostFragment postFrag = (PostFragment) childManager.findFragmentByTag("postFrag");
+        postFrag.onActivityResult(requestCode, resultCode, data);//See if this work-around works.
     }
 
     /**

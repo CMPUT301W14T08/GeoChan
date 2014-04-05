@@ -49,7 +49,8 @@
         android:background="@android:drawable/editbox_background"
         android:ems="10"
         android:hint="@string/commentHint"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:digits="@string/legal_chars" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"

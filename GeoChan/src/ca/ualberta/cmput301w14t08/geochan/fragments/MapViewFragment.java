@@ -52,11 +52,6 @@ public class MapViewFragment extends Fragment {
     private ArrayList<GeoPoint> geoPoints;
     private ArrayList<Marker> markers;
 
-    private int maxLat;
-    private int maxLong;
-    private int minLat;
-    private int minLong;
-
     /**
      * Gets the view when inflated, then calls setZoomLevel to display the
      * correct map area.
@@ -100,14 +95,6 @@ public class MapViewFragment extends Fragment {
         Bundle args = getArguments();
         topComment = (Comment) args.getParcelable("thread_comment");
 
-        // To calculate the max and min latitude and longitude of all
-        // the comments, we set the min's to max integer values and vice versa
-        // then have values of each comment modify these variables
-        minLat = Integer.MAX_VALUE;
-        maxLat = Integer.MIN_VALUE;
-        minLong = Integer.MAX_VALUE;
-        maxLong = Integer.MIN_VALUE;
-
         GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
@@ -116,7 +103,7 @@ public class MapViewFragment extends Fragment {
         } else {
             this.setupMap(topComment);
             this.setMarkers();
-            this.calculateZoomSpan();
+            ;
             this.setZoomLevel();
         }
     }
@@ -171,26 +158,19 @@ public class MapViewFragment extends Fragment {
         // get the mapController and set the zoom
         IMapController mapController = openMapView.getController();
 
-        // set the zoom span
-        // mapController.zoomToSpan((int) (Math.abs(maxLat - minLat) *
-        // ZOOM_FACTOR),
-        // (int) (Math.abs(maxLong - minLong) * ZOOM_FACTOR));
-
-        int deltaLong = maxLong - minLong;
-        int deltaLat = maxLat - minLat;
-        int maxDelta = Math.max(deltaLong, deltaLat);
         int zoomFactor;
+        int zoomSpan = calculateZoomSpan();
 
-        if (maxDelta >= 0 && maxDelta < 1000000) {
+        // calculates the appropriate zoom level
+        zoomFactor = 19 - (int) (Math.log10(zoomSpan) * 1.9);
+        if (zoomFactor > 18 || zoomSpan < 1) {
             zoomFactor = 18;
-        } else if (maxDelta >= 1000000 && maxDelta < 2000000) {
-            zoomFactor = 17;
-        } else {
-            zoomFactor = 3;
+        } else if (zoomFactor < 2) {
+            zoomFactor = 2;
         }
 
-        Log.e("zoom factor", Integer.toString(zoomFactor));
         // set the zoom center
+        Log.e("setting zoom level to", Integer.toString(zoomFactor));
         mapController.setZoom(zoomFactor);
         mapController.animateTo(geoPoints.get(0));
     }
@@ -240,9 +220,19 @@ public class MapViewFragment extends Fragment {
     }
 
     /**
-     * 
+     * Calculates the minimum and maximum values for latitude and longitude
+     * between an array of GeoPoints. This is used to
      */
-    public void calculateZoomSpan() {
+    private int calculateZoomSpan() {
+
+        // To calculate the max and min latitude and longitude of all
+        // the comments, we set the min's to max integer values and vice versa
+        // then have values of each comment modify these variables
+        int minLat = Integer.MAX_VALUE;
+        int maxLat = Integer.MIN_VALUE;
+        int minLong = Integer.MAX_VALUE;
+        int maxLong = Integer.MIN_VALUE;
+
         for (GeoPoint geoPoint : geoPoints) {
             int geoLat = geoPoint.getLatitudeE6();
             int geoLong = geoPoint.getLongitudeE6();
@@ -252,6 +242,10 @@ public class MapViewFragment extends Fragment {
             maxLong = Math.max(geoLong, maxLong);
             minLong = Math.min(geoLong, minLong);
         }
+
+        int deltaLong = maxLong - minLong;
+        int deltaLat = maxLat - minLat;
+        return Math.max(deltaLong, deltaLat);
     }
 
     /**
@@ -293,12 +287,14 @@ public class MapViewFragment extends Fragment {
      * called
      */
     public void getDirections() {
+
         if (currentLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
         } else {
-            new MapAsyncTask().execute();
-            setMarkers();
+            new GetDirectionsAsyncTask().execute();
+            this.setMarkers();
         }
+
         openMapView.invalidate();
     }
 
@@ -310,7 +306,7 @@ public class MapViewFragment extends Fragment {
      * 
      * @author Brad Simons
      */
-    class MapAsyncTask extends AsyncTask<Void, Void, Void> {
+    class GetDirectionsAsyncTask extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog directionsLoadingDialog = new ProgressDialog(getActivity());
 
@@ -354,9 +350,13 @@ public class MapViewFragment extends Fragment {
             directionsLoadingDialog.dismiss();
 
             GeoLocation currentLocation = new GeoLocation(locationListenerService);
+            geoPoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
+                    .getLongitude()));
             Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
 
             currentLocationMarker.showInfoWindow();
+
+            setZoomLevel();
 
             openMapView.getOverlays().add(currentLocationMarker);
             openMapView.invalidate();
