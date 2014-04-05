@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,9 +212,16 @@ public class PostFragment extends Fragment {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
-
             dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
+                    FavouritesFragment favFrag = (FavouritesFragment) getChildFragmentManager()
+                            .findFragmentByTag("favouritesFrag");
+                    boolean fromFav;
+                    if(favFrag != null){
+                        fromFav = true;
+                    } else {
+                        fromFav = false;
+                    }
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -224,8 +232,13 @@ public class PostFragment extends Fragment {
                                                                         // image
                                                                         // file
                                                                         // name
-                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                        if(fromFav == true){
+                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+                                    ImageHelper.REQUEST_GALLERY);
+                        } else {
+                            startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_GALLERY);
+                        }
                     } catch (IOException e) {
                         // do something
                     }
@@ -242,7 +255,7 @@ public class PostFragment extends Fragment {
                                                                         // image
                                                                         // file
                                                                         // name
-                        startActivityForResult(Intent.createChooser(intent, "Test"),
+                        getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
                     } catch (IOException e) {
                         // do something
@@ -255,6 +268,7 @@ public class PostFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("PICDEBUG","Value of resultCode:" + String.valueOf(resultCode));
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ImageHelper.REQUEST_CAMERA) {
                 Bundle extras = data.getExtras();
@@ -266,6 +280,12 @@ public class PostFragment extends Fragment {
                 bundle.putParcelable("IMAGE_THUMB", imageThumb);
                 bundle.putParcelable("IMAGE_FULL", image);
                 // thumbnail.setImageBitmap(squareBitmap);
+                if(image == null){
+                    Log.e("PICDEBUG","image variable is null.");
+                }
+                if(imageThumb == null){
+                    Log.e("PICDEBUG","imagethumb variable is null.");
+                }
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
                 try {

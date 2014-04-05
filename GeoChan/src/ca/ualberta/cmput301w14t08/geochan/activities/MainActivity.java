@@ -121,6 +121,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         checkActionBar();
     }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        //Trying this to solve the favourites image issue.
+        //Probably unnecessary.
+    }
 
     /**
      * Checks the back stack for fragments and enables/disables the back button
@@ -181,12 +188,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             fragment = (PostFragment) favFrag.getChildFragmentManager()
                     .findFragmentByTag("postFrag");
         }
-        fragment.post(view);//Null ptr exception caused here if accessing from favourites.
+        fragment.post(view);
     }
 
     public void attachImage(View view) {
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
-                .findFragmentByTag("postFrag");//Null ptr exception caused here if accessing from favourites.
+                .findFragmentByTag("postFrag");
         if(fragment == null){
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
