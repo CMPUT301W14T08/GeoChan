@@ -39,7 +39,10 @@ public class ElasticSearchPostRunnable implements Runnable {
                 json = GsonHelper.getOnlineGson().toJson(task.getComment());
             } else {
                 type = ElasticSearchClient.TYPE_THREAD;
-                ThreadComment thread = new ThreadComment(task.getComment(), task.getTitle());
+                ThreadComment thread = task.getComment().findThread();
+                if (thread == null) {
+                    thread = new ThreadComment(task.getComment(), task.getTitle());
+                }
                 id = thread.getId();
                 json = GsonHelper.getOnlineGson().toJson(thread);
             }

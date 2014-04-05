@@ -67,10 +67,12 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 public class EditCommentFragment extends Fragment {
     private static final int MAX_BITMAP_DIMENSIONS = 600;
     private Comment editComment;
+    private ThreadComment thread;
     private EditText newTextPost;
     private ImageView oldThumbView;
     private static Bitmap oldThumbnail;
     private static String oldText;
+    private boolean isThread;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,11 +99,13 @@ public class EditCommentFragment extends Fragment {
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
-        ThreadComment thread = ThreadList.getThreads().get(threadIndex);
+        thread = ThreadList.getThreads().get(threadIndex);
         if (thread.getBodyComment().getId().equals(commentId)) {
             editComment = thread.getBodyComment();
+            isThread = true;
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
+            isThread = false;
         }
         if (EditCommentFragment.oldText == null) {
             EditCommentFragment.oldText = editComment.getTextPost();
@@ -302,7 +306,11 @@ public class EditCommentFragment extends Fragment {
         EditCommentFragment.oldText = null;
         EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
-        ThreadManager.startPost(editComment, null);
+        if (isThread) {
+            ThreadManager.startPost(editComment, thread.getTitle());
+        } else {
+            ThreadManager.startPost(editComment, null);
+        }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),

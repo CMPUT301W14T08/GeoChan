@@ -324,6 +324,16 @@ public class Comment implements Parcelable {
             return distScore + timeScore;
         }
     }
+    
+    public ThreadComment findThread() {
+        ThreadComment t = null;
+        for (ThreadComment thread : ThreadList.getThreads()) {
+            if (thread.getBodyComment().getId().equals(getId())) {
+                t = thread;
+            }
+        }
+        return t;
+    }
 
     /**
      * Converts the Comment's commentDate to an appropriately formatted string.
