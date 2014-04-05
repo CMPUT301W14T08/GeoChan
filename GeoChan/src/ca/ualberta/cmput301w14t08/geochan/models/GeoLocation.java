@@ -20,18 +20,10 @@
 
 package ca.ualberta.cmput301w14t08.geochan.models;
 
-import java.util.ArrayList;
-
-import org.osmdroid.bonuspack.location.GeoNamesPOIProvider;
-import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 
 /**
@@ -43,7 +35,6 @@ public class GeoLocation {
 
     private Location location;
     private String locationDescription;
-    private Activity activity;
 
     /**
      * Constructs a new GeoLocation object when supplied a

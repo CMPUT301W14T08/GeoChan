@@ -52,7 +52,8 @@ public class GetPOIRunnable implements Runnable {
             e.printStackTrace();
         } finally {
             if (task.getPOICache() == null || task.getPOICache().equals("Unknown Location")) {
-                task.setPOICache("Unknown Location");
+                task.setPOICache("Unknown Location (" + task.getLocation().getLongitude()
+                                                      + "," + task.getLocation().getLatitude() + ")");
                 task.handleGetPOIState(STATE_GET_POI_FAILED);
             } else {
                 task.handleGetPOIState(STATE_GET_POI_COMPLETE);
