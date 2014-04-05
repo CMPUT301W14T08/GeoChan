@@ -28,6 +28,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.GetPOITask;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
@@ -145,8 +147,10 @@ public class CustomLocationFragment extends Fragment {
             public boolean longPressHelper(IGeoPoint clickedPoint) {
                 newLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
-                //ThreadManager.startGetPOI(newLocation, getActivity());
-                newLocation.retreivePOIString(getActivity());
+                ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Retrieving Location");
+                ThreadManager.startGetPOI(newLocation, dialog);
+                //newLocation.retreivePOIString(getActivity());
                 handleNewLocationPressed(newLocation);
                 return false;
             }

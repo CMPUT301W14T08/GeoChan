@@ -31,8 +31,8 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
 /**
  * Responsible for GeoLocation services for Comment objects
@@ -144,21 +144,6 @@ public class GeoLocation {
     }
 
     /**
-     * perform a request from GeoNames for the location Point of Interest
-     * information. This is done with an async task on the network thread
-     */
-    public void retreivePOIString(Activity activity) {
-        this.activity = activity;
-        if (getLocation() == null) {
-            this.setLocationDescription("Unknown Location");
-        } else {
-            GeoPoint geoPoint = new GeoPoint(getLatitude(), getLongitude());
-            //ThreadManager.startGetPOI(this);
-            new GetPOIAsyncTask().execute(geoPoint);
-        }
-    }
-
-    /**
      * Helper method to construct and return a GeoPoint object corresponding to
      * the location of this object.
      * 
@@ -166,68 +151,6 @@ public class GeoLocation {
      */
     public GeoPoint makeGeoPoint() {
         return new GeoPoint(getLatitude(), getLongitude());
-    }
-
-    /**
-     * Async task for getting the POI of a location. Sets the location
-     * description string with result.
-     * 
-     * @author Brad Simons
-     */
-    private class GetPOIAsyncTask extends AsyncTask<GeoPoint, Void, GeoPoint> {
-
-        ProgressDialog retrievePOIDialog = new ProgressDialog(activity);
-        POI poi;
-
-        /**
-         * Displays a ProgessDialog while the task is executing
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            retrievePOIDialog.setMessage("Retrieving Location");
-            retrievePOIDialog.show();
-        }
-
-        /**
-         * Get the points of interest with 0.3 kilometers of of the location
-         */
-        @Override
-        protected GeoPoint doInBackground(GeoPoint... geoPoints) {
-            // get the Geonames provider
-            GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("bradleyjsimons");
-
-            for (GeoPoint geoPoint : geoPoints) {
-
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, 1, 0.8);
-
-                if (pois.size() > 0 && pois != null) {
-                    poi = pois.get(0);
-                } else {
-                    poi = null;
-                }
-
-                return geoPoint;
-            }
-            return null;
-        }
-
-        /**
-         * Task is now finished, dismiss the ProgressDialog Set the
-         * locationDescription string to the Point of Interest mType
-         */
-        @Override
-        protected void onPostExecute(GeoPoint geoPoint) {
-            super.onPostExecute(geoPoint);
-            retrievePOIDialog.dismiss();
-
-            if (poi != null) {
-                setLocationDescription(poi.mType);
-            } else {
-                setLocationDescription("Unknown Location");
-            }
-
-        }
     }
 
     /**

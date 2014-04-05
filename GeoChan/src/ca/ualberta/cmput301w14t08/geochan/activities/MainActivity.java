@@ -84,7 +84,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return true;
 
         case R.id.action_favourites:
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
                     .addToBackStack(null).commit();

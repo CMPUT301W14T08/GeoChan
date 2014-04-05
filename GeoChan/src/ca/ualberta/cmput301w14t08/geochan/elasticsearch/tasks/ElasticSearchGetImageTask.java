@@ -1,13 +1,31 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
+import java.lang.ref.WeakReference;
+
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
 public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
 
+    /*
+     * Id of the image as stored on elasticSearch
+     */
     private String id;
+    /*
+     * Creates a weak reference to the ImageView that this Task will populate.
+     * The weak reference prevents memory leaks and crashes, because it
+     * automatically tracks the "state" of the variable it backs. If the
+     * reference becomes invalid, the weak reference is garbage- collected. This
+     * technique is important for referring to objects that are part of a
+     * component lifecycle. Using a hard reference may cause memory leaks as the
+     * value continues to change; even worse, it can cause crashes if the
+     * underlying component is destroyed. Using a weak reference to a View
+     * ensures that the reference is more transitory in nature.
+     */
+    private WeakReference<ImageView> mImageWeakRef;
     private Runnable getImageRunnable;
     private ThreadManager manager;
     private Thread thread;
@@ -17,9 +35,11 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
         this.getImageRunnable = new ElasticSearchGetImageRunnable(this);
     }
 
-    public void initGetImageTask(ThreadManager manager, String id) {
+    public void initGetImageTask(ThreadManager manager, String id, ImageView imageView) {
         this.manager = manager;
         this.id = id;
+        // Instantiates the weak reference to the incoming view
+        mImageWeakRef = new WeakReference<ImageView>(imageView);
     }
 
     public void handleState(int state) {
@@ -36,7 +56,7 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
         int outState;
         switch (state) {
         case ElasticSearchGetImageRunnable.STATE_GET_IMAGE_COMPLETE:
-            outState = ThreadManager.TASK_COMPLETE;
+            outState = ThreadManager.GET_IMAGE_COMPLETE;
             break;
         case ElasticSearchGetImageRunnable.STATE_GET_IMAGE_FAILED:
             outState = ThreadManager.GET_IMAGE_FAILED;

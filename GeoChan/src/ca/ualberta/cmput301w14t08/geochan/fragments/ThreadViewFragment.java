@@ -132,12 +132,14 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        
         Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
         if (fav != null) {
             container = R.id.container;
         } else {
             container = R.id.fragment_container;
         }
+        
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override

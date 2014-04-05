@@ -185,6 +185,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         return TYPE_MAX_COUNT;
     }
 
+    
     @Override
     /**
      * Depending on the list item type, inflate the correct
@@ -278,6 +279,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     // Perform action on click
                     Fragment fragment = new ExpandImageFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putString("id", comment.getId());
                     bundle.putParcelable("img", comment.getImage());
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");

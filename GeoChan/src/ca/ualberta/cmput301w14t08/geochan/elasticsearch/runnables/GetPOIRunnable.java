@@ -20,11 +20,12 @@ public class GetPOIRunnable implements Runnable {
     public GetPOIRunnable(GetPOITask task) {
         this.task = task;
     }
+    
     @Override
     public void run() {
         Log.e("POI", "START");
         task.setGetPOIThread(Thread.currentThread());
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
         task.handleGetPOIState(STATE_GET_POI_RUNNING);
         try {
             if (Thread.interrupted()) {
@@ -47,12 +48,15 @@ public class GetPOIRunnable implements Runnable {
             task.setPOICache(poi.mType);
         } catch (Exception e) {
             Log.e("POI", "EXCEPTION");
+            task.setPOICache("Unknown Location");
             e.printStackTrace();
         } finally {
-            if (task.getPOICache() == null) {
+            if (task.getPOICache() == null || task.getPOICache().equals("Unknown Location")) {
+                task.setPOICache("Unknown Location");
                 task.handleGetPOIState(STATE_GET_POI_FAILED);
             } else {
                 task.handleGetPOIState(STATE_GET_POI_COMPLETE);
+                Log.e("POI", "COMPLETE");
             }
             task.setGetPOIThread(null);
             Thread.interrupted();

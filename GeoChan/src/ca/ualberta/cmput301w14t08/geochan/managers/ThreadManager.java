@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentListTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentTask;
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetImageTask;
@@ -61,10 +62,11 @@ public class ThreadManager {
     // Retrieve an bitmap image from elasticSearch
     public static final int GET_IMAGE_FAILED = 15;
     public static final int GET_IMAGE_RUNNING = 16;
+    public static final int GET_IMAGE_COMPLETE = 17;
     // Space for map task states
-    public static final int GET_POI_FAILED = 17;
-    public static final int GET_POI_RUNNING = 18;
-    public static final int GET_POI_COMPLETE = 19;
+    public static final int GET_POI_FAILED = 18;
+    public static final int GET_POI_RUNNING = 19;
+    public static final int GET_POI_COMPLETE = 20;
     
     public static final int TASK_COMPLETE = 9001;
 
@@ -160,16 +162,52 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
+                    
                 case GET_COMMENTS_COMPLETE:
                     ElasticSearchGetCommentTask task = (ElasticSearchGetCommentTask) inputMessage.obj;
                     task.getLoader().setLoading(false);
+                    recycleCommentTask(task);
                     break;
+
+                case GET_IMAGE_COMPLETE:
+
+                    break;
+
                 case GET_POI_RUNNING:
-                    // Put a spinner here
+                    GetPOITask poiTaskRunning = (GetPOITask) inputMessage.obj;
+                    if (poiTaskRunning.getDialog() != null) {
+                        poiTaskRunning.getDialog().show();
+                        /*
+                        if (poiTaskRunning.getCurrentThread().isAlive()) {
+                            try {
+                                synchronized(poiTaskRunning.getCurrentThread()) {
+                                    poiTaskRunning.getCurrentThread().wait();
+                                }
+                            } catch (InterruptedException e) {
+                                Log.e("POI", "Couldn't join thread.");
+                                e.printStackTrace();
+                            }
+                        }
+                        */
+                    }
+                    break;
                 case GET_POI_COMPLETE:
                     GetPOITask poiTaskComplete = (GetPOITask) inputMessage.obj;
+                    if (poiTaskComplete.getDialog() != null) {
+                        poiTaskComplete.getDialog().dismiss();
+                    }
                     poiTaskComplete.getLocation().setLocationDescription(poiTaskComplete.getPOICache());
                     Toaster.toastShort("Get POI task complete.");
+                    recycleGetPOITask(poiTaskComplete);
+                    break;
+                case GET_POI_FAILED:
+                    GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
+                    if (poiTaskFailed.getDialog() != null) {
+                        poiTaskFailed.getDialog().dismiss();
+                    }
+                    poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
+                    Toaster.toastShort("Get POI task failed.");
+                    recycleGetPOITask(poiTaskFailed);
                     break;
                 default:
                     super.handleMessage(inputMessage);
@@ -191,7 +229,7 @@ public class ThreadManager {
      * @param id
      *            the image id under which the bitmap is stored on es
      */
-    public static ElasticSearchGetImageTask startGetImage(String id) {
+    public static ElasticSearchGetImageTask startGetImage(String id, ImageView imageView) {
         if (instance == null) {
             generateInstance();
         }
@@ -199,7 +237,7 @@ public class ThreadManager {
         if (task == null) {
             task = new ElasticSearchGetImageTask();
         }
-        task.initGetImageTask(ThreadManager.instance, id);
+        task.initGetImageTask(ThreadManager.instance, id, imageView);
         task.setImageCache(instance.elasticSearchGetImageCache.get(id));
         instance.elasticSearchGetImagePool.execute(task.getGetImageRunnable());
         return task;
@@ -275,7 +313,7 @@ public class ThreadManager {
         return task;
     }
     
-    public static GetPOITask startGetPOI(GeoLocation location) {
+    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
@@ -283,7 +321,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetPOITask();
         }
-        task.initGetPOITask(ThreadManager.instance, location);
+        task.initGetPOITask(ThreadManager.instance, location, dialog);
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
@@ -295,8 +333,10 @@ public class ThreadManager {
             handler.obtainMessage(state, task).sendToTarget();
             break;
         case GET_POI_RUNNING:
+            handler.obtainMessage(state, task).sendToTarget();
             break;
         case GET_POI_FAILED:
+            handler.obtainMessage(state, task).sendToTarget();
             break;
         default:
             handler.obtainMessage(state, task).sendToTarget();
@@ -351,7 +391,7 @@ public class ThreadManager {
      */
     public void handleGetImageState(ElasticSearchGetImageTask task, int state) {
         switch (state) {
-        case TASK_COMPLETE:
+        case GET_IMAGE_COMPLETE:
             handler.obtainMessage(state, task).sendToTarget();
             break;
         default:
@@ -409,5 +449,10 @@ public class ThreadManager {
     void recyclePostTask(ElasticSearchPostTask task) {
         task.recycle();
         elasticSearchPostTaskQueue.offer(task);
+    }
+    
+    void recycleGetPOITask(GetPOITask task) {
+        task.recycle();
+        getPOITaskQueue.offer(task);
     }
 }

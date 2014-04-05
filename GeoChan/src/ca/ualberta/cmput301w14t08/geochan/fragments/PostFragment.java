@@ -85,6 +85,14 @@ public class PostFragment extends Fragment {
             commentToReplyTo = (Comment) args.getParcelable("cmt");
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
         }
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        geoLocation = new GeoLocation(locationListenerService);
+        if (geoLocation.getLocationDescription() == null) {
+            // Retrieve POI
+            Log.e("POI", "CallFromOnStart");
+            ThreadManager.startGetPOI(geoLocation, null);
+        }
     }
 
     @Override
@@ -100,12 +108,6 @@ public class PostFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-        geoLocation = new GeoLocation(locationListenerService);
-        // Retrieve POI
-        // ThreadManager.startGetPOI(geoLocation);
-        
         if (commentToReplyTo != null) {
             TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
             TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
@@ -133,6 +135,8 @@ public class PostFragment extends Fragment {
                     geoLocation.setCoordinates(lat, lon);
 
                     String locationDescription = args.getString("locationDescription");
+
+                    Log.e("POI is:", locationDescription);
                     geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
@@ -164,8 +168,12 @@ public class PostFragment extends Fragment {
      */
     public void post(View view) {
         if (view.getId() == R.id.post_button) {
-            // Retrieve POI
-            ThreadManager.startGetPOI(geoLocation);
+            if(geoLocation.getLocationDescription() == null) {
+                // Retrieve POI
+                ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Retrieving Location");
+                ThreadManager.startGetPOI(geoLocation, dialog);
+            }
             String title = null;
             EditText editTitle = null;
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);

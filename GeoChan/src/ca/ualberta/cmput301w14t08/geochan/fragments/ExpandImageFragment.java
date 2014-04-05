@@ -12,20 +12,38 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
 public class ExpandImageFragment extends Fragment {
-    Bitmap image;
+    private Bitmap image;
+    private String id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_expand_image, container, false);
     }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        id = bundle.getString("id");
+        image = bundle.getParcelable("img");
+    }
 
     @Override
     public void onStart() {
         super.onStart();
         ImageView imageView = (ImageView) getView().findViewById(R.id.expanded_image);
+        // Start the image getter thread.
+        ThreadManager.startGetImage(id, imageView);
+        
         imageView.setImageBitmap(image);
         LinearLayout rlayout = (LinearLayout) getView().findViewById(R.id.expanded_image_relative);
         rlayout.setOnClickListener(new OnClickListener() {
@@ -42,17 +60,4 @@ public class ExpandImageFragment extends Fragment {
             }
         });
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-     */
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
-        image = bundle.getParcelable("img");
-    }
-
 }
