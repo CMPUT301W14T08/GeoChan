@@ -53,6 +53,7 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -111,10 +112,18 @@ public class EditCommentFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+        ThreadComment thread;
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
-        ThreadComment thread = ThreadList.getThreads().get(threadIndex);
+        boolean fromFavs = bundle.getBoolean("fromFavs");
+        if(fromFavs == true){
+            FavouritesLog log = FavouritesLog.getInstance(getActivity());
+            thread = log.getThreads().get(threadIndex);
+        } else {
+            thread = ThreadList.getThreads().get(threadIndex);
+        }
+        Log.e("DEBUG","text of thread's body comment:" + thread.getBodyComment().getTextPost());
         Log.e("DEBUG","thread not null" + thread.toString());
         Log.e("DEBUG","id not null" + commentId);
         Log.e("DEBUG", "children not empty" + String.valueOf(thread.getBodyComment().getChildren().size()));

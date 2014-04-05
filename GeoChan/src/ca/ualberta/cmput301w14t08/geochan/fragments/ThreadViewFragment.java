@@ -139,6 +139,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         } else {
             container = R.id.fragment_container;
         }
+        //container = R.id.fragment_container;
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -319,8 +320,14 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         //Log.e("EDIT:", "The comment text is:" + c.getTextPost());
         Fragment fragment = new EditCommentFragment();
         Bundle bundle = new Bundle();
+        boolean fromFavs = false;
         bundle.putInt("threadIndex", threadIndex);
         bundle.putString("commentId", comment.getId());
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if(fav != null){
+            fromFavs = true;
+        }
+        bundle.putBoolean("fromFavs", fromFavs);
         Log.e("EDIT:", "Id of comment being passed."+comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
