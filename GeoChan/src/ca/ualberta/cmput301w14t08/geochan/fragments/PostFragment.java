@@ -214,8 +214,7 @@ public class PostFragment extends Fragment {
             dialog.setMessage(R.string.attach_image_dialog);
             dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
-                    FavouritesFragment favFrag = (FavouritesFragment) getChildFragmentManager()
-                            .findFragmentByTag("favouritesFrag");
+                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
                     boolean fromFav;
                     if(favFrag != null){
                         fromFav = true;
@@ -246,6 +245,14 @@ public class PostFragment extends Fragment {
             });
             dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
+                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
+                    Log.e("PICDEBUG", "Value of favFragment." + String.valueOf(favFrag));
+                    boolean fromFav;
+                    if(favFrag != null){
+                        fromFav = true;
+                    } else {
+                        fromFav = false;
+                    }
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
@@ -255,8 +262,13 @@ public class PostFragment extends Fragment {
                                                                         // image
                                                                         // file
                                                                         // name
-                        getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+                        if(fromFav == true){
+                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
+                        } else {
+                            startActivityForResult(Intent.createChooser(intent, "Test"),
+                                    ImageHelper.REQUEST_CAMERA);
+                        }
                     } catch (IOException e) {
                         // do something
                     }
