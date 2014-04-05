@@ -47,7 +47,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -186,7 +185,7 @@ public class PostFragment extends Fragment {
                 ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
-                ElasticSearchClient client = ElasticSearchClient.getInstance();
+                //ElasticSearchClient client = ElasticSearchClient.getInstance();
                 if (commentToReplyTo != null) {
                     Comment c = thread.findCommentById(thread.getBodyComment(),
                             commentToReplyTo.getId());
@@ -285,10 +284,8 @@ public class PostFragment extends Fragment {
                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
                             .getContentResolver(), data.getData());
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);

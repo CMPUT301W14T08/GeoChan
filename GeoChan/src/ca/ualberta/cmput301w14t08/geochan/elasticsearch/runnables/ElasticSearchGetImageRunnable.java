@@ -30,7 +30,6 @@ public class ElasticSearchGetImageRunnable implements Runnable {
     public void run() {
         task.setGetImageThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        Bitmap cache = task.getImageCache();
         JestResult result = null;
         try {
             if (Thread.interrupted()) {
@@ -50,9 +49,8 @@ public class ElasticSearchGetImageRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            cache = esResponse.getSource();
+            task.setImageCache(esResponse.getSource());
             task.handleGetImageState(STATE_GET_IMAGE_COMPLETE);
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -22,16 +22,16 @@ import com.google.gson.reflect.TypeToken;
 public class CacheManager {
     private static CacheManager instance = null;
     private Context context;
-    private Gson commentGson;
-    private Gson threadGson;
+    private Gson offlineGson;
+    private Gson onlineGson;
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
 
     private CacheManager(Context context) {
         this.context = context;
-        this.commentGson = GsonHelper.getOfflineGson();
+        this.offlineGson = GsonHelper.getOfflineGson();
         // thread Gson is same as online - all the data except for the comments.
-        this.threadGson = GsonHelper.getOnlineGson();
+        this.onlineGson = GsonHelper.getOnlineGson();
     }
 
     public static CacheManager getInstance(Context context) {
@@ -49,7 +49,7 @@ public class CacheManager {
      */
     public void serializeThreadList(ArrayList<ThreadComment> list) {
         try {
-            String json = threadGson.toJson(list);
+            String json = onlineGson.toJson(list);
             FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
             w.write(json);
@@ -83,7 +83,7 @@ public class CacheManager {
             f.close();
             Type type = new TypeToken<ArrayList<ThreadComment>>() {
             }.getType();
-            list = threadGson.fromJson(json, type);
+            list = onlineGson.fromJson(json, type);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -91,16 +91,15 @@ public class CacheManager {
         }
         return list;
     }
-
+    
     /**
-     * Serialize threadComment child comments into a file with the file's name
-     * being the threadComment's id.
-     * 
+     * Serialize ThreadComment object into a file with the file's name
+     * being ThreadComment's id;
      * @param thread
      */
-    public void serializeThreadCommentsById(ThreadComment thread) {
+    public void serializeThreadCommentById(ThreadComment thread) {
         try {
-            String json = commentGson.toJson(thread.getBodyComment().getChildren());
+            String json = offlineGson.toJson(thread);
             FileOutputStream f = context.openFileOutput(thread.getId() + EXTENSION,
                     Context.MODE_PRIVATE);
             BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
@@ -113,16 +112,19 @@ public class CacheManager {
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Read ThreadComment child comments from json from the file with tread's id
-     * as filename.
+     * Retrieve ThreadComment object by id and return the children
+     * of its body comment. This is done because we already have ThreadComment
+     * object and its BodyComment from the ThreadComment Deserializers,
+     * This deserializer runs when a thread is opened and we need to retrieve comments
+     * only from the cache.
      * 
      * @param id
      * @return
      */
-    public ArrayList<Comment> deserializeThreadCommentsById(String id) {
-        ArrayList<Comment> list = new ArrayList<Comment>();
+    public ArrayList<Comment> deserializeThreadCommentById(String id) {
+        ThreadComment thread = null;
         try {
             FileInputStream f = context.openFileInput(id + EXTENSION);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
@@ -135,14 +137,12 @@ public class CacheManager {
             }
             r.close();
             f.close();
-            Type type = new TypeToken<ArrayList<Comment>>() {
-            }.getType();
-            list = commentGson.fromJson(json, type);
+            thread = offlineGson.fromJson(json, ThreadComment.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return list;
+        return thread.getBodyComment().getChildren();
     }
 }

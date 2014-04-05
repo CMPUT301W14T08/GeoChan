@@ -39,7 +39,7 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
         this.manager = manager;
         this.id = id;
         // Instantiates the weak reference to the incoming view
-        mImageWeakRef = new WeakReference<ImageView>(imageView);
+        setmImageWeakRef(new WeakReference<ImageView>(imageView));
     }
 
     public void handleState(int state) {
@@ -70,6 +70,14 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
 
     public String getId() {
         return id;
+    }
+
+    public WeakReference<ImageView> getmImageWeakRef() {
+        return mImageWeakRef;
+    }
+
+    public void setmImageWeakRef(WeakReference<ImageView> mImageWeakRef) {
+        this.mImageWeakRef = mImageWeakRef;
     }
 
     public void setCurrentThread(Thread thread) {
