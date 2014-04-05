@@ -24,10 +24,13 @@ package ca.ualberta.cmput301w14t08.geochan.models;
  * This is a container class for one GeoLocationLog entry, it contains a String
  * and a geolocation objects. The string is the title of the thread, where the
  * location object was used.
+ * 
+ * @author bradsimons
  */
 public class LogEntry {
 
     private String threadTitle;
+    private String locationDescription;
     private GeoLocation geoLocation;
 
     /**
@@ -39,6 +42,12 @@ public class LogEntry {
     public LogEntry(String title, GeoLocation geoLocation) {
         this.threadTitle = title;
         this.geoLocation = geoLocation;
+        
+        if (geoLocation.getLocationDescription() != null) {
+            this.locationDescription = geoLocation.getLocationDescription();
+        } else {
+            this.locationDescription = "Unknown Location";
+        }
     }
 
     /**
@@ -59,5 +68,13 @@ public class LogEntry {
 
     public void setGeoLocation(GeoLocation geoLocation) {
         this.geoLocation = geoLocation;
+    }
+    
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
     }
 }

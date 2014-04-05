@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -139,7 +140,7 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         } else {
             container = R.id.fragment_container;
         }
-        
+
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -220,8 +221,9 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         bundle.putLong("id", threadIndex);
         fragment.setArguments(bundle);
 
-        getFragmentManager().beginTransaction().replace(container, fragment, "postFrag")
-                .addToBackStack(null).commit();
+        getFragmentManager().beginTransaction()
+                .replace(container, fragment, "postFrag").addToBackStack(null)
+                .commit();
         getFragmentManager().executePendingTransactions();
 
     }
@@ -311,17 +313,22 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
 
         }
     };
-
-    private void editComment(Comment comment) {
-        // Log.e("EDIT:", "The edit comment button was pressed!");
-        // Log.e("EDIT:", "The comment text is:" + c.getTextPost());
+    
+    private void editComment(Comment comment){
         Fragment fragment = new EditCommentFragment();
         Bundle bundle = new Bundle();
+        boolean fromFavs = false;
         bundle.putInt("threadIndex", threadIndex);
         bundle.putString("commentId", comment.getId());
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if(fav != null){
+            fromFavs = true;
+        }
+        bundle.putBoolean("fromFavs", fromFavs);
+        Log.e("EDIT:", "Id of comment being passed."+comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "editFrag").addToBackStack(null)
+                .replace(container, fragment, "editFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
     }

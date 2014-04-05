@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,13 +54,16 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
 /**
- * Allows the user to edit the text, location, and image of a comment they have
- * made.
+ * Allows the user to edit the text, location, and image of a comment
+ * they have made. The user can only edit a comment that they have made if
+ * their current hash (based on device ID and current username) matches the
+ * hash stored in the Comment being edited.
  * 
  * @author Henry Pabst
  * 
@@ -70,7 +74,17 @@ public class EditCommentFragment extends Fragment {
     private ThreadComment thread;
     private EditText newTextPost;
     private ImageView oldThumbView;
+    /**
+     * The original thumbnail of the Comment being edited. Contained as a variable in
+     * EditCommentFragment so that it persists and does not change as the user alters the
+     * original Comment.
+     */
     private static Bitmap oldThumbnail;
+    /**
+     * The original text of the Comment being edited. Contained as a variable in
+     * EditCommentFragment so that it persists and does not change as the user alters the
+     * original Comment.
+     */
     private static String oldText;
     private boolean isThread;
 
@@ -93,21 +107,37 @@ public class EditCommentFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    
+    /**
+     * Overriden method from Fragment. Determines the Comment being edited based on the id
+     * contained in fragment arguments as well as the ThreadComment containing said Comment.
+     * After the Comment is found the appropriate UI elements and state variables are set.
+     */
+
     @Override
     public void onStart() {
         super.onStart();
+        ThreadComment thread;
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
         thread = ThreadList.getThreads().get(threadIndex);
-        if (thread.getBodyComment().getId().equals(commentId)) {
+        boolean fromFavs = bundle.getBoolean("fromFavs");
+        if(fromFavs == true){
+            FavouritesLog log = FavouritesLog.getInstance(getActivity());
+            thread = log.getThreads().get(threadIndex);
+        } else {
+            thread = ThreadList.getThreads().get(threadIndex);
+        }
+        if (thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
             isThread = true;
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
             isThread = false;
         }
-        if (EditCommentFragment.oldText == null) {
+        if (EditCommentFragment.oldText == null){
+            Log.e("DEBUG","comment not null" + editComment.toString());
             EditCommentFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
@@ -122,6 +152,14 @@ public class EditCommentFragment extends Fragment {
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
     }
 
+    
+    /**
+     * Overriden method from Fragment. Sets the appropriate TextView and ImageView
+     * if the user is returning from changing the location or image. If the user is
+     * returning from changing the location, the new coordinates are placed on the
+     * edit_location_button Button.
+     */
+
     @Override
     public void onResume() {
         super.onResume();
@@ -129,6 +167,10 @@ public class EditCommentFragment extends Fragment {
         if (EditCommentFragment.oldText != null) {
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
+        }
+        if (EditCommentFragment.oldThumbnail != null){
+            oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
+            oldThumbView.setImageBitmap(EditCommentFragment.oldThumbnail);
         }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
@@ -165,18 +207,18 @@ public class EditCommentFragment extends Fragment {
         super.onStop();
     }
 
+
     /**
-     * Recursively finds the comment with the passed ID and sets it to the
-     * variable editComment.
-     * 
-     * @param id
-     *            The ID of the comment to be found.
-     * @param comments
-     *            An ArrayList of Comments to start searching.
-     */
-    public void getCommentFromId(String id, ArrayList<Comment> comments) {
-        for (Comment com : comments) {
-            if (com.getId().equals(id)) {
+     * Recursively finds the Comment with the passed ID and sets it to
+     * the variable editComment. If a Comment with the passed ID is not
+     * found in the passed ArrayList of Comments then the method is recursively
+     * called on the children of Comments in the ArrayList.
+     * @param id The ID of the comment to be found.
+     * @param comments An ArrayList of Comments to start searching in.
+     */ 
+    public void getCommentFromId(String id, ArrayList<Comment> comments){
+        for(Comment com: comments){
+            if(com.getId().equals(id)){
                 editComment = com;
                 return;
             } else {
@@ -187,18 +229,16 @@ public class EditCommentFragment extends Fragment {
     }
 
     /**
-     * Allows the user to change the image attached to their comment. Copied
-     * from attachImageReply in PostCommentFragment, presumably originally
-     * written by either ArtemC or ArtemH.
-     * 
-     * @param view
+     * Allows the user to change the image attached to their comment or remove it
+     * entirely. Prompts the user with an AlertDialog as to which option they would like
+     * to select. 
+     * @param view The Button pressed to call editImage.
      */
     public void editImage(View view) {
         if (view.getId() == R.id.attach_image_button) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
             dialog.setMessage(R.string.attach_image_dialog);
-
             dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     Intent intent = new Intent();
@@ -206,15 +246,11 @@ public class EditCommentFragment extends Fragment {
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     try {
                         File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-                                                                        // the
-                                                                        // image
-                                                                        // file
-                                                                        // name
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
                         startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_GALLERY);
                     } catch (IOException e) {
-                        // do something
+                        e.printStackTrace();
                     }
                 }
             });
@@ -224,15 +260,11 @@ public class EditCommentFragment extends Fragment {
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
                         File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-                                                                        // the
-                                                                        // image
-                                                                        // file
-                                                                        // name
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
                         startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
                     } catch (IOException e) {
-                        // do something
+                        e.printStackTrace();
                     }
                 }
             });
@@ -244,12 +276,12 @@ public class EditCommentFragment extends Fragment {
             });
             dialog.show();
         }
-    }
-
+    }    
+    
     /**
-     * Gets called after the user selects a new image to post from their gallery
-     * or one that they've taken. Sets the image and image thumb in editComment
-     * to the new image they want attached to their comment.
+     * Overriden method from Fragment. Sets the image and thumbnail in the comment being
+     * edited to the user selected image. Is called automatically after the user
+     * returns from selecting an image from either the camera or photo gallery.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -266,10 +298,8 @@ public class EditCommentFragment extends Fragment {
                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
                             .getContentResolver(), data.getData());
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 image = scaleImage(imageBitmap);
@@ -279,11 +309,16 @@ public class EditCommentFragment extends Fragment {
         Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 96, 96);
         editComment.setImageThumb(imageThumb);
     }
-
+    
+    /**
+     * Scales the passed bitmap down so that it does not exceed the
+     * maximum dimensions specified in EditCommentFragment.MAX_BITMAP_DIMENSIONS.
+     * @param bitmap The bitmap that is to be scaled down.
+     * @return A new Bitmap that is a scaled down version of the passed Bitmap.
+     */
     private Bitmap scaleImage(Bitmap bitmap) {
-        // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-        // Scale the pic if it is too large:
-        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
+                || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
             double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
             if (bitmap.getHeight() > bitmap.getWidth())
                 scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
@@ -297,10 +332,11 @@ public class EditCommentFragment extends Fragment {
     }
 
     /**
-     * Returns the user to the previous fragment after the Comment has been
-     * altered.
-     * 
-     * @param view
+     * Sets the text of the comment being edited to the new text entered by the user,
+     * sets the value of EditCommentFragment.oldText and EditCommentFragment.oldThumbnail
+     * to null so that the state isn't preserved across comment edits, and returns the
+     * user to their previous fragment.
+     * @param view The button that was pressed to call makeEdit.
      */
     public void makeEdit(View view) {
         EditCommentFragment.oldText = null;

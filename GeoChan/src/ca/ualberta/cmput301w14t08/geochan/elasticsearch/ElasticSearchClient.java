@@ -26,14 +26,12 @@ import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Count;
 import io.searchbox.core.Get;
-import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.Update;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;

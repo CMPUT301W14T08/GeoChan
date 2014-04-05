@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -121,6 +122,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         checkActionBar();
     }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        //Trying this to solve the favourites image issue.
+        //Probably unnecessary.
+    }
 
     /**
      * Checks the back stack for fragments and enables/disables the back button
@@ -172,26 +180,51 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      *            View passed to the activity to check which button was pressed
      */
     public void post(View view) {
-        PostFragment fragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(
-                "postFrag");
+        getSupportFragmentManager();
+        PostFragment fragment = (PostFragment) getSupportFragmentManager()
+                .findFragmentByTag("postFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (PostFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("postFrag");
+        }
         fragment.post(view);
     }
 
     public void attachImage(View view) {
-        PostFragment fragment = (PostFragment) getSupportFragmentManager().findFragmentByTag(
-                "postFrag");
+        PostFragment fragment = (PostFragment) getSupportFragmentManager()
+                .findFragmentByTag("postFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (PostFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("postFrag");
+        }
         fragment.attachImage(view);
     }
 
     public void editImage(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("editFrag");
+        }
         fragment.editImage(view);
     }
 
     public void makeEdit(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("editFrag");
+        }
         fragment.makeEdit(view);
     }
 
@@ -210,10 +243,21 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
         CustomLocationFragment frag = new CustomLocationFragment();
         frag.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
+        FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                .findFragmentByTag("favouritesFrag");
+        if(favFrag != null){
+            //This bit here solves the issue of a crash when changing location
+            //in a reply to a comment in a favourited thread.
+            FragmentManager childMan = favFrag.getChildFragmentManager();
+            childMan.beginTransaction()
+            .replace(R.id.container, frag, "customLocFrag").addToBackStack(null)
+            .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag, "customLocFrag").addToBackStack(null)
                 .commit();
-        getSupportFragmentManager().executePendingTransactions();
+            getSupportFragmentManager().executePendingTransactions();
+        }
     }
 
     /**
@@ -225,8 +269,15 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void submitLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
+        if(fragment == null){
+            Log.e("DEBUG","submitLocation called for favourites fragment.");
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("customLocFrag");
+        }
         fragment.submitNewLocationFromCoordinates(view);
-    }
+     }
 
     /**
      * Calls the respective submit location method in the fragment.
@@ -237,6 +288,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void submitCurrentLocation(View view) {
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
+        if(fragment == null){
+            Log.e("DEBUG","submitCurrentLocation called for favourites fragment.");
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("customLocFrag");
+        }
         fragment.submitCurrentLocation(view);
     }
 
@@ -256,6 +314,12 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     public void getDirections(View view) {
         MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(
                 "mapFrag");
+        if(fragment == null){
+            FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
+                    .findFragmentByTag("favouritesFrag");
+            fragment = (MapViewFragment) favFrag.getChildFragmentManager()
+                    .findFragmentByTag("mapFrag");
+        }
         fragment.getDirections();
     }
 }

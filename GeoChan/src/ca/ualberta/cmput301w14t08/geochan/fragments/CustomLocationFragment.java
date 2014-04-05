@@ -46,6 +46,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
+import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
@@ -107,8 +108,13 @@ public class CustomLocationFragment extends Fragment {
         super.onStart();
         // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
         // logArray = log.getLogEntries();
-
-        fm = getFragmentManager();
+        FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
+                .findFragmentByTag("favouritesFrag");
+        if(favFrag != null){
+            fm = getChildFragmentManager();
+        } else {
+            fm = getFragmentManager();
+        }
 
         // get the views
         ListView lv = (ListView) getView().findViewById(R.id.custom_location_list_view);
@@ -117,6 +123,13 @@ public class CustomLocationFragment extends Fragment {
         // setup all listeners
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
+        
+        // get the OP
+        Bundle args = getArguments();
+        Comment topComment = (Comment) args.getParcelable("original post");
+        if (topComment != null) {
+         
+        }
 
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -235,7 +248,7 @@ public class CustomLocationFragment extends Fragment {
      * Creates a marker object by taking in latitude and longitude values and
      * sets its position on the map view
      * 
-     * @oaram geoLocation
+     * @param geoLocation
      * @return marker
      */
     private void handleNewLocationPressed(GeoLocation geoLocation) {
@@ -268,10 +281,13 @@ public class CustomLocationFragment extends Fragment {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == POST) {
-            PostFragment fragment = (PostFragment) getFragmentManager().findFragmentByTag(
-                    "postFrag");
+            PostFragment fragment = (PostFragment) getFragmentManager()
+                    .findFragmentByTag("postFrag");
+            if(fragment == null){
+                fragment = (PostFragment) getChildFragmentManager()
+                        .findFragmentByTag("postFrag");
+            }
             Bundle args = fragment.getArguments();
-
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
@@ -281,10 +297,8 @@ public class CustomLocationFragment extends Fragment {
         } else if (postType == SORT_COMMENT) {
             SortUtil.setCommentSortGeo(locationToSubmit);
         } else if (postType == EDIT) {
-            EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
-                    .findFragmentByTag("editFrag");
+            EditCommentFragment fragment = (EditCommentFragment) fm.findFragmentByTag("editFrag");
             Bundle args = fragment.getArguments();
-
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);

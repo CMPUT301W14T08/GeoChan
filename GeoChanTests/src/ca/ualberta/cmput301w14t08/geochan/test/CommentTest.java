@@ -2,9 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.ActivityInstrumentationTestCase2;
@@ -241,7 +239,8 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
     
     /**
-     * Tests sorting comments according to score.
+     * Test sorting by highest score. 
+     * Score is a combination of location and time since posting.
      */
     public void testSortByScoreHighest(){
         long extraTime = 1320000;
@@ -557,7 +556,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
     
     /**
-     * Tests the distance calculation between two comments
+     * Test correctness of calculating distance between two points.
      */
     public void testGetDistanceFrom(){
         Comment c1 = new Comment();
@@ -571,6 +570,10 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("Distance calculated correctly.", dist == Math.sqrt(50));
     }
 
+    
+    /**
+     * Test correct calculation of time differences between comment postings.
+     */
     public void testGetTimeFrom(){
         Comment c1 = new Comment();
         Date d1 = new Date();

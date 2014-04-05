@@ -38,7 +38,7 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
      * 
      */
     public void testSettingsDisplay() {
-        solo.assertCurrentActivity("Not main activity", MainActivity.class);
+        assertTrue("Thread view fragment is not displayed", solo.waitForFragmentById(R.id.fragment_container));
         solo.sendKey(Solo.MENU);
         solo.clickOnText("Settings");
         solo.assertCurrentActivity("Not preferences activity", PreferencesActivity.class);
@@ -54,7 +54,7 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
      * Test that the change username dialog is reflected in the preferences view
      */
     public void testUsernameChange() {
-        solo.assertCurrentActivity("Not main activity", MainActivity.class);
+        assertTrue("Thread view fragment is not displayed", solo.waitForFragmentById(R.id.fragment_container));
         solo.sendKey(Solo.MENU);
         solo.clickOnText("Settings");
         assertTrue(solo.searchText("Change Username"));
@@ -77,7 +77,7 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         assertTrue("Thread view fragment is not displayed", solo.waitForFragmentById(R.id.fragment_container));
         View button = solo.getView(R.id.action_add_thread);
         solo.clickOnView(button);
-        assertTrue("Add new thread fragment is not displayed", solo.waitForFragmentByTag("postThreadFrag"));
+        assertTrue("Add new thread fragment is not displayed", solo.waitForFragmentByTag("postFrag"));
         solo.goBack();
         assertTrue("Did not return to thread list", solo.waitForFragmentById(R.id.fragment_container));
     }
@@ -164,19 +164,19 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
         ListView list = (ListView) solo.getView(R.id.thread_list);
         int count = list.getChildCount();
         // First 2 views are PullToRefresh views
-        for (int i = 2; i <= count; ++i) {
+        for (int i = 2; i < count; ++i) {
+            // Only can click visible list items
             solo.clickInList(i, 0);
             assertTrue("Thread view frag did not launch", solo.waitForFragmentByTag("thread_view_fragment"));
             solo.goBack();
             assertTrue("Did not return to thread list fragment", solo.waitForFragmentById(R.id.fragment_container));
         }
+        
     }
-    
-    
+     
     @Override
     public void tearDown() throws Exception {
       solo.finishOpenedActivities();
     }
     
-
 }
