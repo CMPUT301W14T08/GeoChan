@@ -117,11 +117,9 @@ public class EditCommentFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ThreadComment thread;
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
-        thread = ThreadList.getThreads().get(threadIndex);
         boolean fromFavs = bundle.getBoolean("fromFavs");
         if(fromFavs == true){
             FavouritesLog log = FavouritesLog.getInstance(getActivity());
@@ -343,7 +341,8 @@ public class EditCommentFragment extends Fragment {
         EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
         if (isThread) {
-            ThreadManager.startPost(editComment, thread.getTitle());
+        	String threadTitle = thread.getTitle();
+            ThreadManager.startPost(editComment, threadTitle);
         } else {
             ThreadManager.startPost(editComment, null);
         }
