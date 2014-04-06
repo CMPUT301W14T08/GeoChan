@@ -7,7 +7,8 @@
     <TextView
         android:id="@+id/log_entry_poi"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="39dp"
+        android:gravity="center"
         android:text="@string/hello_world"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
