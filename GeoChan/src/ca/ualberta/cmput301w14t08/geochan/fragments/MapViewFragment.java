@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,13 +49,11 @@ public class MapViewFragment extends Fragment {
 
     private MapView openMapView;
     private LocationListenerService locationListenerService;
-    private GeoLocation currentLocation;
-    private GeoPoint startGeoPoint;
+    private Marker startMarker;
     private Polyline roadOverlay;
-    private Comment topComment;
-    private ArrayList<GeoPoint> geoPoints;
-    private ArrayList<Marker> markers;
     private GridMarkerClusterer poiMarkers;
+    private GridMarkerClusterer directionsMarkers;
+    private GridMarkerClusterer startAndFinishMarkers;
 
     /**
      * Gets the view when inflated, then calls setZoomLevel to display the
@@ -66,8 +63,7 @@ public class MapViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
 
-        geoPoints = new ArrayList<GeoPoint>();
-        markers = new ArrayList<Marker>();
+        //geoPoints = new ArrayList<GeoPoint>();
 
         return inflater.inflate(R.layout.fragment_map_view, container, false);
     }
@@ -96,16 +92,21 @@ public class MapViewFragment extends Fragment {
 
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
-        currentLocation = new GeoLocation(locationListenerService);
 
         Bundle args = getArguments();
-        topComment = (Comment) args.getParcelable("thread_comment");
+        Comment topComment = (Comment) args.getParcelable("thread_comment");
 
         poiMarkers = new GridMarkerClusterer(getActivity());
-        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster);
-        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
-        poiMarkers.setIcon(clusterIcon);
+        directionsMarkers = new GridMarkerClusterer(getActivity());
+        startAndFinishMarkers = new GridMarkerClusterer(getActivity());
         
+        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster);
+        Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
+
+        directionsMarkers.setIcon(clusterIcon);
+        poiMarkers.setIcon(clusterIcon);
+        startAndFinishMarkers.setIcon(clusterIcon);
+
         GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
@@ -113,8 +114,7 @@ public class MapViewFragment extends Fragment {
             fm.popBackStackImmediate();
         } else {
             this.setupMap(topComment);
-            this.setMarkers();
-            this.setZoomLevel();
+            this.setZoomLevel(topComment.getLocation());
         }
     }
 
@@ -145,15 +145,17 @@ public class MapViewFragment extends Fragment {
 
         if (commentLocationIsValid(topComment)) {
             GeoLocation geoLocation = topComment.getLocation();
-            startGeoPoint = new GeoPoint(geoLocation.getLatitude(), geoLocation.getLongitude());
-            geoPoints.add(startGeoPoint);
 
-            Marker startMarker = createMarker(geoLocation, "OP");
+            startMarker = createMarker(geoLocation, "OP");
             startMarker.showInfoWindow();
 
-            poiMarkers.add(startMarker);
             handleChildComments(topComment);
+            
+            openMapView.getOverlays().add(poiMarkers);
+            openMapView.getOverlays().add(directionsMarkers);
+            openMapView.getOverlays().add(startMarker);
         }
+        
         openMapView.invalidate();
     }
 
@@ -164,7 +166,7 @@ public class MapViewFragment extends Fragment {
      * The values must be padded with a zoom_factor, which is a static class
      * variable
      */
-    public void setZoomLevel() {
+    public void setZoomLevel(GeoLocation geoLocation) {
         // get the mapController and set the zoom
         IMapController mapController = openMapView.getController();
 
@@ -180,9 +182,8 @@ public class MapViewFragment extends Fragment {
         }
 
         // set the zoom center
-        Log.e("setting zoom level to", Integer.toString(zoomFactor));
         mapController.setZoom(zoomFactor);
-        mapController.animateTo(geoPoints.get(0));
+        mapController.animateTo(geoLocation.makeGeoPoint());
     }
 
     /**
@@ -203,7 +204,6 @@ public class MapViewFragment extends Fragment {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
-                    geoPoints.add(commentLocation.makeGeoPoint());
                     Marker replyMarker = createMarker(commentLocation, "Reply");
                     poiMarkers.add(replyMarker);
                     handleChildComments(childComment);
@@ -244,7 +244,8 @@ public class MapViewFragment extends Fragment {
         int minLong = Integer.MAX_VALUE;
         int maxLong = Integer.MIN_VALUE;
 
-        for (GeoPoint geoPoint : geoPoints) {
+        for (Marker marker : poiMarkers.getItems()) {
+            GeoPoint geoPoint = marker.getPosition();
             int geoLat = geoPoint.getLatitudeE6();
             int geoLong = geoPoint.getLongitudeE6();
 
@@ -259,17 +260,6 @@ public class MapViewFragment extends Fragment {
         return Math.max(deltaLong, deltaLat);
     }
 
-    /**
-     * Creates a marker object, sets its position to the GeoPoint location
-     * passed, and then adds the marker to the map overlays.
-     * 
-     * @param geoPoint
-     */
-    public void setMarkers() {
-        for (Marker marker : markers) {
-            openMapView.getOverlays().add(marker);
-        }
-    }
 
     /**
      * 
@@ -304,12 +294,12 @@ public class MapViewFragment extends Fragment {
      * called
      */
     public void getDirections() {
-
+        GeoLocation currentLocation = new GeoLocation(locationListenerService);
+        
         if (currentLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Could not retrieve your location");
         } else {
             new GetDirectionsAsyncTask().execute();
-            this.setMarkers();
         }
 
         openMapView.invalidate();
@@ -347,28 +337,31 @@ public class MapViewFragment extends Fragment {
             RoadManager roadManager = new OSRMRoadManager();
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
+            GeoLocation currentLocation = new GeoLocation(locationListenerService);
+            
             waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
                     .getLongitude()));
-            waypoints.add(startGeoPoint);
+            waypoints.add(startMarker.getPosition());
             Road road = roadManager.getRoad(waypoints);
 
             roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
-            openMapView.getOverlays().add(roadOverlay);
-            
+           
             Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
-            for (int i=0; i<road.mNodes.size(); i++){
-                    RoadNode node = road.mNodes.get(i);
-                    Marker nodeMarker = new Marker(openMapView);
-                    nodeMarker.setPosition(node.mLocation);
-                    nodeMarker.setIcon(nodeIcon);
-                    nodeMarker.setTitle("Step "+i);
-                    nodeMarker.setSnippet(node.mInstructions);
-                    nodeMarker.setSubDescription(Road.getLengthDurationText(node.mLength, node.mDuration));
-                    openMapView.getOverlays().add(nodeMarker);
-                    Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
-                    nodeMarker.setImage(icon);
-                    poiMarkers.add(nodeMarker);
+            Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
+
+            for (int i = 0; i < road.mNodes.size(); i++) {
+                RoadNode node = road.mNodes.get(i);
+                Marker nodeMarker = new Marker(openMapView);
+                nodeMarker.setPosition(node.mLocation);
+                nodeMarker.setIcon(nodeIcon);
+                nodeMarker.setTitle("Step " + i);
+                nodeMarker.setSnippet(node.mInstructions);
+                nodeMarker.setSubDescription(Road.getLengthDurationText(node.mLength,
+                        node.mDuration));
+                nodeMarker.setImage(icon);
+                directionsMarkers.add(nodeMarker);
             }
+
             return null;
         }
 
@@ -381,16 +374,20 @@ public class MapViewFragment extends Fragment {
             directionsLoadingDialog.dismiss();
 
             GeoLocation currentLocation = new GeoLocation(locationListenerService);
-            geoPoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
-                    .getLongitude()));
+            currentLocation.retreivePOIString(getActivity());
+            
             Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
             poiMarkers.add(currentLocationMarker);
-            
             currentLocationMarker.showInfoWindow();
-
-            setZoomLevel();
-
+       
+            openMapView.getOverlays().clear();
+            openMapView.getOverlays().add(roadOverlay);
+            openMapView.getOverlays().add(directionsMarkers);
             openMapView.getOverlays().add(poiMarkers);
+            openMapView.getOverlays().add(startAndFinishMarkers);
+            
+            setZoomLevel(currentLocation);
+            
             openMapView.invalidate();
         }
     }
