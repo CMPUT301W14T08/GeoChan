@@ -9,20 +9,20 @@ import android.graphics.Bitmap;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetImageTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class ElasticSearchGetImageRunnable implements Runnable {
+public class GetImageRunnable implements Runnable {
 
-    private ElasticSearchGetImageTask task;
+    private GetImageTask task;
     private String type = ElasticSearchClient.TYPE_IMAGE;
     public static final int STATE_GET_IMAGE_FAILED = -1;
     public static final int STATE_GET_IMAGE_RUNNING = 0;
     public static final int STATE_GET_IMAGE_COMPLETE = 1;
 
-    public ElasticSearchGetImageRunnable(ElasticSearchGetImageTask task) {
+    public GetImageRunnable(GetImageTask task) {
         this.task = task;
     }
 

@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetImageRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.GetImageRunnable;
 
-public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
+public class GetImageTask implements GetImageRunnableInterface {
 
     /*
      * Id of the image as stored on elasticSearch
@@ -34,8 +34,8 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
     private Thread thread;
     private Bitmap cache;
 
-    public ElasticSearchGetImageTask() {
-        this.getImageRunnable = new ElasticSearchGetImageRunnable(this);
+    public GetImageTask() {
+        this.getImageRunnable = new GetImageRunnable(this);
     }
 
     public void initGetImageTask(ThreadManager manager, String id, ImageView imageView, ProgressDialog dialog) {
@@ -59,10 +59,10 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
     public void handleGetImageState(int state) {
         int outState;
         switch (state) {
-        case ElasticSearchGetImageRunnable.STATE_GET_IMAGE_COMPLETE:
+        case GetImageRunnable.STATE_GET_IMAGE_COMPLETE:
             outState = ThreadManager.GET_IMAGE_COMPLETE;
             break;
-        case ElasticSearchGetImageRunnable.STATE_GET_IMAGE_FAILED:
+        case GetImageRunnable.STATE_GET_IMAGE_FAILED:
             outState = ThreadManager.GET_IMAGE_FAILED;
             break;
         default:

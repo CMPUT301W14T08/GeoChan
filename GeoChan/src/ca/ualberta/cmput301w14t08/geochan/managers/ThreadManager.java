@@ -20,10 +20,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentsTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetImageTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetThreadCommentsTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetThreadCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
 /**
@@ -82,41 +82,41 @@ public class ThreadManager {
                                                                     // 10MB??
 
     // Caches for download tasks
-    private final LruCache<String, CommentList> elasticSearchCommentListCache;
-    private final LruCache<String, Bitmap> elasticSearchGetImageCache;
+    private final LruCache<String, CommentList> commentListCache;
+    private final LruCache<String, Bitmap> getImageCache;
     private final LruCache<String, String> getPOICache;
 
     // Queues of runnables required by tasks
     // es GetCommentList task
-    private final BlockingQueue<Runnable> elasticSearchGetCommentListRunnableQueue;
+    private final BlockingQueue<Runnable> getCommentListRunnableQueue;
     // es GetComment task
-    private final BlockingQueue<Runnable> elasticSearchGetCommentsRunnableQueue;
+    private final BlockingQueue<Runnable> getCommentsRunnableQueue;
     // es Post task
-    private final BlockingQueue<Runnable> elasticSearchImageRunnableQueue;
-    private final BlockingQueue<Runnable> elasticSearchPostRunnableQueue;
-    private final BlockingQueue<Runnable> elasticSearchUpdateRunnableQueue;
+    private final BlockingQueue<Runnable> postImageRunnableQueue;
+    private final BlockingQueue<Runnable> postRunnableQueue;
+    private final BlockingQueue<Runnable> updateRunnableQueue;
     // es GetImage task
-    private final BlockingQueue<Runnable> elasticSearchGetImageRunnableQueue;
-    private final BlockingQueue<Runnable> elasticSearchGetThreadCommentsRunnableQueue;
+    private final BlockingQueue<Runnable> getImageRunnableQueue;
+    private final BlockingQueue<Runnable> getThreadCommentsRunnableQueue;
 
     // get Point of Interest Task
     private final BlockingQueue<Runnable> getPOIRunnableQueue;
 
     // Queues of tasks this manager is responsible for
-    private final Queue<ElasticSearchGetCommentsTask> elasticSearchGetCommentsTaskQueue;
-    private final Queue<ElasticSearchPostTask> elasticSearchPostTaskQueue;
-    private final Queue<ElasticSearchGetImageTask> elasticSearchGetImageTaskQueue;
+    private final Queue<GetCommentsTask> getCommentsTaskQueue;
+    private final Queue<PostTask> postTaskQueue;
+    private final Queue<GetImageTask> getImageTaskQueue;
     private final Queue<GetPOITask> getPOITaskQueue;
-    private final Queue<ElasticSearchGetThreadCommentsTask> elasticSearchGetThreadCommentsTaskQueue;
+    private final Queue<GetThreadCommentsTask> getThreadCommentsTaskQueue;
 
     // Thread pools for all the possible threads, one pool per each runnable
-    private final ThreadPoolExecutor elasticSearchGetCommentListPool;
-    private final ThreadPoolExecutor elasticSearchGetCommentsPool;
-    private final ThreadPoolExecutor elasticSearchImagePool;
-    private final ThreadPoolExecutor elasticSearchPostPool;
-    private final ThreadPoolExecutor elasticSearchUpdatePool;
-    private final ThreadPoolExecutor elasticSearchGetImagePool;
-    private final ThreadPoolExecutor elasticSearchGetThreadCommentsPool;
+    private final ThreadPoolExecutor getCommentListPool;
+    private final ThreadPoolExecutor getCommentsPool;
+    private final ThreadPoolExecutor postImagePool;
+    private final ThreadPoolExecutor postPool;
+    private final ThreadPoolExecutor updatePool;
+    private final ThreadPoolExecutor getImagePool;
+    private final ThreadPoolExecutor getThreadCommentsPool;
     private final ThreadPoolExecutor getPOIPool;
 
     private Handler handler;
@@ -126,39 +126,39 @@ public class ThreadManager {
      * Private constructor due to singleton pattern.
      */
     private ThreadManager() {
-        elasticSearchCommentListCache = new LruCache<String, CommentList>(MAXIMUM_CACHE_SIZE);
-        elasticSearchGetImageCache = new LruCache<String, Bitmap>(MAXIMUM_CACHE_SIZE);
+        commentListCache = new LruCache<String, CommentList>(MAXIMUM_CACHE_SIZE);
+        getImageCache = new LruCache<String, Bitmap>(MAXIMUM_CACHE_SIZE);
         getPOICache = new LruCache<String, String>(MAXIMUM_CACHE_SIZE);
 
-        elasticSearchGetCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchGetCommentsRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchGetImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        elasticSearchGetThreadCommentsRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        getCommentListRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        getCommentsRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        postImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        postRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        updateRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        getImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        getThreadCommentsRunnableQueue = new LinkedBlockingQueue<Runnable>();
         getPOIRunnableQueue = new LinkedBlockingQueue<Runnable>();
 
-        elasticSearchGetCommentsTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentsTask>();
-        elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
-        elasticSearchGetImageTaskQueue = new LinkedBlockingQueue<ElasticSearchGetImageTask>();
-        elasticSearchGetThreadCommentsTaskQueue = new LinkedBlockingQueue<ElasticSearchGetThreadCommentsTask>();
+        getCommentsTaskQueue = new LinkedBlockingQueue<GetCommentsTask>();
+        postTaskQueue = new LinkedBlockingQueue<PostTask>();
+        getImageTaskQueue = new LinkedBlockingQueue<GetImageTask>();
+        getThreadCommentsTaskQueue = new LinkedBlockingQueue<GetThreadCommentsTask>();
         getPOITaskQueue = new LinkedBlockingQueue<GetPOITask>();
 
-        elasticSearchGetCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetCommentListRunnableQueue);
-        elasticSearchGetCommentsPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetCommentsRunnableQueue);
-        elasticSearchImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchImageRunnableQueue);
-        elasticSearchPostPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchPostRunnableQueue);
-        elasticSearchUpdatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchUpdateRunnableQueue);
-        elasticSearchGetImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetImageRunnableQueue);
-        elasticSearchGetThreadCommentsPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetThreadCommentsRunnableQueue);
+        getCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, getCommentListRunnableQueue);
+        getCommentsPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, getCommentsRunnableQueue);
+        postImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, postImageRunnableQueue);
+        postPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, postRunnableQueue);
+        updatePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, updateRunnableQueue);
+        getImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, getImageRunnableQueue);
+        getThreadCommentsPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, getThreadCommentsRunnableQueue);
         getPOIPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME,
                 KEEP_ALIVE_TIME_UNIT, getPOIRunnableQueue);
 
@@ -171,48 +171,48 @@ public class ThreadManager {
                     Toaster.toastShort("YAY!!! :D");
                     break;
                 case GET_THREADS_COMPLETE:
-                    ElasticSearchGetThreadCommentsTask threadTask = (ElasticSearchGetThreadCommentsTask) inputMessage.obj;
+                    GetThreadCommentsTask threadTask = (GetThreadCommentsTask) inputMessage.obj;
                     threadTask.getFragment().finishReload();
                     recycleGetThreadCommentsTask(threadTask);
                     break;
                     
                 case GET_THREADS_FAILED:
-                    ElasticSearchGetThreadCommentsTask threadTaskFail = (ElasticSearchGetThreadCommentsTask) inputMessage.obj;
+                    GetThreadCommentsTask threadTaskFail = (GetThreadCommentsTask) inputMessage.obj;
                     threadTaskFail.getFragment().finishReload();
                     recycleGetThreadCommentsTask(threadTaskFail);
                     break;   
 
                 case GET_COMMENTS_COMPLETE:
-                    ElasticSearchGetCommentsTask task = (ElasticSearchGetCommentsTask) inputMessage.obj;
+                    GetCommentsTask task = (GetCommentsTask) inputMessage.obj;
                     task.getFragment().finishReload();
                     recycleCommentsTask(task);
                     break;
                     
                 case GET_COMMENTS_FAILED:
-                    ElasticSearchGetCommentsTask taskFail = (ElasticSearchGetCommentsTask) inputMessage.obj;
+                    GetCommentsTask taskFail = (GetCommentsTask) inputMessage.obj;
                     taskFail.getFragment().finishReload();
                     recycleCommentsTask(taskFail);
                     break;    
                     
                 case GET_COMMENT_LIST_FAILED:
-                    ElasticSearchGetCommentsTask taskListFail = (ElasticSearchGetCommentsTask) inputMessage.obj;
+                    GetCommentsTask taskListFail = (GetCommentsTask) inputMessage.obj;
                     taskListFail.getFragment().finishReload();
                     recycleCommentsTask(taskListFail);
                     break;
 
                 case GET_IMAGE_RUNNING:
-                    ElasticSearchGetImageTask imageTask = (ElasticSearchGetImageTask) inputMessage.obj;
+                    GetImageTask imageTask = (GetImageTask) inputMessage.obj;
                     imageTask.getDialog().show();
                     break;
                     
                 case GET_IMAGE_FAILED:
-                    ElasticSearchGetImageTask imageTaskFail = (ElasticSearchGetImageTask) inputMessage.obj;
+                    GetImageTask imageTaskFail = (GetImageTask) inputMessage.obj;
                     imageTaskFail.getDialog().dismiss();
                     recycleGetImageTask(imageTaskFail);
                     break;
                     
                 case GET_IMAGE_COMPLETE:
-                    ElasticSearchGetImageTask imageTaskComplete = (ElasticSearchGetImageTask) inputMessage.obj;
+                    GetImageTask imageTaskComplete = (GetImageTask) inputMessage.obj;
                     imageTaskComplete.getDialog().dismiss();
                     Bitmap bitmap = imageTaskComplete.getImageCache();
                     String id = imageTaskComplete.getId();
@@ -266,31 +266,31 @@ public class ThreadManager {
      * @param id
      *            the image id under which the bitmap is stored on es
      */
-    public static ElasticSearchGetImageTask startGetImage(String id, ImageView imageView,
+    public static GetImageTask startGetImage(String id, ImageView imageView,
             ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
-        ElasticSearchGetImageTask task = instance.elasticSearchGetImageTaskQueue.poll();
+        GetImageTask task = instance.getImageTaskQueue.poll();
         if (task == null) {
-            task = new ElasticSearchGetImageTask();
+            task = new GetImageTask();
         }
         task.initGetImageTask(instance, id, imageView, dialog);
-        task.setImageCache(instance.elasticSearchGetImageCache.get(id));
-        instance.elasticSearchGetImagePool.execute(task.getGetImageRunnable());
+        task.setImageCache(instance.getImageCache.get(id));
+        instance.getImagePool.execute(task.getGetImageRunnable());
         return task;
     }
     
-    public static ElasticSearchGetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment, ProgressDialog dialog) {
+    public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
-        ElasticSearchGetThreadCommentsTask task = instance.elasticSearchGetThreadCommentsTaskQueue.poll();
+        GetThreadCommentsTask task = instance.getThreadCommentsTaskQueue.poll();
         if (task == null) {
-            task = new ElasticSearchGetThreadCommentsTask();
+            task = new GetThreadCommentsTask();
         }
         task.initGetThreadCommentsTask(instance, fragment, dialog);
-        instance.elasticSearchGetThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
+        instance.getThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
         return task;
     }
 
@@ -304,18 +304,18 @@ public class ThreadManager {
      * @param id
      *            id of the commentList used on the server
      */
-    public static ElasticSearchGetCommentsTask startGetComments(ThreadViewFragment fragment,
+    public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
             int threadIndex, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
-        ElasticSearchGetCommentsTask task = instance.elasticSearchGetCommentsTaskQueue.poll();
+        GetCommentsTask task = instance.getCommentsTaskQueue.poll();
         if (task == null) {
-            task = new ElasticSearchGetCommentsTask();
+            task = new GetCommentsTask();
         }
         task.initCommentsTask(instance, fragment, threadIndex, dialog);
-        task.setCommentListCache(instance.elasticSearchCommentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
-        instance.elasticSearchGetCommentListPool.execute(task.getGetCommentListRunnable());
+        task.setCommentListCache(instance.commentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
+        instance.getCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
     }
 
@@ -329,16 +329,16 @@ public class ThreadManager {
      *            title of the threadComment, if it is a threadComment. if it is
      *            a Comment, not a threadComment, the title field is null
      */
-    public static ElasticSearchPostTask startPost(Comment comment, String title) {
+    public static PostTask startPost(Comment comment, String title) {
         if (instance == null) {
             generateInstance();
         }
-        ElasticSearchPostTask task = instance.elasticSearchPostTaskQueue.poll();
+        PostTask task = instance.postTaskQueue.poll();
         if (task == null) {
-            task = new ElasticSearchPostTask();
+            task = new PostTask();
         }
         task.initPostTask(instance, comment, title);
-        instance.elasticSearchPostPool.execute(task.getPostRunnable());
+        instance.postPool.execute(task.getPostRunnable());
         return task;
     }
 
@@ -380,10 +380,10 @@ public class ThreadManager {
      * @param task
      * @param state
      */
-    public void handleGetCommentsState(ElasticSearchGetCommentsTask task, int state) {
+    public void handleGetCommentsState(GetCommentsTask task, int state) {
         switch (state) {
         case GET_COMMENT_LIST_COMPLETE:
-            instance.elasticSearchGetCommentsPool.execute(task.getGetCommentsRunnable());
+            instance.getCommentsPool.execute(task.getGetCommentsRunnable());
             break;
         case GET_COMMENTS_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
@@ -403,7 +403,7 @@ public class ThreadManager {
         }
     }
     
-    public void handleGetThreadCommentsState(ElasticSearchGetThreadCommentsTask task, int state) {
+    public void handleGetThreadCommentsState(GetThreadCommentsTask task, int state) {
         switch(state) {
         case GET_THREADS_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
@@ -424,7 +424,7 @@ public class ThreadManager {
      * @param task
      * @param state
      */
-    public void handleGetImageState(ElasticSearchGetImageTask task, int state) {
+    public void handleGetImageState(GetImageTask task, int state) {
         switch (state) {
         case GET_IMAGE_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
@@ -450,20 +450,20 @@ public class ThreadManager {
      * @param task
      * @param state
      */
-    public void handlePostState(ElasticSearchPostTask task, int state) {
+    public void handlePostState(PostTask task, int state) {
         switch (state) {
         case POST_COMPLETE:
             if (task.getComment().hasImage()) {
-                instance.elasticSearchImagePool.execute(task.getImageRunnable());
+                instance.postImagePool.execute(task.getImageRunnable());
             } else if (task.getTitle() == null) {
-                instance.elasticSearchUpdatePool.execute(task.getUpdateRunnable());
+                instance.updatePool.execute(task.getUpdateRunnable());
             } else {
                 instance.handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
             }
             break;
         case POST_IMAGE_COMPLETE:
             if (task.getTitle() == null) {
-                instance.elasticSearchUpdatePool.execute(task.getUpdateRunnable());
+                instance.updatePool.execute(task.getUpdateRunnable());
             } else {
                 instance.handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
             }
@@ -477,19 +477,19 @@ public class ThreadManager {
         }
     }
 
-    void recycleCommentsTask(ElasticSearchGetCommentsTask task) {
+    void recycleCommentsTask(GetCommentsTask task) {
         task.recycle();
-        instance.elasticSearchGetCommentsTaskQueue.offer(task);
+        instance.getCommentsTaskQueue.offer(task);
     }
 
-    void recycleGetImageTask(ElasticSearchGetImageTask task) {
+    void recycleGetImageTask(GetImageTask task) {
         task.recycle();
-        instance.elasticSearchGetImageTaskQueue.offer(task);
+        instance.getImageTaskQueue.offer(task);
     }
 
-    void recyclePostTask(ElasticSearchPostTask task) {
+    void recyclePostTask(PostTask task) {
         task.recycle();
-        instance.elasticSearchPostTaskQueue.offer(task);
+        instance.postTaskQueue.offer(task);
     }
 
     void recycleGetPOITask(GetPOITask task) {
@@ -497,8 +497,8 @@ public class ThreadManager {
         instance.getPOITaskQueue.offer(task);
     }
     
-    void recycleGetThreadCommentsTask(ElasticSearchGetThreadCommentsTask task) {
+    void recycleGetThreadCommentsTask(GetThreadCommentsTask task) {
         task.recycle();
-        instance.elasticSearchGetThreadCommentsTaskQueue.offer(task);
+        instance.getThreadCommentsTaskQueue.offer(task);
     }
 }

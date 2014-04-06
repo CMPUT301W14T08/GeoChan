@@ -6,10 +6,10 @@ import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInter
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentsRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentListRunnable;
-import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentsRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.GetCommentListRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.GetCommentsRunnable;
 
-public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInterface, GetCommentsRunnableInterface {
+public class GetCommentsTask implements GetCommentListRunnableInterface, GetCommentsRunnableInterface {
 
     private int threadIndex;
     private CommentList cache;
@@ -20,9 +20,9 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
     private ThreadManager manager;
     private Thread thread;
 
-    public ElasticSearchGetCommentsTask() {
-        this.getCommentListRunnable = new ElasticSearchGetCommentListRunnable(this);
-        this.getCommentsRunnable = new ElasticSearchGetCommentsRunnable(this);
+    public GetCommentsTask() {
+        this.getCommentListRunnable = new GetCommentListRunnable(this);
+        this.getCommentsRunnable = new GetCommentsRunnable(this);
     }
 
     public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex, ProgressDialog dialog) {
@@ -45,10 +45,10 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
     public void handleGetCommentListState(int state) {
         int outState;
         switch (state) {
-        case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_COMPLETE:
+        case GetCommentListRunnable.STATE_GET_LIST_COMPLETE:
             outState = ThreadManager.GET_COMMENT_LIST_COMPLETE;
             break;
-        case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_FAILED:
+        case GetCommentListRunnable.STATE_GET_LIST_FAILED:
             outState = ThreadManager.GET_COMMENT_LIST_FAILED;
             break;
         default:
@@ -117,10 +117,10 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
     public void handleGetCommentsState(int state) {
         int outState;
         switch (state) {
-        case ElasticSearchGetCommentsRunnable.STATE_GET_COMMENTS_COMPLETE:
+        case GetCommentsRunnable.STATE_GET_COMMENTS_COMPLETE:
             outState = ThreadManager.GET_COMMENTS_COMPLETE;
             break;
-        case ElasticSearchGetCommentsRunnable.STATE_GET_COMMENTS_FAILED:
+        case GetCommentsRunnable.STATE_GET_COMMENTS_FAILED:
             outState = ThreadManager.GET_COMMENTS_FAILED;
             break;
         default:

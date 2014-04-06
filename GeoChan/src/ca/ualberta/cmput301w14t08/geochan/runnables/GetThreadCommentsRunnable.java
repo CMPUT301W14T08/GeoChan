@@ -14,20 +14,20 @@ import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetThreadCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetThreadCommentsTask;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-public class ElasticSearchGetThreadCommentsRunnable implements Runnable {
-    private ElasticSearchGetThreadCommentsTask task;
+public class GetThreadCommentsRunnable implements Runnable {
+    private GetThreadCommentsTask task;
     private String type = ElasticSearchClient.TYPE_THREAD;
     public static final int STATE_GET_THREADS_FAILED = -1;
     public static final int STATE_GET_THREADS_RUNNING = 0;
     public static final int STATE_GET_THREADS_COMPLETE = 1;
 
-    public ElasticSearchGetThreadCommentsRunnable(ElasticSearchGetThreadCommentsTask task) {
+    public GetThreadCommentsRunnable(GetThreadCommentsTask task) {
         this.task = task;
     }
 

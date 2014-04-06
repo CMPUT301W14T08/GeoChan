@@ -7,20 +7,20 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
 import com.google.gson.Gson;
 
-public class ElasticSearchUpdateRunnable implements Runnable {
+public class UpdateRunnable implements Runnable {
 
-    private ElasticSearchPostTask task;
+    private PostTask task;
     private String id;
     private String type = ElasticSearchClient.TYPE_INDEX;
     public static final int STATE_UPDATE_FAILED = -1;
     public static final int STATE_UPDATE_RUNNING = 0;
     public static final int STATE_UPDATE_COMPLETE = 1;
 
-    public ElasticSearchUpdateRunnable(ElasticSearchPostTask task) {
+    public UpdateRunnable(PostTask task) {
         this.task = task;
     }
 

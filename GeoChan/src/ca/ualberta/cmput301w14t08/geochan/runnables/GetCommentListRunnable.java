@@ -6,20 +6,20 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class ElasticSearchGetCommentListRunnable implements Runnable {
+public class GetCommentListRunnable implements Runnable {
 
-    private ElasticSearchGetCommentsTask task;
+    private GetCommentsTask task;
     private String type = ElasticSearchClient.TYPE_INDEX;
     public static final int STATE_GET_LIST_FAILED = -1;
     public static final int STATE_GET_LIST_RUNNING = 0;
     public static final int STATE_GET_LIST_COMPLETE = 1;
 
-    public ElasticSearchGetCommentListRunnable(ElasticSearchGetCommentsTask task) {
+    public GetCommentListRunnable(GetCommentsTask task) {
         this.task = task;
     }
 

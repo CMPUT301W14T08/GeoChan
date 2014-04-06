@@ -5,47 +5,34 @@ import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
-public class ElasticSearchPostRunnable implements Runnable {
+public class PostImageRunnable implements Runnable {
 
-    private ElasticSearchPostTask task;
+    private PostTask task;
     private String id;
-    private String type;
-    public static final int STATE_POST_FAILED = -1;
-    public static final int STATE_POST_RUNNING = 0;
-    public static final int STATE_POST_COMPLETE = 1;
+    private String type = ElasticSearchClient.TYPE_IMAGE;
+    public static final int STATE_IMAGE_FAILED = -1;
+    public static final int STATE_IMAGE_RUNNING = 0;
+    public static final int STATE_IMAGE_COMPLETE = 1;
 
-    public ElasticSearchPostRunnable(ElasticSearchPostTask task) {
+    public PostImageRunnable(PostTask task) {
         this.task = task;
     }
 
     @Override
     public void run() {
-        task.setPostThread(Thread.currentThread());
+        task.setImageThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         JestResult jestResult = null;
         try {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            task.handlePostState(STATE_POST_RUNNING);
+            task.handleImageState(STATE_IMAGE_RUNNING);
+            id = task.getComment().getId();
             JestClient client = ElasticSearchClient.getInstance().getClient();
-            String json;
-            if (task.getTitle() == null) {
-                type = ElasticSearchClient.TYPE_COMMENT;
-                id = task.getComment().getId();
-                json = GsonHelper.getOnlineGson().toJson(task.getComment());
-            } else {
-                type = ElasticSearchClient.TYPE_THREAD;
-                ThreadComment thread = task.getComment().findThread();
-                if (thread == null) {
-                    thread = new ThreadComment(task.getComment(), task.getTitle());
-                }
-                id = thread.getId();
-                json = GsonHelper.getOnlineGson().toJson(thread);
-            }
+            String json = GsonHelper.getOnlineGson().toJson(task.getComment().getImage());
             Index index = new Index.Builder(json).index(ElasticSearchClient.URL_INDEX).type(type)
                     .id(id).build();
             if (Thread.interrupted()) {
@@ -59,14 +46,14 @@ public class ElasticSearchPostRunnable implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            task.handlePostState(STATE_POST_COMPLETE);
+            task.handleImageState(STATE_IMAGE_COMPLETE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             if (jestResult == null || !jestResult.isSucceeded()) {
-                task.handlePostState(STATE_POST_FAILED);
+                task.handleImageState(STATE_IMAGE_FAILED);
             }
-            //task.setPostThread(null);
+            //task.setImageThread(null);
             Thread.interrupted();
         }
     }
