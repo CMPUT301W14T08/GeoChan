@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -103,7 +104,9 @@ public class ThreadComment implements Parcelable {
      *         passed GeoLocation.
      */
     public double getDistanceFrom(GeoLocation geo) {
-        return this.getBodyComment().getLocation().distance(geo);
+    	GeoLocation loc = this.getBodyComment().getLocation();
+    	double dist = loc.distance(geo);
+        return dist;
     }
 
     /**
