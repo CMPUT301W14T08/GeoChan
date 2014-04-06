@@ -53,6 +53,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
+import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
@@ -165,10 +166,6 @@ public class CustomLocationFragment extends Fragment {
             public boolean longPressHelper(IGeoPoint clickedPoint) {
                 newLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
-                ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Retrieving Location");
-                ThreadManager.startGetPOI(newLocation, dialog, openMapView);
-                //newLocation.retreivePOIString(getActivity());
                 handleNewLocationPressed(newLocation);
                 return false;
             }
@@ -263,6 +260,11 @@ public class CustomLocationFragment extends Fragment {
         locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(), geoLocation
                 .getLongitude()));
         locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        locationMarker.setDraggable(true);
+        
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Retrieving Location");
+        ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
 
         // clear map, then re-add events Overlay and add new location marker,
         // then refresh

@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.osmdroid.views.MapView;
+import org.osmdroid.bonuspack.overlays.Marker;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -41,6 +41,7 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
  * 
  */
 public class ThreadManager {
+
     // These are the states of all tasks this manager handles
     // Post a comment to elasticSearch
     public static final int POST_FAILED = 1;
@@ -248,31 +249,34 @@ public class ThreadManager {
                     break;
                     
                 case GET_POI_COMPLETE:
-                    GetPOITask poiTaskComplete = (GetPOITask) inputMessage.obj;
-                    if (poiTaskComplete.getDialog() != null) {
-                        poiTaskComplete.getDialog().dismiss();
-                    }
-                    if (poiTaskComplete.getMapView() != null) {
-                    	// Create marker here
-                    	
-                    }
-                    poiTaskComplete.getLocation().setLocationDescription(
-                    		poiTaskComplete.getPOICache());
-                    recycleGetPOITask(poiTaskComplete);
-                    break;
+					GetPOITask poiTaskComplete = (GetPOITask) inputMessage.obj;
+					if (poiTaskComplete.getDialog() != null) {
+						poiTaskComplete.getDialog().dismiss();
+					}
+					if (poiTaskComplete.getMarker() != null) {
+						poiTaskComplete.getMarker().setSubDescription(
+								(poiTaskComplete.getPOICache()));
+						poiTaskComplete.getMarker().showInfoWindow();
+					}
+					poiTaskComplete.getLocation().setLocationDescription(
+							poiTaskComplete.getPOICache());
+					recycleGetPOITask(poiTaskComplete);
+					break;
 
-                case GET_POI_FAILED:
-                	GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
-                	if (poiTaskFailed.getDialog() != null) {
-                		poiTaskFailed.getDialog().dismiss();
-                	}
-                	if (poiTaskFailed.getMapView() != null) {
-                    	// Create marker here
-                    	
-                	}
-                	poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
-                	recycleGetPOITask(poiTaskFailed);
-                	break;
+				case GET_POI_FAILED:
+					GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
+					if (poiTaskFailed.getDialog() != null) {
+						poiTaskFailed.getDialog().dismiss();
+					}
+					if (poiTaskFailed.getMarker() != null) {
+						poiTaskFailed.getMarker().setSubDescription(
+								("Unknown Location"));
+						poiTaskFailed.getMarker().showInfoWindow();
+					}
+					poiTaskFailed.getLocation().setLocationDescription(
+							poiTaskFailed.getPOICache());
+					recycleGetPOITask(poiTaskFailed);
+					break;
 
                 default:
                 	super.handleMessage(inputMessage);
@@ -369,7 +373,7 @@ public class ThreadManager {
         return task;
     }
 
-    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, MapView mapView) {
+    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, Marker marker) {
         if (instance == null) {
             generateInstance();
         }
@@ -377,7 +381,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetPOITask();
         }
-        task.initGetPOITask(instance, location, dialog, mapView);
+        task.initGetPOITask(instance, location, dialog, marker);
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
