@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,12 +48,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
@@ -84,8 +85,16 @@ public class PostFragment extends Fragment {
             commentToReplyTo = (Comment) args.getParcelable("cmt");
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
         }
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
+        geoLocation = new GeoLocation(locationListenerService);
+        if (geoLocation.getLocationDescription() == null) {
+            // Retrieve POI
+            Log.e("POI", "CallFromOnStart");
+            ThreadManager.startGetPOI(geoLocation, null);
+        }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
@@ -99,9 +108,6 @@ public class PostFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-        geoLocation = new GeoLocation(locationListenerService);
         if (commentToReplyTo != null) {
             TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
             TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
@@ -130,8 +136,10 @@ public class PostFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
-                    
+
                     String locationDescription = args.getString("locationDescription");
+
+                    Log.e("POI is:", locationDescription);
                     geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
@@ -140,10 +148,9 @@ public class PostFragment extends Fragment {
                     format.setMaximumFractionDigits(4);
 
                     if (locationDescription.equals("Unknown Location")) {
-                        locButton.setText("Lat: " + format.format(lat) + ", Long: "
-                                + format.format(lon));
+                        locButton.setText("Location: Set");
                     } else {
-                        locButton.setText("Location: " + locationDescription);
+                        locButton.setText("Location: Set");
                     }
                 }
             }
@@ -163,6 +170,12 @@ public class PostFragment extends Fragment {
      */
     public void post(View view) {
         if (view.getId() == R.id.post_button) {
+            if(geoLocation.getLocationDescription() == null) {
+                // Retrieve POI
+                ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Retrieving Location");
+                ThreadManager.startGetPOI(geoLocation, dialog);
+            }
             String title = null;
             EditText editTitle = null;
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
@@ -175,23 +188,24 @@ public class PostFragment extends Fragment {
                 ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
-                ElasticSearchClient client = ElasticSearchClient.getInstance();
-                if (commentToReplyTo == null) {
-                    // ThreadList.addThread(newComment, title);
-                    // int tag = PreferencesManager.getInstance().getThreadSort();
-                    // SortUtil.sortThreads(tag, ThreadList.getThreads();
-                    client.postThread(new ThreadComment(newComment, title));
-                } else {
-                    client.postComment(thread, commentToReplyTo, newComment);
-                    commentToReplyTo.addChild(newComment);
+                //ElasticSearchClient client = ElasticSearchClient.getInstance();
+                if (commentToReplyTo != null) {
+                    Comment c = thread.findCommentById(thread.getBodyComment(),
+                            commentToReplyTo.getId());
+                    c.addChild(newComment);
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
+                } else {
+                    ThreadList.addThread(newComment, title);
+                    int tag = PreferencesManager.getInstance().getThreadSort();
+                    SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
                 // log the thread and the geolocation
                 if (geoLocation.getLocation() == null) {
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(title, geoLocation);
                 }
+                ThreadManager.startPost(newComment, title);
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(),
@@ -232,9 +246,11 @@ public class PostFragment extends Fragment {
                                                                         // file
                                                                         // name
                         if(fromFav == true){
+                            arg0.dismiss();
                             getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                     ImageHelper.REQUEST_GALLERY);
                         } else {
+                            arg0.dismiss();
                             startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_GALLERY);
                         }
@@ -243,6 +259,7 @@ public class PostFragment extends Fragment {
                     }
                 }
             });
+            
             dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
@@ -263,9 +280,11 @@ public class PostFragment extends Fragment {
                                                                         // file
                                                                         // name
                         if(fromFav == true){
+                            arg0.dismiss();
                             getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
                         } else {
+                            arg0.dismiss();
                             startActivityForResult(Intent.createChooser(intent, "Test"),
                                     ImageHelper.REQUEST_CAMERA);
                         }
@@ -304,10 +323,8 @@ public class PostFragment extends Fragment {
                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
                             .getContentResolver(), data.getData());
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
@@ -320,23 +337,22 @@ public class PostFragment extends Fragment {
             }
         }
     }
-    
+
     private Bitmap scaleImage(Bitmap bitmap) {
         // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-           // Scale the pic if it is too large:
-           if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS
-                   || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-               double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
-               if (bitmap.getHeight() > bitmap.getWidth())
-                   scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+        // Scale the pic if it is too large:
+        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+            if (bitmap.getHeight() > bitmap.getWidth())
+                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
 
-               int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
-               int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
 
-               bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-           }
-           return bitmap;
-       }
+            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+        }
+        return bitmap;
+    }
 
     @Override
     public void onStop() {

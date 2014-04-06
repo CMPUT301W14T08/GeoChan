@@ -22,10 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,10 +35,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
-import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -53,11 +55,12 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * @author Henry Pabst, Artem Chikin
  * 
  */
-public class ThreadListFragment extends Fragment implements
-        LoaderCallbacks<ArrayList<ThreadComment>> {
+public class ThreadListFragment extends Fragment {
     private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
+    private CacheManager cacheManager = null;
+    private ConnectivityHelper connectHelper = null;
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
 
@@ -71,7 +74,11 @@ public class ThreadListFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // locationListener = new LocationListenerService(getActivity());
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         setHasOptionsMenu(true);
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading comments.");
+        ThreadManager.startGetThreadComments(this, dialog);
     }
 
     /**
@@ -93,9 +100,10 @@ public class ThreadListFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
-
-        getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
+        connectHelper = ConnectivityHelper.getInstance();
+        if (!connectHelper.isConnected()) {
+            Toaster.toastShort("No network connection.");
+        }
     }
 
     @Override
@@ -181,9 +189,17 @@ public class ThreadListFragment extends Fragment implements
         if (prefManager == null) {
             prefManager = PreferencesManager.getInstance();
         }
+        if (cacheManager == null) {
+            cacheManager = CacheManager.getInstance();
+        }
+        threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
+        // On start, get the threadList from the cache
+        ArrayList<ThreadComment> list = cacheManager.deserializeThreadList();
+        ThreadList.setThreads(list);
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         threadListView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
         threadListView.setAdapter(adapter);
+
         threadListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             /*
@@ -193,7 +209,7 @@ public class ThreadListFragment extends Fragment implements
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("thread", ThreadList.getThreads().get((int) id));
-                bundle.putLong("id", (int) id);
+                bundle.putLong("id", id);
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragment, "thread_view_fragment")
@@ -205,56 +221,34 @@ public class ThreadListFragment extends Fragment implements
         int sort = prefManager.getThreadSort();
         SortUtil.sortThreads(sort, ThreadList.getThreads());
         adapter.notifyDataSetChanged();
+        
         threadListView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                reload();
+                if (!connectHelper.isConnected()) {
+                    Toaster.toastShort("No network connection.");
+                    threadListView.onRefreshComplete();
+                    //onLoadFinished(loader, ThreadList.getThreads());
+                } else {
+                    reload();
+                }
             }
         });
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
-     * android.os.Bundle)
-     */
-    @Override
-    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-        return new ThreadCommentLoader(getActivity());
+    public void reload() {
+        ThreadManager.startGetThreadComments(this, null);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
-     * .Loader, java.lang.Object)
-     */
-    @Override
-    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
-            ArrayList<ThreadComment> list) {
-        ThreadList.setThreads(list);
-        adapter.setList(list);
+    
+    public void finishReload() {
+        cacheManager.serializeThreadList(ThreadList.getThreads());
+        SortUtil.sortThreads(prefManager.getThreadSort(), ThreadList.getThreads());
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+        // Assign custom adapter to the thread listView.
+        threadListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         threadListView.onRefreshComplete();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
-     * .Loader)
-     */
-    @Override
-    public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
-        adapter.setList(new ArrayList<ThreadComment>());
-    }
-
-    private void reload() {
-        getLoaderManager().getLoader(0).forceLoad();
     }
 }

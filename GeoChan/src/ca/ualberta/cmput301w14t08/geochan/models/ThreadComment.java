@@ -44,29 +44,29 @@ public class ThreadComment implements Parcelable {
 
     public ThreadComment(Comment bodyComment, String title) {
         super();
-        this.bodyComment = bodyComment;
-        this.setTitle(title);
+        this.title = title;
         this.id = HashHelper.getCommentIdHash();
+        this.bodyComment = bodyComment;
+
     }
 
     /* This constructor is only used for testing. */
     public ThreadComment() {
         super();
-        this.bodyComment = new Comment();
         this.title = "This thread is being used to test!";
         this.id = HashHelper.getCommentIdHash();
+        this.bodyComment = new Comment();
     }
 
     /**
      * Getters and setters
      */
-
     public Date getThreadDate() {
-        return bodyComment.getCommentDate();
+        return getBodyComment().getCommentDate();
     }
 
     public void setThreadDate(Date threadDate) {
-        bodyComment.setCommentDate(threadDate);
+        getBodyComment().setCommentDate(threadDate);
     }
 
     public String getId() {
@@ -91,10 +91,6 @@ public class ThreadComment implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void addComment(Comment c) {
-        this.bodyComment.addChild(c);
     }
 
     /**
@@ -165,6 +161,21 @@ public class ThreadComment implements Parcelable {
         }
     }
 
+    public Comment findCommentById(Comment parent, String id) {
+        Comment c = null;
+        Log.e("??", "Searching comment " + parent.getId() + " for " + id);
+        if (parent.getId().equals(id)) {
+            c = parent;
+        }
+        for (Comment child : parent.getChildren()) {
+            Comment c2 = findCommentById(child, id);
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -172,7 +183,7 @@ public class ThreadComment implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(bodyComment, flags);
+        dest.writeParcelable(getBodyComment(), flags);
         dest.writeValue(title);
         dest.writeValue(id);
     }

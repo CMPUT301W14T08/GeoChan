@@ -28,10 +28,10 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +45,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
@@ -158,7 +159,10 @@ public class CustomLocationFragment extends Fragment {
             public boolean longPressHelper(IGeoPoint clickedPoint) {
                 newLocation = new GeoLocation(clickedPoint.getLatitude(),
                         clickedPoint.getLongitude());
-                newLocation.retreivePOIString(getActivity());
+                ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Retrieving Location");
+                ThreadManager.startGetPOI(newLocation, dialog);
+                //newLocation.retreivePOIString(getActivity());
                 handleNewLocationPressed(newLocation);
                 return false;
             }
@@ -222,7 +226,7 @@ public class CustomLocationFragment extends Fragment {
         }
         fm.popBackStackImmediate();
     }
-    
+
     /**
      * Called when a user clicks the submit button. If the user has placed a
      * location marker on the map, that location is placed in a bundle and
@@ -277,19 +281,13 @@ public class CustomLocationFragment extends Fragment {
         Bundle bundle = getArguments();
         postType = bundle.getInt("postType");
         if (postType == POST) {
-//            PostFragment fragment = (PostFragment) getFragmentManager()
-//                    .findFragmentByTag("postFrag");
             PostFragment fragment = (PostFragment) getFragmentManager()
                     .findFragmentByTag("postFrag");
             if(fragment == null){
                 fragment = (PostFragment) getChildFragmentManager()
                         .findFragmentByTag("postFrag");
             }
-            if(fragment == null){
-                Log.e("LOCDEBUG","fragment is null when we try to get arguements.");
-            }
-            Bundle args = fragment.getArguments();//The problem is here, fragment is always null no matter what manager is used in favourites.
-
+            Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);
@@ -299,12 +297,8 @@ public class CustomLocationFragment extends Fragment {
         } else if (postType == SORT_COMMENT) {
             SortUtil.setCommentSortGeo(locationToSubmit);
         } else if (postType == EDIT) {
-//            EditCommentFragment fragment = (EditCommentFragment) getFragmentManager()
-//                    .findFragmentByTag("editFrag");
             EditCommentFragment fragment = (EditCommentFragment) fm.findFragmentByTag("editFrag");
-            Log.e("LOCDEBUG", "Is the fragment null when editing as well?");
             Bundle args = fragment.getArguments();
-
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());
             args.putString("LocationType", locationType);

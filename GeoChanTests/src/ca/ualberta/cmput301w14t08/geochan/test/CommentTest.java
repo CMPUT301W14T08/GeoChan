@@ -13,6 +13,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
+/*
+ * Test the main functionality of the Comment class
+ */
 public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     private MainActivity activity;
@@ -31,6 +34,8 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         locationListenerService.startListening();
     }
     
+    // Test presence of an image in a comment object by creating an object
+    // with an image and calling hasImage()
     public void testHasImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
@@ -38,7 +43,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("Comment has image", comment.hasImage());
     }
     
-
+    // Test adding a child, i.e. a reply comment
     @SuppressWarnings("unused")
     public void testAddChild() {
         Comment parent = new Comment("test", null, null);
@@ -46,6 +51,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertNotNull("comment has a reply", parent.getChildren());
     }
     
+    // Test that the constructor functions properly
     public void testConstruct() {
         Comment comment = new Comment("Hola", null, null);
         assertNull(comment.getParent());
@@ -107,8 +113,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c3 children sorted", c3.getChildAtIndex(1) == c7);
         assertTrue("c3 children sorted", c3.getChildAtIndex(2) == c6);
     }
+    
     /**
-     * Test comments according to oldest date
+     * Tests sorting comments according to date (oldest).
      */
     public void testSortByDateOldest(){
         long extraTime = 1320000;
@@ -165,7 +172,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
     
     /**
-     * Comment sorting by closest location.
+     * Tests sorting comments according to location.
      */
     public void testSortByLocation(){
         ArrayList<Comment> carrier = new ArrayList<Comment>();
@@ -314,7 +321,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
     
     /**
-     * Test comment sorting by lowest score.
+     * Tests sorting comments according to score (lowest).
      */
     public void testSortByScoreLowest(){
         long extraTime = 1320000;
@@ -395,7 +402,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
     
     /**
-     * Test sorting of images by those with and without comments.
+     * Tests sorting comments according to image.
      */
     public void testSortByImage(){
         long extraTime = 1320000;
@@ -533,6 +540,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("c2 is > 0", c2.getScoreFromParent() > 0);
     }
     
+    /**
+     * Tests the calculation of the score of one comment relative to another
+     */
     public void testGetUserScore(){
         Comment c1 = new Comment();
         Comment c2 = new Comment();
@@ -559,6 +569,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         Log.e("Value of dist:", String.valueOf(dist));
         assertTrue("Distance calculated correctly.", dist == Math.sqrt(50));
     }
+
     
     /**
      * Test correct calculation of time differences between comment postings.

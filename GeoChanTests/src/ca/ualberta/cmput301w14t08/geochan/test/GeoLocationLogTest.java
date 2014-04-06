@@ -7,6 +7,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
+/**
+ * Test the functionality of the GeoLocationLog methods
+ */
 public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private LocationListenerService locationListenerService;
@@ -15,11 +18,19 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         super(MainActivity.class);
     }
     
+    /**
+     * Verifies the constructor constructs object
+     */
     public void testConstruction() {
         GeoLocationLog geoLocationLog =  GeoLocationLog.getInstance(getActivity());
         assertNotNull(geoLocationLog.getLogEntries());
     }
     
+    /**
+     * Tests adding a log entry by adding several log entries, then
+     * iterating over the log and verifying the entries have been added
+     * correctly.
+     */
     public void testAddLogEntry() {
         locationListenerService = new LocationListenerService(getActivity());
         locationListenerService.startListening();
@@ -39,6 +50,10 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         }
     }
     
+    /**
+     * Tests the clearLog method by populating the log,
+     * calling the method and verifying the log is empty
+     */
     public void testClearLogAndCheckIsLogEmpty() {
         GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
         
@@ -49,6 +64,10 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         assertEquals("Entries array should be empty",true, geoLocationLog.isEmpty());
     }
     
+    /**
+     * Test the corectness of the size method by populating the log with
+     * objects and verifying the method returns the correct quantity
+     */
     public void testSizeOfLog() {        
         locationListenerService = new LocationListenerService(getActivity());
         GeoLocation geoLocation1 = new GeoLocation(locationListenerService);

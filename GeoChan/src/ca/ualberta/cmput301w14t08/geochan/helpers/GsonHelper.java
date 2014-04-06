@@ -1,16 +1,15 @@
 package ca.ualberta.cmput301w14t08.geochan.helpers;
 
+import android.graphics.Bitmap;
 import android.location.Location;
+import ca.ualberta.cmput301w14t08.geochan.json.BitmapJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.CommentJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.CommentOfflineJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.LocationJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.ThreadCommentJsonConverter;
+import ca.ualberta.cmput301w14t08.geochan.json.ThreadCommentOfflineJsonConverter;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentDeserializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.CommentSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.LocationDeserializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.LocationSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentDeserializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentDeserializerOffline;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializer;
-import ca.ualberta.cmput301w14t08.geochan.serializers.ThreadCommentSerializerOffline;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,25 +18,23 @@ public class GsonHelper {
 
     private static Gson offlineGson = null;
     private static Gson onlineGson = null;
+    private static Gson exposeGson = null;
     private static GsonHelper instance = null;
 
     private GsonHelper() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentSerializer());
-        builder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializer());
-        builder.registerTypeAdapter(Location.class, new LocationSerializer());
-        builder.registerTypeAdapter(Location.class, new LocationDeserializer());
+        builder.registerTypeAdapter(Comment.class, new CommentJsonConverter());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentJsonConverter());
+        builder.registerTypeAdapter(Bitmap.class, new BitmapJsonConverter());
+        builder.registerTypeAdapter(Location.class, new LocationJsonConverter());
         onlineGson = builder.create();
         builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentSerializer());
-        builder.registerTypeAdapter(Comment.class, new CommentDeserializer());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentSerializerOffline());
-        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentDeserializerOffline());
-        builder.registerTypeAdapter(Location.class, new LocationSerializer());
-        builder.registerTypeAdapter(Location.class, new LocationDeserializer());
+        builder.registerTypeAdapter(Comment.class, new CommentOfflineJsonConverter());
+        builder.registerTypeAdapter(ThreadComment.class, new ThreadCommentOfflineJsonConverter());
+        builder.registerTypeAdapter(Location.class, new LocationJsonConverter());
         offlineGson = builder.create();
+        builder = new GsonBuilder();
+        exposeGson = builder.excludeFieldsWithoutExposeAnnotation().create();
     }
 
     public static GsonHelper getInstance() {
@@ -59,6 +56,13 @@ public class GsonHelper {
             getInstance();
         }
         return offlineGson;
+    }
+
+    public static Gson getExposeGson() {
+        if (exposeGson == null) {
+            getInstance();
+        }
+        return exposeGson;
     }
 
 }

@@ -23,7 +23,7 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:contentDescription="@string/Image"
-        android:src="@drawable/rect1" />
+        android:src="@null" />
 
     <ImageView
         android:id="@+id/expanded_image_box2"

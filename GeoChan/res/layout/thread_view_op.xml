@@ -115,7 +115,7 @@
         android:id="@+id/thread_view_comment_thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thread_view_op_commentBody"
+        android:layout_alignTop="@+id/thread_view_op_threadTitle"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/image_desc"
         android:paddingTop="5dp"

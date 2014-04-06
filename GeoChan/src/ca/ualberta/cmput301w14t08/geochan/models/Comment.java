@@ -134,10 +134,11 @@ public class Comment implements Parcelable {
     }
 
     public boolean hasImage() {
-        return !(image == null);
+        return !(imageThumb == null);
     }
 
     public void addChild(Comment comment) {
+        comment.setParent(this);
         children.add(comment);
     }
 
@@ -212,6 +213,20 @@ public class Comment implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Comment findCommentById(Comment parent, String id) {
+        Comment c = null;
+        if (parent.getId().equals(id)) {
+            c = parent;
+        }
+        for (Comment child : parent.getChildren()) {
+            Comment c2 = findCommentById(child, id);
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
     }
 
     /**
@@ -309,6 +324,16 @@ public class Comment implements Parcelable {
             return distScore + timeScore;
         }
     }
+    
+    public ThreadComment findThread() {
+        ThreadComment t = null;
+        for (ThreadComment thread : ThreadList.getThreads()) {
+            if (thread.getBodyComment().getId().equals(getId())) {
+                t = thread;
+            }
+        }
+        return t;
+    }
 
     /**
      * Converts the Comment's commentDate to an appropriately formatted string.
@@ -390,6 +415,7 @@ public class Comment implements Parcelable {
         dest.writeValue(location.getLatitude());
         dest.writeValue(location.getLongitude());
         dest.writeValue(user);
+        dest.writeValue(id);
         dest.writeParcelable(parent, flags);
     }
 
@@ -406,6 +432,7 @@ public class Comment implements Parcelable {
         this.setImageThumb((Bitmap) in.readValue(getClass().getClassLoader()));
         this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
         this.setUser((String) in.readValue(getClass().getClassLoader()));
+        this.setId(Long.parseLong((String) in.readValue(getClass().getClassLoader())));
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
     }
 
