@@ -297,7 +297,7 @@ public class CustomLocationFragment extends Fragment {
         } else if (postType == SORT_COMMENT) {
             SortUtil.setCommentSortGeo(locationToSubmit);
         } else if (postType == EDIT) {
-            EditCommentFragment fragment = (EditCommentFragment) fm.findFragmentByTag("editFrag");
+            EditFragment fragment = (EditFragment) fm.findFragmentByTag("editFrag");
             Bundle args = fragment.getArguments();
             args.putDouble("LATITUDE", locationToSubmit.getLatitude());
             args.putDouble("LONGITUDE", locationToSubmit.getLongitude());

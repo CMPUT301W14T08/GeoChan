@@ -38,7 +38,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
-import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.EditFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
@@ -377,7 +377,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (editButton != null) {
             editButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Fragment fragment = new EditCommentFragment();
+                    Fragment fragment = new EditFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt("threadIndex", id);
                     bundle.putString("commentId", thread.getBodyComment().getId());

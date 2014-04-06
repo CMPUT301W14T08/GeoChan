@@ -315,7 +315,7 @@ public class ThreadViewFragment extends Fragment {
     };
     
     private void editComment(Comment comment){
-        Fragment fragment = new EditCommentFragment();
+        Fragment fragment = new EditFragment();
         Bundle bundle = new Bundle();
         boolean fromFavs = false;
         bundle.putInt("threadIndex", threadIndex);

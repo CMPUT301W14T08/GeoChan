@@ -35,7 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
-import ca.ualberta.cmput301w14t08.geochan.fragments.EditCommentFragment;
+import ca.ualberta.cmput301w14t08.geochan.fragments.EditFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
@@ -201,24 +201,24 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     }
 
     public void editImage(View view) {
-        EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
+        EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
-            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+            fragment = (EditFragment) favFrag.getChildFragmentManager()
                     .findFragmentByTag("editFrag");
         }
         fragment.editImage(view);
     }
 
     public void makeEdit(View view) {
-        EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
+        EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
-            fragment = (EditCommentFragment) favFrag.getChildFragmentManager()
+            fragment = (EditFragment) favFrag.getChildFragmentManager()
                     .findFragmentByTag("editFrag");
         }
         fragment.makeEdit(view);
