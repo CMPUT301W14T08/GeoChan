@@ -6,6 +6,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.osmdroid.views.MapView;
+
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -234,22 +236,30 @@ public class ThreadManager {
                     if (poiTaskComplete.getDialog() != null) {
                         poiTaskComplete.getDialog().dismiss();
                     }
+                    if (poiTaskComplete.getMapView() != null) {
+                    	// Create marker here
+                    	
+                    }
                     poiTaskComplete.getLocation().setLocationDescription(
-                            poiTaskComplete.getPOICache());
+                    		poiTaskComplete.getPOICache());
                     recycleGetPOITask(poiTaskComplete);
                     break;
-                    
+
                 case GET_POI_FAILED:
-                    GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
-                    if (poiTaskFailed.getDialog() != null) {
-                        poiTaskFailed.getDialog().dismiss();
-                    }
-                    poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
-                    recycleGetPOITask(poiTaskFailed);
-                    break;
-                    
+                	GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
+                	if (poiTaskFailed.getDialog() != null) {
+                		poiTaskFailed.getDialog().dismiss();
+                	}
+                	if (poiTaskFailed.getMapView() != null) {
+                    	// Create marker here
+                    	
+                	}
+                	poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
+                	recycleGetPOITask(poiTaskFailed);
+                	break;
+
                 default:
-                    super.handleMessage(inputMessage);
+                	super.handleMessage(inputMessage);
                     break;
                 }
             }
@@ -343,7 +353,7 @@ public class ThreadManager {
         return task;
     }
 
-    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog) {
+    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, MapView mapView) {
         if (instance == null) {
             generateInstance();
         }
@@ -351,7 +361,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetPOITask();
         }
-        task.initGetPOITask(instance, location, dialog);
+        task.initGetPOITask(instance, location, dialog, mapView);
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
