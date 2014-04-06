@@ -131,8 +131,6 @@ public class ThreadListUITest extends ActivityInstrumentationTestCase2<MainActiv
     public void testFavoritesButton() {
         solo.clickOnActionBarItem(R.id.action_favourites);
         assertTrue("Favorites fragment is not displayed", solo.waitForFragmentByTag("favouritesFrag"));
-        solo.pressSpinnerItem(0, 0);
-        solo.pressSpinnerItem(0, 1);
         solo.goBack();
         assertTrue("Did not return to thread list", solo.waitForFragmentById(R.id.fragment_container));
     }
