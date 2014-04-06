@@ -276,7 +276,7 @@ public class ThreadManager {
             task = new ElasticSearchGetThreadCommentsTask();
         }
         task.initGetThreadCommentsTask(instance, fragment, dialog);
-        instance.elasticSearchGetThreadCommentsPool.execute(task.getThreadCommentsRunnable());
+        instance.elasticSearchGetThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
         return task;
     }
 
