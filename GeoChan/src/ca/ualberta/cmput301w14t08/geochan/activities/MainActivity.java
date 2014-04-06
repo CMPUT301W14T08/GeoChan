@@ -125,12 +125,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         checkActionBar();
     }
     
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        //Trying this to solve the favourites image issue.
-        //Probably unnecessary.
-    }
 
     /**
      * Checks the back stack for fragments and enables/disables the back button
