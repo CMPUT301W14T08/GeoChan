@@ -22,6 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -42,9 +43,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -63,7 +67,9 @@ public class ThreadViewFragment extends Fragment {
     private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
+    private CacheManager cache = null;
     private ThreadComment thread = null;
+    private ConnectivityHelper connectHelper = null;
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
     private int container;
@@ -77,10 +83,20 @@ public class ThreadViewFragment extends Fragment {
         thread = bundle.getParcelable("thread");
         // Assign custom adapter to the thread listView.
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-        // Load comments with dialog
-        ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Loading comments.");
-        ThreadManager.startGetComments(this, threadIndex, dialog);
+        connectHelper = ConnectivityHelper.getInstance();
+        cache = CacheManager.getInstance();
+        if (!connectHelper.isConnected()) {
+            Toaster.toastShort("No network connection.");
+            ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
+            if (comments != null) {
+                thread.getBodyComment().setChildren(comments);
+            }
+        } else {
+            // Load comments with dialog
+            ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading comments.");
+            ThreadManager.startGetComments(this, threadIndex, dialog);
+        }
     }
 
     /**
@@ -139,7 +155,13 @@ public class ThreadViewFragment extends Fragment {
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                reload();
+            	if (!connectHelper.isConnected()) {
+                    Toaster.toastShort("No network connection.");
+                    threadView.onRefreshComplete();
+                    //onLoadFinished(loader, ThreadList.getThreads());
+                } else {
+                    reload();
+                }
             }
         });
         Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");

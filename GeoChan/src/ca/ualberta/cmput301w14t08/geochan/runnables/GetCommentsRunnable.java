@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchDocs;
@@ -90,6 +91,7 @@ public class GetCommentsRunnable implements Runnable {
             ThreadComment threadComment = ThreadList.getThreads().get(task.getThreadIndex());
             Comment bodyComment = threadComment.getBodyComment();
             threadComment.setBodyComment(commentList.reconsructFromCommentList(commentList, bodyComment));
+            CacheManager.getInstance().serializeThreadCommentById(threadComment);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
