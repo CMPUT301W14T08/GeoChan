@@ -105,6 +105,7 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
         this.cache = null;
         this.manager = null;
         this.fragment = null;
+        this.dialog = null;
     }
 
     @Override
