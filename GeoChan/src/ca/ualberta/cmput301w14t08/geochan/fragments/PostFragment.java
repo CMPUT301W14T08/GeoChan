@@ -80,13 +80,13 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locationListenerService = new LocationListenerService(getActivity());
+        locationListenerService.startListening();
         Bundle args = getArguments();
         if (args.getLong("id") != -1) {
             commentToReplyTo = (Comment) args.getParcelable("cmt");
             thread = ThreadList.getThreads().get((int) args.getLong("id"));
         }
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
         geoLocation = new GeoLocation(locationListenerService);
         if (geoLocation.getLocationDescription() == null) {
             // Retrieve POI
@@ -131,7 +131,7 @@ public class PostFragment extends Fragment {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
                 Button locButton = (Button) getActivity().findViewById(R.id.location_button);
                 if (args.getString("LocationType") == "CURRENT_LOCATION") {
-                    locButton.setText("Current Location");
+                    locButton.setText("Location: Set");
                 } else {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");

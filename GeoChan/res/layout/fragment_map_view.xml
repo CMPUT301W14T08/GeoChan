@@ -7,14 +7,16 @@
     <org.osmdroid.views.MapView
         android:id="@+id/open_map_view"
         android:layout_width="fill_parent"
-        android:layout_height="389dp"
-        android:layout_weight="1.74" />
+        android:layout_height="0dp"
+        android:layout_weight="0.92" />
 
     <Button
         android:id="@+id/get_directions_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.08"
         android:onClick="getDirections"
+        android:background="@drawable/rounded_button_selector"
         android:text="@string/get_directions_button_text" />
 
 </LinearLayout>

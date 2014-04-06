@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
@@ -22,9 +23,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetThreadCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
-import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
 /**
  * Responsible for managing various threads that require to run in the
