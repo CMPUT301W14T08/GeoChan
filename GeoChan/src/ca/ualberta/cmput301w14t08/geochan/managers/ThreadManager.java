@@ -71,8 +71,8 @@ public class ThreadManager {
 
     private static final int KEEP_ALIVE_TIME = 1;
     private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
-    private static final int CORE_POOL_SIZE = 5;
-    private static final int MAXIMUM_POOL_SIZE = 5;
+    private static final int CORE_POOL_SIZE = 8;
+    private static final int MAXIMUM_POOL_SIZE = 8;
     private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at
                                                                     // 10MB??
 
@@ -162,6 +162,18 @@ public class ThreadManager {
                     ElasticSearchGetCommentsTask task = (ElasticSearchGetCommentsTask) inputMessage.obj;
                     task.getFragment().finishReload();
                     recycleCommentsTask(task);
+                    break;
+                    
+                case GET_COMMENTS_FAILED:
+                    ElasticSearchGetCommentsTask taskFail = (ElasticSearchGetCommentsTask) inputMessage.obj;
+                    taskFail.getFragment().finishReload();
+                    recycleCommentsTask(taskFail);
+                    break;    
+                    
+                case GET_COMMENT_LIST_FAILED:
+                    ElasticSearchGetCommentsTask taskListFail = (ElasticSearchGetCommentsTask) inputMessage.obj;
+                    taskListFail.getFragment().finishReload();
+                    recycleCommentsTask(taskListFail);
                     break;
 
                 case GET_IMAGE_RUNNING:
@@ -337,6 +349,12 @@ public class ThreadManager {
             instance.elasticSearchGetCommentsPool.execute(task.getGetCommentsRunnable());
             break;
         case GET_COMMENTS_COMPLETE:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_COMMENT_LIST_FAILED:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_COMMENTS_FAILED:
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;
         default:

@@ -53,7 +53,7 @@ public class ElasticSearchImageRunnable implements Runnable {
             if (jestResult == null || !jestResult.isSucceeded()) {
                 task.handleImageState(STATE_IMAGE_FAILED);
             }
-            task.setImageThread(null);
+            //task.setImageThread(null);
             Thread.interrupted();
         }
     }

@@ -54,7 +54,7 @@ public class ElasticSearchGetCommentListRunnable implements Runnable {
             if (result == null || !result.isSucceeded()) {
                 task.handleGetCommentListState(STATE_GET_LIST_FAILED);
             }
-            task.setGetCommentListThread(null);
+            //task.setGetCommentListThread(null);
             Thread.interrupted();
         }
     }

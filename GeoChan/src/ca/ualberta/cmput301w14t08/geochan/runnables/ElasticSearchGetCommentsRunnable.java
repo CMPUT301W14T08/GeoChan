@@ -111,7 +111,7 @@ public class ElasticSearchGetCommentsRunnable implements Runnable {
                 task.handleGetCommentsState(STATE_GET_COMMENTS_FAILED);
             }
             connection.disconnect();
-            task.setGetCommentsThread(null);
+            //task.setGetCommentsThread(null);
             Thread.interrupted();
         }
 

@@ -57,7 +57,7 @@ public class ElasticSearchGetImageRunnable implements Runnable {
             if (result == null || !result.isSucceeded()) {
                 task.handleGetImageState(STATE_GET_IMAGE_FAILED);
             }
-            task.setGetImageThread(null);
+            //task.setGetImageThread(null);
             Thread.interrupted();
         }
 

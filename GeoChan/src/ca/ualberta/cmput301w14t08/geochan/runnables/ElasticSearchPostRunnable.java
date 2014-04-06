@@ -66,7 +66,7 @@ public class ElasticSearchPostRunnable implements Runnable {
             if (jestResult == null || !jestResult.isSucceeded()) {
                 task.handlePostState(STATE_POST_FAILED);
             }
-            task.setPostThread(null);
+            //task.setPostThread(null);
             Thread.interrupted();
         }
     }

@@ -63,7 +63,7 @@ public class ElasticSearchUpdateRunnable implements Runnable {
             if (jestResult == null || !jestResult.isSucceeded()) {
                 task.handleUpdateState(STATE_UPDATE_FAILED);
             }
-            task.setUpdateThread(null);
+            //task.setUpdateThread(null);
             Thread.interrupted();
         }
     }
