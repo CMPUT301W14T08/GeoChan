@@ -18,7 +18,7 @@ public class ElasticSearchGetThreadCommentsTask implements GetThreadCommentsRunn
         this.getThreadCommentsRunnable = new ElasticSearchGetThreadCommentsRunnable(this);
     }
     
-    public void initGetThreadCommentsTask(ThreadManager manager, ThreadListFragment fragment, ProgressDiaog dialog) {
+    public void initGetThreadCommentsTask(ThreadManager manager, ThreadListFragment fragment, ProgressDialog dialog) {
         this.manager = manager;
         this.fragment = fragment;
         this.dialog = dialog;

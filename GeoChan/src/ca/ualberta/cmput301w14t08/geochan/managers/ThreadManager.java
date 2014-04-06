@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.managers;
 
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -64,10 +63,14 @@ public class ThreadManager {
     public static final int GET_IMAGE_FAILED = 15;
     public static final int GET_IMAGE_RUNNING = 16;
     public static final int GET_IMAGE_COMPLETE = 17;
-    // Space for map task states
+    // Get a point of interest
     public static final int GET_POI_FAILED = 18;
     public static final int GET_POI_RUNNING = 19;
     public static final int GET_POI_COMPLETE = 20;
+    // Retrieve the threadList from elasticSearch
+    public static final int GET_THREADS_FAILED = 21;
+    public static final int GET_THREADS_RUNNING = 22;
+    public static final int GET_THREADS_COMPLETE = 23;
 
     public static final int TASK_COMPLETE = 9001;
 
@@ -167,6 +170,17 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
+                case GET_THREADS_COMPLETE:
+                    ElasticSearchGetThreadCommentsTask threadTask = (ElasticSearchGetThreadCommentsTask) inputMessage.obj;
+                    threadTask.getFragment().finishReload();
+                    recycleGetThreadCommentsTask(threadTask);
+                    break;
+                    
+                case GET_THREADS_FAILED:
+                    ElasticSearchGetThreadCommentsTask threadTaskFail = (ElasticSearchGetThreadCommentsTask) inputMessage.obj;
+                    threadTaskFail.getFragment().finishReload();
+                    recycleGetThreadCommentsTask(threadTaskFail);
+                    break;   
 
                 case GET_COMMENTS_COMPLETE:
                     ElasticSearchGetCommentsTask task = (ElasticSearchGetCommentsTask) inputMessage.obj;
@@ -276,7 +290,7 @@ public class ThreadManager {
             task = new ElasticSearchGetThreadCommentsTask();
         }
         task.initGetThreadCommentsTask(instance, fragment, dialog);
-        instance.elasticSearchGetThreadCommentsPool.execute(task.getThreadCommentsRunnable());
+        instance.elasticSearchGetThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
         return task;
     }
 
@@ -388,6 +402,20 @@ public class ThreadManager {
             break;
         }
     }
+    
+    public void handleGetThreadCommentsState(ElasticSearchGetThreadCommentsTask task, int state) {
+        switch(state) {
+        case GET_THREADS_COMPLETE:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_THREADS_FAILED:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        default:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        }
+    }
 
     /**
      * Handle the possible states of the getImage task. As of now, just wait
@@ -467,5 +495,10 @@ public class ThreadManager {
     void recycleGetPOITask(GetPOITask task) {
         task.recycle();
         instance.getPOITaskQueue.offer(task);
+    }
+    
+    void recycleGetThreadCommentsTask(ElasticSearchGetThreadCommentsTask task) {
+        task.recycle();
+        instance.elasticSearchGetThreadCommentsTaskQueue.offer(task);
     }
 }

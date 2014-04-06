@@ -22,10 +22,9 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,9 +39,9 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
-import ca.ualberta.cmput301w14t08.geochan.loaders.ThreadCommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
@@ -56,8 +55,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * @author Henry Pabst, Artem Chikin
  * 
  */
-public class ThreadListFragment extends Fragment implements
-        LoaderCallbacks<ArrayList<ThreadComment>> {
+public class ThreadListFragment extends Fragment {
     private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
@@ -77,6 +75,9 @@ public class ThreadListFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         // locationListener = new LocationListenerService(getActivity());
         setHasOptionsMenu(true);
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading comments.");
+        ThreadManager.startGetThreadComments(this, dialog);
     }
 
     /**
@@ -101,8 +102,6 @@ public class ThreadListFragment extends Fragment implements
         connectHelper = ConnectivityHelper.getInstance();
         if (!connectHelper.isConnected()) {
             Toaster.toastShort("No network connection.");
-        } else {
-            getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
         }
     }
 
@@ -238,54 +237,16 @@ public class ThreadListFragment extends Fragment implements
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
-     * android.os.Bundle)
-     */
-    @Override
-    public Loader<ArrayList<ThreadComment>> onCreateLoader(int id, Bundle args) {
-        return new ThreadCommentLoader(getActivity());
+    public void reload() {
+        ThreadManager.startGetThreadComments(this, null);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
-     * .Loader, java.lang.Object)
-     */
-    @Override
-    public void onLoadFinished(Loader<ArrayList<ThreadComment>> loader,
-            ArrayList<ThreadComment> list) {
-        ThreadList.setThreads(list);
-        // After the load is finished, serialize the thread list to the local
-        // cache
-        cacheManager.serializeThreadList(list);
-        adapter.setList(list);
+    
+    public void finishReload() {
+        SortUtil.sortThreads(prefManager.getThreadSort(), ThreadList.getThreads());
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+        // Assign custom adapter to the thread listView.
+        threadListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         threadListView.onRefreshComplete();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
-     * .Loader)
-     */
-    @Override
-    public void onLoaderReset(Loader<ArrayList<ThreadComment>> loader) {
-        adapter.setList(new ArrayList<ThreadComment>());
-    }
-
-    private void reload() {
-        if(getLoaderManager().getLoader(0) != null) {
-            getLoaderManager().getLoader(0).forceLoad();
-        } else {
-            getLoaderManager().initLoader(ThreadCommentLoader.LOADER_ID, null, this);
-            getLoaderManager().getLoader(0).forceLoad();
-        }
     }
 }
