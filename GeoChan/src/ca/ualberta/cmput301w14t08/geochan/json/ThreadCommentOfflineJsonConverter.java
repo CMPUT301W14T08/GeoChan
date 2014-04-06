@@ -30,7 +30,6 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -51,7 +50,6 @@ import com.google.gson.JsonSerializer;
  * offline caching.
  * 
  */
-// TODO: IMPLEMENT
 public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadComment>,
         JsonDeserializer<ThreadComment> {
 

@@ -48,7 +48,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
@@ -73,7 +72,6 @@ public class EditFragment extends Fragment {
     private Comment editComment;
     private ThreadComment thread;
     private EditText newTextPost;
-    private ImageView oldThumbView;
     /**
      * The original thumbnail of the Comment being edited. Contained as a variable in
      * EditCommentFragment so that it persists and does not change as the user alters the

@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -26,7 +25,6 @@ import com.google.gson.reflect.TypeToken;
 public class GetCommentsRunnable implements Runnable {
 
     private GetCommentsTask task;
-    private String type = ElasticSearchClient.TYPE_COMMENT;
     public static final int STATE_GET_COMMENTS_FAILED = -1;
     public static final int STATE_GET_COMMENTS_RUNNING = 0;
     public static final int STATE_GET_COMMENTS_COMPLETE = 1;

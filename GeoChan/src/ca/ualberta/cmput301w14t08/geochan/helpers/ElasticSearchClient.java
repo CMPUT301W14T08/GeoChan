@@ -22,24 +22,7 @@ package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
-import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
-import io.searchbox.core.Count;
-import io.searchbox.core.Search;
-
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
-import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchCountResponse;
-import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
-import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchSearchResponse;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * This class is responsible for all ElasticSearch operations. NEED MORE
@@ -49,7 +32,6 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
-    private static Gson gson;
     private static JestClient client;
     // TODO CHANGE THESE BACK!!!
     public static final String TYPE_COMMENT = "geoCommentTest";
@@ -61,7 +43,6 @@ public class ElasticSearchClient {
 
     private ElasticSearchClient() {
         ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
-        gson = GsonHelper.getOnlineGson();
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(config);
         client = factory.getObject();

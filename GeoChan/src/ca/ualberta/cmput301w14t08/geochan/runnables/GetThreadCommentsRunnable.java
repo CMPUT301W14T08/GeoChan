@@ -1,15 +1,14 @@
 package ca.ualberta.cmput301w14t08.geochan.runnables;
 
+import io.searchbox.client.JestResult;
+import io.searchbox.core.Search;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import io.searchbox.client.JestResult;
-import io.searchbox.core.Get;
-import io.searchbox.core.Search;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
-import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -17,7 +16,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetThreadCommentsTask;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 public class GetThreadCommentsRunnable implements Runnable {
