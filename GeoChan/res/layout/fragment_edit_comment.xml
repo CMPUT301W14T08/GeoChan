@@ -26,19 +26,6 @@
 		android:scrollbars = "vertical"
         android:layout_below="@+id/comment_editing" />
     
-    <ImageView
-        android:id="@+id/old_thumb"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/old_comment_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/image_desc"
-        android:paddingBottom="2dp"
-        android:paddingRight="2dp"
-        android:paddingTop="2dp"
-        android:src="@drawable/rect2" />
-    
     <EditText
         android:id="@+id/editBody"
         android:layout_width="match_parent"
