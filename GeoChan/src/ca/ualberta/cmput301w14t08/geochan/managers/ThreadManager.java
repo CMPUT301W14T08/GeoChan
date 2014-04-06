@@ -22,6 +22,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetImageTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetThreadCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
@@ -92,14 +93,17 @@ public class ThreadManager {
     private final BlockingQueue<Runnable> elasticSearchUpdateRunnableQueue;
     // es GetImage task
     private final BlockingQueue<Runnable> elasticSearchGetImageRunnableQueue;
+    private final BlockingQueue<Runnable> elasticSearchGetThreadCommentsRunnableQueue;
+
     // get Point of Interest Task
-    private final BlockingQueue<Runnable> GetPOIRunnableQueue;
+    private final BlockingQueue<Runnable> getPOIRunnableQueue;
 
     // Queues of tasks this manager is responsible for
     private final Queue<ElasticSearchGetCommentsTask> elasticSearchGetCommentsTaskQueue;
     private final Queue<ElasticSearchPostTask> elasticSearchPostTaskQueue;
     private final Queue<ElasticSearchGetImageTask> elasticSearchGetImageTaskQueue;
     private final Queue<GetPOITask> getPOITaskQueue;
+    private final Queue<ElasticSearchGetThreadCommentsTask> elasticSearchGetThreadCommentsTaskQueue;
 
     // Thread pools for all the possible threads, one pool per each runnable
     private final ThreadPoolExecutor elasticSearchGetCommentListPool;
@@ -108,6 +112,7 @@ public class ThreadManager {
     private final ThreadPoolExecutor elasticSearchPostPool;
     private final ThreadPoolExecutor elasticSearchUpdatePool;
     private final ThreadPoolExecutor elasticSearchGetImagePool;
+    private final ThreadPoolExecutor elasticSearchGetThreadCommentsPool;
     private final ThreadPoolExecutor getPOIPool;
 
     private Handler handler;
@@ -127,11 +132,13 @@ public class ThreadManager {
         elasticSearchPostRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchUpdateRunnableQueue = new LinkedBlockingQueue<Runnable>();
         elasticSearchGetImageRunnableQueue = new LinkedBlockingQueue<Runnable>();
-        GetPOIRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        elasticSearchGetThreadCommentsRunnableQueue = new LinkedBlockingQueue<Runnable>();
+        getPOIRunnableQueue = new LinkedBlockingQueue<Runnable>();
 
         elasticSearchGetCommentsTaskQueue = new LinkedBlockingQueue<ElasticSearchGetCommentsTask>();
         elasticSearchPostTaskQueue = new LinkedBlockingQueue<ElasticSearchPostTask>();
         elasticSearchGetImageTaskQueue = new LinkedBlockingQueue<ElasticSearchGetImageTask>();
+        elasticSearchGetThreadCommentsTaskQueue = new LinkedBlockingQueue<ElasticSearchGetThreadCommentsTask>();
         getPOITaskQueue = new LinkedBlockingQueue<GetPOITask>();
 
         elasticSearchGetCommentListPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
@@ -146,8 +153,10 @@ public class ThreadManager {
                 KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchUpdateRunnableQueue);
         elasticSearchGetImagePool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
                 KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetImageRunnableQueue);
+        elasticSearchGetThreadCommentsPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_TIME, KEEP_ALIVE_TIME_UNIT, elasticSearchGetThreadCommentsRunnableQueue);
         getPOIPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME,
-                KEEP_ALIVE_TIME_UNIT, GetPOIRunnableQueue);
+                KEEP_ALIVE_TIME_UNIT, getPOIRunnableQueue);
 
         handler = new Handler(Looper.getMainLooper()) {
 
