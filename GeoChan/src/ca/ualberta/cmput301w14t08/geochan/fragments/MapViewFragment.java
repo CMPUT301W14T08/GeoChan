@@ -46,8 +46,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  */
 public class MapViewFragment extends Fragment {
 
-	final public static double ZOOM_FACTOR = 1.2;
-
 	private MapView openMapView;
 	private LocationListenerService locationListenerService;
 	private Marker originalPostMarker;
@@ -152,7 +150,8 @@ public class MapViewFragment extends Fragment {
 			originalPostMarker = createMarker(geoLocation, "OP");
 			originalPostMarker.showInfoWindow();
 			originalPostMarker.setIcon(getResources().getDrawable(
-					R.drawable.ic_marker2));
+					R.drawable.red_map_pin));
+			startAndFinishMarkers.add(originalPostMarker);
 
 			handleChildComments(topComment);
 
@@ -224,7 +223,7 @@ public class MapViewFragment extends Fragment {
 					replyMarker.setAnchor(Marker.ANCHOR_CENTER,
 							Marker.ANCHOR_BOTTOM);
 					replyMarker.setIcon(getResources().getDrawable(
-							R.drawable.ic_dark_blue_pin_hi));
+							R.drawable.blue_map_pin));
 
 					replyPostMarkers.add(replyMarker);
 					handleChildComments(childComment);
@@ -248,8 +247,8 @@ public class MapViewFragment extends Fragment {
 		} else {
 			return (location.getLatitude() >= -90.0
 					|| location.getLatitude() <= 90.0
-					|| location.getLongitude() >= -180.0 || location
-					.getLongitude() <= 180.0);
+					|| location.getLongitude() >= -180.0 || 
+					location.getLongitude() <= 180.0);
 		}
 	}
 
@@ -405,15 +404,20 @@ public class MapViewFragment extends Fragment {
 			GeoLocation currentLocation = new GeoLocation(
 					locationListenerService);
 
-			Marker currentLocationMarker = createMarker(currentLocation,
-					"Your Location");
-			currentLocationMarker.setIcon(getResources().getDrawable(
-					R.drawable.ic_google_maps_pin_green_md));
+			Marker currentLocationMarker = new Marker(openMapView);
+
+			currentLocationMarker.setTitle("Current Location");
+			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
 
 			ProgressDialog dialog = new ProgressDialog(getActivity());
 			dialog.setMessage("Retrieving Location");
 			ThreadManager.startGetPOI(currentLocation, dialog,
 					currentLocationMarker);
+
+			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER,
+					Marker.ANCHOR_BOTTOM);
+			currentLocationMarker.setIcon(getResources().getDrawable(
+					R.drawable.green_map_pin));
 
 			startAndFinishMarkers.add(currentLocationMarker);
 
