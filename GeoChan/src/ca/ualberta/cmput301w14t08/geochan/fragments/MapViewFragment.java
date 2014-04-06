@@ -3,16 +3,21 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,6 +56,7 @@ public class MapViewFragment extends Fragment {
     private Comment topComment;
     private ArrayList<GeoPoint> geoPoints;
     private ArrayList<Marker> markers;
+    private GridMarkerClusterer poiMarkers;
 
     /**
      * Gets the view when inflated, then calls setZoomLevel to display the
@@ -95,6 +101,11 @@ public class MapViewFragment extends Fragment {
         Bundle args = getArguments();
         topComment = (Comment) args.getParcelable("thread_comment");
 
+        poiMarkers = new GridMarkerClusterer(getActivity());
+        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster);
+        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+        poiMarkers.setIcon(clusterIcon);
+        
         GeoLocation geoLocation = topComment.getLocation();
         if (geoLocation.getLocation() == null) {
             ErrorDialog.show(getActivity(), "Thread has no location");
@@ -103,7 +114,6 @@ public class MapViewFragment extends Fragment {
         } else {
             this.setupMap(topComment);
             this.setMarkers();
-            ;
             this.setZoomLevel();
         }
     }
@@ -141,7 +151,7 @@ public class MapViewFragment extends Fragment {
             Marker startMarker = createMarker(geoLocation, "OP");
             startMarker.showInfoWindow();
 
-            markers.add(startMarker);
+            poiMarkers.add(startMarker);
             handleChildComments(topComment);
         }
         openMapView.invalidate();
@@ -194,7 +204,8 @@ public class MapViewFragment extends Fragment {
                 GeoLocation commentLocation = childComment.getLocation();
                 if (commentLocationIsValid(childComment)) {
                     geoPoints.add(commentLocation.makeGeoPoint());
-                    markers.add(createMarker(commentLocation, "reply"));
+                    Marker replyMarker = createMarker(commentLocation, "Reply");
+                    poiMarkers.add(replyMarker);
                     handleChildComments(childComment);
                 }
             }
@@ -260,6 +271,12 @@ public class MapViewFragment extends Fragment {
         }
     }
 
+    /**
+     * 
+     * @param geoLocation
+     * @param postType
+     * @return
+     */
     public Marker createMarker(GeoLocation geoLocation, String postType) {
 
         Marker marker = new Marker(openMapView);
@@ -337,7 +354,21 @@ public class MapViewFragment extends Fragment {
 
             roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
             openMapView.getOverlays().add(roadOverlay);
-
+            
+            Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+            for (int i=0; i<road.mNodes.size(); i++){
+                    RoadNode node = road.mNodes.get(i);
+                    Marker nodeMarker = new Marker(openMapView);
+                    nodeMarker.setPosition(node.mLocation);
+                    nodeMarker.setIcon(nodeIcon);
+                    nodeMarker.setTitle("Step "+i);
+                    nodeMarker.setSnippet(node.mInstructions);
+                    nodeMarker.setSubDescription(Road.getLengthDurationText(node.mLength, node.mDuration));
+                    openMapView.getOverlays().add(nodeMarker);
+                    Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
+                    nodeMarker.setImage(icon);
+                    poiMarkers.add(nodeMarker);
+            }
             return null;
         }
 
@@ -353,12 +384,13 @@ public class MapViewFragment extends Fragment {
             geoPoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
                     .getLongitude()));
             Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
-
+            poiMarkers.add(currentLocationMarker);
+            
             currentLocationMarker.showInfoWindow();
 
             setZoomLevel();
 
-            openMapView.getOverlays().add(currentLocationMarker);
+            openMapView.getOverlays().add(poiMarkers);
             openMapView.invalidate();
         }
     }
