@@ -35,7 +35,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,7 +69,7 @@ public class CustomLocationFragment extends Fragment {
 	private FragmentManager fm;
 	private MapView openMapView;
 	private LocationListenerService locationListenerService;
-	// private Marker locationMarker;
+	private Marker currentLocationMarker;
 	private GeoLocation newLocation;
 	private GeoLocation currentLocation;
 	private MapEventsOverlay mapEventsOverlay;
@@ -114,7 +113,6 @@ public class CustomLocationFragment extends Fragment {
 		super.onStart();
 		GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
 		logArray = log.getLogEntries();
-		Log.e("LOG", Integer.toString(logArray.size()));
 
 		FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
 				.findFragmentByTag("favouritesFrag");
@@ -193,13 +191,13 @@ public class CustomLocationFragment extends Fragment {
 
 		// if valid current location, put it on the map
 		if (currentLocation.getLocation() != null) {
-			Marker marker = new Marker(openMapView);
-			marker.setPosition(currentLocation.makeGeoPoint());
-			marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-			marker.setTitle("Current Location");
-			marker.setIcon(getResources().getDrawable(
+			currentLocationMarker = new Marker(openMapView);
+			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
+			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+			currentLocationMarker.setTitle("Current Location");
+			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.current_location_pin));
-			openMapView.getOverlays().add(marker);
+			openMapView.getOverlays().add(currentLocationMarker);
 
 			openMapView.getController().setZoom(13);
 			openMapView.getController().animateTo(
@@ -318,6 +316,7 @@ public class CustomLocationFragment extends Fragment {
 		openMapView.getOverlays().clear();
 		openMapView.getOverlays().add(mapEventsOverlay);
 		openMapView.getOverlays().add(locationMarker);
+		openMapView.getOverlays().add(currentLocationMarker);
 		openMapView.invalidate();
 	}
 
