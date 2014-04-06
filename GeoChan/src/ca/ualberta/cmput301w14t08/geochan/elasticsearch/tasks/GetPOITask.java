@@ -88,5 +88,6 @@ public class GetPOITask implements GetPOIRunnableInterface {
         this.location = null;
         this.cache = null;
         this.manager = null;
+        setCurrentThread(null);
     }
 }

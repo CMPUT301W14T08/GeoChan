@@ -179,7 +179,9 @@ public class ThreadManager {
                     ElasticSearchGetImageTask imageTaskComplete = (ElasticSearchGetImageTask) inputMessage.obj;
                     imageTaskComplete.getDialog().dismiss();
                     Bitmap bitmap = imageTaskComplete.getImageCache();
+                    String id = imageTaskComplete.getId();
                     imageTaskComplete.getmImageWeakRef().get().setImageBitmap(bitmap);
+                    CacheManager.getInstance().serializeImage(bitmap, id);
                     recycleGetImageTask(imageTaskComplete);
                     break;
 
@@ -189,6 +191,7 @@ public class ThreadManager {
                         poiTaskRunning.getDialog().show();
                     }
                     break;
+                    
                 case GET_POI_COMPLETE:
                     GetPOITask poiTaskComplete = (GetPOITask) inputMessage.obj;
                     if (poiTaskComplete.getDialog() != null) {
@@ -198,6 +201,7 @@ public class ThreadManager {
                             poiTaskComplete.getPOICache());
                     recycleGetPOITask(poiTaskComplete);
                     break;
+                    
                 case GET_POI_FAILED:
                     GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
                     if (poiTaskFailed.getDialog() != null) {
@@ -206,12 +210,12 @@ public class ThreadManager {
                     poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
                     recycleGetPOITask(poiTaskFailed);
                     break;
+                    
                 default:
                     super.handleMessage(inputMessage);
                     break;
                 }
             }
-
         };
     }
 

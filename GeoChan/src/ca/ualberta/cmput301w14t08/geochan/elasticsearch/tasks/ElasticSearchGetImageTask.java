@@ -16,6 +16,7 @@ public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
      */
     private String id;
     private ProgressDialog dialog;
+    
     /*
      * Creates a weak reference to the ImageView that this Task will populate.
      * The weak reference prevents memory leaks and crashes, because it

@@ -281,7 +281,6 @@ public class ThreadViewAdapter extends BaseAdapter {
                     Fragment fragment = new ExpandImageFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("id", comment.getId());
-                    bundle.putParcelable("img", comment.getImage());
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {

@@ -246,9 +246,11 @@ public class PostFragment extends Fragment {
                                                                         // file
                                                                         // name
                         if(fromFav == true){
+                            arg0.dismiss();
                             getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                     ImageHelper.REQUEST_GALLERY);
                         } else {
+                            arg0.dismiss();
                             startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_GALLERY);
                         }
@@ -257,6 +259,7 @@ public class PostFragment extends Fragment {
                     }
                 }
             });
+            
             dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
                     FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
@@ -277,9 +280,11 @@ public class PostFragment extends Fragment {
                                                                         // file
                                                                         // name
                         if(fromFav == true){
+                            arg0.dismiss();
                             getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
                         } else {
+                            arg0.dismiss();
                             startActivityForResult(Intent.createChooser(intent, "Test"),
                                     ImageHelper.REQUEST_CAMERA);
                         }

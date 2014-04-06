@@ -59,7 +59,7 @@ public class GetPOIRunnable implements Runnable {
                 task.handleGetPOIState(STATE_GET_POI_COMPLETE);
                 Log.e("POI", "COMPLETE");
             }
-            task.setGetPOIThread(null);
+            //task.setGetPOIThread(null);
             Thread.interrupted();
         }
     }
