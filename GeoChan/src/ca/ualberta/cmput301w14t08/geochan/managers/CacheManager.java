@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -152,6 +153,7 @@ public class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.e("Thread", "Serialized");
     }
     
     /**
@@ -184,6 +186,11 @@ public class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return thread.getBodyComment().getChildren();
+        if (thread != null) {
+            Log.e("Thread", "Deserialized");
+            return thread.getBodyComment().getChildren();
+        } else {
+        	return null;
+        }
     }
 }

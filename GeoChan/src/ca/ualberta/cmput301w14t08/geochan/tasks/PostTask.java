@@ -1,6 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import ca.ualberta.cmput301w14t08.geochan.interfaces.ImageRunnableInterface;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.PostImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
@@ -9,7 +9,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.PostImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.PostRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.UpdateRunnable;
 
-public class PostTask implements ImageRunnableInterface, PostRunnableInterface,
+public class PostTask implements PostImageRunnableInterface, PostRunnableInterface,
         UpdateRunnableInterface {
     private Comment comment;
     private String title;
