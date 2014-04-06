@@ -20,6 +20,7 @@
             android:layout_weight="0.5"
             android:layout="@+id/new_location_button"
             android:onClick="submitCurrentLocation"
+            android:background="@drawable/rounded_button_selector"
             android:text="@string/current_location_button_text" />
 
         <Button
@@ -29,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:onClick="submitLocation"
+            android:background="@drawable/rounded_button_selector"
             android:text="@string/new_location_button_text" />
     </LinearLayout>
     

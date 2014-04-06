@@ -45,7 +45,6 @@ public class ThreadList {
         threads = listOfThreads;
     }
 
-
     /**
      * Creates a new ThreadComment and adds it to to the ThreadList.
      * 

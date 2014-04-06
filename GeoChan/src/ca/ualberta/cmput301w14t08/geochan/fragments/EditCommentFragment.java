@@ -52,6 +52,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -63,12 +64,14 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * they have made. The user can only edit a comment that they have made if
  * their current hash (based on device ID and current username) matches the
  * hash stored in the Comment being edited.
+ * 
  * @author Henry Pabst
- *
+ * 
  */
 public class EditCommentFragment extends Fragment {
     private static final int MAX_BITMAP_DIMENSIONS = 600;
     private Comment editComment;
+    private ThreadComment thread;
     private EditText newTextPost;
     private ImageView oldThumbView;
     /**
@@ -83,14 +86,14 @@ public class EditCommentFragment extends Fragment {
      * original Comment.
      */
     private static String oldText;
-    
-    
+    private boolean isThread;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_edit_comment, container, false);
     }
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,24 +101,27 @@ public class EditCommentFragment extends Fragment {
         item.setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
-       super.onCreate(savedInstanceState); 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
+
     
     /**
      * Overriden method from Fragment. Determines the Comment being edited based on the id
      * contained in fragment arguments as well as the ThreadComment containing said Comment.
      * After the Comment is found the appropriate UI elements and state variables are set.
      */
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         ThreadComment thread;
         Bundle bundle = getArguments();
         String commentId = bundle.getString("commentId");
         int threadIndex = bundle.getInt("threadIndex");
+        thread = ThreadList.getThreads().get(threadIndex);
         boolean fromFavs = bundle.getBoolean("fromFavs");
         if(fromFavs == true){
             FavouritesLog log = FavouritesLog.getInstance(getActivity());
@@ -123,23 +129,20 @@ public class EditCommentFragment extends Fragment {
         } else {
             thread = ThreadList.getThreads().get(threadIndex);
         }
-        Log.e("DEBUG","text of thread's body comment:" + thread.getBodyComment().getTextPost());
-        Log.e("DEBUG","thread not null" + thread.toString());
-        Log.e("DEBUG","id not null" + commentId);
-        Log.e("DEBUG", "children not empty" + String.valueOf(thread.getBodyComment().getChildren().size()));
-        if(thread.getBodyComment().getId().equals(commentId)){
+        if (thread.getBodyComment().getId().equals(commentId)){
             editComment = thread.getBodyComment();
+            isThread = true;
         } else {
             getCommentFromId(commentId, thread.getBodyComment().getChildren());
+            isThread = false;
         }
-        if(EditCommentFragment.oldText == null){
+        if (EditCommentFragment.oldText == null){
             Log.e("DEBUG","comment not null" + editComment.toString());
             EditCommentFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
         }
-        if(EditCommentFragment.oldThumbnail == null
-            && editComment.getImageThumb() != null){
+        if (EditCommentFragment.oldThumbnail == null && editComment.getImageThumb() != null) {
             EditCommentFragment.oldThumbnail = editComment.getImageThumb();
             oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
             oldThumbView.setImageBitmap(EditCommentFragment.oldThumbnail);
@@ -148,6 +151,7 @@ public class EditCommentFragment extends Fragment {
         newTextPost.setText(editComment.getTextPost());
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
     }
+
     
     /**
      * Overriden method from Fragment. Sets the appropriate TextView and ImageView
@@ -155,11 +159,12 @@ public class EditCommentFragment extends Fragment {
      * returning from changing the location, the new coordinates are placed on the
      * edit_location_button Button.
      */
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Bundle args = getArguments();
-        if (EditCommentFragment.oldText != null){
+        if (EditCommentFragment.oldText != null) {
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditCommentFragment.oldText);
         }
@@ -183,25 +188,26 @@ public class EditCommentFragment extends Fragment {
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
+                    locButton.setText(format.format(lat) + ", " + format.format(lon));
                     locButton
-                            .setText(format.format(lat) +", " + format.format(lon));
-                    locButton.setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                            .setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
                 }
             }
         }
     }
-    
+
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         editComment.setTextPost(newTextPost.getText().toString());
     }
-    
+
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
     }
-    
+
+
     /**
      * Recursively finds the Comment with the passed ID and sets it to
      * the variable editComment. If a Comment with the passed ID is not
@@ -221,14 +227,14 @@ public class EditCommentFragment extends Fragment {
         }
         return;
     }
-    
+
     /**
      * Allows the user to change the image attached to their comment or remove it
      * entirely. Prompts the user with an AlertDialog as to which option they would like
      * to select. 
      * @param view The Button pressed to call editImage.
      */
-    public void editImage(View view){
+    public void editImage(View view) {
         if (view.getId() == R.id.attach_image_button) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(R.string.attach_image_title);
@@ -262,16 +268,15 @@ public class EditCommentFragment extends Fragment {
                     }
                 }
             });
-            dialog.setNeutralButton("Remove Image", new DialogInterface.OnClickListener(){
-               public void onClick(DialogInterface arg0, int arg1){
-                   editComment.setImage(null);
-                   editComment.setImageThumb(null);
-               }
+            dialog.setNeutralButton("Remove Image", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    editComment.setImage(null);
+                    editComment.setImageThumb(null);
+                }
             });
             dialog.show();
         }
-    }
-    
+    }    
     
     /**
      * Overriden method from Fragment. Sets the image and thumbnail in the comment being
@@ -300,7 +305,7 @@ public class EditCommentFragment extends Fragment {
                 image = scaleImage(imageBitmap);
             }
         }
-        editComment.setImage(image);   
+        editComment.setImage(image);
         Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 96, 96);
         editComment.setImageThumb(imageThumb);
     }
@@ -325,7 +330,7 @@ public class EditCommentFragment extends Fragment {
         }
         return bitmap;
     }
-    
+
     /**
      * Sets the text of the comment being edited to the new text entered by the user,
      * sets the value of EditCommentFragment.oldText and EditCommentFragment.oldThumbnail
@@ -333,16 +338,21 @@ public class EditCommentFragment extends Fragment {
      * user to their previous fragment.
      * @param view The button that was pressed to call makeEdit.
      */
-    public void makeEdit(View view){
+    public void makeEdit(View view) {
         EditCommentFragment.oldText = null;
         EditCommentFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
+        if (isThread) {
+            ThreadManager.startPost(editComment, thread.getTitle());
+        } else {
+            ThreadManager.startPost(editComment, null);
+        }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         getFragmentManager().popBackStackImmediate();
-        
+
     }
 
 }

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -187,6 +186,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         return TYPE_MAX_COUNT;
     }
 
+    
     @Override
     /**
      * Depending on the list item type, inflate the correct
@@ -280,7 +280,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                     // Perform action on click
                     Fragment fragment = new ExpandImageFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("img", comment.getImage());
+                    bundle.putString("id", comment.getId());
                     fragment.setArguments(bundle);
                     Fragment fav = manager.findFragmentByTag("favThrFragment");
                     if (fav != null) {
@@ -343,7 +343,7 @@ public class ThreadViewAdapter extends BaseAdapter {
         final ImageButton editButton = (ImageButton) convertView
                 .findViewById(R.id.thread_edit_button);
 
-        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(
+        if (HashHelper.getHash(PreferencesManager.getInstance().getUser()).equals(
                 thread.getBodyComment().getHash())) {
             editButton.setVisibility(View.VISIBLE);
         }
@@ -373,20 +373,20 @@ public class ThreadViewAdapter extends BaseAdapter {
                 }
             });
         }
-        
-        if(editButton != null){
-            editButton.setOnClickListener(new View.OnClickListener(){
-               public void onClick(View v){
-                   Fragment fragment = new EditCommentFragment();
-                   Bundle bundle = new Bundle();
-                   bundle.putInt("threadIndex", id);
-                   bundle.putString("commentId", thread.getBodyComment().getId());
-                   fragment.setArguments(bundle);
-                   manager.beginTransaction()
-                           .replace(R.id.fragment_container, fragment, "editFrag").addToBackStack(null)
-                           .commit();
-                   manager.executePendingTransactions();
-               }
+
+        if (editButton != null) {
+            editButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Fragment fragment = new EditCommentFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("threadIndex", id);
+                    bundle.putString("commentId", thread.getBodyComment().getId());
+                    fragment.setArguments(bundle);
+                    manager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment, "editFrag")
+                            .addToBackStack(null).commit();
+                    manager.executePendingTransactions();
+                }
             });
         }
 
@@ -477,17 +477,17 @@ public class ThreadViewAdapter extends BaseAdapter {
             if (locDescriptor != null) {
                 origPostLocationText.setText("near: " + locDescriptor);
             } else {
-            // The rounding of long and lat for max 4 decimal digits.
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
+                // The rounding of long and lat for max 4 decimal digits.
+                DecimalFormat format = new DecimalFormat();
+                format.setRoundingMode(RoundingMode.HALF_EVEN);
+                format.setMinimumFractionDigits(0);
+                format.setMaximumFractionDigits(4);
 
-            origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
-                    + " Longitude: " + format.format(loc.getLongitude()));
-            } 
+                origPostLocationText.setText("Latitude: " + format.format(loc.getLatitude())
+                        + " Longitude: " + format.format(loc.getLongitude()));
+            }
         }
-        
+
         // Set the thumbnail is there is an image
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView

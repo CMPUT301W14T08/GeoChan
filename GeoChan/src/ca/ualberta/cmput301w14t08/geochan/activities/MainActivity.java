@@ -41,6 +41,8 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.MapViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
@@ -60,7 +62,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
         // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
         ConnectivityHelper.generateInstance(this);
+        Toaster.generateInstance(this);
         PreferencesManager.generateInstance(this);
+        CacheManager.generateInstance(this);
         ThreadListFragment fragment = new ThreadListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
                 .commit();
@@ -83,7 +87,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return true;
 
         case R.id.action_favourites:
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new FavouritesFragment(), "favouritesFrag")
                     .addToBackStack(null).commit();
@@ -202,8 +205,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
         fragment.attachImage(view);
     }
-    
-    public void editImage(View view){
+
+    public void editImage(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
@@ -214,8 +217,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
         fragment.editImage(view);
     }
-    
-    public void makeEdit(View view){
+
+    public void makeEdit(View view) {
         EditCommentFragment fragment = (EditCommentFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
