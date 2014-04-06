@@ -26,7 +26,9 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -67,12 +69,15 @@ public class CustomLocationFragment extends Fragment {
 	private CustomLocationAdapter customLocationAdapter;
 	private int postType;
 	private FragmentManager fm;
-	private MapView openMapView;
 	private LocationListenerService locationListenerService;
 	private Marker currentLocationMarker;
 	private GeoLocation newLocation;
 	private GeoLocation currentLocation;
+	private MapView openMapView;
 	private MapEventsOverlay mapEventsOverlay;
+	private ArrayList<Marker> markers;
+	private MarkerInfoWindow currentLocationInfoWindow;
+	private MarkerInfoWindow newLocationInfoWindow;
 
 	// flags for type of post that initiated this fragment
 	public static final int POST = 1;
@@ -129,6 +134,11 @@ public class CustomLocationFragment extends Fragment {
 		locationListenerService = new LocationListenerService(getActivity());
 		locationListenerService.startListening();
 
+		currentLocationInfoWindow = new MarkerInfoWindow(
+				R.layout.bonuspack_bubble, openMapView);
+		newLocationInfoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
+				openMapView);
+
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -172,6 +182,12 @@ public class CustomLocationFragment extends Fragment {
 		openMapView.invalidate();
 	}
 
+	private void hideInfoWindows() {
+		for (Marker marker : markers) {
+			marker.hideInfoWindow();
+		}
+	}
+
 	/**
 	 * Sets up the map. Implements a map button receiver so that the user can
 	 * click on the map to set their location. Then gets the users current
@@ -189,20 +205,32 @@ public class CustomLocationFragment extends Fragment {
 
 		currentLocation = new GeoLocation(locationListenerService);
 
+		markers = new ArrayList<Marker>();
+
 		// if valid current location, put it on the map
 		if (currentLocation.getLocation() != null) {
 			currentLocationMarker = new Marker(openMapView);
+
+			currentLocationInfoWindow = new MarkerInfoWindow(
+					R.layout.bonuspack_bubble, openMapView);
+			currentLocationMarker.setInfoWindow(currentLocationInfoWindow);
+
 			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
-			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER,
+					Marker.ANCHOR_BOTTOM);
 			currentLocationMarker.setTitle("Current Location");
 			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.current_location_pin));
+
+			setMarkerListeners(currentLocationMarker);
+			
 			openMapView.getOverlays().add(currentLocationMarker);
 
 			openMapView.getController().setZoom(13);
 			openMapView.getController().animateTo(
 					currentLocation.makeGeoPoint());
 
+			markers.add(currentLocationMarker);
 		} else {
 			openMapView.getController().setZoom(3);
 		}
@@ -255,6 +283,56 @@ public class CustomLocationFragment extends Fragment {
 		}
 	}
 
+	private void setMarkerListeners(Marker locationMarker) {
+
+		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker, MapView map) {
+				if (marker.isInfoWindowShown() != true) {
+					hideInfoWindows();
+					marker.showInfoWindow();
+				} else {
+					hideInfoWindows();
+				}
+				return false;
+			}
+
+		});
+
+		if (locationMarker.isDraggable()) {
+			locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
+				/**
+				 * Called as the marker is being dragged, no implementation
+				 */
+				@Override
+				public void onMarkerDrag(Marker marker) {
+				}
+
+				/**
+				 * Called when the onDragListen action is complete Updates the
+				 * location and POI when the drag is finished
+				 */
+				@Override
+				public void onMarkerDragEnd(Marker marker) {
+					GeoLocation geoLocation = new GeoLocation(marker.getPosition()
+							.getLatitude(), marker.getPosition().getLongitude());
+					ProgressDialog dialog = new ProgressDialog(getActivity());
+					dialog.setMessage("Retrieving Location");
+					ThreadManager.startGetPOI(geoLocation, dialog, marker);
+				}
+
+				/**
+				 * Called when the drag operation begins. No implementation at this
+				 * time
+				 */
+				@Override
+				public void onMarkerDragStart(Marker marker) {
+					hideInfoWindows();
+				}
+			});
+		}
+	}
+
 	/**
 	 * Creates a marker object by taking in latitude and longitude values and
 	 * sets its position on the map view. Also adds a listener to the Marker for
@@ -267,6 +345,8 @@ public class CustomLocationFragment extends Fragment {
 
 		// create the marker and set it up
 		Marker locationMarker = new Marker(openMapView);
+		locationMarker.setInfoWindow(newLocationInfoWindow);
+
 		locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(),
 				geoLocation.getLongitude()));
 		locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -275,48 +355,28 @@ public class CustomLocationFragment extends Fragment {
 		locationMarker.setIcon(getResources().getDrawable(
 				R.drawable.red_map_pin));
 
+		setMarkerListeners(locationMarker);
+
 		// get the POI
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
 
-		locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
 
-			/**
-			 * Called as the marker is being dragged, no implementation
-			 */
-			@Override
-			public void onMarkerDrag(Marker marker) {
-			}
-
-			/**
-			 * Called when the onDragListen action is complete Updates the
-			 * location and POI when the drag is finished
-			 */
-			@Override
-			public void onMarkerDragEnd(Marker marker) {
-				GeoLocation geoLocation = new GeoLocation(marker.getPosition()
-						.getLatitude(), marker.getPosition().getLongitude());
-				ProgressDialog dialog = new ProgressDialog(getActivity());
-				dialog.setMessage("Retrieving Location");
-				ThreadManager.startGetPOI(geoLocation, dialog, marker);
-			}
-
-			/**
-			 * Called when the drag operation begins. No implementation at this
-			 * time
-			 */
-			@Override
-			public void onMarkerDragStart(Marker marker) {
-			}
-		});
+		markers.clear();
+		markers.add(locationMarker);
+		if (currentLocationMarker != null) {
+			markers.add(currentLocationMarker);
+		}
 
 		// clear map, then re-add events Overlay and add new location marker,
 		// then refresh the map
 		openMapView.getOverlays().clear();
 		openMapView.getOverlays().add(mapEventsOverlay);
 		openMapView.getOverlays().add(locationMarker);
-		openMapView.getOverlays().add(currentLocationMarker);
+		if (currentLocationMarker != null) {
+			openMapView.getOverlays().add(currentLocationMarker);
+		}
 		openMapView.invalidate();
 	}
 

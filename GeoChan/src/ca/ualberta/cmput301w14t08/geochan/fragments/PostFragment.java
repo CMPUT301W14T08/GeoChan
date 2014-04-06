@@ -55,6 +55,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -83,7 +84,13 @@ public class PostFragment extends Fragment {
 		Bundle args = getArguments();
 		if (args.getLong("id") != -1) {
 			commentToReplyTo = (Comment) args.getParcelable("cmt");
-			thread = ThreadList.getThreads().get((int) args.getLong("id"));
+	        boolean fromFavs = args.getBoolean("fromFavs");
+	        if (fromFavs) {
+	        	FavouritesLog log = FavouritesLog.getInstance(getActivity());
+	            thread = log.getThreads().get((int) args.getLong("id"));
+	        } else {
+				thread = ThreadList.getThreads().get((int) args.getLong("id"));
+	        }
 		}
 		geoLocation = new GeoLocation(locationListenerService);
 		if (geoLocation.getLocation() != null) {
