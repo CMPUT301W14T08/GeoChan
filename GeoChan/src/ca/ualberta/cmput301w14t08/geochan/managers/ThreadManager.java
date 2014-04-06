@@ -173,6 +173,7 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
+                    
                 case GET_THREADS_COMPLETE:
                     GetThreadCommentsTask threadTask = (GetThreadCommentsTask) inputMessage.obj;
                     threadTask.getFragment().finishReload();
@@ -187,18 +188,34 @@ public class ThreadManager {
 
                 case GET_COMMENTS_COMPLETE:
                     GetCommentsTask task = (GetCommentsTask) inputMessage.obj;
+                    if (task.getDialog() != null) {
+                    	task.getDialog().dismiss();
+                	}
                     task.getFragment().finishReload();
                     recycleCommentsTask(task);
                     break;
                     
                 case GET_COMMENTS_FAILED:
                     GetCommentsTask taskFail = (GetCommentsTask) inputMessage.obj;
+                    if (taskFail.getDialog() != null) {
+                    	taskFail.getDialog().dismiss();
+                	}
                     taskFail.getFragment().finishReload();
                     recycleCommentsTask(taskFail);
                     break;    
+
+                case GET_COMMENT_LIST_RUNNING:
+                	GetCommentsTask getCommentsRunning = (GetCommentsTask) inputMessage.obj;
+                	if (getCommentsRunning.getDialog() != null) {
+                		getCommentsRunning.getDialog().show();
+                	}
+                	break;
                     
                 case GET_COMMENT_LIST_FAILED:
                     GetCommentsTask taskListFail = (GetCommentsTask) inputMessage.obj;
+                    if (taskListFail.getDialog() != null) {
+                    	taskListFail.getDialog().dismiss();
+                	}
                     taskListFail.getFragment().finishReload();
                     recycleCommentsTask(taskListFail);
                     break;
@@ -416,6 +433,9 @@ public class ThreadManager {
     
     public void handleGetThreadCommentsState(GetThreadCommentsTask task, int state) {
         switch(state) {
+        case GET_THREADS_RUNNING:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
         case GET_THREADS_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;
