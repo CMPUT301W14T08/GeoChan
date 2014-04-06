@@ -26,6 +26,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -281,9 +282,28 @@ public class CustomLocationFragment extends Fragment {
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
 
+		locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
+
+			@Override
+			public void onMarkerDrag(Marker marker) {
+			}
+
+			@Override
+			public void onMarkerDragEnd(Marker marker) {
+				GeoLocation geoLocation = new GeoLocation(marker.getPosition()
+						.getLatitude(), marker.getPosition().getLongitude());
+				ProgressDialog dialog = new ProgressDialog(getActivity());
+				dialog.setMessage("Retrieving Location");
+				ThreadManager.startGetPOI(geoLocation, dialog, marker);
+			}
+
+			@Override
+			public void onMarkerDragStart(Marker marker) {
+			}
+		});
+
 		// clear map, then re-add events Overlay and add new location marker,
-		// then refresh
-		// the map
+		// then refresh the map
 		openMapView.getOverlays().clear();
 		openMapView.getOverlays().add(mapEventsOverlay);
 		openMapView.getOverlays().add(locationMarker);
