@@ -86,7 +86,6 @@ public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadC
         object.addProperty("textPost", thread.getBodyComment().getTextPost());
 
         if (thread.getBodyComment().hasImage()) {
-            Bitmap bitmap = thread.getBodyComment().getImage();
             Bitmap bitmapThumb = thread.getBodyComment().getImageThumb();
 
             /*
@@ -94,18 +93,14 @@ public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadC
              * -string
              */
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();
             String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP);
-            object.addProperty("image", encoded);
             object.addProperty("imageThumbnail", encodedThumb);
         }
         recursiveSerialize(object, thread.getBodyComment(), thread.getBodyComment().getChildren());
-        Log.e("comments", object.toString());
+        
+        // Serialize all the images in the thread.
         return object;
     }
 
@@ -133,17 +128,12 @@ public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadC
         }
         ArrayList<Comment> topList = new ArrayList<Comment>();
         recursiveDeserialize(object, id, topList);
-        Bitmap image = null;
         Bitmap thumbnail = null;
         if (hasImage) {
             /*
              * http://stackoverflow.com/questions/20594833/convert-byte-array-or-
              * bitmap-to-picture
              */
-            String encodedImage = object.get("image").getAsString();
-            byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
-            image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
             String encodedThumb = object.get("imageThumbnail").getAsString();
             byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);
             thumbnail = BitmapFactory.decodeByteArray(thumbArray, 0, thumbArray.length);
@@ -157,7 +147,6 @@ public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadC
         c.setId(Long.parseLong(id));
         c.setChildren(topList);
         if (hasImage) {
-            c.setImage(image);
             c.setImageThumb(thumbnail);
         }
         final ThreadComment comment = new ThreadComment(c, title);

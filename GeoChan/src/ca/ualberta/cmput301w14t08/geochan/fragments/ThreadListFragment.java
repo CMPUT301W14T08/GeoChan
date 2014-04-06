@@ -94,6 +94,7 @@ public class ThreadListFragment extends Fragment {
             adapter.notifyDataSetChanged();
             locSortFlag = 0;
         }
+        adapter.notifyDataSetChanged();
         super.onResume();
     }
 

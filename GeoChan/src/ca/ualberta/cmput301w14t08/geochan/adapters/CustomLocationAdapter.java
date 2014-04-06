@@ -20,8 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -29,9 +27,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * This class is an adapter to display a list of locations the user specified in
@@ -41,10 +39,10 @@ import ca.ualberta.cmput301w14t08.geochan.R;
  * @author Artem Chikin
  */
 public class CustomLocationAdapter extends BaseAdapter {
-    private ArrayList<LogEntry> logArray;
+    private ArrayList<GeoLocation> logArray;
     private Context context;
 
-    public CustomLocationAdapter(Context context, ArrayList<LogEntry> logEntries) {
+    public CustomLocationAdapter(Context context, ArrayList<GeoLocation> logEntries) {
         this.context = context;
         this.logArray = logEntries;
     }
@@ -55,7 +53,7 @@ public class CustomLocationAdapter extends BaseAdapter {
     }
 
     @Override
-    public LogEntry getItem(int position) {
+    public GeoLocation getItem(int position) {
         return logArray.get(position);
     }
 
@@ -66,7 +64,7 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LogEntry logEntry = getItem(position);
+    	GeoLocation logEntry = getItem(position);
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -74,18 +72,8 @@ public class CustomLocationAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.log_entry_layout, null);
         }
 
-        TextView title = (TextView) convertView.findViewById(R.id.log_entry_title);
-        title.setText(logEntry.getThreadTitle());
-
-        TextView loc = (TextView) convertView.findViewById(R.id.log_entry_location);
-        DecimalFormat format = new DecimalFormat();
-        format.setRoundingMode(RoundingMode.HALF_EVEN);
-        format.setMinimumFractionDigits(0);
-        format.setMaximumFractionDigits(4);
-
-        loc.setText("Latitude: " + format.format(logEntry.getGeoLocation().getLatitude())
-                + ", Longitude: " + format.format(logEntry.getGeoLocation().getLongitude()));
-
+        TextView poi = (TextView) convertView.findViewById(R.id.log_entry_poi);
+        poi.setText(logEntry.getLocationDescription());
         return convertView;
     }
 
