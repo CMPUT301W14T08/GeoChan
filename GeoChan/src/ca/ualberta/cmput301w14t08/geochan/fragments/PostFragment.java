@@ -66,297 +66,299 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author Artem Chikin
  */
 public class PostFragment extends Fragment {
-    public static final int MAX_BITMAP_DIMENSIONS = 600;
+	public static final int MAX_BITMAP_DIMENSIONS = 600;
 
-    private LocationListenerService locationListenerService;
-    private GeoLocation geoLocation;
-    private Bitmap image = null;
-    private Bitmap imageThumb = null;
-    private ThreadComment thread = null;
-    private Comment commentToReplyTo = null;
+	private LocationListenerService locationListenerService;
+	private GeoLocation geoLocation;
+	private Bitmap image = null;
+	private Bitmap imageThumb = null;
+	private ThreadComment thread = null;
+	private Comment commentToReplyTo = null;
 
-    // private ImageView thumbnail;
+	// private ImageView thumbnail;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        locationListenerService = new LocationListenerService(getActivity());
-        locationListenerService.startListening();
-        Bundle args = getArguments();
-        if (args.getLong("id") != -1) {
-            commentToReplyTo = (Comment) args.getParcelable("cmt");
-            thread = ThreadList.getThreads().get((int) args.getLong("id"));
-        }
-        geoLocation = new GeoLocation(locationListenerService);
-        if (geoLocation.getLocationDescription() == null) {
-            // Retrieve POI
-            Log.e("POI", "CallFromOnStart");
-            ThreadManager.startGetPOI(geoLocation, null, null);
-        }
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		locationListenerService = new LocationListenerService(getActivity());
+		locationListenerService.startListening();
+		Bundle args = getArguments();
+		if (args.getLong("id") != -1) {
+			commentToReplyTo = (Comment) args.getParcelable("cmt");
+			thread = ThreadList.getThreads().get((int) args.getLong("id"));
+		}
+		geoLocation = new GeoLocation(locationListenerService);
+		if (geoLocation.getLocation() != null) {
+			if (geoLocation.getLocationDescription() == null) {
+				// Retrieve POI
+				Log.e("POI", "CallFromOnStart");
+				ThreadManager.startGetPOI(geoLocation, null, null);
+			}
+		}
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(false);
-        if (thread == null) {
-            return inflater.inflate(R.layout.fragment_post_thread, container, false);
-        } else {
-            return inflater.inflate(R.layout.fragment_post_comment, container, false);
-        }
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		setHasOptionsMenu(false);
+		if (thread == null) {
+			return inflater.inflate(R.layout.fragment_post_thread, container, false);
+		} else {
+			return inflater.inflate(R.layout.fragment_post_comment, container, false);
+		}
+	}
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (commentToReplyTo != null) {
-            TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
-            TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
-            bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
-            bodyReplyTo.setText(commentToReplyTo.getTextPost());
-            replyTo.setText(commentToReplyTo.getUser() + " says:");
-            Bitmap comThumbnail = commentToReplyTo.getImageThumb();
-            ImageView postThumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
-            postThumbnail.setImageBitmap(comThumbnail);
-        }
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (commentToReplyTo != null) {
+			TextView replyTo = (TextView) getActivity().findViewById(R.id.comment_replyingTo);
+			TextView bodyReplyTo = (TextView) getActivity().findViewById(R.id.reply_to_body);
+			bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
+			bodyReplyTo.setText(commentToReplyTo.getTextPost());
+			replyTo.setText(commentToReplyTo.getUser() + " says:");
+			Bitmap comThumbnail = commentToReplyTo.getImageThumb();
+			ImageView postThumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
+			postThumbnail.setImageBitmap(comThumbnail);
+		}
+	}
 
-    /**
-     * COMMENT GOES HERE
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        Bundle args = getArguments();
-        if (args != null) {
-            if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
-                Button locButton = (Button) getActivity().findViewById(R.id.location_button);
-                if (args.getString("LocationType") == "CURRENT_LOCATION") {
-                    locButton.setText("Location: Set");
-                } else {
-                    Double lat = args.getDouble("LATITUDE");
-                    Double lon = args.getDouble("LONGITUDE");
-                    geoLocation.setCoordinates(lat, lon);
+	/**
+	 * COMMENT GOES HERE
+	 */
+	@Override
+	public void onResume() {
+		super.onResume();
+		Bundle args = getArguments();
+		if (args != null) {
+			if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
+				Button locButton = (Button) getActivity().findViewById(R.id.location_button);
+				if (args.getString("LocationType") == "CURRENT_LOCATION") {
+					locButton.setText("Location: Set");
+				} else {
+					Double lat = args.getDouble("LATITUDE");
+					Double lon = args.getDouble("LONGITUDE");
+					geoLocation.setCoordinates(lat, lon);
 
-                    String locationDescription = args.getString("locationDescription");
+					String locationDescription = args.getString("locationDescription");
 
-                    Log.e("POI is:", locationDescription);
-                    geoLocation.setLocationDescription(locationDescription);
+					Log.e("POI is:", locationDescription);
+					geoLocation.setLocationDescription(locationDescription);
 
-                    DecimalFormat format = new DecimalFormat();
-                    format.setRoundingMode(RoundingMode.HALF_EVEN);
-                    format.setMinimumFractionDigits(0);
-                    format.setMaximumFractionDigits(4);
+					DecimalFormat format = new DecimalFormat();
+					format.setRoundingMode(RoundingMode.HALF_EVEN);
+					format.setMinimumFractionDigits(0);
+					format.setMaximumFractionDigits(4);
 
-                    if (locationDescription.equals("Unknown Location")) {
-                        locButton.setText("Location: Set");
-                    } else {
-                        locButton.setText("Location: Set");
-                    }
-                }
-            }
-            if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
-                imageThumb = args.getParcelable("IMAGE_THUMB");
-                image = args.getParcelable("IMAGE_FULL");
-            }
-        }
-    }
+					if (locationDescription.equals("Unknown Location")) {
+						locButton.setText("Location: Set");
+					} else {
+						locButton.setText("Location: Set");
+					}
+				}
+			}
+			if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
+				imageThumb = args.getParcelable("IMAGE_THUMB");
+				image = args.getParcelable("IMAGE_FULL");
+			}
+		}
+	}
 
-    /**
-     * onClick method for the post button. Extracts the textView information,
-     * creates the threadComment object and posts it to the server.
-     * 
-     * @param view
-     *            The post button in the PostThreadFragment
-     */
-    public void post(View view) {
-        if (view.getId() == R.id.post_button) {
-            if(geoLocation.getLocationDescription() == null) {
-                // Retrieve POI
-                ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Retrieving Location");
-                ThreadManager.startGetPOI(geoLocation, dialog, null);
-            }
-            String title = null;
-            EditText editTitle = null;
-            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
-            String comment = editComment.getText().toString();
-            if (thread == null) {
-                editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
-                title = editTitle.getText().toString();
-            }
-            if (title != null && title.equals("")) {
-                ErrorDialog.show(getActivity(), "Title can not be left blank.");
-            } else {
-                Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
-                //ElasticSearchClient client = ElasticSearchClient.getInstance();
-                if (commentToReplyTo != null) {
-                    Comment c = thread.findCommentById(thread.getBodyComment(),
-                            commentToReplyTo.getId());
-                    c.addChild(newComment);
-                    int tag = PreferencesManager.getInstance().getCommentSort();
-                    SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
-                } else {
-                    ThreadList.addThread(newComment, title);
-                    int tag = PreferencesManager.getInstance().getThreadSort();
-                    SortUtil.sortThreads(tag, ThreadList.getThreads());
-                }
-                // log the thread and the geolocation
-                if (geoLocation.getLocation() == null) {
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
-                    geoLocationLog.addLogEntry(title, geoLocation);
-                }
-                ThreadManager.startPost(newComment, title);
-                InputMethodManager inputManager = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(view.getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-                this.getFragmentManager().popBackStackImmediate();
-            }
-        }
-    }
+	/**
+	 * onClick method for the post button. Extracts the textView information,
+	 * creates the threadComment object and posts it to the server.
+	 * 
+	 * @param view
+	 *            The post button in the PostThreadFragment
+	 */
+	public void post(View view) {
+		if (view.getId() == R.id.post_button) {
+			if(geoLocation.getLocationDescription() == null) {
+				// Retrieve POI
+				ProgressDialog dialog = new ProgressDialog(getActivity());
+				dialog.setMessage("Retrieving Location");
+				ThreadManager.startGetPOI(geoLocation, dialog, null);
+			}
+			String title = null;
+			EditText editTitle = null;
+			EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+			String comment = editComment.getText().toString();
+			if (thread == null) {
+				editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
+				title = editTitle.getText().toString();
+			}
+			if (title != null && title.equals("")) {
+				ErrorDialog.show(getActivity(), "Title can not be left blank.");
+			} else {
+				Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
+				//ElasticSearchClient client = ElasticSearchClient.getInstance();
+				if (commentToReplyTo != null) {
+					Comment c = thread.findCommentById(thread.getBodyComment(),
+							commentToReplyTo.getId());
+					c.addChild(newComment);
+					int tag = PreferencesManager.getInstance().getCommentSort();
+					SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
+				} else {
+					ThreadList.addThread(newComment, title);
+					int tag = PreferencesManager.getInstance().getThreadSort();
+					SortUtil.sortThreads(tag, ThreadList.getThreads());
+				}
+				// log the thread and the geolocation
+				if (geoLocation.getLocation() == null) {
+					GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+					geoLocationLog.addLogEntry(title, geoLocation);
+				}
+				ThreadManager.startPost(newComment, title);
+				InputMethodManager inputManager = (InputMethodManager) getActivity()
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+				this.getFragmentManager().popBackStackImmediate();
+			}
+		}
+	}
 
-    /**
-     * Displays dialog and either launches camera or gallery
-     * 
-     * @param View
-     *            the AttachPhoto button in postThreadFragment
-     */
-    public void attachImage(View view) {
-        if (view.getId() == R.id.attach_image_button) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-            dialog.setTitle(R.string.attach_image_title);
-            dialog.setMessage(R.string.attach_image_dialog);
-            dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
-                    boolean fromFav;
-                    if(favFrag != null){
-                        fromFav = true;
-                    } else {
-                        fromFav = false;
-                    }
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    try {
-                        File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-                                                                        // the
-                                                                        // image
-                                                                        // file
-                                                                        // name
-                        if(fromFav == true){
-                            arg0.dismiss();
-                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
-                                    ImageHelper.REQUEST_GALLERY);
-                        } else {
-                            arg0.dismiss();
-                            startActivityForResult(Intent.createChooser(intent, "Test"),
-                                ImageHelper.REQUEST_GALLERY);
-                        }
-                    } catch (IOException e) {
-                        // do something
-                    }
-                }
-            });
-            
-            dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
-                    Log.e("PICDEBUG", "Value of favFragment." + String.valueOf(favFrag));
-                    boolean fromFav;
-                    if(favFrag != null){
-                        fromFav = true;
-                    } else {
-                        fromFav = false;
-                    }
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    try {
-                        File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-                                                                        // the
-                                                                        // image
-                                                                        // file
-                                                                        // name
-                        if(fromFav == true){
-                            arg0.dismiss();
-                            getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
-                                ImageHelper.REQUEST_CAMERA);
-                        } else {
-                            arg0.dismiss();
-                            startActivityForResult(Intent.createChooser(intent, "Test"),
-                                    ImageHelper.REQUEST_CAMERA);
-                        }
-                    } catch (IOException e) {
-                        // do something
-                    }
-                }
-            });
-            dialog.show();
-        }
-    }
+	/**
+	 * Displays dialog and either launches camera or gallery
+	 * 
+	 * @param View
+	 *            the AttachPhoto button in postThreadFragment
+	 */
+	public void attachImage(View view) {
+		if (view.getId() == R.id.attach_image_button) {
+			AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+			dialog.setTitle(R.string.attach_image_title);
+			dialog.setMessage(R.string.attach_image_dialog);
+			dialog.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface arg0, int arg1) {
+					FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
+					boolean fromFav;
+					if(favFrag != null){
+						fromFav = true;
+					} else {
+						fromFav = false;
+					}
+					Intent intent = new Intent();
+					intent.setType("image/*");
+					intent.setAction(Intent.ACTION_GET_CONTENT);
+					try {
+						File file = ImageHelper.createImageFile();
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+						// the
+						// image
+						// file
+						// name
+						if(fromFav == true){
+							arg0.dismiss();
+							getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+									ImageHelper.REQUEST_GALLERY);
+						} else {
+							arg0.dismiss();
+							startActivityForResult(Intent.createChooser(intent, "Test"),
+									ImageHelper.REQUEST_GALLERY);
+						}
+					} catch (IOException e) {
+						// do something
+					}
+				}
+			});
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e("PICDEBUG","Value of resultCode:" + String.valueOf(resultCode));
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ImageHelper.REQUEST_CAMERA) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
-                image = scaleImage(imageBitmap);
-                imageThumb = squareBitmap;
-                Bundle bundle = getArguments();
-                bundle.putParcelable("IMAGE_THUMB", imageThumb);
-                bundle.putParcelable("IMAGE_FULL", image);
-                // thumbnail.setImageBitmap(squareBitmap);
-                if(image == null){
-                    Log.e("PICDEBUG","image variable is null.");
-                }
-                if(imageThumb == null){
-                    Log.e("PICDEBUG","imagethumb variable is null.");
-                }
-            } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
-                Bitmap imageBitmap = null;
-                try {
-                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
-                            .getContentResolver(), data.getData());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
-                image = scaleImage(imageBitmap);
-                imageThumb = squareBitmap;
-                Bundle bundle = getArguments();
-                bundle.putParcelable("IMAGE_THUMB", imageThumb);
-                bundle.putParcelable("IMAGE_FULL", image);
-                // thumbnail.setImageBitmap(squareBitmap);
-            }
-        }
-    }
+			dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface arg0, int arg1) {
+					FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
+					Log.e("PICDEBUG", "Value of favFragment." + String.valueOf(favFrag));
+					boolean fromFav;
+					if(favFrag != null){
+						fromFav = true;
+					} else {
+						fromFav = false;
+					}
+					Intent intent = new Intent();
+					intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+					try {
+						File file = ImageHelper.createImageFile();
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
+						// the
+						// image
+						// file
+						// name
+						if(fromFav == true){
+							arg0.dismiss();
+							getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+									ImageHelper.REQUEST_CAMERA);
+						} else {
+							arg0.dismiss();
+							startActivityForResult(Intent.createChooser(intent, "Test"),
+									ImageHelper.REQUEST_CAMERA);
+						}
+					} catch (IOException e) {
+						// do something
+					}
+				}
+			});
+			dialog.show();
+		}
+	}
 
-    private Bitmap scaleImage(Bitmap bitmap) {
-        // https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
-        // Scale the pic if it is too large:
-        if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
-            double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
-            if (bitmap.getHeight() > bitmap.getWidth())
-                scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Log.e("PICDEBUG","Value of resultCode:" + String.valueOf(resultCode));
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == ImageHelper.REQUEST_CAMERA) {
+				Bundle extras = data.getExtras();
+				Bitmap imageBitmap = (Bitmap) extras.get("data");
+				Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+				image = scaleImage(imageBitmap);
+				imageThumb = squareBitmap;
+				Bundle bundle = getArguments();
+				bundle.putParcelable("IMAGE_THUMB", imageThumb);
+				bundle.putParcelable("IMAGE_FULL", image);
+				// thumbnail.setImageBitmap(squareBitmap);
+				if(image == null){
+					Log.e("PICDEBUG","image variable is null.");
+				}
+				if(imageThumb == null){
+					Log.e("PICDEBUG","imagethumb variable is null.");
+				}
+			} else if (requestCode == ImageHelper.REQUEST_GALLERY) {
+				Bitmap imageBitmap = null;
+				try {
+					imageBitmap = MediaStore.Images.Media.getBitmap(getActivity()
+							.getContentResolver(), data.getData());
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
+				image = scaleImage(imageBitmap);
+				imageThumb = squareBitmap;
+				Bundle bundle = getArguments();
+				bundle.putParcelable("IMAGE_THUMB", imageThumb);
+				bundle.putParcelable("IMAGE_FULL", image);
+				// thumbnail.setImageBitmap(squareBitmap);
+			}
+		}
+	}
 
-            int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
-            int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
+	private Bitmap scaleImage(Bitmap bitmap) {
+		// https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
+		// Scale the pic if it is too large:
+		if (bitmap.getWidth() > MAX_BITMAP_DIMENSIONS || bitmap.getHeight() > MAX_BITMAP_DIMENSIONS) {
+			double scalingFactor = bitmap.getWidth() * 1.0 / MAX_BITMAP_DIMENSIONS;
+			if (bitmap.getHeight() > bitmap.getWidth())
+				scalingFactor = bitmap.getHeight() * 1.0 / MAX_BITMAP_DIMENSIONS;
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-        }
-        return bitmap;
-    }
+			int newWidth = (int) Math.round(bitmap.getWidth() / scalingFactor);
+			int newHeight = (int) Math.round(bitmap.getHeight() / scalingFactor);
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        locationListenerService.stopListening();
-    }
+			bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+		}
+		return bitmap;
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		locationListenerService.stopListening();
+	}
 }

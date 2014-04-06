@@ -1,6 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import org.osmdroid.views.MapView;
+import org.osmdroid.bonuspack.overlays.Marker;
 
 import android.app.ProgressDialog;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetPOIRunnableInterface;
@@ -10,7 +10,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.GetPOIRunnable;
 
 public class GetPOITask implements GetPOIRunnableInterface {
 	private GeoLocation location;
-	private MapView openMapView;
+	private Marker marker;
 	private String cache;
 	private ProgressDialog dialog;
 	private Runnable getPOIRunnable;
@@ -22,11 +22,11 @@ public class GetPOITask implements GetPOIRunnableInterface {
 	}
 
 	public void initGetPOITask(ThreadManager manager, GeoLocation location, ProgressDialog dialog, 
-			MapView openMapView) {
+			Marker marker) {
 		this.manager = manager;
 		this.dialog= dialog;
 		this.location = location;
-		this.openMapView = openMapView;
+		this.marker = marker;
 	}
 
 	public void handleState(int state) {
@@ -73,8 +73,8 @@ public class GetPOITask implements GetPOIRunnableInterface {
         return dialog;
     }
     
-    public MapView getMapView() {
-    	return openMapView;
+    public Marker getMarker() {
+    	return marker;
     }
 
     public void setCurrentThread(Thread thread) {
