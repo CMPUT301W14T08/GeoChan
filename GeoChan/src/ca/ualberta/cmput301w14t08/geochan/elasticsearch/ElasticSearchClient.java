@@ -25,11 +25,11 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Count;
-import io.searchbox.core.Get;
 import io.searchbox.core.Search;
-import io.searchbox.core.Update;
 
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
@@ -37,7 +37,6 @@ import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -84,7 +83,7 @@ public class ElasticSearchClient {
     public JestClient getClient() {
         return client;
     }
-
+    
     /**
      * Returns the total number of ThreadComments on the server
      * 
@@ -123,100 +122,6 @@ public class ElasticSearchClient {
             list.add(object);
         }
         return list;
-    }
-
-    /**
-     * Gets a list of comments for a specified parent comment
-     * 
-     * @param topComment
-     *            The parent comment to get the children of.
-     * @return The passed Comment's children in an ArrayList.
-     * 
-     */
-    public ArrayList<Comment> getComments(Comment topComment) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        Get get = new Get.Builder(URL_INDEX, topComment.getId()).type(TYPE_INDEX).build();
-        JestResult result = null;
-        try {
-            result = client.execute(get);
-            JsonArray array = result.getJsonObject().get("_source").getAsJsonObject()
-                    .get("comments").getAsJsonArray();
-            ArrayList<String> hits = new ArrayList<String>();
-            for (int i = 0; i < array.size(); ++i) {
-                hits.add(array.get(i).getAsString());
-            }
-            for (String hit : hits) {
-                Comment comment = get(hit);
-                if (comment != null) {
-                    comments.add(comment);
-                }
-            }
-            for (Comment comment : comments) {
-                comment.setParent(topComment);
-                ArrayList<Comment> children = getComments(comment);
-                if (children != null) {
-                    comment.setChildren(children);
-                }
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return comments;
-    }
-
-    /**
-     * Gets a Comment from the server, specified by its id
-     * 
-     * @param id
-     *            The id of the Comment to be retrieved.
-     * @return The Comment retrieved from the server.
-     * 
-     */
-    public Comment get(final String id) {
-        Get get = new Get.Builder(URL_INDEX, id).type(TYPE_COMMENT).build();
-        JestResult result = null;
-        try {
-            result = client.execute(get);
-            Type type = new TypeToken<ElasticSearchResponse<Comment>>() {
-            }.getType();
-            ElasticSearchResponse<Comment> esResponse = gson.fromJson(result.getJsonString(), type);
-            return esResponse.getSource();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Updates a record on the ElasticSearch server.
-     * 
-     * @param query
-     *            the JSON query string
-     * @param type
-     *            the ElasticSearch type
-     * @param id
-     *            the record ID
-     * @return the network Thread (for monitoring purposes)
-     * 
-     */
-    public Thread update(final String query, final String type, final String id) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                Update update = new Update.Builder(query).index(URL_INDEX).type(type).id(id)
-                        .build();
-                try {
-                    client.execute(update);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
-        return t;
     }
 
     /**

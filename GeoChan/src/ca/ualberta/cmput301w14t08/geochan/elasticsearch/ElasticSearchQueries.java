@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
 
+import java.util.ArrayList;
+
 /**
  * A utility class for ElasticSearch. Contains various queries and builders for
  * queries to be used when interacting with ElasticSearch.
@@ -30,23 +32,39 @@ public class ElasticSearchQueries {
     /**
      * A query string to search for all results in a type.
      */
-    public static final String SEARCH_MATCH_ALL = "{\n" + "   \"size\" : 9999,  \n"
-            + "   \"query\": {\n" + "       \"match_all\" : { } \n" + "   }\n" + "}";
+    public static final String SEARCH_MATCH_ALL =           "{\n" +
+                                                            "   \"size\" : 9999,  \n" +
+                                                            "   \"query\": {\n" +
+                                                            "       \"match_all\" : { } \n" +
+                                                            "   }\n" +
+                                                            "}";
 
     /**
      * A query string to search for all results based on a parent ID.
      */
-    private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + "   \"query\": {\n"
-            + "       \"match\" : {\n" + "           \"parent\" : \"";
-    private static final String SEARCH_MATCH_PARENT_END = "\" \n" + "       }\n" + "   }\n" + "}";
+    private static final String SEARCH_MATCH_PARENT_BEGIN = "{\n" + 
+                                                            "   \"query\": {\n" +
+                                                            "       \"match\" : {\n" +
+                                                            "           \"parent\" : \"";
+    private static final String SEARCH_MATCH_PARENT_END =   "\" \n" +
+                                                            "       }\n" +
+                                                            "   }\n" +
+                                                            "}";
 
     /**
-     * A query string to update the list of comments when a new comment is
-     * posted.
+     * A query string to update the list of comments when a new comment is posted.
      */
-    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" + "   \"doc\" : \n";
-    private static final String UPDATE_COMMENT_LIST_END = "   ,\n"
-            + "   \"doc_as_upsert\" : true\n" + "}";
+    private static final String UPDATE_COMMENT_LIST_BEGIN = "{\n" +
+                                                            "   \"doc\" : \n";
+    private static final String UPDATE_COMMENT_LIST_END =   "   ,\n" +
+                                                            "   \"doc_as_upsert\" : true\n" +
+                                                            "}";
+    
+    private static final String GET_COMMENTS_BEGIN =        "{\n" +
+                                                            "   \"ids\" : [";
+    private static final String GET_COMMENTS_END =          "   ]\n" +
+                                                            "}";
+    
 
     /**
      * Returns a query string to search by parent ID
@@ -70,5 +88,14 @@ public class ElasticSearchQueries {
      */
     public static String commentListScript(String json) {
         return UPDATE_COMMENT_LIST_BEGIN + json + UPDATE_COMMENT_LIST_END;
+    }
+    
+    public static String commentsScript(ArrayList<String> idList) {
+        String str = GET_COMMENTS_BEGIN;
+        for (String id : idList.subList(1, idList.size())) {
+            str = str + "\"" + id + "\",";
+        }
+        str = str.substring(0, str.length() - 1) + GET_COMMENTS_END;
+        return str;
     }
 }

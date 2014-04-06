@@ -1,32 +1,36 @@
 package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
 
 import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentListRunnable;
+import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentsRunnable;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
-import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentsRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 
-public class ElasticSearchGetCommentListTask implements GetCommentListRunnableInterface {
+public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInterface, GetCommentsRunnableInterface {
 
-    private String id;
+    private int threadIndex;
     private CommentList cache;
-    private CommentLoader loader;
+    private ThreadViewFragment fragment;
     private Runnable getCommentListRunnable;
+    private Runnable getCommentsRunnable;
     private ThreadManager manager;
     private Thread thread;
 
-    public ElasticSearchGetCommentListTask() {
+    public ElasticSearchGetCommentsTask() {
         this.getCommentListRunnable = new ElasticSearchGetCommentListRunnable(this);
+        this.getCommentsRunnable = new ElasticSearchGetCommentsRunnable(this);
     }
 
-    public void initCommentListTask(ThreadManager manager, CommentLoader loader, String id) {
+    public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex) {
         this.manager = manager;
-        this.loader = loader;
-        this.id = id;
+        this.fragment = fragment;
+        this.threadIndex = threadIndex;
     }
 
     public void handleState(int state) {
-        manager.handleGetCommentListState(this, state);
+        manager.handleGetCommentsState(this, state);
     }
 
     @Override
@@ -39,7 +43,7 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
         int outState;
         switch (state) {
         case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_COMPLETE:
-            outState = ThreadManager.TASK_COMPLETE;
+            outState = ThreadManager.GET_COMMENT_LIST_COMPLETE;
             break;
         case ElasticSearchGetCommentListRunnable.STATE_GET_LIST_FAILED:
             outState = ThreadManager.GET_COMMENT_LIST_FAILED;
@@ -61,12 +65,12 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
         return cache;
     }
 
-    public String getId() {
-        return id;
+    public int getThreadIndex() {
+        return threadIndex;
     }
 
-    public CommentLoader getLoader() {
-        return loader;
+    public ThreadViewFragment getFragment() {
+        return fragment;
     }
 
     public void setCurrentThread(Thread thread) {
@@ -84,11 +88,37 @@ public class ElasticSearchGetCommentListTask implements GetCommentListRunnableIn
     public Runnable getGetCommentListRunnable() {
         return getCommentListRunnable;
     }
+    
+    public Runnable getGetCommentsRunnable() {
+        return getCommentsRunnable;
+    }
 
     public void recycle() {
-        this.id = null;
+        this.threadIndex = -1;
         this.cache = null;
         this.manager = null;
-        this.loader = null;
+        this.fragment = null;
+    }
+
+    @Override
+    public void setGetCommentsThread(Thread thread) {
+        setCurrentThread(thread);
+    }
+
+    @Override
+    public void handleGetCommentsState(int state) {
+        int outState;
+        switch (state) {
+        case ElasticSearchGetCommentsRunnable.STATE_GET_COMMENTS_COMPLETE:
+            outState = ThreadManager.GET_COMMENTS_COMPLETE;
+            break;
+        case ElasticSearchGetCommentsRunnable.STATE_GET_COMMENTS_FAILED:
+            outState = ThreadManager.GET_COMMENTS_FAILED;
+            break;
+        default:
+            outState = ThreadManager.GET_COMMENTS_RUNNING;
+            break;
+        }
+        handleState(outState);
     }
 }

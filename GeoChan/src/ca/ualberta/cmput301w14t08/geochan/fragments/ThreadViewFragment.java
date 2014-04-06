@@ -22,13 +22,10 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,8 +44,8 @@ import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
-import ca.ualberta.cmput301w14t08.geochan.loaders.CommentLoader;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -61,7 +58,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * 
  * @author Henry Pabst, Artem Chikin
  */
-public class ThreadViewFragment extends Fragment implements LoaderCallbacks<ArrayList<Comment>> {
+public class ThreadViewFragment extends Fragment {
     private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
@@ -71,6 +68,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     private int container;
     private static int locSortFlag = 0;
 
+    @Override
+    public void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        threadIndex = (int) bundle.getLong("id");
+        thread = bundle.getParcelable("thread");
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+        // Assign custom adapter to the thread listView.
+        reload();
+    }
+    
     /**
      * Initializes several of the variables used in displaying the contents of a
      * thread. If the user just returned from selecting a custom location to
@@ -105,15 +113,6 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
-        threadIndex = (int) bundle.getLong("id");
-        thread = bundle.getParcelable("thread");
-        //getLoaderManager().initLoader(CommentLoader.LOADER_ID, null, this);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.thread_view, menu);
@@ -130,17 +129,8 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
         super.onStart();
         threadView = (PullToRefreshListView) getView().findViewById(R.id.thread_view_list);
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-        // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        
-        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
-        if (fav != null) {
-            container = R.id.container;
-        } else {
-            container = R.id.fragment_container;
-        }
-
         threadView.setOnItemClickListener(commentButtonListener);
         threadView.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -148,6 +138,12 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 reload();
             }
         });
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if (fav != null) {
+            container = R.id.container;
+        } else {
+            container = R.id.fragment_container;
+        }
     }
 
     /**
@@ -421,52 +417,17 @@ public class ThreadViewFragment extends Fragment implements LoaderCallbacks<Arra
                 .addToBackStack(null).commit();
         getFragmentManager().executePendingTransactions();
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
-     * android.os.Bundle)
-     */
-    @Override
-    public Loader<ArrayList<Comment>> onCreateLoader(int id, Bundle args) {
-        return new CommentLoader(getActivity(), thread);
+    
+    public void reload() {
+        ThreadManager.startGetComments(this, threadIndex);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoadFinished(android.content
-     * .Loader, java.lang.Object)
-     */
-    @Override
-    public void onLoadFinished(Loader<ArrayList<Comment>> loader, ArrayList<Comment> list) {
-        thread.getBodyComment().setChildren(list);
-        /*
-         * Have to reset adapter: workaround for a strange issue, for
-         * description, see :
-         * http://stackoverflow.com/questions/20512068/listview
-         * -not-updating-properly-cursoradapter-after-swapcursor
-         */
+    
+    public void finishReload() {
+        SortUtil.sortComments(prefManager.getCommentSort(), thread.getBodyComment().getChildren());
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+        // Assign custom adapter to the thread listView.
         threadView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         threadView.onRefreshComplete();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * android.app.LoaderManager.LoaderCallbacks#onLoaderReset(android.content
-     * .Loader)
-     */
-    @Override
-    public void onLoaderReset(Loader<ArrayList<Comment>> loader) {
-        //
-    }
-
-    private void reload() {
-        getLoaderManager().getLoader(1).forceLoad();
     }
 }
