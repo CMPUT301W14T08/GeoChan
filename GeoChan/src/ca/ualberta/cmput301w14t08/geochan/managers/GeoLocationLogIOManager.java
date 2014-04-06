@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
-import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,7 +43,7 @@ public class GeoLocationLogIOManager {
     }
 
     // Serialize ArrayList of log entries to JSON
-    public void serializeLog(ArrayList<LogEntry> list) {
+    public void serializeLog(ArrayList<GeoLocation> list) {
         try {
             String json = gson.toJson(list);
             FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -59,8 +59,8 @@ public class GeoLocationLogIOManager {
     }
 
     // Deserialize ArrayList of log entries from JSON
-    public ArrayList<LogEntry> deserializeLog() {
-        ArrayList<LogEntry> list = new ArrayList<LogEntry>();
+    public ArrayList<GeoLocation> deserializeLog() {
+        ArrayList<GeoLocation> list = new ArrayList<GeoLocation>();
         try {
             FileInputStream f = context.openFileInput(FILENAME);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
@@ -73,7 +73,7 @@ public class GeoLocationLogIOManager {
             }
             r.close();
             f.close();
-            Type type = new TypeToken<ArrayList<LogEntry>>() {
+            Type type = new TypeToken<ArrayList<GeoLocation>>() {
             }.getType();
             list = gson.fromJson(json, type);
         } catch (FileNotFoundException e) {

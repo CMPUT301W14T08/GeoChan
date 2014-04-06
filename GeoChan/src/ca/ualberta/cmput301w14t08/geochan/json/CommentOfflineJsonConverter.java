@@ -75,21 +75,13 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>,
         object.addProperty("id", comment.getId());
         object.addProperty("textPost", comment.getTextPost());
         if (comment.hasImage()) {
-            Bitmap bitmap = comment.getImage();
             Bitmap bitmapThumb = comment.getImageThumb();
             /*
              * http://stackoverflow.com/questions/9224056/android-bitmap-to-base64
              * -string
              */
-            // Serialize the image
+            // Serialize the image thumbnail
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            object.addProperty("image", encoded);
-
-            // Serialize the thumbnail
-            byteArrayOutputStream = new ByteArrayOutputStream();
             bitmapThumb.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             byte[] byteThumbArray = byteArrayOutputStream.toByteArray();
             String encodedThumb = Base64.encodeToString(byteThumbArray, Base64.NO_WRAP);
@@ -130,8 +122,6 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>,
              * http://stackoverflow.com/questions/20594833/convert-byte-array-or-
              * bitmap-to-picture
              */
-            String encodedImage = object.get("image").getAsString();
-            byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
 
             // http://stackoverflow.com/a/5878773
             // Sando's workaround for running out of memory on decoding bitmaps.
@@ -144,8 +134,6 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>,
                                           // after being clear, when it will be
                                           // used in the future
             opts.inTempStorage = new byte[32 * 1024];
-
-            image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, opts);
 
             String encodedThumb = object.get("imageThumbnail").getAsString();
             byte[] thumbArray = Base64.decode(encodedThumb, Base64.NO_WRAP);

@@ -20,6 +20,8 @@
 
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.util.ArrayList;
+
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
@@ -32,6 +34,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,13 +45,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
@@ -60,8 +64,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
  */
 public class CustomLocationFragment extends Fragment {
 
-    // private ArrayList<LogEntry> logArray;
-    // private CustomLocationAdapter customLocationAdapter;
+    private ArrayList<GeoLocation> logArray;
+    private CustomLocationAdapter customLocationAdapter;
     private int postType;
     private FragmentManager fm;
     private MapView openMapView;
@@ -106,8 +110,10 @@ public class CustomLocationFragment extends Fragment {
      */
     public void onStart() {
         super.onStart();
-        // GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
-        // logArray = log.getLogEntries();
+        GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
+        logArray = log.getLogEntries();
+        Log.e("LOG", Integer.toString(logArray.size()));
+        
         FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
                 .findFragmentByTag("favouritesFrag");
         if(favFrag != null){
@@ -135,8 +141,8 @@ public class CustomLocationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // clicks a previous location item in the list
-                LogEntry logEntry = (LogEntry) parent.getItemAtPosition(position);
-                setBundleArguments(logEntry.getGeoLocation(), "PREVIOUS_LOCATION");
+                GeoLocation logEntry = (GeoLocation) parent.getItemAtPosition(position);
+                setBundleArguments(logEntry, "PREVIOUS_LOCATION");
                 fm.popBackStackImmediate();
             }
         });
@@ -168,9 +174,8 @@ public class CustomLocationFragment extends Fragment {
             }
         };
 
-        // customLocationAdapter = new CustomLocationAdapter(getActivity(),
-        // logArray);
-        // lv.setAdapter(customLocationAdapter);
+        customLocationAdapter = new CustomLocationAdapter(getActivity(), logArray);
+        lv.setAdapter(customLocationAdapter);
 
         setupMap(mapEventsReceiver);
     }

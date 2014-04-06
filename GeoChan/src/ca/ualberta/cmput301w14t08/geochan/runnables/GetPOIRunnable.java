@@ -6,7 +6,6 @@ import org.osmdroid.bonuspack.location.GeoNamesPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
 
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
@@ -23,7 +22,6 @@ public class GetPOIRunnable implements Runnable {
     
     @Override
     public void run() {
-        Log.e("POI", "START");
         task.setGetPOIThread(Thread.currentThread());
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
         task.handleGetPOIState(STATE_GET_POI_RUNNING);
@@ -47,7 +45,6 @@ public class GetPOIRunnable implements Runnable {
             }
             task.setPOICache(poi.mType);
         } catch (Exception e) {
-            Log.e("POI", "EXCEPTION");
             task.setPOICache("Unknown Location");
             e.printStackTrace();
         } finally {
@@ -57,7 +54,6 @@ public class GetPOIRunnable implements Runnable {
                 task.handleGetPOIState(STATE_GET_POI_FAILED);
             } else {
                 task.handleGetPOIState(STATE_GET_POI_COMPLETE);
-                Log.e("POI", "COMPLETE");
             }
             //task.setGetPOIThread(null);
             Thread.interrupted();

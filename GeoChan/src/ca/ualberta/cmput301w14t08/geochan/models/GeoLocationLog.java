@@ -33,7 +33,7 @@ public class GeoLocationLog {
 
     private static GeoLocationLog instance = null;
     private Context context;
-    private ArrayList<LogEntry> entries;
+    private ArrayList<GeoLocation> entries;
 
     /**
      * Protected constructor. Is called only if singleton has not been
@@ -66,9 +66,13 @@ public class GeoLocationLog {
      * @param geoLocation
      *            GeoLocation to be stored in the new LogEntry.
      */
-    public void addLogEntry(String threadTitle, GeoLocation geoLocation) {
-        LogEntry logEntry = new LogEntry(threadTitle, geoLocation);
-        entries.add(logEntry);
+    public void addLogEntry(GeoLocation newGeoLocation) {
+    	for (GeoLocation location : entries) {
+    		if (newGeoLocation.getLocationDescription().equals(location.getLocationDescription())) {
+    			return;
+    		}
+    	}
+        entries.add(newGeoLocation);
         GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
         manager.serializeLog(entries);
     }
@@ -78,7 +82,7 @@ public class GeoLocationLog {
      * 
      * @return entries
      */
-    public ArrayList<LogEntry> getLogEntries() {
+    public ArrayList<GeoLocation> getLogEntries() {
         GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
         entries = manager.deserializeLog();
         return entries;

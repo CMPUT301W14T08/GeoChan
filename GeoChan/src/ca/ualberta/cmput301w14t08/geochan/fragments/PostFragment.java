@@ -66,7 +66,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author Artem Chikin
  */
 public class PostFragment extends Fragment {
-    public static final int MAX_BITMAP_DIMENSIONS = 600;
+    public static final int MAX_BITMAP_DIMENSIONS = 900;
 
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
@@ -90,7 +90,6 @@ public class PostFragment extends Fragment {
         geoLocation = new GeoLocation(locationListenerService);
         if (geoLocation.getLocationDescription() == null) {
             // Retrieve POI
-            Log.e("POI", "CallFromOnStart");
             ThreadManager.startGetPOI(geoLocation, null, null);
         }
     }
@@ -139,7 +138,6 @@ public class PostFragment extends Fragment {
 
                     String locationDescription = args.getString("locationDescription");
 
-                    Log.e("POI is:", locationDescription);
                     geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
@@ -201,9 +199,9 @@ public class PostFragment extends Fragment {
                     SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
                 // log the thread and the geolocation
-                if (geoLocation.getLocation() == null) {
+                if (geoLocation.getLocation() != null) {
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
-                    geoLocationLog.addLogEntry(title, geoLocation);
+                    geoLocationLog.addLogEntry(geoLocation);
                 }
                 ThreadManager.startPost(newComment, title);
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
