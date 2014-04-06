@@ -374,7 +374,7 @@ public class MapViewFragment extends Fragment {
             directionsLoadingDialog.dismiss();
 
             GeoLocation currentLocation = new GeoLocation(locationListenerService);
-            currentLocation.retreivePOIString(getActivity());
+            //currentLocation.retreivePOIString(getActivity());
             
             Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
             poiMarkers.add(currentLocationMarker);
