@@ -242,12 +242,16 @@ public class ThreadViewFragment extends Fragment {
         bundle.putParcelable("cmt", comment);
         bundle.putLong("id", threadIndex);
         fragment.setArguments(bundle);
-
+        boolean fromFavs = false;
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if(fav != null){
+            fromFavs = true;
+        }
+        bundle.putBoolean("fromFavs", fromFavs);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "postFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
-
     }
 
     private OnItemClickListener commentButtonListener = new OnItemClickListener() {
