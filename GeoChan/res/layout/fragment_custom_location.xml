@@ -3,7 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/previous_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/custom_location_list_view"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="5dp"
+        android:text="@string/location_log"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <org.osmdroid.views.MapView
+        android:id="@+id/map_view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/previous_location_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="5dp" >
 
+    </org.osmdroid.views.MapView>
+
+    <ListView
+        android:id="@+id/custom_location_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true" >
+
+    </ListView>
+    
+    
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -33,35 +65,5 @@
             android:background="@drawable/rounded_button_selector"
             android:text="@string/new_location_button_text" />
     </LinearLayout>
-    
-    <TextView
-        android:id="@+id/previous_location_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/custom_location_list_view"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="5dp"
-        android:text="@string/location_log"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <org.osmdroid.views.MapView
-        android:id="@+id/map_view"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/previous_location_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:padding="5dp" >
-
-    </org.osmdroid.views.MapView>
-
-    <ListView
-        android:id="@+id/custom_location_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_alignParentLeft="true" >
-
-    </ListView>
 
 </RelativeLayout>

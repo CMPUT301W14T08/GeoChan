@@ -66,7 +66,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author Artem Chikin
  */
 public class PostFragment extends Fragment {
-	public static final int MAX_BITMAP_DIMENSIONS = 600;
+    public static final int MAX_BITMAP_DIMENSIONS = 900;
 
 	private LocationListenerService locationListenerService;
 	private GeoLocation geoLocation;
@@ -140,9 +140,7 @@ public class PostFragment extends Fragment {
 					geoLocation.setCoordinates(lat, lon);
 
 					String locationDescription = args.getString("locationDescription");
-
-					Log.e("POI is:", locationDescription);
-					geoLocation.setLocationDescription(locationDescription);
+                    geoLocation.setLocationDescription(locationDescription);
 
 					DecimalFormat format = new DecimalFormat();
 					format.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -163,59 +161,59 @@ public class PostFragment extends Fragment {
 		}
 	}
 
-	/**
-	 * onClick method for the post button. Extracts the textView information,
-	 * creates the threadComment object and posts it to the server.
-	 * 
-	 * @param view
-	 *            The post button in the PostThreadFragment
-	 */
-	public void post(View view) {
-		if (view.getId() == R.id.post_button) {
-			if(geoLocation.getLocationDescription() == null) {
-				// Retrieve POI
-				ProgressDialog dialog = new ProgressDialog(getActivity());
-				dialog.setMessage("Retrieving Location");
-				ThreadManager.startGetPOI(geoLocation, dialog, null);
-			}
-			String title = null;
-			EditText editTitle = null;
-			EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
-			String comment = editComment.getText().toString();
-			if (thread == null) {
-				editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
-				title = editTitle.getText().toString();
-			}
-			if (title != null && title.equals("")) {
-				ErrorDialog.show(getActivity(), "Title can not be left blank.");
-			} else {
-				Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
-				//ElasticSearchClient client = ElasticSearchClient.getInstance();
-				if (commentToReplyTo != null) {
-					Comment c = thread.findCommentById(thread.getBodyComment(),
-							commentToReplyTo.getId());
-					c.addChild(newComment);
-					int tag = PreferencesManager.getInstance().getCommentSort();
-					SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
-				} else {
-					ThreadList.addThread(newComment, title);
-					int tag = PreferencesManager.getInstance().getThreadSort();
-					SortUtil.sortThreads(tag, ThreadList.getThreads());
-				}
-				// log the thread and the geolocation
-				if (geoLocation.getLocation() == null) {
-					GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
-					geoLocationLog.addLogEntry(title, geoLocation);
-				}
-				ThreadManager.startPost(newComment, title);
-				InputMethodManager inputManager = (InputMethodManager) getActivity()
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputManager.hideSoftInputFromWindow(view.getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				this.getFragmentManager().popBackStackImmediate();
-			}
-		}
-	}
+    /**
+     * onClick method for the post button. Extracts the textView information,
+     * creates the threadComment object and posts it to the server.
+     * 
+     * @param view
+     *            The post button in the PostThreadFragment
+     */
+    public void post(View view) {
+        if (view.getId() == R.id.post_button) {
+            if(geoLocation.getLocationDescription() == null) {
+                // Retrieve POI
+                ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Retrieving Location");
+                ThreadManager.startGetPOI(geoLocation, dialog, null);
+            }
+            String title = null;
+            EditText editTitle = null;
+            EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+            String comment = editComment.getText().toString();
+            if (thread == null) {
+                editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
+                title = editTitle.getText().toString();
+            }
+            if (title != null && title.equals("")) {
+                ErrorDialog.show(getActivity(), "Title can not be left blank.");
+            } else {
+                Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
+                //ElasticSearchClient client = ElasticSearchClient.getInstance();
+                if (commentToReplyTo != null) {
+                    Comment c = thread.findCommentById(thread.getBodyComment(),
+                            commentToReplyTo.getId());
+                    c.addChild(newComment);
+                    int tag = PreferencesManager.getInstance().getCommentSort();
+                    SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
+                } else {
+                    ThreadList.addThread(newComment, title);
+                    int tag = PreferencesManager.getInstance().getThreadSort();
+                    SortUtil.sortThreads(tag, ThreadList.getThreads());
+                }
+                // log the thread and the geolocation
+                if (geoLocation.getLocation() != null) {
+                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+                    geoLocationLog.addLogEntry(geoLocation);
+                }
+                ThreadManager.startPost(newComment, title);
+                InputMethodManager inputManager = (InputMethodManager) getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+                this.getFragmentManager().popBackStackImmediate();
+            }
+        }
+    }
 
 	/**
 	 * Displays dialog and either launches camera or gallery

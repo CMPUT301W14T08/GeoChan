@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
@@ -88,16 +87,11 @@ public class GetCommentsRunnable implements Runnable {
                 list.add(object);
             }
             for (Comment comment : list) {
-                Log.e("?", comment.getTextPost() + "  " + comment.getId());
                 commentList.findCommentListById(commentList, comment.getId()).setComment(comment);
             }
             ThreadComment threadComment = ThreadList.getThreads().get(task.getThreadIndex());
             Comment bodyComment = threadComment.getBodyComment();
-            Log.e("??", "size: " + bodyComment.getChildren().size());
             threadComment.setBodyComment(commentList.reconsructFromCommentList(commentList, bodyComment));
-            /*for (CommentList cl : commentList.getChildren()) {
-                Log.e("???", cl.getId());
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

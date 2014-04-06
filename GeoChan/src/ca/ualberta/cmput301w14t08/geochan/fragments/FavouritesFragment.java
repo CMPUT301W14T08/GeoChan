@@ -86,13 +86,18 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         disableSpinner();
     }
     
+    /**
+     * Calls onActivityResult on the PostFragment previously being used by the user. A
+     * workaround for onActivityResult not being called on child fragments, so instead when
+     * favourites are involved we call it on the parent fragment then delegate back to
+     * the child fragment.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        Log.e("PICDEBUG","onActivityResult called in FavouritesFragment.");
         super.onActivityResult(requestCode, resultCode, data);
         FragmentManager childManager = getChildFragmentManager();
         PostFragment postFrag = (PostFragment) childManager.findFragmentByTag("postFrag");
-        postFrag.onActivityResult(requestCode, resultCode, data);//See if this work-around works.
+        postFrag.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

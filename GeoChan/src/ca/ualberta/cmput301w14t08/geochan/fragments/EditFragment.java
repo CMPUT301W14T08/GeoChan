@@ -142,8 +142,8 @@ public class EditFragment extends Fragment {
         }
         if (EditFragment.oldThumbnail == null && editComment.getImageThumb() != null) {
             EditFragment.oldThumbnail = editComment.getImageThumb();
-            oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
-            oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
+            //oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
+            //oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
         }
         newTextPost = (EditText) getActivity().findViewById(R.id.editBody);
         newTextPost.setText(editComment.getTextPost());
@@ -167,8 +167,8 @@ public class EditFragment extends Fragment {
             oldTextView.setText(EditFragment.oldText);
         }
         if (EditFragment.oldThumbnail != null){
-            oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
-            oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
+            //oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
+            //oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
         }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
