@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.managers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +13,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -26,6 +29,7 @@ public class CacheManager {
     private Gson onlineGson;
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
+    private static final String IMAGE = "IMG";
 
     private CacheManager(Context context) {
         this.context = context;
@@ -34,11 +38,50 @@ public class CacheManager {
         this.onlineGson = GsonHelper.getOnlineGson();
     }
 
-    public static CacheManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new CacheManager(context);
-        }
+    public static CacheManager getInstance() {
         return instance;
+    }
+    
+    public static void generateInstance(Context context) {
+        instance = new CacheManager(context);
+    }
+    
+    public void serializeImage(Bitmap image, String id) {
+        try {
+            String json = onlineGson.toJson(image);
+            FileOutputStream f = context.openFileOutput(IMAGE + id + EXTENSION, Context.MODE_PRIVATE);
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+            w.write(json);
+            w.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Bitmap deserializeImage(String id) {
+        Bitmap image = null;
+        try {
+            FileInputStream f = context.openFileInput(IMAGE + id + EXTENSION);
+            BufferedReader r = new BufferedReader(new InputStreamReader(f));
+            String json = "";
+            String temp = "";
+            temp = r.readLine();
+            while (temp != null) {
+                json = json + temp;
+                temp = r.readLine();
+            }
+            r.close();
+            f.close();
+            image = onlineGson.fromJson(json, Bitmap.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     /**

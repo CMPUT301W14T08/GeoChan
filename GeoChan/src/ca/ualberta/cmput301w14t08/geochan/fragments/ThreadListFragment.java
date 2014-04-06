@@ -190,7 +190,7 @@ public class ThreadListFragment extends Fragment implements
             prefManager = PreferencesManager.getInstance();
         }
         if (cacheManager == null) {
-            cacheManager = CacheManager.getInstance(getActivity());
+            cacheManager = CacheManager.getInstance();
         }
         threadListView = (PullToRefreshListView) getActivity().findViewById(R.id.thread_list);
         // On start, get the threadList from the cache

@@ -42,6 +42,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
@@ -63,6 +64,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         ConnectivityHelper.generateInstance(this);
         Toaster.generateInstance(this);
         PreferencesManager.generateInstance(this);
+        CacheManager.generateInstance(this);
         ThreadListFragment fragment = new ThreadListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
                 .commit();

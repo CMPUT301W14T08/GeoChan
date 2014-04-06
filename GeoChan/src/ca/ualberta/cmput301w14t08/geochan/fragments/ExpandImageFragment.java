@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
 public class ExpandImageFragment extends Fragment {
@@ -35,18 +37,21 @@ public class ExpandImageFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         id = bundle.getString("id");
-        image = bundle.getParcelable("image");
     }
 
     @Override
     public void onStart() {
         super.onStart();
         ImageView imageView = (ImageView) getView().findViewById(R.id.expanded_image);
-        // Start the image getter thread.
-        ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Downloading Image");
-        ThreadManager.startGetImage(id, imageView, dialog);
-        
+        Bitmap image = CacheManager.getInstance().deserializeImage(id);
+        if (image == null) {
+            // Start the image getter thread.
+            ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Downloading Image");
+            ThreadManager.startGetImage(id, imageView, dialog);
+        } else {
+            imageView.setImageBitmap(image);
+        }
         LinearLayout rlayout = (LinearLayout) getView().findViewById(R.id.expanded_image_relative);
         rlayout.setOnClickListener(new OnClickListener() {
             @Override
