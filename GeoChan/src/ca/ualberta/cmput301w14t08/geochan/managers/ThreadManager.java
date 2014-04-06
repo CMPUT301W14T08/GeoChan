@@ -268,7 +268,7 @@ public class ThreadManager {
      *            id of the commentList used on the server
      */
     public static ElasticSearchGetCommentsTask startGetComments(ThreadViewFragment fragment,
-            int threadIndex) {
+            int threadIndex, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
@@ -276,7 +276,7 @@ public class ThreadManager {
         if (task == null) {
             task = new ElasticSearchGetCommentsTask();
         }
-        task.initCommentsTask(instance, fragment, threadIndex);
+        task.initCommentsTask(instance, fragment, threadIndex, dialog);
         task.setCommentListCache(instance.elasticSearchCommentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
         instance.elasticSearchGetCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
@@ -349,6 +349,9 @@ public class ThreadManager {
             instance.elasticSearchGetCommentsPool.execute(task.getGetCommentsRunnable());
             break;
         case GET_COMMENTS_COMPLETE:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_COMMENT_LIST_RUNNING:
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;
         case GET_COMMENT_LIST_FAILED:

@@ -1,5 +1,6 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
+import android.app.ProgressDialog;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentsRunnableInterface;
@@ -13,6 +14,7 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
     private int threadIndex;
     private CommentList cache;
     private ThreadViewFragment fragment;
+    private ProgressDialog dialog;
     private Runnable getCommentListRunnable;
     private Runnable getCommentsRunnable;
     private ThreadManager manager;
@@ -23,10 +25,11 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
         this.getCommentsRunnable = new ElasticSearchGetCommentsRunnable(this);
     }
 
-    public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex) {
+    public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex, ProgressDialog dialog) {
         this.manager = manager;
         this.fragment = fragment;
         this.threadIndex = threadIndex;
+        this.dialog = dialog;
     }
 
     public void handleState(int state) {
@@ -71,6 +74,10 @@ public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInter
 
     public ThreadViewFragment getFragment() {
         return fragment;
+    }
+
+    public ProgressDialog getDialog() {
+        return dialog;
     }
 
     public void setCurrentThread(Thread thread) {

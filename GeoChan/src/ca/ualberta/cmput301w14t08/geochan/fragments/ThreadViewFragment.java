@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -74,11 +75,14 @@ public class ThreadViewFragment extends Fragment {
         Bundle bundle = getArguments();
         threadIndex = (int) bundle.getLong("id");
         thread = bundle.getParcelable("thread");
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         // Assign custom adapter to the thread listView.
-        reload();
+        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+        // Load comments with dialog
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading comments.");
+        ThreadManager.startGetComments(this, threadIndex, dialog);
     }
-    
+
     /**
      * Initializes several of the variables used in displaying the contents of a
      * thread. If the user just returned from selecting a custom location to
@@ -419,7 +423,7 @@ public class ThreadViewFragment extends Fragment {
     }
     
     public void reload() {
-        ThreadManager.startGetComments(this, threadIndex);
+        ThreadManager.startGetComments(this, threadIndex, null);
     }
     
     public void finishReload() {
