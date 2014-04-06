@@ -1,10 +1,10 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
+package ca.ualberta.cmput301w14t08.geochan.tasks;
 
 import android.app.ProgressDialog;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.GetPOIRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetPOIRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.runnables.GetPOIRunnable;
 
 public class GetPOITask implements GetPOIRunnableInterface {
     private GeoLocation location;

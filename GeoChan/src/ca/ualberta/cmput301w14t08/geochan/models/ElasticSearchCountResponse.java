@@ -19,29 +19,22 @@
  */
 
 /*
- * Reused from https://github.com/rayzhangcl/ESDemo/
+ * Adapted from files originally from https://github.com/rayzhangcl/ESDemo/
  */
 
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
-
-import java.util.Collection;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
 /**
- * Represents a hit within a response served by ElasticSearch.
+ * Represents a count response served by ElasticSearch.
  * 
  * @author AUTHOR HERE
  * 
  */
-public class ElasticSearchHits<T> {
-    int total;
-    double max_score;
-    Collection<ElasticSearchResponse<T>> hits;
+public class ElasticSearchCountResponse {
+    int count;
+    transient Object _shards;
 
-    public Collection<ElasticSearchResponse<T>> getHits() {
-        return hits;
-    }
-
-    public String toString() {
-        return (super.toString() + "," + total + "," + max_score + "," + hits);
+    public int getCount() {
+        return count;
     }
 }

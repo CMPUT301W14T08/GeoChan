@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
+package ca.ualberta.cmput301w14t08.geochan.runnables;
 
 import java.util.ArrayList;
 
@@ -7,8 +7,8 @@ import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
 
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.GetPOITask;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
 public class GetPOIRunnable implements Runnable {
 

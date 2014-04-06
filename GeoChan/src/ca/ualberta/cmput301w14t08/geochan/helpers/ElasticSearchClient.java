@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
+package ca.ualberta.cmput301w14t08.geochan.helpers;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -32,8 +32,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchCountResponse;
+import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
+import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 import com.google.gson.Gson;

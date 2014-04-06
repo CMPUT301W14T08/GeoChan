@@ -1,13 +1,13 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
+package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchImageRunnable;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchPostRunnable;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchUpdateRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.ImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchImageRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchPostRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchUpdateRunnable;
 
 public class ElasticSearchPostTask implements ImageRunnableInterface, PostRunnableInterface,
         UpdateRunnableInterface {

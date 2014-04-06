@@ -1,12 +1,12 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
+package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentListRunnable;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetCommentsRunnable;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentsRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentListRunnable;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetCommentsRunnable;
 
 public class ElasticSearchGetCommentsTask implements GetCommentListRunnableInterface, GetCommentsRunnableInterface {
 

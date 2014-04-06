@@ -22,29 +22,42 @@
  * Reused from https://github.com/rayzhangcl/ESDemo/
  */
 
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
+package ca.ualberta.cmput301w14t08.geochan.models;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * Represents a response served by ElasticSearch.
+ * Represents a search response served by ElasticSearch
  * 
  * @author AUTHOR HERE
  * 
  */
-public class ElasticSearchResponse<T> {
-    String _index;
-    String _type;
-    String _id;
-    int _version;
+public class ElasticSearchSearchResponse<T> {
+    int took;
+    boolean timed_out;
+    transient Object _shards;
+    ElasticSearchHits<T> hits;
     boolean exists;
-    T _source;
-    double max_score;
 
-    public T getSource() {
-        return _source;
+    public Collection<ElasticSearchResponse<T>> getHits() {
+        return hits.getHits();
     }
 
-    @Override
+    /**
+     * COMMENT HERE
+     * 
+     * @return
+     */
+    public Collection<T> getSources() {
+        Collection<T> out = new ArrayList<T>();
+        for (ElasticSearchResponse<T> essrt : getHits()) {
+            out.add(essrt.getSource());
+        }
+        return out;
+    }
+
     public String toString() {
-        return "_index: " + _index + ", _source:" + _source.toString();
+        return (super.toString() + ":" + took + "," + _shards + "," + exists + "," + hits);
     }
 }

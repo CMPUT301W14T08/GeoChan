@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables;
+package ca.ualberta.cmput301w14t08.geochan.runnables;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,16 +10,16 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchClient;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchDocs;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchQueries;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.ElasticSearchResponse;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
+import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchDocs;
+import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentsTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

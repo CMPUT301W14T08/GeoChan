@@ -1,13 +1,13 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks;
+package ca.ualberta.cmput301w14t08.geochan.tasks;
 
 import java.lang.ref.WeakReference;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.runnables.ElasticSearchGetImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
+import ca.ualberta.cmput301w14t08.geochan.runnables.ElasticSearchGetImageRunnable;
 
 public class ElasticSearchGetImageTask implements GetImageRunnableInterface {
 

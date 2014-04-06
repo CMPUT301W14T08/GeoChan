@@ -1,4 +1,4 @@
-package ca.ualberta.cmput301w14t08.geochan.elasticsearch;
+package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.Collection;
 

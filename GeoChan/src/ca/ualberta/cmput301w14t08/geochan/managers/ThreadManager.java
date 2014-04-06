@@ -14,16 +14,16 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.widget.ImageView;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetCommentsTask;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchGetImageTask;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.ElasticSearchPostTask;
-import ca.ualberta.cmput301w14t08.geochan.elasticsearch.tasks.GetPOITask;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetCommentsTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchGetImageTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.ElasticSearchPostTask;
+import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
 /**
  * Responsible for managing various threads that require to run in the
