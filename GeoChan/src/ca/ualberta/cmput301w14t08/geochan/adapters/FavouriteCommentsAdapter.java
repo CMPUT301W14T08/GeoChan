@@ -1,7 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -16,8 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ExpandImageFragment;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * COMMENT HERE
@@ -26,11 +24,11 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  * 
  */
 public class FavouriteCommentsAdapter extends BaseAdapter {
-    private ArrayList<Comment> list;
+    private ArrayList<ThreadComment> list;
     private Context context;
     private FragmentManager manager;
 
-    public FavouriteCommentsAdapter(ArrayList<Comment> list, Context context,
+    public FavouriteCommentsAdapter(ArrayList<ThreadComment> list, Context context,
             FragmentManager manager) {
         this.list = list;
         this.context = context;
@@ -43,7 +41,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Comment getItem(int position) {
+    public ThreadComment getItem(int position) {
         return list.get(position);
     }
 
@@ -58,7 +56,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
      * 
      */
     public View getView(int position, View convertView, ViewGroup parent) {
-        Comment comment = (Comment) getItem(position);
+        ThreadComment comment = (ThreadComment) getItem(position);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,43 +65,37 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         // Comment body
         TextView commentBody = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentBody);
-        commentBody.setText(comment.getTextPost());
+        commentBody.setText(comment.getBodyComment().getTextPost());
         // Comment creator
         TextView commentBy = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentBy);
-        commentBy.setText("Posted by " + comment.getUser() + "#" + comment.getHash());
+        commentBy.setText("Posted by " + comment.getBodyComment().getUser() + "#" + comment.getBodyComment().getHash());
         // Comment timestamp
         TextView commentTime = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_commentDate);
-        commentTime.setText(comment.getCommentDateString());
+        commentTime.setText(comment.getBodyComment().getCommentDateString());
         // Comment location
         TextView commentLocationText = (TextView) convertView
                 .findViewById(R.id.thread_view_comment_location);
-        GeoLocation repLocCom = comment.getLocation();
+        GeoLocation repLocCom = comment.getBodyComment().getLocation();
         if (repLocCom != null) {
-            DecimalFormat format = new DecimalFormat();
-            format.setRoundingMode(RoundingMode.HALF_EVEN);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(4);
-
-            commentLocationText.setText("Latitude: " + format.format(repLocCom.getLatitude())
-                    + " Longitude: " + format.format(repLocCom.getLongitude()));
+            commentLocationText.setText(repLocCom.getLocationDescription());
         } else {
             commentLocationText.setText("Error: No location found");
         }
 
-        if (comment.hasImage()) {
+        if (comment.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_view_comment_thumbnail);
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
-            thumbnail.setImageBitmap(comment.getImageThumb());
+            thumbnail.setImageBitmap(comment.getBodyComment().getImageThumb());
             listenForCommentThumbnail(convertView, comment);
         }
         return convertView;
     }
 
-    private void listenForCommentThumbnail(View convertView, final Comment comment) {
+    private void listenForCommentThumbnail(View convertView, final ThreadComment comment) {
         ImageButton thumbnail = (ImageButton) convertView
                 .findViewById(R.id.thread_view_comment_thumbnail);
         if (thumbnail != null) {
@@ -112,8 +104,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
                     // Perform action on click
                     Fragment fragment = new ExpandImageFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("img", comment.getImage());
-                    fragment.setArguments(bundle);
+                    bundle.putString("id", comment.getId());
                     manager.beginTransaction().add(R.id.fragment_container, fragment, "thumbFrag")
                             .addToBackStack(null).commit();
                     manager.executePendingTransactions();
