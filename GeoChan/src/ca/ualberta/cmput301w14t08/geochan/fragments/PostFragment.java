@@ -66,7 +66,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * @author Artem Chikin
  */
 public class PostFragment extends Fragment {
-    public static final int MAX_BITMAP_DIMENSIONS = 600;
+    private static final int MAX_BITMAP_DIMENSIONS = 600;
 
     private LocationListenerService locationListenerService;
     private GeoLocation geoLocation;
