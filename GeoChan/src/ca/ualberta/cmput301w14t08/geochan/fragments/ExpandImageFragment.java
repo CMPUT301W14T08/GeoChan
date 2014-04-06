@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ public class ExpandImageFragment extends Fragment {
     public void onStart() {
         super.onStart();
         ImageView imageView = (ImageView) getView().findViewById(R.id.expanded_image);
-        Bitmap image = CacheManager.getInstance().deserializeImage(id);
+        final Bitmap image = CacheManager.getInstance().deserializeImage(id);
         if (image == null) {
             // Start the image getter thread.
             ProgressDialog dialog = new ProgressDialog(getActivity());
@@ -61,7 +62,8 @@ public class ExpandImageFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "SAVE!? NO.", Toast.LENGTH_SHORT).show();
+            	MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), image, id+".jpeg" , id + "image");
+                Toast.makeText(getActivity(), "Saved to gallery.", Toast.LENGTH_SHORT).show();
             }
         });
     }

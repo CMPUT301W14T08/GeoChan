@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.managers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,9 +33,18 @@ public class CacheManager {
 
     private CacheManager(Context context) {
         this.context = context;
+        checkCacheSize();
         this.offlineGson = GsonHelper.getOfflineGson();
         // thread Gson is same as online - all the data except for the comments.
         this.onlineGson = GsonHelper.getOnlineGson();
+    }
+    
+    private void checkCacheSize() {
+    	File file = context.getFilesDir();
+    	Log.e("CACHE LENGTH:", Long.toString(file.length()));
+    	Log.e("CACHE FREE:", Long.toString(file.getFreeSpace()));
+    	Log.e("CACHE TOTAL:", Long.toString(file.getTotalSpace()));
+    	Log.e("CACHE USABLE:", Long.toString(file.getUsableSpace()));
     }
 
     public static CacheManager getInstance() {

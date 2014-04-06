@@ -45,9 +45,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -74,8 +74,6 @@ public class PostFragment extends Fragment {
 	private Bitmap imageThumb = null;
 	private ThreadComment thread = null;
 	private Comment commentToReplyTo = null;
-
-	// private ImageView thumbnail;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,9 +114,6 @@ public class PostFragment extends Fragment {
 			bodyReplyTo.setMovementMethod(new ScrollingMovementMethod());
 			bodyReplyTo.setText(commentToReplyTo.getTextPost());
 			replyTo.setText(commentToReplyTo.getUser() + " says:");
-			Bitmap comThumbnail = commentToReplyTo.getImageThumb();
-			ImageView postThumbnail = (ImageView) getActivity().findViewById(R.id.post_thumbnail);
-			postThumbnail.setImageBitmap(comThumbnail);
 		}
 	}
 
@@ -169,6 +164,14 @@ public class PostFragment extends Fragment {
      *            The post button in the PostThreadFragment
      */
     public void post(View view) {
+    	if (!ConnectivityHelper.getInstance().isConnected()) {
+    		ErrorDialog.show(getActivity(), "You are not connected to the Internet. Please try again later.");
+    		return;
+    	}
+    	if (geoLocation.getLocation() == null) {
+    		ErrorDialog.show(getActivity(), "Could not retrieve location. Please specify a custom location.");
+    		return;
+    	}
         if (view.getId() == R.id.post_button) {
             if(geoLocation.getLocationDescription() == null) {
                 // Retrieve POI
