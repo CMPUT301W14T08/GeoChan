@@ -51,10 +51,8 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
-import ca.ualberta.cmput301w14t08.geochan.fragments.FavouritesFragment;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
@@ -126,23 +124,12 @@ public class CustomLocationFragment extends Fragment {
 			fm = getFragmentManager();
 		}
 
-		// get the views
 		ListView lv = (ListView) getView().findViewById(
 				R.id.custom_location_list_view);
 		openMapView = (MapView) getActivity().findViewById(R.id.map_view);
 
-		// setup all listeners
 		locationListenerService = new LocationListenerService(getActivity());
 		locationListenerService.startListening();
-
-		// get the OP
-		Bundle args = getArguments();
-		Comment topComment = (Comment) args.getParcelable("original post");
-		if (topComment != null) {
-			Marker threadLocationMarker = new Marker(openMapView);
-			threadLocationMarker.setIcon(getResources().getDrawable(
-					R.drawable.red_map_pin));
-		}
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -184,6 +171,7 @@ public class CustomLocationFragment extends Fragment {
 		lv.setAdapter(customLocationAdapter);
 
 		setupMap(mapEventsReceiver);
+		openMapView.invalidate();
 	}
 
 	/**
@@ -203,12 +191,22 @@ public class CustomLocationFragment extends Fragment {
 
 		currentLocation = new GeoLocation(locationListenerService);
 
+		// if valid current location, put it on the map
 		if (currentLocation.getLocation() != null) {
-			openMapView.getController().setCenter(
-					new GeoPoint(currentLocation.getLocation()));
+			Marker marker = new Marker(openMapView);
+			marker.setPosition(currentLocation.makeGeoPoint());
+			marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+			marker.setTitle("Current Location");
+			marker.setIcon(getResources().getDrawable(
+					R.drawable.current_location_pin));
+			openMapView.getOverlays().add(marker);
+
 			openMapView.getController().setZoom(13);
+			openMapView.getController().animateTo(
+					currentLocation.makeGeoPoint());
+
 		} else {
-			openMapView.getController().setZoom(2);
+			openMapView.getController().setZoom(3);
 		}
 	}
 
@@ -261,14 +259,15 @@ public class CustomLocationFragment extends Fragment {
 
 	/**
 	 * Creates a marker object by taking in latitude and longitude values and
-	 * sets its position on the map view
+	 * sets its position on the map view. Also adds a listener to the Marker for
+	 * dragging the marker around the map
 	 * 
 	 * @param geoLocation
 	 * @return marker
 	 */
 	private void handleNewLocationPressed(GeoLocation geoLocation) {
 
-		// create the marker and set its position
+		// create the marker and set it up
 		Marker locationMarker = new Marker(openMapView);
 		locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(),
 				geoLocation.getLongitude()));
@@ -278,16 +277,24 @@ public class CustomLocationFragment extends Fragment {
 		locationMarker.setIcon(getResources().getDrawable(
 				R.drawable.red_map_pin));
 
+		// get the POI
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
 
 		locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
 
+			/**
+			 * Called as the marker is being dragged, no implementation
+			 */
 			@Override
 			public void onMarkerDrag(Marker marker) {
 			}
 
+			/**
+			 * Called when the onDragListen action is complete Updates the
+			 * location and POI when the drag is finished
+			 */
 			@Override
 			public void onMarkerDragEnd(Marker marker) {
 				GeoLocation geoLocation = new GeoLocation(marker.getPosition()
@@ -297,6 +304,10 @@ public class CustomLocationFragment extends Fragment {
 				ThreadManager.startGetPOI(geoLocation, dialog, marker);
 			}
 
+			/**
+			 * Called when the drag operation begins. No implementation at this
+			 * time
+			 */
 			@Override
 			public void onMarkerDragStart(Marker marker) {
 			}
