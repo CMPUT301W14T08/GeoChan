@@ -27,6 +27,7 @@ import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -67,12 +68,14 @@ public class CustomLocationFragment extends Fragment {
 	private CustomLocationAdapter customLocationAdapter;
 	private int postType;
 	private FragmentManager fm;
-	private MapView openMapView;
 	private LocationListenerService locationListenerService;
 	private Marker currentLocationMarker;
 	private GeoLocation newLocation;
 	private GeoLocation currentLocation;
+	private MapView openMapView;
 	private MapEventsOverlay mapEventsOverlay;
+	private MarkerInfoWindow currentLocationInfoWindow;
+	private MarkerInfoWindow newLocationInfoWindow;
 
 	// flags for type of post that initiated this fragment
 	public static final int POST = 1;
@@ -129,6 +132,9 @@ public class CustomLocationFragment extends Fragment {
 		locationListenerService = new LocationListenerService(getActivity());
 		locationListenerService.startListening();
 
+		currentLocationInfoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble, openMapView);
+		newLocationInfoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble, openMapView);
+		
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -192,17 +198,21 @@ public class CustomLocationFragment extends Fragment {
 		// if valid current location, put it on the map
 		if (currentLocation.getLocation() != null) {
 			currentLocationMarker = new Marker(openMapView);
+			
+			currentLocationInfoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble, openMapView);
+			currentLocationMarker.setInfoWindow(currentLocationInfoWindow);
+			
 			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
 			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 			currentLocationMarker.setTitle("Current Location");
 			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.current_location_pin));
+			
 			openMapView.getOverlays().add(currentLocationMarker);
 
 			openMapView.getController().setZoom(13);
 			openMapView.getController().animateTo(
 					currentLocation.makeGeoPoint());
-
 		} else {
 			openMapView.getController().setZoom(3);
 		}
@@ -267,6 +277,8 @@ public class CustomLocationFragment extends Fragment {
 
 		// create the marker and set it up
 		Marker locationMarker = new Marker(openMapView);
+		locationMarker.setInfoWindow(newLocationInfoWindow);
+		
 		locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(),
 				geoLocation.getLongitude()));
 		locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -279,7 +291,7 @@ public class CustomLocationFragment extends Fragment {
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
-
+		
 		locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
 
 			/**
@@ -308,6 +320,7 @@ public class CustomLocationFragment extends Fragment {
 			 */
 			@Override
 			public void onMarkerDragStart(Marker marker) {
+				marker.hideInfoWindow();
 			}
 		});
 
