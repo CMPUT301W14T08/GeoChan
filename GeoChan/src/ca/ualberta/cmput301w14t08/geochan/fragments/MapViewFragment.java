@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,9 +50,9 @@ public class MapViewFragment extends Fragment {
 
     private MapView openMapView;
     private LocationListenerService locationListenerService;
-    private Marker startMarker;
+    private Marker originalPostMarker;
     private Polyline roadOverlay;
-    private GridMarkerClusterer poiMarkers;
+    private GridMarkerClusterer replyPostMarkers;
     private GridMarkerClusterer directionsMarkers;
     private GridMarkerClusterer startAndFinishMarkers;
 
@@ -96,7 +97,7 @@ public class MapViewFragment extends Fragment {
         Bundle args = getArguments();
         Comment topComment = (Comment) args.getParcelable("thread_comment");
 
-        poiMarkers = new GridMarkerClusterer(getActivity());
+        replyPostMarkers = new GridMarkerClusterer(getActivity());
         directionsMarkers = new GridMarkerClusterer(getActivity());
         startAndFinishMarkers = new GridMarkerClusterer(getActivity());
         
@@ -104,7 +105,7 @@ public class MapViewFragment extends Fragment {
         Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
 
         directionsMarkers.setIcon(clusterIcon);
-        poiMarkers.setIcon(clusterIcon);
+        replyPostMarkers.setIcon(clusterIcon);
         startAndFinishMarkers.setIcon(clusterIcon);
 
         GeoLocation geoLocation = topComment.getLocation();
@@ -146,14 +147,14 @@ public class MapViewFragment extends Fragment {
         if (commentLocationIsValid(topComment)) {
             GeoLocation geoLocation = topComment.getLocation();
 
-            startMarker = createMarker(geoLocation, "OP");
-            startMarker.showInfoWindow();
+            originalPostMarker = createMarker(geoLocation, "OP");
+            originalPostMarker.showInfoWindow();
 
             handleChildComments(topComment);
             
-            openMapView.getOverlays().add(poiMarkers);
+            openMapView.getOverlays().add(replyPostMarkers);
             openMapView.getOverlays().add(directionsMarkers);
-            openMapView.getOverlays().add(startMarker);
+            openMapView.getOverlays().add(originalPostMarker);
         }
         
         openMapView.invalidate();
@@ -172,7 +173,7 @@ public class MapViewFragment extends Fragment {
 
         int zoomFactor;
         int zoomSpan = calculateZoomSpan();
-
+        
         // calculates the appropriate zoom level
         zoomFactor = 19 - (int) (Math.log10(zoomSpan) * 1.9);
         if (zoomFactor > 18 || zoomSpan < 1) {
@@ -181,6 +182,9 @@ public class MapViewFragment extends Fragment {
             zoomFactor = 2;
         }
 
+        Log.e("zoomFactor", Integer.toString(zoomFactor));
+        Log.e("zoomSpan", Integer.toString(zoomSpan));
+        
         // set the zoom center
         mapController.setZoom(zoomFactor);
         mapController.animateTo(geoLocation.makeGeoPoint());
@@ -205,6 +209,8 @@ public class MapViewFragment extends Fragment {
                 GeoLocation commentLocation = childComment.getLocation();
                 
                 if (commentLocationIsValid(childComment)) {
+                	Log.e("hi","hi");
+                	
                 	Marker replyMarker = new Marker(openMapView);
                 	replyMarker.setTitle("Reply");
                 	replyMarker.setPosition(commentLocation.makeGeoPoint());
@@ -218,7 +224,7 @@ public class MapViewFragment extends Fragment {
                     replyMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                     replyMarker.setImage(getResources().getDrawable(R.drawable.marker_via));
                 	
-                    poiMarkers.add(replyMarker);
+                    replyPostMarkers.add(replyMarker);
                     handleChildComments(childComment);
                 }
             }
@@ -257,7 +263,7 @@ public class MapViewFragment extends Fragment {
         int minLong = Integer.MAX_VALUE;
         int maxLong = Integer.MIN_VALUE;
 
-        for (Marker marker : poiMarkers.getItems()) {
+        for (Marker marker : replyPostMarkers.getItems()) {
             GeoPoint geoPoint = marker.getPosition();
             int geoLat = geoPoint.getLatitudeE6();
             int geoLong = geoPoint.getLongitudeE6();
@@ -354,7 +360,7 @@ public class MapViewFragment extends Fragment {
             
             waypoints.add(new GeoPoint(currentLocation.getLatitude(), currentLocation
                     .getLongitude()));
-            waypoints.add(startMarker.getPosition());
+            waypoints.add(originalPostMarker.getPosition());
             Road road = roadManager.getRoad(waypoints);
 
             roadOverlay = RoadManager.buildRoadOverlay(road, getActivity());
@@ -390,13 +396,13 @@ public class MapViewFragment extends Fragment {
             //currentLocation.retreivePOIString(getActivity());
             
             Marker currentLocationMarker = createMarker(currentLocation, "Your Location");
-            poiMarkers.add(currentLocationMarker);
+            replyPostMarkers.add(currentLocationMarker);
             currentLocationMarker.showInfoWindow();
        
             openMapView.getOverlays().clear();
             openMapView.getOverlays().add(roadOverlay);
             openMapView.getOverlays().add(directionsMarkers);
-            openMapView.getOverlays().add(poiMarkers);
+            openMapView.getOverlays().add(replyPostMarkers);
             openMapView.getOverlays().add(startAndFinishMarkers);
             
             setZoomLevel(currentLocation);
