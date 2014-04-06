@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.widget.ImageView;
+import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -263,6 +264,19 @@ public class ThreadManager {
         task.initGetImageTask(instance, id, imageView, dialog);
         task.setImageCache(instance.elasticSearchGetImageCache.get(id));
         instance.elasticSearchGetImagePool.execute(task.getGetImageRunnable());
+        return task;
+    }
+    
+    public static ElasticSearchGetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment, ProgressDialog dialog) {
+        if (instance == null) {
+            generateInstance();
+        }
+        ElasticSearchGetThreadCommentsTask task = instance.elasticSearchGetThreadCommentsTaskQueue.poll();
+        if (task == null) {
+            task = new ElasticSearchGetThreadCommentsTask();
+        }
+        task.initGetThreadCommentsTask(instance, fragment, dialog);
+        instance.elasticSearchGetThreadCommentsPool.execute(task.getThreadCommentsRunnable());
         return task;
     }
 
