@@ -77,7 +77,7 @@ public class ThreadListFragment extends Fragment {
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         setHasOptionsMenu(true);
         ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Loading comments.");
+        dialog.setMessage("Loading Threads.");
         ThreadManager.startGetThreadComments(this, dialog);
     }
 

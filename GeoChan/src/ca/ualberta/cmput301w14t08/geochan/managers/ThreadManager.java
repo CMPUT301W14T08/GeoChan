@@ -6,6 +6,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.osmdroid.views.MapView;
+
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -171,6 +173,7 @@ public class ThreadManager {
                 case TASK_COMPLETE:
                     Toaster.toastShort("YAY!!! :D");
                     break;
+                    
                 case GET_THREADS_COMPLETE:
                     GetThreadCommentsTask threadTask = (GetThreadCommentsTask) inputMessage.obj;
                     threadTask.getFragment().finishReload();
@@ -185,18 +188,34 @@ public class ThreadManager {
 
                 case GET_COMMENTS_COMPLETE:
                     GetCommentsTask task = (GetCommentsTask) inputMessage.obj;
+                    if (task.getDialog() != null) {
+                    	task.getDialog().dismiss();
+                	}
                     task.getFragment().finishReload();
                     recycleCommentsTask(task);
                     break;
                     
                 case GET_COMMENTS_FAILED:
                     GetCommentsTask taskFail = (GetCommentsTask) inputMessage.obj;
+                    if (taskFail.getDialog() != null) {
+                    	taskFail.getDialog().dismiss();
+                	}
                     taskFail.getFragment().finishReload();
                     recycleCommentsTask(taskFail);
                     break;    
+
+                case GET_COMMENT_LIST_RUNNING:
+                	GetCommentsTask getCommentsRunning = (GetCommentsTask) inputMessage.obj;
+                	if (getCommentsRunning.getDialog() != null) {
+                		getCommentsRunning.getDialog().show();
+                	}
+                	break;
                     
                 case GET_COMMENT_LIST_FAILED:
                     GetCommentsTask taskListFail = (GetCommentsTask) inputMessage.obj;
+                    if (taskListFail.getDialog() != null) {
+                    	taskListFail.getDialog().dismiss();
+                	}
                     taskListFail.getFragment().finishReload();
                     recycleCommentsTask(taskListFail);
                     break;
@@ -234,22 +253,30 @@ public class ThreadManager {
                     if (poiTaskComplete.getDialog() != null) {
                         poiTaskComplete.getDialog().dismiss();
                     }
+                    if (poiTaskComplete.getMapView() != null) {
+                    	// Create marker here
+                    	
+                    }
                     poiTaskComplete.getLocation().setLocationDescription(
-                            poiTaskComplete.getPOICache());
+                    		poiTaskComplete.getPOICache());
                     recycleGetPOITask(poiTaskComplete);
                     break;
-                    
+
                 case GET_POI_FAILED:
-                    GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
-                    if (poiTaskFailed.getDialog() != null) {
-                        poiTaskFailed.getDialog().dismiss();
-                    }
-                    poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
-                    recycleGetPOITask(poiTaskFailed);
-                    break;
-                    
+                	GetPOITask poiTaskFailed = (GetPOITask) inputMessage.obj;
+                	if (poiTaskFailed.getDialog() != null) {
+                		poiTaskFailed.getDialog().dismiss();
+                	}
+                	if (poiTaskFailed.getMapView() != null) {
+                    	// Create marker here
+                    	
+                	}
+                	poiTaskFailed.getLocation().setLocationDescription(poiTaskFailed.getPOICache());
+                	recycleGetPOITask(poiTaskFailed);
+                	break;
+
                 default:
-                    super.handleMessage(inputMessage);
+                	super.handleMessage(inputMessage);
                     break;
                 }
             }
@@ -343,7 +370,7 @@ public class ThreadManager {
         return task;
     }
 
-    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog) {
+    public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, MapView mapView) {
         if (instance == null) {
             generateInstance();
         }
@@ -351,7 +378,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetPOITask();
         }
-        task.initGetPOITask(instance, location, dialog);
+        task.initGetPOITask(instance, location, dialog, mapView);
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
@@ -406,6 +433,9 @@ public class ThreadManager {
     
     public void handleGetThreadCommentsState(GetThreadCommentsTask task, int state) {
         switch(state) {
+        case GET_THREADS_RUNNING:
+            instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
         case GET_THREADS_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;

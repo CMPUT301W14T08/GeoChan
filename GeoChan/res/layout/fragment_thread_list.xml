@@ -1,26 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent" >
 
     <eu.erikw.PullToRefreshListView
         android:id="@+id/thread_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-    	android:dividerHeight="1dp"
-        android:layout_alignParentTop="true" >
-
+    	android:dividerHeight="1dp" >
     </eu.erikw.PullToRefreshListView>
 	
 	<TextView
 	    android:id="@+id/empty_list_view"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentTop="true"
-	    android:layout_centerHorizontal="true"
 	    android:alpha="0.4"
 	    android:gravity="center"
 	    android:text="@string/no_threads"
@@ -28,4 +22,4 @@
 	    android:textSize="27sp"
 	    android:textStyle="italic" />
 
-</RelativeLayout>
+</LinearLayout>

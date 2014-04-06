@@ -91,7 +91,7 @@ public class PostFragment extends Fragment {
         if (geoLocation.getLocationDescription() == null) {
             // Retrieve POI
             Log.e("POI", "CallFromOnStart");
-            ThreadManager.startGetPOI(geoLocation, null);
+            ThreadManager.startGetPOI(geoLocation, null, null);
         }
     }
 
@@ -174,7 +174,7 @@ public class PostFragment extends Fragment {
                 // Retrieve POI
                 ProgressDialog dialog = new ProgressDialog(getActivity());
                 dialog.setMessage("Retrieving Location");
-                ThreadManager.startGetPOI(geoLocation, dialog);
+                ThreadManager.startGetPOI(geoLocation, dialog, null);
             }
             String title = null;
             EditText editTitle = null;

@@ -161,7 +161,7 @@ public class CustomLocationFragment extends Fragment {
                         clickedPoint.getLongitude());
                 ProgressDialog dialog = new ProgressDialog(getActivity());
                 dialog.setMessage("Retrieving Location");
-                ThreadManager.startGetPOI(newLocation, dialog);
+                ThreadManager.startGetPOI(newLocation, dialog, openMapView);
                 //newLocation.retreivePOIString(getActivity());
                 handleNewLocationPressed(newLocation);
                 return false;

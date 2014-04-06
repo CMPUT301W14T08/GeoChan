@@ -203,8 +203,21 @@ public class MapViewFragment extends Fragment {
         } else {
             for (Comment childComment : children) {
                 GeoLocation commentLocation = childComment.getLocation();
+                
                 if (commentLocationIsValid(childComment)) {
-                    Marker replyMarker = createMarker(commentLocation, "Reply");
+                	Marker replyMarker = new Marker(openMapView);
+                	replyMarker.setTitle("Reply");
+                	replyMarker.setPosition(commentLocation.makeGeoPoint());
+                	
+                	if (commentLocation.getLocationDescription() != null) {
+                        replyMarker.setSubDescription(commentLocation.getLocationDescription());
+                    } else {
+                        replyMarker.setSubDescription("Unknown Location");
+                    }
+                    
+                    replyMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                    replyMarker.setImage(getResources().getDrawable(R.drawable.marker_via));
+                	
                     poiMarkers.add(replyMarker);
                     handleChildComments(childComment);
                 }
