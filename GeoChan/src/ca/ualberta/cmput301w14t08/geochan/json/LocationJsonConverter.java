@@ -28,12 +28,12 @@ public class LocationJsonConverter implements JsonSerializer<Location>, JsonDese
      * see: http://stackoverflow.com/a/13997920
      */
     @Override
-    public JsonElement serialize(Location t, Type type, JsonSerializationContext jsc) {
+    public JsonElement serialize(Location location, Type type, JsonSerializationContext jsc) {
         JsonObject jo = new JsonObject();
-        jo.addProperty("mProvider", t.getProvider());
-        jo.addProperty("mAccuracy", t.getAccuracy());
-        jo.addProperty("latitude", t.getLatitude());
-        jo.addProperty("longitude", t.getLongitude());
+        jo.addProperty("mProvider", location.getProvider());
+        jo.addProperty("mAccuracy", location.getAccuracy());
+        jo.addProperty("latitude", location.getLatitude());
+        jo.addProperty("longitude", location.getLongitude());
         return jo;
     }
 

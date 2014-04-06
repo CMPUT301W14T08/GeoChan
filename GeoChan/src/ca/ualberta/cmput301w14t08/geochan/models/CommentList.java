@@ -6,19 +6,19 @@ import com.google.gson.annotations.Expose;
 
 public class CommentList {
     @Expose
-    private ArrayList<CommentList> comments;
+    private ArrayList<CommentList> children;
     @Expose
     private String id;
     private Comment comment;
 
     public CommentList(Comment comment) {
-        comments = new ArrayList<CommentList>();
+        children = new ArrayList<CommentList>();
         this.id = comment.getId();
         this.comment = comment;
     }
 
     public CommentList(String id) {
-        comments = new ArrayList<CommentList>();
+        children = new ArrayList<CommentList>();
         this.id = id;
         this.comment = null;
     }
@@ -40,15 +40,15 @@ public class CommentList {
     }
 
     public void setChildren(ArrayList<CommentList> comments) {
-        this.comments = comments;
+        this.children = comments;
     }
 
     public void addCommentList(CommentList commentList) {
-        comments.add(commentList);
+        children.add(commentList);
     }
 
     public ArrayList<CommentList> getChildren() {
-        return comments;
+        return children;
     }
 
     public CommentList findCommentListById(CommentList commentList, String id) {

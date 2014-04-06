@@ -40,6 +40,7 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
@@ -50,6 +51,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+			android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout="@+id/new_location_button"
             android:onClick="submitCurrentLocation"
             android:background="@drawable/rounded_button_selector"
@@ -61,6 +64,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+			android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:onClick="submitLocation"
             android:background="@drawable/rounded_button_selector"
             android:text="@string/new_location_button_text" />
