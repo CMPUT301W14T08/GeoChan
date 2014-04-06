@@ -74,6 +74,7 @@ public class ThreadListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // locationListener = new LocationListenerService(getActivity());
+        adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         setHasOptionsMenu(true);
         ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading comments.");
@@ -242,6 +243,7 @@ public class ThreadListFragment extends Fragment {
     }
     
     public void finishReload() {
+        cacheManager.serializeThreadList(ThreadList.getThreads());
         SortUtil.sortThreads(prefManager.getThreadSort(), ThreadList.getThreads());
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         // Assign custom adapter to the thread listView.
