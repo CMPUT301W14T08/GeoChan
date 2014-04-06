@@ -24,7 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
