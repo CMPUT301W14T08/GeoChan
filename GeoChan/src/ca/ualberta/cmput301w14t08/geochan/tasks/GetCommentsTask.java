@@ -73,6 +73,7 @@ public class GetCommentsTask implements GetCommentListRunnableInterface, GetComm
         return fragment;
     }
 
+
     public void setCurrentThread(Thread thread) {
         synchronized (manager) {
             this.thread = thread;
