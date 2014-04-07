@@ -23,5 +23,4 @@ public class Toaster {
     public static void toastLong(String message) {
         Toast.makeText(instance.context, message, Toast.LENGTH_LONG).show();
     }
-
 }
