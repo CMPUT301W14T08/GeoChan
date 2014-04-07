@@ -52,11 +52,13 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * Adapter used for displaying a ThreadComment in the ThreadViewFragment. It
- * inflates layouts for OP, top level comments and comment replies.
+ * inflates layouts for OP, top level comments and comment replies and listens to
+ * the buttons of the listView elements that are visible at all times.
  * 
  * @author Artem Chikin
  */
 public class ThreadViewAdapter extends BaseAdapter {
+	// Constants for all the poosible layout types.
     private static final int TYPE_COMMENT0 = 0;
     private static final int TYPE_COMMENT1 = 1;
     private static final int TYPE_COMMENT2 = 2;
@@ -88,7 +90,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * This method takes a comment and recursively builds a list of comment
-     * objects from the Comment's children tree.
+     * objects from the Comment's children tree. This is the list we display in our listView.
      * 
      * @param comment
      * 
@@ -158,7 +160,12 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
     }
 
-    // OP, SEPARATOR, 7 COMMENT depths and COMMENT_MAX types in order.
+    /**
+     * Return the layout type for a list element,
+     * OP, SEPARATOR, 7 COMMENT depths and COMMENT_MAX types.
+     * 
+     * @return int layout type
+     */
     @Override
     public int getItemViewType(int position) {
         int type = 0;
@@ -191,7 +198,7 @@ public class ThreadViewAdapter extends BaseAdapter {
     @Override
     /**
      * Depending on the list item type, inflate the correct
-     * layout.
+     * layout, start listening for its buttons.
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
@@ -261,7 +268,8 @@ public class ThreadViewAdapter extends BaseAdapter {
             final Comment commentMax = (Comment) getItem(position);
             convertView = setConvertView(convertView, R.layout.thread_view_comment_max);
             setCommentFields(convertView, commentMax);
-            // TYPE_COMMENTMAX has an extra field: depth
+            // TYPE_COMMENTMAX has an extra field: depth relative to the maximum 
+            // depth layout.
             TextView depthMeter = (TextView) convertView
                     .findViewById(R.id.thread_view_comment_depth_meter);
             depthMeter.setText("Max depth + " + Integer.toString(commentMax.getDepth() - 7));
@@ -272,6 +280,13 @@ public class ThreadViewAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * Listen for the thumbnail of a comment, onClick start the 
+     * ExpandImageFragment.
+     * 
+     * @param convertView The view that contains the thumbnail.
+     * @param comment The corresponding comment object.
+     */
     private void listenForThumbnail(View convertView, final Comment comment) {
     	ImageButton thumbnail = (ImageButton) convertView
     			.findViewById(R.id.thread_view_comment_thumbnail);
@@ -301,11 +316,11 @@ public class ThreadViewAdapter extends BaseAdapter {
     				manager.executePendingTransactions();
     			}
             });
-        }
+    	}
     }
 
     /**
-     * Assign convertview layout
+     * Assign convertview to layout.
      * 
      * @param convertView
      *            view to inflate
@@ -314,22 +329,22 @@ public class ThreadViewAdapter extends BaseAdapter {
      * @return convertView Inflated view
      */
     private View setConvertView(View convertView, int layout) {
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
-        }
-        return convertView;
+    	if (convertView == null) {
+    		LayoutInflater inflater = (LayoutInflater) context
+    				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    		convertView = inflater.inflate(layout, null);
+    	}
+    	return convertView;
     }
 
     /**
-     * Listener for the buttons in the TYPE_OP listView item. Comments have
+     * Listener for the buttons of the thread op (TYPE_OP) listView item. Comments have
      * listeners in ThreadViewFragment because they are only displayed after
      * onItemClick, threadComment buttons have a listener in the adapter for
      * ease of access to the permanently displayed buttons.
      * 
-     * @param convertView
-     * @param thread
+     * @param convertView view that contains op.
+     * @param thread threadComment object that contains op.
      * 
      */
     private void listenForThreadButtons(View convertView, final ThreadComment thread) {
@@ -359,11 +374,12 @@ public class ThreadViewAdapter extends BaseAdapter {
             listenForThumbnail(convertView, thread.getBodyComment());
         }
 
+        // Listen for the star(favourites) button.
         if (starButton != null) {
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click depending on if the thread has
-                    // been favourited
+                    // been favourited. 
                     if (!FavouritesLog.getInstance(context).hasThreadComment(thread.getId())) {
                         Toast.makeText(context, "Thread saved to Favourites.", Toast.LENGTH_SHORT)
                                 .show();
@@ -380,7 +396,7 @@ public class ThreadViewAdapter extends BaseAdapter {
                 }
             });
         }
-
+        // Listen for the edit button.
         if (editButton != null) {
             editButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -397,6 +413,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             });
         }
 
+        // Listen for the map button.
         if (mapButton != null) {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -420,51 +437,49 @@ public class ThreadViewAdapter extends BaseAdapter {
             });
         }
 
+        // Listen for the reply button.
         if (replyButton != null) {
-            replyButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click to launch postCommentFragment
-                    Fragment fragment = new PostFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("cmt", thread.getBodyComment());
-                    bundle.putLong("id", id);
-                    fragment.setArguments(bundle);
-                    Fragment fav = manager.findFragmentByTag("favThrFragment");
-                    if (fav != null) {
-                        Log.e("DEBUG","Attempting reply from favourites fragment.");
-                        manager.beginTransaction().replace(R.id.container, fragment, "postFrag")
-                        .addToBackStack(null).commit();
-                        manager.executePendingTransactions();//Added this to see if it works.
-                    } else {
-                        Log.e("DEBUG", "Attempting reply from non-favourites fragment.");
-                        manager.beginTransaction()
-                                .replace(R.id.fragment_container, fragment, "postFrag")
-                                .addToBackStack(null).commit();
-                        manager.executePendingTransactions();
-                    }
-                }
+        	replyButton.setOnClickListener(new View.OnClickListener() {
+        		public void onClick(View v) {
+        			// Perform action on click to launch postCommentFragment
+        			Fragment fragment = new PostFragment();
+        			Bundle bundle = new Bundle();
+        			bundle.putParcelable("cmt", thread.getBodyComment());
+        			bundle.putLong("id", id);
+        			fragment.setArguments(bundle);
+        			Fragment fav = manager.findFragmentByTag("favThrFragment");
+        			if (fav != null) {
+        				manager.beginTransaction()
+        				.replace(R.id.container, fragment, "postFrag")
+        				.addToBackStack(null).commit();
+        				manager.executePendingTransactions();
+        			} else {
+        				manager.beginTransaction()
+        				.replace(R.id.fragment_container, fragment, "postFrag")
+        				.addToBackStack(null).commit();
+        				manager.executePendingTransactions();
+        			}
+        		}
 
-            });
+        	});
         }
     }
 
     /**
-     * Method to set the required fields of the orignal post of the thread.
+     * Sets the required fields of the orignal post of the thread.
      * Title, creator, comment, timestamp, location.
      * 
      * @param convertView
      *            View container of a listView item
      */
     private void setOPFields(View convertView) {
-        // Thread title
+    	// Thread title
         TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
         // Special case of Viewing a Favourite Comment in ThreadView
         if (thread.getTitle().equals("")) {
         	title.setVisibility(View.GONE);
         	LinearLayout buttons = (LinearLayout) convertView.findViewById(R.id.thread_view_op_buttons);
         	buttons.setVisibility(View.GONE);
-        	//ImageButton button = (ImageButton) convertView.findViewById(R.id.comment_reply_button);
-        	//button.setVisibility(View.GONE);
         } else {
         	title.setText(thread.getTitle());
         }
@@ -504,7 +519,7 @@ public class ThreadViewAdapter extends BaseAdapter {
             }
         }
 
-        // Set the thumbnail is there is an image
+        // Set the thumbnail if there is an image
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_view_comment_thumbnail);
@@ -515,11 +530,11 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method sets all the required views for a comment reply. Comment,
-     * creator, time
+     * Sets all the required views for a comment reply. Comment text,
+     * creator, time.
      * 
-     * @param convertView
-     * @param reply
+     * @param convertView View that contains the comment.
+     * @param reply Comment object.
      * 
      */
     private void setCommentFields(View convertView, Comment reply) {

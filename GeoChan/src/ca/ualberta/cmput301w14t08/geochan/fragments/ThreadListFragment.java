@@ -233,7 +233,6 @@ public class ThreadListFragment extends Fragment {
                 }
             }
         });
-
     }
 
     public void reload() {
