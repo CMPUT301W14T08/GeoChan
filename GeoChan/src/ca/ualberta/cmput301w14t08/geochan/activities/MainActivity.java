@@ -62,6 +62,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
 	 * and a ThreadListFragment to view the app's thread list.
 	 * @param savedInstanceState the saved instance state bundle
 	 */
+	
+	// TODO Fix logic in fragments
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

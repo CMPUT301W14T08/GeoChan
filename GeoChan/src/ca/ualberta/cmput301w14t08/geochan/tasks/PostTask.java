@@ -24,6 +24,7 @@ import android.app.ProgressDialog;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetPOIRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.TaskInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -41,7 +42,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.UpdateRunnable;
  * @author Artem Herasymchuk, Artem Chikin
  *
  */
-public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInterface, PostRunnableInterface,
+public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostImageRunnableInterface, PostRunnableInterface,
         UpdateRunnableInterface {
     private Comment comment;
     private GeoLocation location;
@@ -82,16 +83,6 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
         this.dialog = dialog;
         this.threadComment = null;
     }
-
-    /** 
-     * Passes the state of the task to the ThreadManager
-     * so that it can be handled by the manager.
-     * @param state the state
-     */
-    public void handleState(int state) {
-        manager.handlePostState(this, state);
-    }
-
     
     /** 
      * Handles the various possible states of the
@@ -182,9 +173,17 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
     }
 	
     /**
-     * Returns the currently running thread.
-     * @return the thread
+     * {@inheritDoc} 
      */
+    @Override
+    public void handleState(int state) {
+        manager.handlePostState(this, state);
+    }
+	
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
     public Thread getCurrentThread() {
         synchronized (manager) {
             return thread;
@@ -192,18 +191,19 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
     }
 
     /**
-     * Sets the currently running thread of the task.
-     * @param thread the thread
+     * {@inheritDoc} 
      */
+    @Override
     public void setCurrentThread(Thread thread) {
         synchronized (manager) {
             this.thread = thread;
         }
     }
 
-	/**
-	 * Resets the task.
-	 */
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
     public void recycle() {
         comment = null;
         manager = null;
