@@ -47,20 +47,32 @@ public class FavouriteThreadsFragment extends Fragment {
     private FavouritesLog log;
     private ListView favouritesListView;
 
+    /**
+     * Initializes the log and list member variables.
+     * @param savedInstanceState The previously saved state of the fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log = FavouritesLog.getInstance(getActivity());
         list = log.getThreads();
     }
-
+    /**
+     * Set up the fragment's View.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_favourites_list, container, false);
     }
 
     /**
-     * Set up the listView, adapter and listen for list item clicks
+     * Set up the listView, adapter and listen for list item clicks.
      */
     @Override
     public void onStart() {
