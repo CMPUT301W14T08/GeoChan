@@ -65,14 +65,11 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
  */
 public class CustomLocationFragment extends Fragment {
 
-	private ArrayList<GeoLocation> logArray;
-	private CustomLocationAdapter customLocationAdapter;
 	private int postType;
 	private FragmentManager fm;
 	private LocationListenerService locationListenerService;
 	private Marker currentLocationMarker;
 	private GeoLocation newLocation;
-	private GeoLocation currentLocation;
 	private MapView openMapView;
 	private MapEventsOverlay mapEventsOverlay;
 	private ArrayList<Marker> markers;
@@ -117,7 +114,7 @@ public class CustomLocationFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
-		logArray = log.getLogEntries();
+		ArrayList<GeoLocation> logArray = log.getLogEntries();
 
 		FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
 				.findFragmentByTag("favouritesFrag");
@@ -174,7 +171,7 @@ public class CustomLocationFragment extends Fragment {
 			}
 		};
 
-		customLocationAdapter = new CustomLocationAdapter(getActivity(),
+		CustomLocationAdapter customLocationAdapter = new CustomLocationAdapter(getActivity(),
 				logArray);
 		lv.setAdapter(customLocationAdapter);
 
@@ -203,7 +200,7 @@ public class CustomLocationFragment extends Fragment {
 		openMapView.setBuiltInZoomControls(true);
 		openMapView.setMultiTouchControls(true);
 
-		currentLocation = new GeoLocation(locationListenerService);
+		GeoLocation currentLocation = new GeoLocation(locationListenerService);
 
 		markers = new ArrayList<Marker>();
 
@@ -342,8 +339,8 @@ public class CustomLocationFragment extends Fragment {
 	 * @return marker
 	 */
 	private void handleNewLocationPressed(GeoLocation geoLocation) {
-
-		// create the marker and set it up
+		hideInfoWindows();
+		
 		Marker locationMarker = new Marker(openMapView);
 		locationMarker.setInfoWindow(newLocationInfoWindow);
 

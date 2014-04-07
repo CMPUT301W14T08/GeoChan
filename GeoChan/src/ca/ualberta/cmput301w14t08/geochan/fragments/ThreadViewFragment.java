@@ -212,7 +212,7 @@ public class ThreadViewFragment extends Fragment {
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
-        log.addComment(comment);
+        log.addFavComment(new ThreadComment(comment,""));
     }
 
     /**
@@ -225,7 +225,7 @@ public class ThreadViewFragment extends Fragment {
         Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT)
                 .show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
-        log.removeComment(comment);
+        log.removeFavComment(comment);
     }
 
     /**
@@ -242,12 +242,16 @@ public class ThreadViewFragment extends Fragment {
         bundle.putParcelable("cmt", comment);
         bundle.putLong("id", threadIndex);
         fragment.setArguments(bundle);
-
+        boolean fromFavs = false;
+        Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
+        if(fav != null){
+            fromFavs = true;
+        }
+        bundle.putBoolean("fromFavs", fromFavs);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "postFrag").addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
-
     }
 
     private OnItemClickListener commentButtonListener = new OnItemClickListener() {
@@ -309,14 +313,14 @@ public class ThreadViewFragment extends Fragment {
             }
 
             // Check if the favourites log already has a copy.
-            if (FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+            if (FavouritesLog.getInstance(getActivity()).hasFavComment(comment.getId())) {
                 starButton.setImageResource(R.drawable.ic_rating_marked);
             }
 
             starButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Favourite or unfavourite depending on current state
-                    if (!FavouritesLog.getInstance(getActivity()).hasComment(comment.getId())) {
+                    if (!FavouritesLog.getInstance(getActivity()).hasFavComment(comment.getId())) {
                         starButton.setImageResource(R.drawable.ic_rating_marked);
                         favouriteAComment(comment);
                     } else {
@@ -347,7 +351,7 @@ public class ThreadViewFragment extends Fragment {
             fromFavs = true;
         }
         bundle.putBoolean("fromFavs", fromFavs);
-        Log.e("EDIT:", "Id of comment being passed."+comment.getId());
+        Log.e("EDIT:", "Id of comment being passed." + comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "editFrag").addToBackStack(null)

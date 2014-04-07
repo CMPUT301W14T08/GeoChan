@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polyline;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -53,6 +56,7 @@ public class MapViewFragment extends Fragment {
 	private GridMarkerClusterer replyPostMarkers;
 	private GridMarkerClusterer directionsMarkers;
 	private GridMarkerClusterer startAndFinishMarkers;
+	private ArrayList<Marker> markers;
 
 	/**
 	 * Gets the view when inflated, then calls setZoomLevel to display the
@@ -62,8 +66,6 @@ public class MapViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setHasOptionsMenu(false);
-
-		// geoPoints = new ArrayList<GeoPoint>();
 
 		return inflater.inflate(R.layout.fragment_map_view, container, false);
 	}
@@ -99,6 +101,7 @@ public class MapViewFragment extends Fragment {
 		replyPostMarkers = new GridMarkerClusterer(getActivity());
 		directionsMarkers = new GridMarkerClusterer(getActivity());
 		startAndFinishMarkers = new GridMarkerClusterer(getActivity());
+		markers = new ArrayList<Marker>();
 
 		Drawable clusterIconD = getResources().getDrawable(
 				R.drawable.marker_cluster);
@@ -147,11 +150,19 @@ public class MapViewFragment extends Fragment {
 		if (commentLocationIsValid(topComment)) {
 			GeoLocation geoLocation = topComment.getLocation();
 
+			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+					R.layout.bonuspack_bubble, openMapView);
+			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
+					openMapView);
+
 			originalPostMarker = createMarker(geoLocation, "OP");
+			originalPostMarker.setInfoWindow(infoWindow);
 			originalPostMarker.showInfoWindow();
 			originalPostMarker.setIcon(getResources().getDrawable(
 					R.drawable.red_map_pin));
 			startAndFinishMarkers.add(originalPostMarker);
+			markers.add(originalPostMarker);
+			setMarkerListeners(originalPostMarker);
 
 			handleChildComments(topComment);
 
@@ -190,6 +201,63 @@ public class MapViewFragment extends Fragment {
 		mapController.animateTo(geoLocation.makeGeoPoint());
 	}
 
+	private void setMarkerListeners(Marker locationMarker) {
+
+		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker, MapView map) {
+				if (marker.isInfoWindowShown() != true) {
+					hideInfoWindows();
+					marker.showInfoWindow();
+				} else {
+					hideInfoWindows();
+				}
+				return false;
+			}
+
+		});
+
+		if (locationMarker.isDraggable()) {
+			locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
+				/**
+				 * Called as the marker is being dragged, no implementation
+				 */
+				@Override
+				public void onMarkerDrag(Marker marker) {
+				}
+
+				/**
+				 * Called when the onDragListen action is complete Updates the
+				 * location and POI when the drag is finished
+				 */
+				@Override
+				public void onMarkerDragEnd(Marker marker) {
+					GeoLocation geoLocation = new GeoLocation(marker
+							.getPosition().getLatitude(), marker.getPosition()
+							.getLongitude());
+					ProgressDialog dialog = new ProgressDialog(getActivity());
+					dialog.setMessage("Retrieving Location");
+					ThreadManager.startGetPOI(geoLocation, dialog, marker);
+				}
+
+				/**
+				 * Called when the drag operation begins. No implementation at
+				 * this time
+				 */
+				@Override
+				public void onMarkerDragStart(Marker marker) {
+					hideInfoWindows();
+				}
+			});
+		}
+	}
+
+	private void hideInfoWindows() {
+		for (Marker marker : markers) {
+			marker.hideInfoWindow();
+		}
+	}
+
 	/**
 	 * Recursive method for handling all comments in the thread. First checks if
 	 * the comment has any children or not. If none, simply return. Otherwise,
@@ -224,8 +292,14 @@ public class MapViewFragment extends Fragment {
 							Marker.ANCHOR_BOTTOM);
 					replyMarker.setIcon(getResources().getDrawable(
 							R.drawable.blue_map_pin));
-
+					MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+							R.layout.bonuspack_bubble, openMapView);
+					infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
+							openMapView);
+					replyMarker.setInfoWindow(infoWindow);
+					setMarkerListeners(replyMarker);
 					replyPostMarkers.add(replyMarker);
+					markers.add(replyMarker);
 					handleChildComments(childComment);
 				}
 			}
@@ -247,8 +321,8 @@ public class MapViewFragment extends Fragment {
 		} else {
 			return (location.getLatitude() >= -90.0
 					|| location.getLatitude() <= 90.0
-					|| location.getLongitude() >= -180.0 || 
-					location.getLongitude() <= 180.0);
+					|| location.getLongitude() >= -180.0 || location
+					.getLongitude() <= 180.0);
 		}
 	}
 
@@ -380,6 +454,11 @@ public class MapViewFragment extends Fragment {
 			for (int i = 0; i < road.mNodes.size(); i++) {
 				RoadNode node = road.mNodes.get(i);
 				Marker nodeMarker = new Marker(openMapView);
+				MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+						R.layout.bonuspack_bubble, openMapView);
+				infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
+						openMapView);
+				nodeMarker.setInfoWindow(infoWindow);
 				nodeMarker.setPosition(node.mLocation);
 				nodeMarker.setIcon(nodeIcon);
 				nodeMarker.setTitle("Step " + i);
@@ -388,6 +467,8 @@ public class MapViewFragment extends Fragment {
 						node.mLength, node.mDuration));
 				nodeMarker.setImage(icon);
 				directionsMarkers.add(nodeMarker);
+				setMarkerListeners(nodeMarker);
+				markers.add(nodeMarker);
 			}
 
 			return null;
@@ -418,8 +499,17 @@ public class MapViewFragment extends Fragment {
 					Marker.ANCHOR_BOTTOM);
 			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.green_map_pin));
-
+			
+			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+					R.layout.bonuspack_bubble, openMapView);
+			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
+					openMapView);
+			currentLocationMarker.setInfoWindow(infoWindow);
+			
+			setMarkerListeners(currentLocationMarker);
+			
 			startAndFinishMarkers.add(currentLocationMarker);
+			markers.add(currentLocationMarker);
 
 			openMapView.getOverlays().clear();
 			openMapView.getOverlays().add(roadOverlay);
