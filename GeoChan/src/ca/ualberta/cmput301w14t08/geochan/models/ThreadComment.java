@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 
 /**
  * ThreadComment is a model class that handles all operations of threads in the

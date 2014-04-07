@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.test;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
@@ -473,7 +474,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     /**
      * Tests the calculation of comment scores in relation to their parent.
      */
-    @SuppressWarnings({ "deprecation", "deprecation" })
+    @SuppressWarnings("deprecation")
     public void testGetParentScore(){
         /*
          * Test the score calculation for child comments.
