@@ -97,7 +97,7 @@ public class ThreadViewFragment extends Fragment {
             // Load comments with dialog
             ProgressDialog dialog = new ProgressDialog(getActivity());
             dialog.setMessage("Loading comments.");
-            ThreadManager.startGetComments(this, threadIndex, dialog);
+            ThreadManager.startGetComments(this, threadIndex);
         }
     }
 
@@ -459,7 +459,7 @@ public class ThreadViewFragment extends Fragment {
     }
     
     public void reload() {
-        ThreadManager.startGetComments(this, threadIndex, null);
+        ThreadManager.startGetComments(this, threadIndex);
     }
     
     public void finishReload() {

@@ -137,7 +137,7 @@ public class CacheManager {
         return list;
     }
     
- // Serialize commentQueue to JSON
+    // Serialize commentQueue to JSON
     public void serializeThreadCommentQueue() {
         try {
             String json = offlineGson.toJson(getThreadCommentQueue());
