@@ -169,7 +169,9 @@ public class PostFragment extends Fragment {
      *            The post button in the PostThreadFragment
      */
     public void post(View view) {
-    	geoLocation = new GeoLocation(locationListenerService);
+    	if (geoLocation == null) {
+        	geoLocation = new GeoLocation(locationListenerService);
+    	}
     	if (geoLocation.getLocation() == null) {
     		ErrorDialog.show(getActivity(), "Could not retrieve location. Please specify a custom location.");
     		return;
