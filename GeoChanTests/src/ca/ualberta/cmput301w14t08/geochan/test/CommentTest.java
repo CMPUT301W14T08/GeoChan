@@ -34,8 +34,8 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
-/*
- * Test the main functionality of the Comment class
+/**
+ * Tests the functionality of the comment class
  */
 public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     

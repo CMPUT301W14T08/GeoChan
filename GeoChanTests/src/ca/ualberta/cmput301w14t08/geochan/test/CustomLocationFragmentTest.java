@@ -8,6 +8,9 @@ import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.fragments.CustomLocationFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 
+/**
+ * Tests for the custom location fragment from which a user can select a location from a map
+ */
 public class CustomLocationFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
     Fragment fragment;

@@ -67,6 +67,9 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("Comment added successfuly.", t1.getBodyComment().getChildren().contains(c1));
     }
     
+    /**
+     * Tests that distance between two geolocations is calculated correctly
+     */
     public void testGetDistanceFrom(){
         ThreadComment t1 = new ThreadComment();
         GeoLocation g1 = new GeoLocation(5,5);
@@ -77,6 +80,9 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
                       Math.sqrt(50));
     }
     
+    /**
+     * Tests that the time difference between a comment and other date is correct
+     */
     public void testGetTimeFrom(){
         ThreadComment t1 = new ThreadComment();
         Date d1 = new Date();
@@ -90,6 +96,9 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
                     1.0);
     }
     
+    /**
+     * Check that scores of different comments are calculated correctly
+     */
     public void testGetScoreFromUser(){
         ThreadComment t1 = new ThreadComment();
         ThreadComment t2 = new ThreadComment();
@@ -103,6 +112,9 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
                     t2.getScoreFromUser(g)); 
     }
     
+    /**
+     * Tests comment sorting by newest creation time
+     */
     public void testSortByDateNewest(){
         ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
         ThreadComment t1 = new ThreadComment();
@@ -178,6 +190,10 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
         assertTrue("t1 at index 9", carrier.get(9) == t1);   
     }
     
+    /**
+     * Tests sorting by oldest date by creating a sequence of comments
+     * then checking they appear in reverse order after sorting
+     */
     public void testSortByDateOldest(){
         ArrayList<ThreadComment> carrier = new ArrayList<ThreadComment>();
         ThreadComment t1 = new ThreadComment();

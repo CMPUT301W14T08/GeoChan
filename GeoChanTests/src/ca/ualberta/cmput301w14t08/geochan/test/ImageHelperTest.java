@@ -47,6 +47,9 @@ public class ImageHelperTest extends ActivityInstrumentationTestCase2<MainActivi
         assertNotNull(imageHelper);
     }
 
+    /**
+     * Test that files can be created
+     */
     public void testFileCreation() {
         try {
             File file = ImageHelper.createImageFile();

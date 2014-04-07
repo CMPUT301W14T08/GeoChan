@@ -31,6 +31,9 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/**
+ * Test the ThreadView fragment for proper functionality
+ */
 public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     Fragment fragment;
     ListView threadViewList;
@@ -59,6 +62,9 @@ public class ThreadViewFragmentTest extends ActivityInstrumentationTestCase2<Mai
         assertNotNull("fragment not initialized",fragment);
     }
    
+    /**
+     * Test that the listview is displayed correctly on the screen
+     */
     public void testListViewVisibility() {
         threadViewList = (ListView) activity.findViewById(ca.ualberta.cmput301w14t08.geochan.R.id.thread_view_list);
         View rootView = activity.getWindow().getDecorView();

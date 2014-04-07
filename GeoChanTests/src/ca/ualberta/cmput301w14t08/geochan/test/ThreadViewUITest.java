@@ -156,7 +156,7 @@ public class ThreadViewUITest extends ActivityInstrumentationTestCase2<MainActiv
         assertTrue("Custom location fragment did not launch", solo.waitForFragmentByTag("customLocFrag"));
         solo.clickOnButton(solo.getString(R.string.current_location_button_text));
         assertTrue("Location fragment did not return to Thread view fragment", solo.waitForFragmentByTag("thread_view_fragment"));
-        solo.clickOnButton("Current Location");
+        solo.clickOnButton("Location");
         assertTrue("Custom location fragment did not launch", solo.waitForFragmentByTag("customLocFrag"));
         solo.searchText(solo.getString(R.string.location_log));
         solo.searchButton(solo.getString(R.string.current_location_button_text));
