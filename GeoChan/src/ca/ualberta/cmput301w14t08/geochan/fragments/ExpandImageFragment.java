@@ -63,6 +63,11 @@ public class ExpandImageFragment extends Fragment {
      * 
      * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
      */
+    /**
+     * Assigns the fragments id variable to the ID passed into
+     * the fragment.
+     * @param savedInstanceState The previously saved state of the fragment.
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -70,6 +75,9 @@ public class ExpandImageFragment extends Fragment {
         id = bundle.getString("id");
     }
 
+    /**
+     * Initializes the UI of the fragment.
+     */
     @Override
     public void onStart() {
         super.onStart();

@@ -92,12 +92,25 @@ public class EditFragment extends Fragment {
     private boolean isThread;
     private File imageFile;
 
+    /**
+     * Initializes the UI of our fragment. Called only by Android.
+     * 
+     * @param inflater The LayoutInflater to inflate any Views in the fragment.
+     * @param container The parent View the fragment is attached to.
+     * @param savedInstanceState Previous saved state of the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.fragment_edit, container, false);
     }
 
+    /**
+     * Creates and initialzes the menu of the fragment. Called only by Android.
+     * 
+     * @param menu The Menu object for the fragment.
+     * @param inflater The inflater for the menu.
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -158,7 +171,6 @@ public class EditFragment extends Fragment {
      * returning from changing the location, the new coordinates are placed on the
      * edit_location_button Button.
      */
-
     @Override
     public void onResume() {
         super.onResume();
@@ -192,6 +204,10 @@ public class EditFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the text post of the Comment being edited to the value entered into the
+     * EditText by the user.
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -272,6 +288,10 @@ public class EditFragment extends Fragment {
      * Overriden method from Fragment. Sets the image and thumbnail in the comment being
      * edited to the user selected image. Is called automatically after the user
      * returns from selecting an image from either the camera or photo gallery.
+     * 
+     * @param requestCode The request code supplied to startActivityForResult.
+     * @param resultCode The result code returned by the activity.
+     * @param data The data returned by the activity.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

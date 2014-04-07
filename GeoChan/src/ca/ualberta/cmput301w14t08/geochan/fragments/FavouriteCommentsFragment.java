@@ -36,7 +36,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * Fragment displaying the child comments of a saved thread.
+ * Fragment for displaying the child comments of a saved thread.
  * 
  * @author Artem Chikin
  * 
@@ -47,8 +47,9 @@ public class FavouriteCommentsFragment extends Fragment {
     private ListView favouritesListView;
 
     /**
-     * Set up the log instance and get the comment list
+     * Set up the log instance and get the comment list.
      * 
+     * @param savedInstanceState The previously saved state of the fragment.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,11 @@ public class FavouriteCommentsFragment extends Fragment {
     }
 
     /**
-     * Inflate the fragment view from the given layout
+     * Inflate the fragment view from the given layout.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param contained The parent view that the fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
      * 
      */
     @Override

@@ -67,7 +67,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 public class CustomLocationFragment extends Fragment {
 
 	private int postType;
-	private FragmentManager fm;
+	private FragmentManager fragManager;
 	private LocationListenerService locationListenerService;
 	private GeoLocation newLocation;
 	private MapView openMapView;
@@ -94,7 +94,7 @@ public class CustomLocationFragment extends Fragment {
 	}
 
 	/**
-	 * Inflates the menu and adds any action bar items that are present
+	 * Inflates the menu and adds any action bar items that are present.
 	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -108,7 +108,7 @@ public class CustomLocationFragment extends Fragment {
 	/**
 	 * Setups up the Location Log to display previous locations, connects the UI
 	 * buttons, starts listening for location updates and finally calls setup
-	 * map.
+	 * map. Gets the proper fragment manager and sets it to fragManager.
 	 * 
 	 */
 	public void onStart() {
@@ -119,9 +119,9 @@ public class CustomLocationFragment extends Fragment {
 		FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()
 				.findFragmentByTag("favouritesFrag");
 		if (favFrag != null) {
-			fm = getChildFragmentManager();
+			fragManager = getChildFragmentManager();
 		} else {
-			fm = getFragmentManager();
+			fragManager = getFragmentManager();
 		}
 
 		ListView lv = (ListView) getView().findViewById(
@@ -141,7 +141,7 @@ public class CustomLocationFragment extends Fragment {
 				GeoLocation logEntry = (GeoLocation) parent
 						.getItemAtPosition(position);
 				setBundleArguments(logEntry, "PREVIOUS_LOCATION");
-				fm.popBackStackImmediate();
+				fragManager.popBackStackImmediate();
 			}
 		});
 
@@ -167,6 +167,8 @@ public class CustomLocationFragment extends Fragment {
 	/**
 	 * Sets up the map view, gets the current location and initiates a new
 	 * marker object from it, if valid. Then plots it on the map.
+	 * 
+	 * @param mapEventsReceiver The MapEventsReceiver for handling click events on the map.
 	 */
 	private void setupMap(MapEventsReceiver mapEventsReceiver) {
 
@@ -206,7 +208,8 @@ public class CustomLocationFragment extends Fragment {
 	 * on the map. Only the long click is implemented here, for setting a custom
 	 * location pin
 	 * 
-	 * @return mapEventsReceiver
+	 * @return mapEventsReceiver A MapEventsReceiver object set up for use
+	 * in our MapViewFragment.
 	 */
 	private MapEventsReceiver getMapEventsReceiver() {
 		MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
@@ -241,7 +244,12 @@ public class CustomLocationFragment extends Fragment {
 	 * location, and sets up the marker. Calls setMarkerListeners to react to a
 	 * click on a marker
 	 * 
-	 * @param geoLocation
+	 * @param geoLocation A GeoLocation representing the location where the
+	 * map was clicked.
+	 * @param icon The icon to be displayed in the map.
+	 * @param title The title to be displayed with the marker on the map.
+	 * 
+	 * @return A CustomMarker object set up with the passed information.
 	 */
 	public CustomMarker createMarker(GeoLocation geoLocation, Drawable icon,
 			String title) {
@@ -265,7 +273,7 @@ public class CustomLocationFragment extends Fragment {
 	 * infoWindow of the marker that was clicked. Second, if the marker is
 	 * draggable,
 	 * 
-	 * @param locationMarker
+	 * @param locationMarker The CustomMarker to have listeners set up for.
 	 */
 	private void setMarkerListeners(CustomMarker locationMarker) {
 
@@ -334,8 +342,7 @@ public class CustomLocationFragment extends Fragment {
 	 * sets its position on the map view. Also adds a listener to the Marker for
 	 * dragging the marker around the map
 	 * 
-	 * @param geoLocation
-	 * @return marker
+	 * @param geoLocation A GeoLocation representing the point that was pressed on the map.
 	 */
 	private void handleNewLocationPressed(GeoLocation geoLocation) {
 		hideInfoWindows();
@@ -361,7 +368,7 @@ public class CustomLocationFragment extends Fragment {
 	}
 
 	/**
-	 * Iterates through all markers on the map and hides their infoWindows
+	 * Iterates through all markers on the map and hides their infoWindows.
 	 */
 	private void hideInfoWindows() {
 		for (Marker marker : markers) {
@@ -374,10 +381,14 @@ public class CustomLocationFragment extends Fragment {
 	 * current location, puts it in a bundle and passes it back to the previous
 	 * fragment
 	 * 
+<<<<<<< HEAD
 	 * @param view where the button was clicked from
+=======
+	 * @param view A View for the Button that was pressed.
+>>>>>>> 7fdf133c59ad8fbb902cacb68c5313321b6b0ee8
 	 * 
 	 */
-	public void submitCurrentLocation(View v) {
+	public void submitCurrentLocation(View view) {
 		GeoLocation currentGeoLocation = new GeoLocation(
 				locationListenerService);
 		if (currentGeoLocation.getLocation() == null) {
@@ -385,7 +396,7 @@ public class CustomLocationFragment extends Fragment {
 		} else {
 			setBundleArguments(currentGeoLocation, "CURRENT_LOCATION");
 		}
-		fm.popBackStackImmediate();
+		fragManager.popBackStackImmediate();
 	}
 
 	/**
@@ -393,16 +404,20 @@ public class CustomLocationFragment extends Fragment {
 	 * location marker on the map, that location is placed in a bundle and
 	 * passed back to the previous fragment
 	 * 
+<<<<<<< HEAD
 	 * @param v where the button was clicked from
+=======
+	 * @param view A View for the Button that was pressed.
+>>>>>>> 7fdf133c59ad8fbb902cacb68c5313321b6b0ee8
 	 * 
 	 */
-	public void submitNewLocation(View v) {
+	public void submitNewLocation(View view) {
 		if (newLocation == null) {
 			ErrorDialog.show(getActivity(),
 					"Please select a location on the map");
 		} else {
 			setBundleArguments(newLocation, "NEW_LOCATION");
-			fm.popBackStackImmediate();
+			fragManager.popBackStackImmediate();
 		}
 	}
 
@@ -413,8 +428,10 @@ public class CustomLocationFragment extends Fragment {
 	 * location being returned (current location of user or a new location set
 	 * on the map)
 	 * 
-	 * @param locationToSubmit
-	 * @param locationType
+	 * @param locationToSubmit A GeoLocation representing the location to be
+	 * submitted to another fragment.
+	 * @param locationType A string representing the location type that is being
+	 * submitted.
 	 */
 	public void setBundleArguments(GeoLocation locationToSubmit,
 			String locationType) {
@@ -438,7 +455,7 @@ public class CustomLocationFragment extends Fragment {
 		} else if (postType == SORT_COMMENT) {
 			SortUtil.setCommentSortGeo(locationToSubmit);
 		} else if (postType == EDIT) {
-			EditFragment fragment = (EditFragment) fm
+			EditFragment fragment = (EditFragment) fragManager
 					.findFragmentByTag("editFrag");
 			Bundle args = fragment.getArguments();
 			args.putDouble("LATITUDE", locationToSubmit.getLatitude());
