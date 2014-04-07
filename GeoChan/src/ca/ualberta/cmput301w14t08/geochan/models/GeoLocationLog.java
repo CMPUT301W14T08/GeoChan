@@ -61,8 +61,6 @@ public class GeoLocationLog {
     /**
      * Adds a new LogEntry to the GeoLocationLog.
      * 
-     * @param threadTitle
-     *            Title to be stored in the new LogEntry.
      * @param geoLocation
      *            GeoLocation to be stored in the new LogEntry.
      */

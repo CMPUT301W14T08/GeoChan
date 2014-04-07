@@ -39,21 +39,21 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testHasImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
-        Comment comment = new Comment("test", bitmap, null, null);
+        Comment comment = new Comment("test", bitmap, new GeoLocation(22.0, 22.0), null);
         assertTrue("Comment has image", comment.hasImage());
     }
     
     // Test adding a child, i.e. a reply comment
     @SuppressWarnings("unused")
     public void testAddChild() {
-        Comment parent = new Comment("test", null, null);
-        Comment reply = new Comment("test_reply", null, parent);
+        Comment parent = new Comment("test", new GeoLocation(22.0, 22.0), null);
+        Comment reply = new Comment("test_reply", new GeoLocation(22.0, 22.0), parent);
         assertNotNull("comment has a reply", parent.getChildren());
     }
     
     // Test that the constructor functions properly
     public void testConstruct() {
-        Comment comment = new Comment("Hola", null, null);
+        Comment comment = new Comment("Hola", new GeoLocation(22.0, 22.0), null);
         assertNull(comment.getParent());
     }
     
@@ -457,8 +457,8 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         SortUtil.sortComments(SortUtil.SORT_IMAGE, carrier);
         
         assertTrue("c5 at index 0", carrier.get(0) == c5);
-        assertTrue("c3 at index 1", carrier.get(1) == c3);
-        assertTrue("c4 at index 2", carrier.get(2) == c4);
+        assertTrue("c3 at index 1", carrier.get(1) == c4);
+        assertTrue("c4 at index 2", carrier.get(2) == c3);
         assertTrue("c2 at index 3", carrier.get(3) == c2);
         assertTrue("c1 at index 4", carrier.get(4) == c1);
         
@@ -473,6 +473,7 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
     /**
      * Tests the calculation of comment scores in relation to their parent.
      */
+    @SuppressWarnings({ "deprecation", "deprecation" })
     public void testGetParentScore(){
         /*
          * Test the score calculation for child comments.

@@ -5,7 +5,6 @@ import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
-import ca.ualberta.cmput301w14t08.geochan.models.LogEntry;
 
 /**
  * Test the functionality of the GeoLocationLog methods
@@ -36,17 +35,14 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         locationListenerService.startListening();
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         
-        String threadTitle = "TestThread";
-        
         GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
         
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
-        geoLocationLog.addLogEntry(threadTitle, geoLocation);
+        geoLocationLog.addLogEntry(geoLocation);
+        geoLocationLog.addLogEntry(geoLocation);
+        geoLocationLog.addLogEntry(geoLocation);
         
-        for (LogEntry entry : geoLocationLog.getLogEntries()) {
-            assertEquals("threadTitles should be equal", threadTitle, entry.getThreadTitle());
-            assertEquals("geoLocations should be equal", geoLocation, entry.getGeoLocation());
+        for (GeoLocation entry : geoLocationLog.getLogEntries()) {
+            assertTrue("geoLocations should be equal", geoLocation.equals(entry));
         }
     }
     
@@ -57,7 +53,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
     public void testClearLogAndCheckIsLogEmpty() {
         GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
         
-        geoLocationLog.addLogEntry("TestThreadTitle", new GeoLocation(1.0,2.0));
+        geoLocationLog.addLogEntry(new GeoLocation(1.0,2.0));
         assertEquals("Entries array should NOT be empty", false, geoLocationLog.isEmpty());
         
         geoLocationLog.clearLog();
@@ -76,9 +72,9 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         
         GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
         
-        geoLocationLog.addLogEntry("thread1", geoLocation1);
-        geoLocationLog.addLogEntry("thread2", geoLocation2);
-        geoLocationLog.addLogEntry("thread3", geoLocation3);
+        geoLocationLog.addLogEntry(geoLocation1);
+        geoLocationLog.addLogEntry(geoLocation2);
+        geoLocationLog.addLogEntry(geoLocation3);
         
         assertEquals("Size of entries should be 3", 3, geoLocationLog.size());
     }
