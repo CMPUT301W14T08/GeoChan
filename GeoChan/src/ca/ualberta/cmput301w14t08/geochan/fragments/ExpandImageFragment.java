@@ -110,6 +110,7 @@ public class ExpandImageFragment extends Fragment {
 		            } finally {
 		            	imageOut.close();
 		            }
+	                Toast.makeText(getActivity(), "Saved to gallery.", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                 	Toaster.toastShort("Failed to save to gallery.");
                     if (uri != null) {
@@ -117,7 +118,6 @@ public class ExpandImageFragment extends Fragment {
                         uri = null;
                     }
                 }
-                Toast.makeText(getActivity(), "Saved to gallery.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -25,7 +25,11 @@ import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 
-
+/**
+ * Android JUnit tests for our ElasticSearchClient tests.
+ * @author Henry Pabst
+ *
+ */
 public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<MainActivity> {
     private ElasticSearchClient client;
     
@@ -38,11 +42,17 @@ public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<Ma
         super.setUp();
     }
     
+    /**
+     * Tests the proper construction of the ElasticSearchClient instance.
+     */
     public void testConstruction() {
         client = ElasticSearchClient.getInstance();
         assertNotNull(client);
     }
     
+    /**
+     * Tests the retrieval of the JestClient.
+     */
     public void testGetJest() {
         JestClient jest = client.getClient();
         assertNotNull(jest);

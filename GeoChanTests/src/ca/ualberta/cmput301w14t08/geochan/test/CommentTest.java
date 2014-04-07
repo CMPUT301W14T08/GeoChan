@@ -55,8 +55,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         locationListenerService.startListening();
     }
     
-    // Test presence of an image in a comment object by creating an object
-    // with an image and calling hasImage()
+    /**Test presence of an image in a comment object by creating an object
+    *with an image and calling hasImage()
+    **/
     public void testHasImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(256, 256, conf);
@@ -64,7 +65,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue("Comment has image", comment.hasImage());
     }
     
-    // Test adding a child, i.e. a reply comment
+    /**Test adding a child, i.e. a reply comment
+     * 
+     */
     @SuppressWarnings("unused")
     public void testAddChild() {
         Comment parent = new Comment("test", new GeoLocation(22.0, 22.0), null);
@@ -72,7 +75,9 @@ public class CommentTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertNotNull("comment has a reply", parent.getChildren());
     }
     
-    // Test that the constructor functions properly
+    /**Test that the constructor functions properly
+     * 
+     */
     public void testConstruct() {
         Comment comment = new Comment("Hola", new GeoLocation(22.0, 22.0), null);
         assertNull(comment.getParent());
