@@ -58,8 +58,7 @@ public class MapViewFragment extends Fragment {
 	private ArrayList<Marker> markers;
 
 	/**
-	 * Gets the view when inflated, then calls setZoomLevel to display the
-	 * correct map area.
+	 * Gets the view when inflated
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,9 +161,9 @@ public class MapViewFragment extends Fragment {
 			startAndFinishMarkers.add(originalPostMarker);
 
 			setMarkerListeners(originalPostMarker);
-			
+
 			markers.add(originalPostMarker);
-			
+
 			handleChildComments(topComment);
 
 			openMapView.getOverlays().add(replyPostMarkers);
@@ -203,8 +202,8 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
-	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed in
-	 * This is used to cl
+	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
+	 * in This is used to cl
 	 * 
 	 * @param locationMarker
 	 */
@@ -224,6 +223,9 @@ public class MapViewFragment extends Fragment {
 		});
 	}
 
+	/**
+	 * Hides infoWindows for every marker on the map
+	 */
 	private void hideInfoWindows() {
 		for (Marker marker : markers) {
 			marker.hideInfoWindow();
@@ -266,8 +268,8 @@ public class MapViewFragment extends Fragment {
 							R.drawable.blue_map_pin));
 					MarkerInfoWindow infoWindow = new MarkerInfoWindow(
 							R.layout.bonuspack_bubble, openMapView);
-					infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-							openMapView);
+					infoWindow = new MarkerInfoWindow(
+							R.layout.bonuspack_bubble, openMapView);
 					replyMarker.setInfoWindow(infoWindow);
 					setMarkerListeners(replyMarker);
 					replyPostMarkers.add(replyMarker);
@@ -333,6 +335,8 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
+	 * Creates a new marker based on a geoLocation. Sets the title to the
+	 * postType string passed in
 	 * 
 	 * @param geoLocation
 	 * @param postType
@@ -402,7 +406,7 @@ public class MapViewFragment extends Fragment {
 		/**
 		 * Calculating the directions from the current to the location of the
 		 * topComment. Builds a road overlay and adds it to the openMapView
-		 * objects overlays
+		 * objects overlays.
 		 */
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -430,6 +434,7 @@ public class MapViewFragment extends Fragment {
 						R.layout.bonuspack_bubble, openMapView);
 				infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
 						openMapView);
+
 				nodeMarker.setInfoWindow(infoWindow);
 				nodeMarker.setPosition(node.mLocation);
 				nodeMarker.setIcon(nodeIcon);
@@ -438,7 +443,9 @@ public class MapViewFragment extends Fragment {
 				nodeMarker.setSubDescription(Road.getLengthDurationText(
 						node.mLength, node.mDuration));
 				nodeMarker.setImage(icon);
+
 				directionsMarkers.add(nodeMarker);
+
 				setMarkerListeners(nodeMarker);
 				markers.add(nodeMarker);
 			}
@@ -447,12 +454,16 @@ public class MapViewFragment extends Fragment {
 		}
 
 		/**
-		 * Task is now finished, dismiss the ProgressDialog and refresh the map
+		 * Task is now finished. Creates the current location marker and
+		 * sets it on the map. Clears the map and re-adds all the 
+		 * overlays to the map, then refreshes the map
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			directionsLoadingDialog.dismiss();
+
+			hideInfoWindows();
 
 			GeoLocation currentLocation = new GeoLocation(
 					locationListenerService);
@@ -471,15 +482,15 @@ public class MapViewFragment extends Fragment {
 					Marker.ANCHOR_BOTTOM);
 			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.green_map_pin));
-			
+
 			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
 					R.layout.bonuspack_bubble, openMapView);
 			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
 					openMapView);
 			currentLocationMarker.setInfoWindow(infoWindow);
-			
+
 			setMarkerListeners(currentLocationMarker);
-			
+
 			startAndFinishMarkers.add(currentLocationMarker);
 			markers.add(currentLocationMarker);
 
