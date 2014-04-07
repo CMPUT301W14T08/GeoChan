@@ -64,17 +64,29 @@ public class CustomLocationAdapter extends BaseAdapter {
     /**
      * Returns a specific log entry.
      * @param position the position of the entry
+     * @return the log entry
      */
     @Override
     public GeoLocation getItem(int position) {
         return logArray.get(position);
     }
 
+    /**
+     * Returns the id of a specific entry.
+     * @return the id
+     */
     @Override
     public long getItemId(int position) {
         return 0;
     }
 
+    /**
+     * Returns the view for a specific entry.
+     * @param position the position
+     * @param convertView a previous recycled view
+     * @param parent parent view
+     * @return the view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	GeoLocation logEntry = getItem(position);

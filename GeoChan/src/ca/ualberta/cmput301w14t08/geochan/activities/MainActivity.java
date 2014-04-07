@@ -60,6 +60,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
 	/**
 	 * Sets up the initial state of the activity. Initializes singleton classes
 	 * and a ThreadListFragment to view the app's thread list.
+	 * @param savedInstanceState the saved instance state bundle
 	 */
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
 
 	/**
 	 * Inflates this activity's action bar options.
+	 * @param menu the menu
+	 * @return the result
 	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +98,8 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     /**
      * Handles the selection of specific action bar items according
      * to which item was selected.
+     * @param item the item selected
+     * @return the result
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
