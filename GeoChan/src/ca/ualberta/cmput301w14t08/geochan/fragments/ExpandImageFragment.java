@@ -1,11 +1,13 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 
@@ -70,7 +73,29 @@ public class ExpandImageFragment extends Fragment {
         saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), image, id+".jpeg" , id + "image");
+            	ContentValues values = new ContentValues();
+                values.put(Images.Media.TITLE, id);
+                values.put(Images.Media.DESCRIPTION, id);
+                values.put(Images.Media.MIME_TYPE, "image/jpeg");
+                values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                
+                Uri uri = null;
+                ContentResolver contentResolver = getActivity().getContentResolver();
+                try {
+	                uri = contentResolver.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+	                OutputStream imageOut = contentResolver.openOutputStream(uri);
+		            try {
+		                image.compress(Bitmap.CompressFormat.JPEG, 90, imageOut);
+		            } finally {
+		            	imageOut.close();
+		            }
+                } catch (Exception e) {
+                	Toaster.toastShort("Failed to save to gallery.");
+                    if (uri != null) {
+                        contentResolver.delete(uri, null, null);
+                        uri = null;
+                    }
+                }
                 Toast.makeText(getActivity(), "Saved to gallery.", Toast.LENGTH_SHORT).show();
             }
         });
