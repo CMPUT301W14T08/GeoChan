@@ -29,9 +29,11 @@ import java.text.DecimalFormat;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
@@ -48,10 +50,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
@@ -171,10 +176,6 @@ public class PostFragment extends Fragment {
      *            The post button in the PostThreadFragment
      */
     public void post(View view) {
-    	if (!ConnectivityHelper.getInstance().isConnected()) {
-    		ErrorDialog.show(getActivity(), "You are not connected to the Internet. Please try again later.");
-    		return;
-    	}
     	if (geoLocation.getLocation() == null) {
     		ErrorDialog.show(getActivity(), "Could not retrieve location. Please specify a custom location.");
     		return;
@@ -189,6 +190,7 @@ public class PostFragment extends Fragment {
             String title = null;
             EditText editTitle = null;
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
+            ThreadComment threadComment = null;
             String comment = editComment.getText().toString();
             if (thread == null) {
                 editTitle = (EditText) this.getView().findViewById(R.id.titlePrompt);
@@ -206,7 +208,8 @@ public class PostFragment extends Fragment {
                     int tag = PreferencesManager.getInstance().getCommentSort();
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
                 } else {
-                    ThreadList.addThread(newComment, title);
+                	threadComment = new ThreadComment(newComment, title);
+                    ThreadList.addThread(threadComment);
                     int tag = PreferencesManager.getInstance().getThreadSort();
                     SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
@@ -215,7 +218,23 @@ public class PostFragment extends Fragment {
                     GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
                     geoLocationLog.addLogEntry(geoLocation);
                 }
-                ThreadManager.startPost(newComment, title);
+            	if (!ConnectivityHelper.getInstance().isConnected()) {
+            		ComponentName reciever = new ComponentName(getActivity(), ConnectivityBroadcastReceiver.class);
+                	
+                	PackageManager packageManager = getActivity().getPackageManager();
+                	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                	
+            		CacheManager cacheManager = CacheManager.getInstance();
+            		if (title == null) {
+            			cacheManager.addCommentToQueue(newComment);
+            		} else {
+            			cacheManager.addThreadCommentToQueue(threadComment);
+            		}
+            		Toaster.toastShort("No internet connection detected. Your post will automatically send on connection.");
+            		return;
+            	} else {
+            		ThreadManager.startPost(newComment, title);
+            	}
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(),

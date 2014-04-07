@@ -30,8 +30,8 @@ public class CacheManager {
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
     private static final String IMAGE = "IMG";
-    private ArrayList<Comment> commentQueue;
-    private ArrayList<ThreadComment> threadCommentQueue;
+    private ArrayList<Comment> commentQueue = null;
+    private ArrayList<ThreadComment> threadCommentQueue = null;
 
     private CacheManager(Context context) {
         this.context = context;
@@ -58,7 +58,14 @@ public class CacheManager {
     }
     
     public void postAll() {
-    	
+    	for (Comment comment : commentQueue) {
+    		ThreadManager.startPost(comment, null);
+    		commentQueue.remove(comment);
+    	}
+    	for (ThreadComment threadComment : threadCommentQueue) {
+    		ThreadManager.startPost(threadComment.getBodyComment(), threadComment.getTitle());
+    		threadCommentQueue.remove(threadComment);
+    	}
     }
 
     public static CacheManager getInstance() {

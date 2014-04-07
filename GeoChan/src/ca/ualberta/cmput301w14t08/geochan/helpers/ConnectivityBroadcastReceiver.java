@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-public class ConnectivityListenerService extends BroadcastReceiver {
+public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
     /**
      * called when BroacastReceiver receives an intent broadcast
@@ -16,7 +16,7 @@ public class ConnectivityListenerService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         ConnectivityHelper helper = ConnectivityHelper.getInstance();
         if (helper.isConnected()) {
-        	ComponentName reciever = new ComponentName(context, ConnectivityListenerService.class);
+        	ComponentName reciever = new ComponentName(context, ConnectivityBroadcastReceiver.class);
         	
         	PackageManager packageManager = context.getPackageManager();
         	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);

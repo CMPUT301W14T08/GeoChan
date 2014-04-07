@@ -46,6 +46,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.ualberta.cmput301w14t08.geochan.activities.PreferencesActivity" />
         </activity>
+        <receiver
+            android:name=".helpers.ConnectivityBroadcastReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
