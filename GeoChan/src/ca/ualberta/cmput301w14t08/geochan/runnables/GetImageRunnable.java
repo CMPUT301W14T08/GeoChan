@@ -6,6 +6,7 @@ import io.searchbox.core.Get;
 import java.lang.reflect.Type;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ElasticSearchResponse;
