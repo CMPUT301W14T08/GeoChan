@@ -135,7 +135,9 @@ public class PostFragment extends Fragment {
 				} else {
 					Double lat = args.getDouble("LATITUDE");
 					Double lon = args.getDouble("LONGITUDE");
-					geoLocation.setCoordinates(lat, lon);
+					Log.e("LAT", Double.toString(lat));
+					Log.e("LON", Double.toString(lon));
+					geoLocation = new GeoLocation(lat, lon);
 
 					String locationDescription = args.getString("locationDescription");
                     geoLocation.setLocationDescription(locationDescription);
