@@ -28,6 +28,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
 /**
  * Handles all operations involved in logging used locations.
  * Follows singleton design pattern.
+ * 
  * @author Artem Chikin
  * 
  */

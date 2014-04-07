@@ -50,6 +50,7 @@ import com.google.gson.JsonSerializer;
  * offline caching.
  * 
  * @author Artem Chikin
+ * @author Artem Herasymchuk
  */
 public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadComment>,
         JsonDeserializer<ThreadComment> {

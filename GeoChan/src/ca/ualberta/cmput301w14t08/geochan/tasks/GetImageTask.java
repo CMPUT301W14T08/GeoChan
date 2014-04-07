@@ -34,6 +34,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.GetImageRunnable;
  * Responsible for the task of controlling the runnables
  * that are responsible for downloading an image from
  * ElasticSearch.
+ * 
  * @author Artem Chikin
  *
  */

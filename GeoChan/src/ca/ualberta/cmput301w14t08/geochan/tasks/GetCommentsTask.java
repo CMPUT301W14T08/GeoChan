@@ -33,6 +33,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.GetCommentsRunnable;
  * Responsible for the task of controlling the runnables
  * that are responsible for the various parts of getting
  * all the Comments in a ThreadComment.
+ * 
  * @author Artem Herasymchuk
  *
  */
