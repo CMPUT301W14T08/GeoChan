@@ -1,16 +1,30 @@
 package eu.erikw;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.*;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.animation.*;
-import android.view.animation.Animation.AnimationListener;
-import android.widget.*;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * A generic, customizable Android ListView implementation that has 'Pull to Refresh' functionality.
@@ -31,6 +45,7 @@ import java.util.Date;
  * @author Erik Wallentinsen <dev+ptr@erikw.eu>
  * @version 1.3.0
  */
+@SuppressLint("SimpleDateFormat")
 public class PullToRefreshListView extends ListView{
 
     private static final float PULL_RESISTANCE                 = 1.7f;
@@ -281,31 +296,32 @@ public class PullToRefreshListView extends ListView{
                 else {
                 	previousY = -1;
                 }
-                
+
                 // Remember where have we started
                 mScrollStartY = event.getY();
-                
+
                 break;
 
             case MotionEvent.ACTION_UP:
-                if(previousY != -1 && (state == State.RELEASE_TO_REFRESH || getFirstVisiblePosition() == 0)){
-                    switch(state){
-                        case RELEASE_TO_REFRESH:
-                            setState(State.REFRESHING);
-                            bounceBackHeader();
+            	if(previousY != -1 && (state == State.RELEASE_TO_REFRESH || getFirstVisiblePosition() == 0)){
+            		switch(state){
+            		case RELEASE_TO_REFRESH:
+            			setState(State.REFRESHING);
+            			bounceBackHeader();
+            			break;
 
-                            break;
-
-                        case PULL_TO_REFRESH:
-                            resetHeader();
-                            break;
-                    }
-                }
-                break;
+            		case PULL_TO_REFRESH:
+            			resetHeader();
+            			break;
+            		default:
+            			break;
+            		}
+            	}
+            	break;
 
             case MotionEvent.ACTION_MOVE:
-                if(previousY != -1 && getFirstVisiblePosition() == 0 && Math.abs(mScrollStartY-event.getY()) > IDLE_DISTANCE){
-                    float y = event.getY();
+            	if(previousY != -1 && getFirstVisiblePosition() == 0 && Math.abs(mScrollStartY-event.getY()) > IDLE_DISTANCE){
+            		float y = event.getY();
                     float diff = y - previousY;
                     if(diff > 0) diff /= PULL_RESISTANCE;
                     previousY = y;
@@ -482,7 +498,8 @@ public class PullToRefreshListView extends ListView{
 
     private class PTROnGlobalLayoutListener implements OnGlobalLayoutListener{
 
-        @Override
+        @SuppressWarnings("deprecation")
+		@Override
         public void onGlobalLayout(){
             int initialHeaderHeight = header.getHeight();
 

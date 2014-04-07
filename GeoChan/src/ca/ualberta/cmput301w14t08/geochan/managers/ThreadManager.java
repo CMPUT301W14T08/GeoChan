@@ -334,7 +334,8 @@ public class ThreadManager {
         task.initCommentsTask(instance, fragment, threadIndex, location);
         task.setCommentListCache(instance.commentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
-        instance.getCommentListPool.execute(task.getGetCommentListRunnable());
+        instance.getPOIPool.execute(task.getGetPOIOnPostRunnable());
+        //instance.getCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
     }
 
@@ -401,6 +402,14 @@ public class ThreadManager {
      */
     public void handleGetCommentsState(GetCommentsTask task, int state) {
         switch (state) {
+        case GET_POI_COMPLETE:
+        	instance.getCommentListPool.execute(task.getGetCommentListRunnable());
+        case GET_POI_RUNNING:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+            break;
+        case GET_POI_FAILED:
+        	instance.getCommentsPool.execute(task.getGetCommentsRunnable());
+            break;
         case GET_COMMENT_LIST_COMPLETE:
             instance.getCommentsPool.execute(task.getGetCommentsRunnable());
             break;
