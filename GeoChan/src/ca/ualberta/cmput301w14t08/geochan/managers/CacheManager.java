@@ -41,6 +41,8 @@ public class CacheManager {
         this.offlineGson = GsonHelper.getOfflineGson();
         // thread Gson is same as online - all the data except for the comments.
         this.onlineGson = GsonHelper.getOnlineGson();
+        commentQueue = deserializeCommentQueue();
+        threadCommentQueue = deserializeThreadCommentQueue();
     }
     
     private void checkCacheSize() {
@@ -53,10 +55,12 @@ public class CacheManager {
     
     public void addCommentToQueue(Comment comment) {
     	commentQueue.add(comment);
+    	serializeCommentQueue();
     }
     
     public void addThreadCommentToQueue(ThreadComment thread) {
     	threadCommentQueue.add(thread);
+    	serializeThreadCommentQueue();
     }
     
     public void postAll() {
@@ -68,6 +72,8 @@ public class CacheManager {
     		ThreadManager.startPost(threadComment.getBodyComment(), threadComment.getTitle());
     		threadCommentQueue.remove(threadComment);
     	}
+    	serializeCommentQueue();
+    	serializeThreadCommentQueue();
     }
 
     public static CacheManager getInstance() {
