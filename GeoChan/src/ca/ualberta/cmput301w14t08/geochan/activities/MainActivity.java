@@ -47,15 +47,19 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 /**
- * This is the main and, so far, only activity in the application. It inflates
- * the default fragment and handles some of the crucial controller methods.
+ * Inflates the default fragment and handles some of the crucial controller methods.
  * Initializes most of our singleton classes so attempting to fetch an instance of 
  * one does not return null.
  * 
- * @author Henry Pabst, Artem Chikin
+ * @author Henry Pabst, Artem Chikin, Artem Herasymchuk
  */
 
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
+	
+	/**
+	 * Sets up the initial state of the activity. Initializes singleton classes
+	 * and a ThreadListFragment to view the app's thread list.
+	 */
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
+	/**
+	 * Inflates this activity's action bar options.
+	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -83,6 +90,10 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Handles the selection of specific action bar items according
+     * to which item was selected.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -112,16 +123,22 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             // This next line is necessary for JUnit to see fragments
             getSupportFragmentManager().executePendingTransactions();
             return true;
+            
         case android.R.id.home:
             if (!returnBackStackImmediate(getSupportFragmentManager())) {
                 getSupportFragmentManager().popBackStack();
             }
             return true;
+            
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * Re-registers the OnBackStackChangedListener as it does not survive
+     * the destruction of the Activity. 
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -139,6 +156,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         checkActionBar();
     }
 
+    /**
+     * Overrides the back button to work with nested fragments
+     */
     @Override
     public void onBackPressed() {
         if (!returnBackStackImmediate(getSupportFragmentManager())) {
@@ -146,16 +166,36 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
     }
 
-    // HACK: propagate back button press to child fragments.
-    // This might not work properly when you have multiple fragments adding
-    // multiple children to the backstack.
-    // (in our case, only one child fragments adds fragments to the backstack,
-    // so we're fine with this)
-    //
-    // This code was taken from the website:
-    // http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html
-    // Accessed on March 21, 2014
+    /**
+     * Checks the back stack for fragments and enables/disables the back button
+     * in the action bar accordingly
+     */
+    private void checkActionBar() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+    
+    /**
+     * Propagates a back button press down to our nested fragment manager
+     * and its fragments.
+     * @param fm the Fragment Manager
+     * @return true if the back stack was returned from successfully,
+     * false if not
+     */
     private boolean returnBackStackImmediate(FragmentManager fm) {
+        // HACK: propagate back button press to child fragments.
+        // This might not work properly when you have multiple fragments adding
+        // multiple children to the back stack.
+        // (in our case, only one child fragments adds fragments to the back stack,
+        // so we're fine with this)
+        //
+        // This code was taken from the web site:
+        // http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html
+        // Accessed on March 21, 2014
         List<Fragment> fragments = fm.getFragments();
         if (fragments != null && fragments.size() > 0) {
             for (Fragment fragment : fragments) {
@@ -310,19 +350,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
                     .findFragmentByTag("customLocFrag");
         }
         fragment.submitCurrentLocation(view);
-    }
-
-    /**
-     * Checks the back stack for fragments and enables/disables the back button
-     * in the action bar accordingly
-     */
-    private void checkActionBar() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (count > 0) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-        }
     }
 
     /**

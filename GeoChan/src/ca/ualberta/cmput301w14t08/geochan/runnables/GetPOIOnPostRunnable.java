@@ -40,7 +40,7 @@ public class GetPOIOnPostRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            if (pois.size() > 0 && pois != null) {
+            if (pois != null && pois.size() > 0) {
                 poi = pois.get(0);
             } else {
                 poi = null;
