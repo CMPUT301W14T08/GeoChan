@@ -45,7 +45,12 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
     /**
-     * Set up the fragment, action bar and the spinner
+     * Set up the fragment, action bar and the spinner.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
      * 
      */
     @Override
@@ -72,7 +77,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * Restore spinner state from savedInstanceState
+     * Restore spinner state from savedInstanceState.
+     * @param savedInstanceState The previously saved state of the fragment.
      * 
      */
     @Override
@@ -89,7 +95,9 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * Save spinner selection
+     * Save spinner selection.
+     * 
+     * @param outState The Bundle for data to be saved to.
      * 
      */
     @Override
@@ -99,6 +107,9 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * Disables the spinner.
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -110,6 +121,10 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
      * workaround for onActivityResult not being called on child fragments, so instead when
      * favourites are involved we call it on the parent fragment then delegate back to
      * the child fragment.
+     * 
+     * @param requestCode The requestCode given in startActivityForResult.
+     * @param resultCode The code returned by the activity.
+     * @param data Data returned by the activity.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -121,7 +136,8 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
 
     /**
      * On spinner selection, inflate correct favourites fragment.
-     * 
+     * @param position The position of the navigation item.
+     * @param id The ID of the navigation item.
      */
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
@@ -141,7 +157,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * enable/disable spinner if in fragment.
+     * Enable/disable spinner if in fragment.
      */
     @Override
     public void onBackStackChanged() {
@@ -154,7 +170,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * Enable the spinner
+     * Enable the spinner.
      */
     private void enableSpinner() {
         actionBar.setDisplayShowTitleEnabled(false);
@@ -162,7 +178,7 @@ public class FavouritesFragment extends Fragment implements ActionBar.OnNavigati
     }
 
     /**
-     * Disable the spinner
+     * Disable the spinner.
      */
     private void disableSpinner() {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);

@@ -76,9 +76,15 @@ public class MapViewFragment extends Fragment {
 	private GridMarkerClusterer startAndFinishClusterMarkers;
 	private ArrayList<CustomMarker> markers;
 
-	/**
-	 * Gets the view when inflated
-	 */
+    /**
+     * Set up the fragment's UI.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -88,7 +94,9 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
-	 * inflates the menu and adds and add items to action bar if present
+	 * Inflates the menu and adds and add items to action bar if present.
+	 * @param menu The Menu object for the fragment.
+	 * @param inflater the MenuInflater for inflating the fragment's menu.
 	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -166,7 +174,7 @@ public class MapViewFragment extends Fragment {
 	 * then calls handleChildComments to place pins for each child comment in
 	 * the thread.
 	 * 
-	 * @param topComment
+	 * @param topComment The OP of the ThreadComment.
 	 */
 	public void setupMap(Comment topComment) {
 		openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
@@ -204,6 +212,8 @@ public class MapViewFragment extends Fragment {
 	 * animates to the startGeoPoint, which is the location of the topComment.
 	 * The values must be padded with a zoom_factor, which is a static class
 	 * variable
+	 * 
+	 * @param geoLocation GeoLocation used to start the basis of the distance
 	 */
 	public void setZoomLevel(GeoLocation geoLocation) {
 		// get the mapController and set the zoom
@@ -227,7 +237,8 @@ public class MapViewFragment extends Fragment {
 
 	/**
 	 * Calculates the minimum and maximum values for latitude and longitude
-	 * between an array of GeoPoints. This is used to
+	 * between an array of GeoPoints. This is used to determine the zoom level.
+	 * @return The maximum distance between markers on the map.
 	 */
 	private int calculateZoomSpan() {
 		int opLat = originalPostMarker.getPosition().getLatitudeE6();
@@ -261,9 +272,10 @@ public class MapViewFragment extends Fragment {
 
 	/**
 	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
-	 * in This is used to cl
+	 * in. This is used to handle click events for the maps, which will
+	 * cause infoWindows to show and hide.
 	 * 
-	 * @param locationMarker
+	 * @param locationMarker Marker that the listeners will be attached to.
 	 */
 	private void setMarkerListeners(Marker locationMarker) {
 
@@ -289,7 +301,7 @@ public class MapViewFragment extends Fragment {
 	 * for the entire thread. Then finally make a recursive call to check if a
 	 * child comment has any children.
 	 * 
-	 * @param comment
+	 * @param comment Comment to be added to the map.
 	 */
 	private void handleChildComments(Comment comment) {
 		ArrayList<Comment> children = comment.getChildren();
@@ -303,8 +315,9 @@ public class MapViewFragment extends Fragment {
 					Drawable icon = getResources().getDrawable(
 							R.drawable.blue_map_pin);
 
-					CustomMarker replyMarker = createMarker(commentLocation,
-							"Reply", icon);
+					CustomMarker replyMarker = new CustomMarker(commentLocation,
+							openMapView, icon);
+					replyMarker.setUpInfoWindow("Reply", getActivity());
 
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation
@@ -336,8 +349,8 @@ public class MapViewFragment extends Fragment {
 	 * coordinates are -90 < lat < 90, and -180 < longitude < 180. It also does
 	 * a null check on location.
 	 * 
-	 * @param comment
-	 * @return isValidLocation
+	 * @param comment to be check for valid location
+	 * @return boolean isValidLocation
 	 */
 	public boolean commentLocationIsValid(Comment comment) {
 		GeoLocation location = comment.getLocation();
@@ -349,29 +362,6 @@ public class MapViewFragment extends Fragment {
 					|| location.getLongitude() >= -180.0 || location
 					.getLongitude() <= 180.0);
 		}
-	}
-
-	/**
-	 * Creates a new marker based on a geoLocation. Sets the title to the
-	 * postType string passed in
-	 * 
-	 * @param geoLocation
-	 * @param postType
-	 * @return
-	 */
-	public CustomMarker createMarker(GeoLocation geoLocation, String postType,
-			Drawable icon) {
-
-		CustomMarker marker = new CustomMarker(geoLocation, openMapView, icon);
-		marker.setUpInfoWindow(postType, getActivity());
-
-		if (geoLocation.getLocationDescription() != null) {
-			marker.setSubDescription(geoLocation.getLocationDescription());
-		} else {
-			marker.setSubDescription("Unknown Location");
-		}
-
-		return marker;
 	}
 
 	/**

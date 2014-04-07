@@ -36,7 +36,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  * NOTE: If testing on emulator, you must inject a location via DDMS prior to
  * beginning tests
  * 
- * @author bradsimons
+ * @author Brad Simons
  * 
  */
 public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivity> {
