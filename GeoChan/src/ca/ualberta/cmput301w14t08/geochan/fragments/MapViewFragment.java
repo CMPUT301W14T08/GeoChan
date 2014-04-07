@@ -170,9 +170,7 @@ public class MapViewFragment extends Fragment {
 		if (commentLocationIsValid(topComment)) {
 			GeoLocation geoLocation = topComment.getLocation();
 
-			originalPostMarker = createMarker(geoLocation, openMapView, "OP");
-			originalPostMarker.setInfoWindow(infoWindow);
-			originalPostMarker.showInfoWindow();
+			originalPostMarker = createMarker(geoLocation, "OP");
 			originalPostMarker.setIcon(getResources().getDrawable(
 					R.drawable.red_map_pin));
 			startAndFinishClusterMarkers.add(originalPostMarker);
@@ -290,7 +288,7 @@ public class MapViewFragment extends Fragment {
 					replyMarker.setInfoWindow(infoWindow);
 					setMarkerListeners(replyMarker);
 					replyPostClusterMarkers.add(replyMarker);
-					markers.add(replyMarker);
+					//markers.add(replyMarker);
 					handleChildComments(childComment);
 				}
 			}
@@ -359,7 +357,7 @@ public class MapViewFragment extends Fragment {
 	 * @param postType
 	 * @return
 	 */
-	public Marker createMarker(GeoLocation geoLocation, String postType) {
+	public CustomMarker createMarker(GeoLocation geoLocation, String postType) {
 
 		Marker marker = new Marker(openMapView);
 		marker.setTitle(postType);
@@ -375,7 +373,8 @@ public class MapViewFragment extends Fragment {
 
 		marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-		return marker;
+		//return marker;
+		return null;
 	}
 
 	/**
@@ -464,7 +463,7 @@ public class MapViewFragment extends Fragment {
 				directionsClusterMarkers.add(nodeMarker);
 
 				setMarkerListeners(nodeMarker);
-				markers.add(nodeMarker);
+				//markers.add(nodeMarker);
 			}
 
 			return null;
@@ -509,7 +508,7 @@ public class MapViewFragment extends Fragment {
 			setMarkerListeners(currentLocationMarker);
 
 			startAndFinishClusterMarkers.add(currentLocationMarker);
-			markers.add(currentLocationMarker);
+			//markers.add(currentLocationMarker);
 
 			openMapView.getOverlays().clear();
 			openMapView.getOverlays().add(roadOverlay);
