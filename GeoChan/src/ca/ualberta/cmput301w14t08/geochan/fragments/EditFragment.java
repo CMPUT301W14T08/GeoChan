@@ -54,6 +54,7 @@ import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
@@ -342,7 +343,9 @@ public class EditFragment extends Fragment {
         editComment.setTextPost(newTextPost.getText().toString());
         if (isThread) {
         	String threadTitle = thread.getTitle();
+        	thread.setBodyComment(editComment);
             ThreadManager.startPost(editComment, threadTitle);
+            CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
         } else {
             ThreadManager.startPost(editComment, null);
         }

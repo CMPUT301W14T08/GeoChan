@@ -210,6 +210,7 @@ public class PostFragment extends Fragment {
                 } else {
                 	threadComment = new ThreadComment(newComment, title);
                     ThreadList.addThread(threadComment);
+                    CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
                     int tag = PreferencesManager.getInstance().getThreadSort();
                     SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
