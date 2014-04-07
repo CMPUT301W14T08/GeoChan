@@ -44,7 +44,7 @@ public class GetPOIRunnable implements Runnable {
 	public void run() {
 		task.setGetPOIThread(Thread.currentThread());
 		android.os.Process
-				.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
+				.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 		task.handleGetPOIState(STATE_GET_POI_RUNNING);
 		try {
 			if (Thread.interrupted()) {
