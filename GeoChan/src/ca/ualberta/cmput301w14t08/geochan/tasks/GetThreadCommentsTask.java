@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import android.app.ProgressDialog;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetThreadCommentsRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
