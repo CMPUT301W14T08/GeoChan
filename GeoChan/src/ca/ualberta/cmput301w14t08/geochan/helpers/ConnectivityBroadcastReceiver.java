@@ -20,19 +20,24 @@
 
 package ca.ualberta.cmput301w14t08.geochan.helpers;
 
-import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 
 /**
- * COMMENT
+ * Receives a broadcast anytime the connection state changes.
+ * Should only be enabled manually when connection is detected to be off
+ * as it only handles the case of the connection coming back,
+ * in order to save battery by not constantly monitoring the connection state.
+ * 
+ * @author Artem Herasymchuk
  *
  */
 public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
-
+	
     /**
      * called when BroacastReceiver receives an intent broadcast
      */

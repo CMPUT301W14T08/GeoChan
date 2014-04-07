@@ -166,7 +166,7 @@ public class MapViewFragment extends Fragment {
 	 * then calls handleChildComments to place pins for each child comment in
 	 * the thread.
 	 * 
-	 * @param topComment
+	 * @param topComment object of the thread
 	 */
 	public void setupMap(Comment topComment) {
 		openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
@@ -204,6 +204,8 @@ public class MapViewFragment extends Fragment {
 	 * animates to the startGeoPoint, which is the location of the topComment.
 	 * The values must be padded with a zoom_factor, which is a static class
 	 * variable
+	 * 
+	 * @param GeoLocation used to start the basis of the distance
 	 */
 	public void setZoomLevel(GeoLocation geoLocation) {
 		// get the mapController and set the zoom
@@ -261,9 +263,10 @@ public class MapViewFragment extends Fragment {
 
 	/**
 	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
-	 * in This is used to cl
+	 * in. This is used to handle click events for the maps, which will
+	 * cause infoWindows to show and hide
 	 * 
-	 * @param locationMarker
+	 * @param locationMarker that the listeners will be attached to
 	 */
 	private void setMarkerListeners(Marker locationMarker) {
 
@@ -289,7 +292,7 @@ public class MapViewFragment extends Fragment {
 	 * for the entire thread. Then finally make a recursive call to check if a
 	 * child comment has any children.
 	 * 
-	 * @param comment
+	 * @param comment to be added to the map
 	 */
 	private void handleChildComments(Comment comment) {
 		ArrayList<Comment> children = comment.getChildren();
@@ -303,8 +306,9 @@ public class MapViewFragment extends Fragment {
 					Drawable icon = getResources().getDrawable(
 							R.drawable.blue_map_pin);
 
-					CustomMarker replyMarker = createMarker(commentLocation,
-							"Reply", icon);
+					CustomMarker replyMarker = new CustomMarker(commentLocation,
+							openMapView, icon);
+					replyMarker.setUpInfoWindow("Reply", getActivity());
 
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation
@@ -336,8 +340,8 @@ public class MapViewFragment extends Fragment {
 	 * coordinates are -90 < lat < 90, and -180 < longitude < 180. It also does
 	 * a null check on location.
 	 * 
-	 * @param comment
-	 * @return isValidLocation
+	 * @param comment to be check for valid location
+	 * @return boolean isValidLocation
 	 */
 	public boolean commentLocationIsValid(Comment comment) {
 		GeoLocation location = comment.getLocation();
@@ -349,29 +353,6 @@ public class MapViewFragment extends Fragment {
 					|| location.getLongitude() >= -180.0 || location
 					.getLongitude() <= 180.0);
 		}
-	}
-
-	/**
-	 * Creates a new marker based on a geoLocation. Sets the title to the
-	 * postType string passed in
-	 * 
-	 * @param geoLocation
-	 * @param postType
-	 * @return
-	 */
-	public CustomMarker createMarker(GeoLocation geoLocation, String postType,
-			Drawable icon) {
-
-		CustomMarker marker = new CustomMarker(geoLocation, openMapView, icon);
-		marker.setUpInfoWindow(postType, getActivity());
-
-		if (geoLocation.getLocationDescription() != null) {
-			marker.setSubDescription(geoLocation.getLocationDescription());
-		} else {
-			marker.setSubDescription("Unknown Location");
-		}
-
-		return marker;
 	}
 
 	/**
