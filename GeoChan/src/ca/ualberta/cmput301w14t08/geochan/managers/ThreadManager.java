@@ -40,6 +40,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -271,6 +272,7 @@ public class ThreadManager {
                     String id = imageTaskComplete.getId();
                     ImageView view = imageTaskComplete.getmImageWeakRef().get();
                     if (view != null) {
+                    	Toaster.toastShort("Image updated");
                         view.setImageBitmap(bitmap);
                     }
                     CacheManager.getInstance().serializeImage(bitmap, id);

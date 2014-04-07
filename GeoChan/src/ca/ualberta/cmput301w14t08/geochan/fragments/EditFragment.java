@@ -41,7 +41,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -151,7 +150,6 @@ public class EditFragment extends Fragment {
             isThread = false;
         }
         if (EditFragment.oldText == null){
-            Log.e("DEBUG","comment not null" + editComment.toString());
             EditFragment.oldText = editComment.getTextPost();
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditFragment.oldText);
@@ -163,7 +161,6 @@ public class EditFragment extends Fragment {
         newTextPost.setText(editComment.getTextPost());
         newTextPost.setMovementMethod(new ScrollingMovementMethod());
     }
-
     
     /**
      * Overriden method from Fragment. Sets the appropriate TextView and ImageView
@@ -352,6 +349,7 @@ public class EditFragment extends Fragment {
      * sets the value of EditCommentFragment.oldText and EditCommentFragment.oldThumbnail
      * to null so that the state isn't preserved across comment edits, and returns the
      * user to their previous fragment.
+     * 
      * @param view The button that was pressed to call makeEdit.
      */
     public void makeEdit(View view) {
@@ -373,6 +371,5 @@ public class EditFragment extends Fragment {
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         getFragmentManager().popBackStackImmediate();
-
     }
 }

@@ -114,7 +114,7 @@
 
     <ImageButton
         android:id="@+id/thread_view_comment_thumbnail"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thread_view_op_threadTitle"
         android:layout_alignParentRight="true"

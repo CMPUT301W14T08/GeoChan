@@ -81,15 +81,16 @@ public class ExpandImageFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Downloading Image");
         ImageView imageView = (ImageView) getView().findViewById(R.id.expanded_image);
         final Bitmap image = CacheManager.getInstance().deserializeImage(id);
         if (image == null) {
             // Start the image getter thread.
-            ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Downloading Image");
             ThreadManager.startGetImage(id, imageView, dialog);
         } else {
             imageView.setImageBitmap(image);
+            ThreadManager.startGetImage(id, imageView, null);
         }
         LinearLayout rlayout = (LinearLayout) getView().findViewById(R.id.expanded_image_relative);
         rlayout.setOnClickListener(new OnClickListener() {
