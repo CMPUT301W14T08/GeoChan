@@ -38,6 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateDialogListenerInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
@@ -55,7 +56,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * @author Artem Chikin
  * 
  */
-public class ThreadListFragment extends Fragment {
+public class ThreadListFragment extends Fragment implements UpdateDialogListenerInterface {
     private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
@@ -241,6 +242,7 @@ public class ThreadListFragment extends Fragment {
         });
     }
 
+    @Override
     public void reload() {
         ThreadManager.startGetThreadComments(this);
     }
