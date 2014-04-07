@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -341,13 +342,15 @@ public class EditFragment extends Fragment {
         EditFragment.oldText = null;
         EditFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setMessage("Getting Location Data");
         if (isThread) {
         	String threadTitle = thread.getTitle();
         	thread.setBodyComment(editComment);
-            ThreadManager.startPost(editComment, threadTitle, editComment.getLocation());
+            ThreadManager.startPost(editComment, threadTitle, editComment.getLocation(), dialog);
             CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
         } else {
-            ThreadManager.startPost(editComment, null, editComment.getLocation());
+            ThreadManager.startPost(editComment, null, editComment.getLocation(), dialog);
         }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);

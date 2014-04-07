@@ -194,7 +194,6 @@ public class PostFragment extends Fragment {
                     SortUtil.sortComments(tag, thread.getBodyComment().getChildren());
                 } else {
                 	threadComment = new ThreadComment(newComment, title);
-                    ThreadList.addThread(threadComment);
                     CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
                     int tag = PreferencesManager.getInstance().getThreadSort();
                     SortUtil.sortThreads(tag, ThreadList.getThreads());
@@ -208,7 +207,9 @@ public class PostFragment extends Fragment {
             		}
             		Toaster.toastShort("No internet connection detected. Your post will automatically send on connection.");
             	} else {
-            		ThreadManager.startPost(newComment, title, geoLocation);
+            		ProgressDialog dialog = new ProgressDialog(getActivity());
+            		dialog.setMessage("Getting Location Data");
+            		ThreadManager.startPost(newComment, title, geoLocation, dialog);
             	}
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

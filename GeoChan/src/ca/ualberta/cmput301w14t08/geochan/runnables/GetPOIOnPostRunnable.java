@@ -7,6 +7,8 @@ import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
 
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
 public class GetPOIOnPostRunnable implements Runnable {
@@ -38,7 +40,7 @@ public class GetPOIOnPostRunnable implements Runnable {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            if (pois.size() > 0 && pois != null) {
+            if (pois != null && pois.size() > 0) {
                 poi = pois.get(0);
             } else {
                 poi = null;
@@ -50,11 +52,17 @@ public class GetPOIOnPostRunnable implements Runnable {
         } finally {
         	String poiString = task.getPOICache();
             if (poiString == null || poiString.equals("Unknown Location")) {
-                String newString = "Unknown Location (" + task.getLocation().getLongitude()
+                poiString = "Unknown Location (" + task.getLocation().getLongitude()
                         + "," + task.getLocation().getLatitude() + ")";
-                task.setPOICache(newString);
+                task.setPOICache(poiString);
+                task.getLocation().setLocationDescription(poiString);
+                task.getComment().setLocation(task.getLocation());
                 task.handleGetPOIState(STATE_GET_POI_FAILED);
             } else {
+                task.getLocation().setLocationDescription(poiString);
+                task.getComment().setLocation(task.getLocation());
+                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
+                geoLocationLog.addLogEntry(location);
                 task.handleGetPOIState(STATE_GET_POI_COMPLETE);
             }
             //task.setGetPOIThread(null);
