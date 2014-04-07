@@ -63,8 +63,8 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns a specific log entry.
-     * @param position the position of the entry
-     * @return the log entry
+     * @param position  the position of the entry
+     * @return  the log entry
      */
     @Override
     public GeoLocation getItem(int position) {
@@ -73,6 +73,7 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns the id of a specific entry.
+     * @param position  the position of the entry
      * @return the id
      */
     @Override

@@ -77,6 +77,13 @@ public class ThreadViewAdapter extends BaseAdapter {
     private ArrayList<Comment> comments;
     private FragmentManager manager;
 
+    /**
+     * Constructs the adapter and initializes all of its components.
+     * @param context  the context
+     * @param thread  the ThreadComment to display
+     * @param manager  the FragmentManager with this adapter's fragment
+     * @param id  the index of the ThreadComment in the ThreadList
+     */
     public ThreadViewAdapter(Context context, ThreadComment thread, FragmentManager manager, int id) {
         super();
         this.context = context;
@@ -88,8 +95,9 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method takes a comment and recursively builds a list of comment
-     * objects from the Comment's children tree. This is the list we display in our listView.
+     * Takes a comment and recursively builds a list of comment
+     * objects from the Comment's children tree.
+     * This is the list we display in our listView.
      * 
      * @param comment
      * 
@@ -107,18 +115,23 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     /**
-     * This method is called once the comments of a thread loaded.
+     * Sets the ThreadComment that the adapter is displaying
+     * and refreshes the adapter.
      * 
      * @param thread
      * 
      */
     public void setThread(ThreadComment thread) {
         this.thread = thread;
-        // this.comments = new ArrayList<Comment>();
         buildAList(thread.getBodyComment());
         this.notifyDataSetChanged();
     }
 
+    /**
+     * Returns the number of items in this adapter,
+     * includes all posts (including the bodyComment) and the separator
+     * between the bodyComment and the other Comments.
+     */
     @Override
     public int getCount() {
         int size = getCountChildren(thread.getBodyComment());
@@ -129,8 +142,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * This method recursively counts the total amount of children a comment
      * object has.
      * 
-     * @param comment
-     * @return size
+     * @param comment  the comment to be counted
+     * @return the number of children
      * 
      */
     private int getCountChildren(Comment comment) {
@@ -146,6 +159,11 @@ public class ThreadViewAdapter extends BaseAdapter {
         return size;
     }
 
+    /**
+     * Gets an item at the specific position in the list.
+     * @param position  the position
+     * @return the item
+     */
     @Override
     public Object getItem(int position) {
         if (position == 0) {
@@ -158,12 +176,32 @@ public class ThreadViewAdapter extends BaseAdapter {
             return comments.get(position - 2);
         }
     }
+    
+    /**
+     * Gets the id of an item at a specific position.
+     * @param position  the position
+     * @return the id
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
+     * Returns the number of views that this adapter can create.
+     * @return the number of views
+     */
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_MAX_COUNT;
+    }
 
     /**
      * Return the layout type for a list element,
      * OP, SEPARATOR, 7 COMMENT depths and COMMENT_MAX types.
      * 
-     * @return int layout type
+     * @param position the position
+     * @return the layout type
      */
     @Override
     public int getItemViewType(int position) {
@@ -182,22 +220,15 @@ public class ThreadViewAdapter extends BaseAdapter {
         }
         return type;
     }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return TYPE_MAX_COUNT;
-    }
-
     
     @Override
     /**
      * Depending on the list item type, inflate the correct
      * layout, start listening for its buttons.
+     * @param position the position
+     * @param convertView a previous recycled view
+     * @param parent parent view
+     * @return the view
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);

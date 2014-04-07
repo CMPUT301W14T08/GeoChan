@@ -45,32 +45,53 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<ThreadComment> list;
     private Context context;
 
+    /**
+     * Constructs the adapter and initializes its context and list of ThreadComments.
+     * @param list  the list
+     * @param context  the context
+     */
     public FavouriteCommentsAdapter(ArrayList<ThreadComment> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
+    /**
+     * Returns the number of entries in the array.
+     * @return the number of entries
+     */
     @Override
     public int getCount() {
         return list.size();
     }
 
+    /**
+     * Gets the entry at a specified position
+     * @param position  the position
+     * @return the ThreadComment
+     */
     @Override
     public ThreadComment getItem(int position) {
         return list.get(position);
     }
 
+    /** 
+     * Returns the id of a specific entry.
+     * @param position  the position
+     * @return the id 
+     */
     @Override
     public long getItemId(int position) {
         return 0;
     }
 
-    @Override
     /**
      * Return a location log item view and set fields.
-     * 
-     * @return convertView View of a listview item
+     * @param position the position
+     * @param convertView a previous recycled view
+     * @param parent parent view
+     * @return the view
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment comment = (ThreadComment) getItem(position);
         if (convertView == null) {
@@ -106,7 +127,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     /**
      * Listens for the star button on a favorite comment and removes
      * it from the list when pressed.
-     * 
+     * @param convertView  the View on which to check buttons
+     * @param comment  the ThreadComment
      */
     public void listenForStarButton(View convertView, final ThreadComment comment) {
     	ImageButton starButton = (ImageButton) convertView
