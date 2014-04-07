@@ -8,7 +8,6 @@ import org.osmdroid.util.GeoPoint;
 
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
-import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
 public class GetPOIOnPostRunnable implements Runnable {
