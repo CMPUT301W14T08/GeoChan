@@ -336,7 +336,6 @@ public class PostFragment extends Fragment {
 	/**
 	 * Scales a bitmap to a suitable size for display.
 	 * 
-	 * @author Artem Chikin
 	 */
 	private Bitmap scaleImage(Bitmap bitmap) {
 		// https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java

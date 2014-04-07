@@ -31,16 +31,16 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         Comment comment1 = new Comment(commentText, null, null);
         Comment comment2 = new Comment(commentText, null, null);
         Comment comment3 = new Comment(commentText, null, null);
-        /*favLog.addComment(comment1);
-        favLog.addComment(comment2);
-        favLog.addComment(comment3);
+        favLog.addFavComment(new ThreadComment(comment1,""));
+        favLog.addFavComment(new ThreadComment(comment2,""));
+        favLog.addFavComment(new ThreadComment(comment3,""));
         
         int count = 0;
-        for(Comment c : favLog.getComments()) {
+        for(ThreadComment c : favLog.getFavComments()) {
             ++count;
-            assertTrue("Comment text must match", c.getTextPost() == commentText);
+            assertTrue("Comment text must match", c.getBodyComment().getTextPost() == commentText);
         }
-        assertTrue("count must be 3", count == 3);*/
+        assertTrue("count must be 3", count == 3);
     }
     
     /**
@@ -75,12 +75,12 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         Comment comment1 = new Comment(commentText, null, null);
         Comment comment2 = new Comment(commentText, null, null);
         Comment comment3 = new Comment(commentText, null, null);
-        /*favLog.addComment(comment1);
-        favLog.addComment(comment2);
-        favLog.addComment(comment3);
-        assertTrue("Must Have Comment", favLog.hasComment(comment1.getId()));
-        assertTrue("Must Have Comment", favLog.hasComment(comment2.getId()));
-        assertTrue("Must Have Comment", favLog.hasComment(comment3.getId()));*/
+        favLog.addFavComment(new ThreadComment(comment1,""));
+        favLog.addFavComment(new ThreadComment(comment2,""));
+        favLog.addFavComment(new ThreadComment(comment3,""));
+        assertTrue("Must Have Comment", favLog.hasFavComment(comment1.getId()));
+        assertTrue("Must Have Comment", favLog.hasFavComment(comment2.getId()));
+        assertTrue("Must Have Comment", favLog.hasFavComment(comment3.getId()));
     }
     
     /**
@@ -112,14 +112,14 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
         Comment comment1 = new Comment(commentText, null, null);
         Comment comment2 = new Comment(commentText, null, null);
         Comment comment3 = new Comment(commentText, null, null);
-        /*favLog.addComment(comment1);
-        favLog.addComment(comment2);
-        favLog.addComment(comment3);
-        assertTrue("count must be 3", favLog.getComments().size() == 3);
-        favLog.removeComment(comment1);
-        favLog.removeComment(comment2);
-        favLog.removeComment(comment3);
-        assertTrue("count must be 0", favLog.getComments().size() == 0);*/
+        favLog.addFavComment(new ThreadComment(comment1,""));
+        favLog.addFavComment(new ThreadComment(comment2,""));
+        favLog.addFavComment(new ThreadComment(comment3,""));
+        assertTrue("count must be 3", favLog.getFavComments().size() == 3);
+        favLog.removeFavComment(comment1.getId());
+        favLog.removeFavComment(comment2.getId());
+        favLog.removeFavComment(comment3.getId());
+        assertTrue("count must be 0", favLog.getFavComments().size() == 0);
     }
     
     /**
