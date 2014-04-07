@@ -25,8 +25,8 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.ClientConfig;
 
 /**
- * This class is responsible for all ElasticSearch operations. NEED MORE
- * DETAILED COMMENT
+ * This class is responsible for ElasticSearch operations. Contains server connection
+ * data and methods to create a singleton
  * 
  * @author Artem Herasymchuk
  */
