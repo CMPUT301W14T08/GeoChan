@@ -80,6 +80,11 @@ public class PostFragment extends Fragment {
 	private ThreadComment thread = null;
 	private Comment commentToReplyTo = null;
 
+	/**
+	 * Initializes several of the member variables used
+	 * by PostFragment.
+	 * @param savedInstanceState The previously saved state of the fragment.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +103,15 @@ public class PostFragment extends Fragment {
 		}
 	}
 
+    /**
+     * Set up the fragment's UI.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setHasOptionsMenu(false);
@@ -108,6 +122,9 @@ public class PostFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * Initializes some UI elements if the user is posting a reply rather than a new ThreadComment.
+	 */
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -121,7 +138,7 @@ public class PostFragment extends Fragment {
 	}
 
 	/**
-	 * Resumes the fragment, updating the location and textview states accordingly
+	 * Resumes the fragment, updating the location and textview states accordingly.
 	 */
 	@Override
 	public void onResume() {
@@ -166,7 +183,7 @@ public class PostFragment extends Fragment {
      * creates the threadComment object and posts it to the server.
      * 
      * @param view
-     *            The post button in the PostThreadFragment
+     *            The post button in the PostThreadFragment.
      */
     public void post(View view) {
     	if (geoLocation == null) {
@@ -229,7 +246,7 @@ public class PostFragment extends Fragment {
 	 * Displays dialog and either launches camera or gallery
 	 * 
 	 * @param View
-	 *            the AttachPhoto button in postThreadFragment
+	 *            the AttachPhoto button in postThreadFragment.
 	 */
 	public void attachImage(View view) {
 		if (view.getId() == R.id.attach_image_button) {
@@ -339,6 +356,8 @@ public class PostFragment extends Fragment {
 
 	/**
 	 * Scales a bitmap to a suitable size for display.
+	 * @param bitmap The Bitmap to be scaled.
+	 * @return The rescaled Bitmap.
 	 * 
 	 */
 	private Bitmap scaleImage(Bitmap bitmap) {
@@ -357,6 +376,9 @@ public class PostFragment extends Fragment {
 		return bitmap;
 	}
 
+	/**
+	 * Stops the locationListenerService from listening.
+	 */
 	@Override
 	public void onStop() {
 		super.onStop();

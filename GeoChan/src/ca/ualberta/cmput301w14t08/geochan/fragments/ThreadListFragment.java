@@ -65,12 +65,27 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
     private PreferencesManager prefManager = null;
     private static int locSortFlag = 0;
 
+    /**
+     * Set up the fragment UI.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thread_list, container, false);
     }
 
+    /**
+     * Sets the fragment's adapter and starts a thread of execution to retrieve
+     * ThreadComments from ElasticSearch.
+     * 
+     * @param savedInstanceState The previously saved state of the fragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +112,10 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
         super.onResume();
     }
 
+    /**
+     * Checks if there is a network connection for pulling ThreadComments from ElasticSearch.
+     * @param savedInstanceState The previously saved state of the fragment.
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -106,6 +125,12 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
         }
     }
 
+    /**
+     * Initialize's the ThreadList's menu.
+     * 
+     * @param menu The Menu of the fragment.
+     * @param inflater A MenuInflater to inflate the fragment's menu.
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
