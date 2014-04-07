@@ -63,8 +63,8 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns a specific log entry.
-     * @param position the position of the entry
-     * @return the log entry
+     * @param position  the position of the entry
+     * @return  the log entry
      */
     @Override
     public GeoLocation getItem(int position) {
@@ -73,6 +73,7 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns the id of a specific entry.
+     * @param position  the position of the entry
      * @return the id
      */
     @Override
@@ -82,10 +83,10 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns the view for a specific entry.
-     * @param position the position
-     * @param convertView a previous recycled view
-     * @param parent parent view
-     * @return the view
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent The parent View.
+     * @return The View.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

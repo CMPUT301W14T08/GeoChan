@@ -345,11 +345,13 @@ public class EditFragment extends Fragment {
         ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("Getting Location Data");
         if (isThread) {
+        	Log.e("WWW", "START EDITING THREAD");
         	String threadTitle = thread.getTitle();
         	thread.setBodyComment(editComment);
             ThreadManager.startPost(editComment, threadTitle, editComment.getLocation(), dialog);
             CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
         } else {
+        	Log.e("WWW", "START EDITING COMMENT");
             ThreadManager.startPost(editComment, null, editComment.getLocation(), dialog);
         }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(

@@ -11,6 +11,7 @@
           android:showAsAction="ifRoom">
         	
         <menu>
+        <group android:checkableBehavior="single">
         <item android:id="@+id/thread_sort_score_high"
               android:title="@string/score_highest"/>
         
@@ -25,7 +26,7 @@
         
         <item android:id="@+id/thread_sort_location"
               android:title="@string/sort_location"/>
-        
+        </group>
         </menu>
         
     </item>

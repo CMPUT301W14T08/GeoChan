@@ -39,6 +39,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.UpdateRunnable;
  * Responsible for the task of controlling the runnables
  * that are responsible for the various parts of posting
  * a ThreadComment or Comment to ElasticSearch.
+ * 
  * @author Artem Herasymchuk
  * @author Artem Chikin
  *

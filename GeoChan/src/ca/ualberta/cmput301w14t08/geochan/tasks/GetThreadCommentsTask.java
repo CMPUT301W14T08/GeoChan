@@ -29,6 +29,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.GetThreadCommentsRunnable;
 /**
  * Responsible for the task that downloads all the Comments for a particular
  * ThreadComment from ElasticSearch.
+ * 
  * @author Artem Herasymchuk
  *
  */

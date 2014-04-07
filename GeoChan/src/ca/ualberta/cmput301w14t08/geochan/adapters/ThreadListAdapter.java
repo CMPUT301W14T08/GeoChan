@@ -48,35 +48,64 @@ public class ThreadListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<ThreadComment> displayList;
 
+    /**
+     * Constructs the adapter and initializes its context and list of ThreadComments.
+     * @param list  The ArrayList of ThreadComments.
+     * @param context  The Context the adapter is running in.
+     */
     public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
         this.context = context;
         this.displayList = list;
     }
 
+    /**
+     * Returns the number of entries in the array.
+     * @return The number of entries.
+     */
     @Override
     public int getCount() {
         return displayList.size();
     }
 
+    /**
+     * Gets the entry at a specified position.
+     * @param position  The position.
+     * @return The ThreadComment.
+     */
     @Override
     public ThreadComment getItem(int position) {
         return displayList.get(position);
     }
 
+    /**
+     * Returns the id of a specific entry.
+     * @param position  The position.
+     * @return The id of the entry. 
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
+     
 
+    /**
+     * Sets the list of the adapter to a new list
+     * and refreshes itself.
+     * @param list  The new ArrayList of ThreadComments for the adapter.
+     */
     public void setList(ArrayList<ThreadComment> list) {
         displayList = list;
         notifyDataSetChanged();
     }
 
-    @Override
     /**
-     * Inflate thread list item layout
+     * Inflate thread list item layout.
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent Parent view.
+     * @return The view.
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment thread = getItem(position);
         if (convertView == null) {
@@ -88,6 +117,12 @@ public class ThreadListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * Sets the various fields (text, images, etc) of a specific view
+     * based on the information from a specific ThreadComment.
+     * @param convertView  The view to work on.
+     * @param thread  The ThreadComment.
+     */
     private void setThreadFields(View convertView, ThreadComment thread) {
         // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.threadTitle);

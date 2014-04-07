@@ -45,32 +45,53 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     private ArrayList<ThreadComment> list;
     private Context context;
 
+    /**
+     * Constructs the adapter and initializes its context and list of ThreadComments.
+     * @param list  The ArrayList of ThreadComments.
+     * @param context  The Context in which the adapter is running.
+     */
     public FavouriteCommentsAdapter(ArrayList<ThreadComment> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
+    /**
+     * Returns the number of entries in the array.
+     * @return The number of entries.
+     */
     @Override
     public int getCount() {
         return list.size();
     }
 
+    /**
+     * Gets the entry at a specified position.
+     * @param position  The position of the ThreadComment.
+     * @return The ThreadComment.
+     */
     @Override
     public ThreadComment getItem(int position) {
         return list.get(position);
     }
 
+    /** 
+     * Returns the id of a specific entry.
+     * @param position  The position.
+     * @return The id. 
+     */
     @Override
     public long getItemId(int position) {
         return 0;
     }
 
-    @Override
     /**
      * Return a location log item view and set fields.
-     * 
-     * @return convertView View of a listview item
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent Parent view
+     * @return The View.
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment comment = (ThreadComment) getItem(position);
         if (convertView == null) {
@@ -106,7 +127,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     /**
      * Listens for the star button on a favorite comment and removes
      * it from the list when pressed.
-     * 
+     * @param convertView  The View on which to check buttons.
+     * @param comment  The ThreadComment.
      */
     public void listenForStarButton(View convertView, final ThreadComment comment) {
     	ImageButton starButton = (ImageButton) convertView

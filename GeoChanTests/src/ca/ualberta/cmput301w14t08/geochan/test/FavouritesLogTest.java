@@ -27,7 +27,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * Tests for the functionality of the FavouritesLog
+ * Tests for the functionality of the FavouritesLog.
  *
  */
 public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -44,7 +44,7 @@ public class FavouritesLogTest extends ActivityInstrumentationTestCase2<MainActi
     }
     
     /**
-     * test adding a comment as a favourite, assert it is logged in the comments log
+     * Test adding a comment as a favourite, assert it is logged in the comments log.
      */
     public void testAddFavouriteComment() {
         String commentText = "test";

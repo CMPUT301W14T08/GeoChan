@@ -30,6 +30,11 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.PostFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
+/**
+ * Tests for our PostFragment class.
+ * @author Henry Pabst
+ *
+ */
 public class PostFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
     PostFragment fragment;
     MainActivity activity;

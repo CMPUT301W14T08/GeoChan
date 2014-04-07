@@ -27,6 +27,11 @@ import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * Tests our ImageHelper class.
+ * @author Henry Pabst
+ *
+ */
 public class ImageHelperTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     public ImageHelperTest() {
@@ -51,6 +56,9 @@ public class ImageHelperTest extends ActivityInstrumentationTestCase2<MainActivi
         }
     }
     
+    /**
+     * Tests that filenames are saved properly.
+     */
     public void testUniqueFileNames() {
         try {
             File file = ImageHelper.createImageFile();

@@ -32,6 +32,7 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.GetPOIRunnable;
 /**
  * Responsible for the task of controlling the runnables
  * that obtain the closest point of interest to the location of the user.
+ * 
  * @author Artem Chikin
  *
  */
