@@ -55,6 +55,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
@@ -70,12 +71,12 @@ public class MapViewFragment extends Fragment {
 
 	private MapView openMapView;
 	private LocationListenerService locationListenerService;
-	private Marker originalPostMarker;
+	private CustomMarker originalPostMarker;
 	private Polyline roadOverlay;
 	private GridMarkerClusterer replyPostClusterMarkers;
 	private GridMarkerClusterer directionsClusterMarkers;
 	private GridMarkerClusterer startAndFinishClusterMarkers;
-	private ArrayList<Marker> markers;
+	private ArrayList<CustomMarker> markers;
 
 	/**
 	 * Gets the view when inflated
@@ -116,10 +117,11 @@ public class MapViewFragment extends Fragment {
 		Bundle args = getArguments();
 		Comment topComment = (Comment) args.getParcelable("thread_comment");
 
+		markers = new ArrayList<CustomMarker>();
+
 		replyPostClusterMarkers = new GridMarkerClusterer(getActivity());
 		directionsClusterMarkers = new GridMarkerClusterer(getActivity());
 		startAndFinishClusterMarkers = new GridMarkerClusterer(getActivity());
-		markers = new ArrayList<Marker>();
 
 		Drawable clusterIconD = getResources().getDrawable(
 				R.drawable.marker_cluster);
@@ -168,12 +170,7 @@ public class MapViewFragment extends Fragment {
 		if (commentLocationIsValid(topComment)) {
 			GeoLocation geoLocation = topComment.getLocation();
 
-			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-					R.layout.bonuspack_bubble, openMapView);
-			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-					openMapView);
-
-			originalPostMarker = createMarker(geoLocation, "OP");
+			originalPostMarker = createMarker(geoLocation, openMapView, "OP");
 			originalPostMarker.setInfoWindow(infoWindow);
 			originalPostMarker.showInfoWindow();
 			originalPostMarker.setIcon(getResources().getDrawable(
@@ -474,9 +471,9 @@ public class MapViewFragment extends Fragment {
 		}
 
 		/**
-		 * Task is now finished. Creates the current location marker and
-		 * sets it on the map. Clears the map and re-adds all the 
-		 * overlays to the map, then refreshes the map
+		 * Task is now finished. Creates the current location marker and sets it
+		 * on the map. Clears the map and re-adds all the overlays to the map,
+		 * then refreshes the map
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
