@@ -48,20 +48,23 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 /**
  * This is the main and, so far, only activity in the application. It inflates
- * the default fragment and handles some of the crucial controller methods
+ * the default fragment and handles some of the crucial controller methods.
+ * Initializes most of our singleton classes so attempting to fetch an instance of 
+ * one does not return null.
  * 
  * @author Henry Pabst, Artem Chikin
  */
 
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             return;
         }
-        // DO NOT DELETE THE LINE BELOW OR THIS APP WILL EXPLODE
+        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE, THESE SINGLETON
+        // CLASSES HAVE TO BE INITIALIZED BEFORE ANYTHING ELSE.
         ConnectivityHelper.generateInstance(this);
         Toaster.generateInstance(this);
         PreferencesManager.generateInstance(this);
@@ -116,7 +119,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             return true;
         default:
             return super.onOptionsItemSelected(item);
-            // return false;
         }
     }
 
@@ -190,6 +192,10 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.post(view);
     }
 
+    /**
+     * Calls the respective attach image method in the running PostFragment.
+     * @param view View passed to the activity to check which button was pressed.
+     */
     public void attachImage(View view) {
         PostFragment fragment = (PostFragment) getSupportFragmentManager()
                 .findFragmentByTag("postFrag");
@@ -202,6 +208,11 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.attachImage(view);
     }
 
+    /**
+     * Method called when the Edit Image button is pressed in EditFragment. Finds the
+     * appropriate fragment and calls editImage on it.
+     * @param view The View passed to the activity to check which button was pressed.
+     */
     public void editImage(View view) {
         EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
@@ -214,6 +225,11 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         fragment.editImage(view);
     }
 
+    /**
+     * Method called when the Post Edit button is pressed in EditFragment.
+     * Finds the appropriate fragment and calls makeEdit on it.
+     * @param view
+     */
     public void makeEdit(View view) {
         EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
@@ -309,6 +325,11 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         }
     }
 
+    /**
+     * Called when the get_directions_button is clicked in MapViewFragment. Finds the
+     * fragment where the button was clicked and calls getDirections on it.
+     * @param view View passed to the activity to determine which button was pressed.
+     */
     public void getDirections(View view) {
         MapViewFragment fragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(
                 "mapFrag");

@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
+import org.osmdroid.util.GeoPoint;
+
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
@@ -227,9 +229,9 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
     }
 
     /**
-     * Checks for the correct POI string from the GeoNames.org service. 
-     * Uses known GPS coordinates and checks their values with what 
-     * is in the database.
+     * Checks for the correct POI string from the GeoNames.org service. Uses
+     * known GPS coordinates and checks their values with what is in the
+     * database.
      */
     public void testGetPOIString() {
         // create a geoLocation, set its coordinates, and retrieve the POI
@@ -261,19 +263,33 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
             }
         };
         handler2.postDelayed(runnable2, 2000);
-        
+
         // one more check on location, set coordinates to Larry King Square
         geoLocation.setCoordinates(34.09806, -118.32944);
-        
+
         // again check the POI
         Handler handler3 = new Handler();
         Runnable runnable3 = new Runnable() {
             public void run() {
                 assertEquals("the descriptions should be the same", "Larry King Square",
                         geoLocation.getLocationDescription());
-
             }
         };
         handler3.postDelayed(runnable3, 2000);
+    }
+
+    /**
+     * tests to make sure that the makeGeoPoint method returns the appropriate
+     * geoPoint object based on the geoLocation object
+     */
+    public void testMakeGeoPointMethod() {
+        GeoLocation geoLocation = new GeoLocation(1.0, 2.0);
+        GeoPoint geoPoint = geoLocation.makeGeoPoint();
+
+        assertNotNull(geoPoint);
+        assertEquals("geoPoint and geoLocation should have same lat", geoLocation.getLatitude(),
+                geoPoint.getLatitude());
+        assertEquals("geoPoint and geoLocation should have same long", geoLocation.getLatitude(),
+                geoPoint.getLatitude());
     }
 }

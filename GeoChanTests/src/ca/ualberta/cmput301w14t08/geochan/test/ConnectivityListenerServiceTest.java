@@ -1,9 +1,7 @@
 package ca.ualberta.cmput301w14t08.geochan.test;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 
 public class ConnectivityListenerServiceTest extends ActivityInstrumentationTestCase2<MainActivity> {
     
