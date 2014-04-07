@@ -36,8 +36,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Contains the JSON Serializer and Deserializer for converting Bitmap objects
- * to and from base64 JSON strings.
+ * Handles the serialization and deserialization of Bitmap objects
+ * into base64 JSON strings.
  * 
  * @author Artem Chikin
  * @author Artem Herasymchuk
@@ -58,35 +58,21 @@ public class BitmapJsonConverter implements JsonSerializer<Bitmap>,
 	 */
 	@Override
 	public Bitmap deserialize(JsonElement jsonElement, Type type,
-			JsonDeserializationContext jsc) throws JsonParseException {
-		
+			JsonDeserializationContext jsc) throws JsonParseException {	
 		Bitmap image = null;
 		JsonObject object = jsonElement.getAsJsonObject();
 		String encodedImage = object.get("image").getAsString();
-		
 		byte[] byteArray = Base64.decode(encodedImage, Base64.NO_WRAP);
 		
 		/*
-		 *  http://stackoverflow.com/a/5878773
-		 *  Sando's workaround for running out of memory on decoding bitmaps.
+		 * http://stackoverflow.com/a/5878773
+		 * Sando's workaround for running out of memory on decoding bitmaps.
 		 */
-		
-		BitmapFactory.Options opts = new BitmapFactory.Options();
-		
-		/* Disable Dithering mode */
+		BitmapFactory.Options opts = new BitmapFactory.Options();	
 		opts.inDither = false;
-		
-		/* Tell to gc that whether it needs free memory, the Bitmap can be cleared */
 		opts.inPurgeable = true; 
-		
-		/* 
-		 * Which kind of reference will be used to recover the Bitmap data
-		 * after being clear, when it will be used in the future
-		 */
-		opts.inInputShareable = true;
-		
-		opts.inTempStorage = new byte[32 * 1024];
-		
+		opts.inInputShareable = true;	
+		opts.inTempStorage = new byte[32 * 1024];	
 		image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length,
 				opts);
 		
@@ -106,18 +92,14 @@ public class BitmapJsonConverter implements JsonSerializer<Bitmap>,
 	@Override
 	public JsonElement serialize(Bitmap bitmap, Type type,
 			JsonSerializationContext jsc) {
-		
 		JsonObject object = new JsonObject();
 		
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-		
 		byte[] byteArray = byteArrayOutputStream.toByteArray();
-		String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-		
+		String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);	
 		object.addProperty("image", encoded);
 		
-		return object;
-		
+		return object;	
 	}
 }
