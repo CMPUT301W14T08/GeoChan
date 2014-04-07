@@ -28,7 +28,6 @@ import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,7 +60,6 @@ import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 
@@ -123,7 +121,7 @@ public class PostFragment extends Fragment {
 	}
 
 	/**
-	 * COMMENT GOES HERE
+	 * Resumes the fragment, updating the location and textview states accordingly
 	 */
 	@Override
 	public void onResume() {
@@ -289,6 +287,14 @@ public class PostFragment extends Fragment {
 		}
 	}
 
+	
+	/**
+	 * Handles the return from the camera activity
+	 * 
+	 * @param requestCode Type of activity requested
+	 * @param resultCode Code indicating activity success/failure
+	 * @param data Image data associated with the camera activity
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
@@ -325,6 +331,11 @@ public class PostFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * Scales a bitmap to a suitable size for display.
+	 * 
+	 * @author Artem Chikin
+	 */
 	private Bitmap scaleImage(Bitmap bitmap) {
 		// https://github.com/bradleyjsimons/PicPoster/blob/master/src/ca/ualberta/cs/picposter/controller/PicPosterController.java
 		// Scale the pic if it is too large:

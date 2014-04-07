@@ -16,7 +16,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * COMMENT EXPLAINING THE CLASS HERE
+ * Fragment displaying the child comments of a saved thread.
  * 
  * @author Artem Chikin
  * 
@@ -27,7 +27,7 @@ public class FavouriteCommentsFragment extends Fragment {
     private ListView favouritesListView;
 
     /**
-     * COMMENT HERE
+     * Set up the log instance and get the comment list
      * 
      */
     @Override
@@ -38,7 +38,7 @@ public class FavouriteCommentsFragment extends Fragment {
     }
 
     /**
-     * COMMENT HERE
+     * Inflate the fragment view from the given layout
      * 
      */
     @Override
