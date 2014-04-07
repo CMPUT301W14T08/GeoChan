@@ -30,8 +30,10 @@ public class CacheManager {
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
     private static final String IMAGE = "IMG";
-    private ArrayList<Comment> commentQueue = null;
-    private ArrayList<ThreadComment> threadCommentQueue = null;
+    private static final String FILENAME2 = "commentq.sav";
+    private static final String FILENAME3 = "threadq.sav";
+    private ArrayList<Comment> commentQueue;
+    private ArrayList<ThreadComment> threadCommentQueue;
 
     private CacheManager(Context context) {
         this.context = context;
@@ -83,6 +85,99 @@ public class CacheManager {
 	public void setCommentQueue(ArrayList<Comment> commentQueue) {
 		this.commentQueue = commentQueue;
 	}
+	
+	public ArrayList<ThreadComment> getThreadCommentQueue() {
+		return threadCommentQueue;
+	}
+
+	public void setThreadCommentQueue(ArrayList<ThreadComment> threadCommentQueue) {
+		this.threadCommentQueue = threadCommentQueue;
+	}
+	
+    
+	// Serialize commentQueue to JSON
+    public void serializeCommentQueue() {
+        try {
+            String json = offlineGson.toJson(getCommentQueue());
+            FileOutputStream f = context.openFileOutput(FILENAME2, Context.MODE_PRIVATE);
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+            w.write(json);
+            w.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Deserialize comment Queue from JSON
+    public ArrayList<Comment> deserializeCommentQueue() {
+        ArrayList<Comment> list = new ArrayList<Comment>();
+        try {
+            FileInputStream f = context.openFileInput(FILENAME2);
+            BufferedReader r = new BufferedReader(new InputStreamReader(f));
+            String json = "";
+            String temp = "";
+            temp = r.readLine();
+            while (temp != null) {
+                json = json + temp;
+                temp = r.readLine();
+            }
+            r.close();
+            f.close();
+            Type type = new TypeToken<ArrayList<Comment>>() {
+            }.getType();
+            list = onlineGson.fromJson(json, type);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+ // Serialize commentQueue to JSON
+    public void serializeThreadCommentQueue() {
+        try {
+            String json = offlineGson.toJson(getThreadCommentQueue());
+            FileOutputStream f = context.openFileOutput(FILENAME3, Context.MODE_PRIVATE);
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+            w.write(json);
+            w.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Deserialize threadComment Queue from JSON
+    public ArrayList<ThreadComment> deserializeThreadCommentQueue() {
+        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+        try {
+            FileInputStream f = context.openFileInput(FILENAME3);
+            BufferedReader r = new BufferedReader(new InputStreamReader(f));
+            String json = "";
+            String temp = "";
+            temp = r.readLine();
+            while (temp != null) {
+                json = json + temp;
+                temp = r.readLine();
+            }
+            r.close();
+            f.close();
+            Type type = new TypeToken<ArrayList<ThreadComment>>() {
+            }.getType();
+            list = onlineGson.fromJson(json, type);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 	public void serializeImage(Bitmap image, String id) {
         try {
