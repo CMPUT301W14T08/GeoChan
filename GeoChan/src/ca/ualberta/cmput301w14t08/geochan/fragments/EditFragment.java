@@ -167,10 +167,6 @@ public class EditFragment extends Fragment {
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditFragment.oldText);
         }
-        if (EditFragment.oldThumbnail != null){
-            //oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
-            //oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
-        }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
                 Button locButton = (Button) getActivity().findViewById(R.id.edit_location_button);
@@ -181,6 +177,9 @@ public class EditFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
+                    
+                    String locationDescription = args.getString("locationDescription");
+                    geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
@@ -354,5 +353,4 @@ public class EditFragment extends Fragment {
         getFragmentManager().popBackStackImmediate();
 
     }
-
 }
