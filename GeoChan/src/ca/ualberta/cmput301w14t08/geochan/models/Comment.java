@@ -42,411 +42,432 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
  * @author Henry Pabst, Artem Chikin
  */
 public class Comment implements Parcelable {
-    private String textPost;
-    private Date commentDate;
-    private Bitmap image;
-    private Bitmap imageThumb;
-    private GeoLocation location;
-    private String user;
-    private String hash;
-    private int depth;
-    private Comment parent;
-    private ArrayList<Comment> children;
-    private ArrayList<String> commentIds;
-    private PreferencesManager manager;
-    private long id;
+	private String textPost;
+	private Date commentDate;
+	private Bitmap image;
+	private Bitmap imageThumb;
+	private GeoLocation location;
+	private String user;
+	private String hash;
+	private int depth;
+	private Comment parent;
+	private ArrayList<Comment> children;
+	private ArrayList<String> commentIds;
+	private PreferencesManager manager;
+	private long id;
 
-    /**
-     * Initializes a Comment object with a post, parent comment, image
-     * and GeoLocation.
-     */
-    public Comment(String textPost, Bitmap image, GeoLocation location, Comment parent) {
-        super();
-        this.manager = PreferencesManager.getInstance();
-        this.setTextPost(textPost);
-        this.setCommentDate(new Date());
-        this.setImage(image);
-        this.setImageThumb(ThumbnailUtils.extractThumbnail(image, 150, 150));
-        this.setLocation(location);
-        this.setUser(manager.getUser());
-        this.setHash(HashHelper.getHash(manager.getUser()));
-        if (parent == null) {
-            this.depth = -1;
-        } else {
-            this.depth = parent.depth + 1;
-        }
-        this.setParent(parent);
-        this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getCommentIdHash();
-        this.commentIds = new ArrayList<String>();
-    }
+	/**
+	 * Initializes a Comment object with a post, parent comment, image and
+	 * GeoLocation.
+	 */
+	public Comment(String textPost, Bitmap image, GeoLocation location,
+			Comment parent) {
+		super();
+		this.manager = PreferencesManager.getInstance();
+		this.setTextPost(textPost);
+		this.setCommentDate(new Date());
+		this.setImage(image);
+		this.setImageThumb(ThumbnailUtils.extractThumbnail(image, 150, 150));
+		this.setLocation(location);
+		this.setUser(manager.getUser());
+		this.setHash(HashHelper.getHash(manager.getUser()));
+		if (parent == null) {
+			this.depth = -1;
+		} else {
+			this.depth = parent.depth + 1;
+		}
+		this.setParent(parent);
+		this.setChildren(new ArrayList<Comment>());
+		this.id = HashHelper.getCommentIdHash();
+		this.commentIds = new ArrayList<String>();
+	}
 
-    /**
-     * Initializes a Comment object with a post, parent comment
-     * and GeoLocation.
-     */
-    public Comment(String textPost, GeoLocation location, Comment parent) {
-        super();
-        this.manager = PreferencesManager.getInstance();
-        this.setTextPost(textPost);
-        this.setCommentDate(new Date());
-        this.setImage(null);
-        this.setImageThumb(null);
-        this.setLocation(location);
-        this.setUser(manager.getUser());
-        this.setHash(HashHelper.getHash(manager.getUser()));
-        if (parent == null) {
-            this.depth = -1;
-        } else {
-            this.depth = parent.depth + 1;
-        }
-        this.setParent(parent);
-        this.setChildren(new ArrayList<Comment>());
-        this.id = HashHelper.getCommentIdHash();
-        this.commentIds = new ArrayList<String>();
-    }
+	/**
+	 * Initializes a Comment object with a post, parent comment and GeoLocation.
+	 */
+	public Comment(String textPost, GeoLocation location, Comment parent) {
+		super();
+		this.manager = PreferencesManager.getInstance();
+		this.setTextPost(textPost);
+		this.setCommentDate(new Date());
+		this.setImage(null);
+		this.setImageThumb(null);
+		this.setLocation(location);
+		this.setUser(manager.getUser());
+		this.setHash(HashHelper.getHash(manager.getUser()));
+		if (parent == null) {
+			this.depth = -1;
+		} else {
+			this.depth = parent.depth + 1;
+		}
+		this.setParent(parent);
+		this.setChildren(new ArrayList<Comment>());
+		this.id = HashHelper.getCommentIdHash();
+		this.commentIds = new ArrayList<String>();
+	}
 
-    /**
-     * Initializes a Comment object with no data.
-     */
-    public Comment() {
-        super();
-        this.manager = PreferencesManager.getInstance();
-        this.textPost = "No comment.";
-        this.commentDate = new Date();
-        this.image = null;
-        this.location = new GeoLocation(0, 0);
-        this.parent = null;
-        this.children = new ArrayList<Comment>();
-        this.setUser(new String());
-        this.setHash(new String());
-        this.depth = -1;
-        this.setParent(null);
-        this.setChildren(new ArrayList<Comment>());
-        this.id = -1;
-        this.commentIds = new ArrayList<String>();
-    }
+	/**
+	 * Initializes a Comment object with no data.
+	 */
+	public Comment() {
+		super();
+		this.manager = PreferencesManager.getInstance();
+		this.textPost = "No comment.";
+		this.commentDate = new Date();
+		this.image = null;
+		this.location = new GeoLocation(0, 0);
+		this.parent = null;
+		this.children = new ArrayList<Comment>();
+		this.setUser(new String());
+		this.setHash(new String());
+		this.depth = -1;
+		this.setParent(null);
+		this.setChildren(new ArrayList<Comment>());
+		this.id = -1;
+		this.commentIds = new ArrayList<String>();
+	}
 
-    /**
-     * Simple check that returns whether this Comment has an image associated with it.
-     * @return true if the Comment has an image, false if not
-     */
-    public boolean hasImage() {
-        return !(imageThumb == null);
-    }
+	/**
+	 * Simple check that returns whether this Comment has an image associated
+	 * with it.
+	 * 
+	 * @return true if the Comment has an image, false if not
+	 */
+	public boolean hasImage() {
+		return !(imageThumb == null);
+	}
 
-    /**
-     * Adds a child Comment to this Comment.
-     * @param comment  the child Comment to add
-     */
-    public void addChild(Comment comment) {
-        comment.setParent(this);
-        children.add(comment);
-    }
-    
-    /**
-     * Searches a parent Comment's children recursively for a Comment
-     * by its ElasticSearch id.
-     * @param parent  the parent Comment
-     * @param id  the id
-     * @return  the Comment if found, or null if not found
-     */
-    public Comment findCommentById(Comment parent, String id) {
-        Comment c = null;
-        if (parent.getId().equals(id)) {
-            c = parent;
-        }
-        for (Comment child : parent.getChildren()) {
-            Comment c2 = findCommentById(child, id);
-            if (c2 != null) {
-                c = c2;
-            }
-        }
-        return c;
-    }
+	/**
+	 * Adds a child Comment to this Comment.
+	 * 
+	 * @param comment
+	 *            the child Comment to add
+	 */
+	public void addChild(Comment comment) {
+		comment.setParent(this);
+		children.add(comment);
+	}
 
-    /**
-     * Determines the distance between a comment and a GeoLocation in terms of
-     * latitude and longitude coordinates.
-     * 
-     * @param geo
-     *            The GeoLocation to be compared with.
-     * @return The distance between the Comment and the passed GeoLocation in
-     *         terms of coordinates.
-     */
-    public double getDistanceFrom(GeoLocation geo) {
-        return this.getLocation().distance(geo);
-    }
+	/**
+	 * Searches a parent Comment's children recursively for a Comment by its
+	 * ElasticSearch id.
+	 * 
+	 * @param parent
+	 *            the parent Comment
+	 * @param id
+	 *            the id
+	 * @return the Comment if found, or null if not found
+	 */
+	public Comment findCommentById(Comment parent, String id) {
+		Comment c = null;
+		if (parent.getId().equals(id)) {
+			c = parent;
+		}
+		for (Comment child : parent.getChildren()) {
+			Comment c2 = findCommentById(child, id);
+			if (c2 != null) {
+				c = c2;
+			}
+		}
+		return c;
+	}
 
-    /**
-     * Determines the amount of time between when the Comment was posted and the
-     * passed date in terms of hours.
-     * 
-     * @param date
-     *            The Date to be compared with.
-     * @return The number of hours between when the Comment was posted and the
-     *         passed Date.
-     */
-    public double getTimeFrom(Date date) {
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(this.getCommentDate());
-        cal2.setTime(date);
-        long t1 = cal1.getTimeInMillis();
-        long t2 = cal2.getTimeInMillis();
-        if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
-            return 0.5;
-        } else {
-            return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
-        }
-    }
+	/**
+	 * Determines the distance between a comment and a GeoLocation in terms of
+	 * latitude and longitude coordinates.
+	 * 
+	 * @param geo
+	 *            The GeoLocation to be compared with.
+	 * @return The distance between the Comment and the passed GeoLocation in
+	 *         terms of coordinates.
+	 */
+	public double getDistanceFrom(GeoLocation geo) {
+		return this.getLocation().distance(geo);
+	}
 
-    /**
-     * Determines the "score" of the Comment in relation to its parent. Should
-     * never be called on the bodyComment of a ThreadComment, and will return 0
-     * if it does.
-     * 
-     * @return The score of the Comment in relation to its parent.
-     */
-    @Deprecated
-    public double getScoreFromParent() {
-        int distConst = 25;
-        int timeConst = 10;
-        int maxScore = 50000;
-        /*
-         * These can be changed depending on how we want to weight distance vs.
-         * time for comment scoring.
-         */
-        if (this.parent == null) {
-            Log.e("Comment:", "getScoreFromParent() was incorrectly called on a top comment.");
-            return 0;
-        }
-        double distScore = distConst
-                * (1 / Math.sqrt(this.getDistanceFrom(this.getParent().getLocation())));
-        double timeScore = timeConst
-                * (1 / Math.sqrt(this.getTimeFrom(this.getParent().getCommentDate())));
-        if ((distScore + timeScore) > maxScore) {
-            return maxScore;
-        } else {
-            return distScore + timeScore;
-        }
-    }
+	/**
+	 * Determines the amount of time between when the Comment was posted and the
+	 * passed date in terms of hours.
+	 * 
+	 * @param date
+	 *            The Date to be compared with.
+	 * @return The number of hours between when the Comment was posted and the
+	 *         passed Date.
+	 */
+	public double getTimeFrom(Date date) {
+		Calendar cal1 = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
+		cal1.setTime(this.getCommentDate());
+		cal2.setTime(date);
+		long t1 = cal1.getTimeInMillis();
+		long t2 = cal2.getTimeInMillis();
+		if (TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2)) < 1) {
+			return 0.5;
+		} else {
+			return TimeUnit.MILLISECONDS.toHours(Math.abs(t1 - t2));
+		}
+	}
 
-    /**
-     * Determines the score of a comment in a thread relevant to the user's
-     * current location and time.
-     * 
-     * @param geo
-     *            The current GeoLocation of the user. In sorting, the
-     *            Thread.sortLoc GeoLocation of the sorting thread is used and
-     *            should be set in the fragment.
-     * @return The score of the comment in relation to the user's location and
-     *         current time.
-     */
-    public double getScoreFromUser(GeoLocation geo) {
-        int distConst = 25;
-        int timeConst = 10;
-        int maxScore = 10000;
+	/**
+	 * Determines the "score" of the Comment in relation to its parent. Should
+	 * never be called on the bodyComment of a ThreadComment, and will return 0
+	 * if it does.
+	 * 
+	 * @return The score of the Comment in relation to its parent.
+	 */
+	@Deprecated
+	public double getScoreFromParent() {
+		int distConst = 25;
+		int timeConst = 10;
+		int maxScore = 50000;
+		/*
+		 * These can be changed depending on how we want to weight distance vs.
+		 * time for comment scoring.
+		 */
+		if (this.parent == null) {
+			Log.e("Comment:",
+					"getScoreFromParent() was incorrectly called on a top comment.");
+			return 0;
+		}
+		double distScore = distConst
+				* (1 / Math.sqrt(this.getDistanceFrom(this.getParent()
+						.getLocation())));
+		double timeScore = timeConst
+				* (1 / Math.sqrt(this.getTimeFrom(this.getParent()
+						.getCommentDate())));
+		if ((distScore + timeScore) > maxScore) {
+			return maxScore;
+		} else {
+			return distScore + timeScore;
+		}
+	}
 
-        if (geo == null) {
-            Log.e("Comment:", "getScoreFromUser() was incorrectly called with a null location.");
-            return 0;
-        }
-        double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(geo)));
-        double timeScore = timeConst * (1 / Math.sqrt(this.getTimeFrom(new Date())));
-        if ((distScore + timeScore) > maxScore) {
-            return maxScore;
-        } else {
-            return distScore + timeScore;
-        }
-    }
-    
-    /** 
-     * Searches the ThreadList for the ThreadComment containing this
-     * Comment.
-     * @return the ThreadComment of the Comment if found, or null if not found
-     */
-    public ThreadComment findThread() {
-        ThreadComment t = null;
-        for (ThreadComment thread : ThreadList.getThreads()) {
-            if (thread.getBodyComment().getId().equals(getId())) {
-                t = thread;
-            }
-        }
-        return t;
-    }
+	/**
+	 * Determines the score of a comment in a thread relevant to the user's
+	 * current location and time.
+	 * 
+	 * @param geo
+	 *            The current GeoLocation of the user. In sorting, the
+	 *            Thread.sortLoc GeoLocation of the sorting thread is used and
+	 *            should be set in the fragment.
+	 * @return The score of the comment in relation to the user's location and
+	 *         current time.
+	 */
+	public double getScoreFromUser(GeoLocation geo) {
+		int distConst = 25;
+		int timeConst = 10;
+		int maxScore = 10000;
 
-    /**
-     * Converts the Comment's commentDate to an appropriately formatted string.
-     * 
-     * @return The string of the Comment's commentDate.
-     */
-    public String getCommentDateString() {
-        SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy", Locale.getDefault());
-        SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-        return "On " + formatDate.format(commentDate) + " at " + formatTime.format(commentDate);
-    }
+		if (geo == null) {
+			Log.e("Comment:",
+					"getScoreFromUser() was incorrectly called with a null location.");
+			return 0;
+		}
+		double distScore = distConst
+				* (1 / Math.sqrt(this.getDistanceFrom(geo)));
+		double timeScore = timeConst
+				* (1 / Math.sqrt(this.getTimeFrom(new Date())));
+		if ((distScore + timeScore) > maxScore) {
+			return maxScore;
+		} else {
+			return distScore + timeScore;
+		}
+	}
 
-    /**
-     * Describes any special objects contained in the Parcelable representation.
-     * Not used in our implementation.
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+	/**
+	 * Searches the ThreadList for the ThreadComment containing this Comment.
+	 * 
+	 * @return the ThreadComment of the Comment if found, or null if not found
+	 */
+	public ThreadComment findThread() {
+		ThreadComment t = null;
+		for (ThreadComment thread : ThreadList.getThreads()) {
+			if (thread.getBodyComment().getId().equals(getId())) {
+				t = thread;
+			}
+		}
+		return t;
+	}
 
-    /**
-     * Writes a Comment object to a Parcel.
-     * @param dest  the Parcel
-     * @param flags  contextual flags
-     */
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(textPost);
-        dest.writeValue(commentDate);
-        dest.writeValue(image);
-        dest.writeValue(imageThumb);
-        dest.writeValue(location.getLatitude());
-        dest.writeValue(location.getLongitude());
-        dest.writeValue(user);
-        dest.writeValue(id);
-        dest.writeParcelable(parent, flags);
-    }
+	/**
+	 * Converts the Comment's commentDate to an appropriately formatted string.
+	 * 
+	 * @return The string of the Comment's commentDate.
+	 */
+	public String getCommentDateString() {
+		SimpleDateFormat formatDate = new SimpleDateFormat("MMM dd/yy",
+				Locale.getDefault());
+		SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm aa",
+				Locale.getDefault());
+		return "On " + formatDate.format(commentDate) + " at "
+				+ formatTime.format(commentDate);
+	}
 
-    /**
-     * Constructs a Comment object from a Parcel.
-     * 
-     * @param in  the parcel
-     */
-    public Comment(Parcel in) {
-        super();
-        this.setTextPost((String) in.readValue(getClass().getClassLoader()));
-        this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
-        this.setImage((Bitmap) in.readValue(getClass().getClassLoader()));
-        this.setImageThumb((Bitmap) in.readValue(getClass().getClassLoader()));
-        this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
-        this.setUser((String) in.readValue(getClass().getClassLoader()));
-        this.setId(Long.parseLong((String) in.readValue(getClass().getClassLoader())));
-        this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
-    }
+	/**
+	 * Describes any special objects contained in the Parcelable representation.
+	 * Not used in our implementation.
+	 */
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 
-    /**
-     * Creates Comments from Parcels.
-     */
-    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
-        public Comment createFromParcel(Parcel in) {
-            return new Comment(in);
-        }
+	/**
+	 * Writes a Comment object to a Parcel.
+	 * 
+	 * @param dest
+	 *            the Parcel
+	 * @param flags
+	 *            contextual flags
+	 */
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeValue(textPost);
+		dest.writeValue(commentDate);
+		dest.writeValue(image);
+		dest.writeValue(imageThumb);
+		dest.writeValue(location.getLatitude());
+		dest.writeValue(location.getLongitude());
+		dest.writeValue(user);
+		dest.writeValue(id);
+		dest.writeParcelable(parent, flags);
+	}
 
-        public Comment[] newArray(int size) {
-            return new Comment[size];
-        }
-    };
-    
-    /* Getters and setters below */
-    
-    public Bitmap getImageThumb() {
-        return imageThumb;
-    }
+	/**
+	 * Constructs a Comment object from a Parcel.
+	 * 
+	 * @param in
+	 *            the parcel
+	 */
+	public Comment(Parcel in) {
+		super();
+		this.setTextPost((String) in.readValue(getClass().getClassLoader()));
+		this.setCommentDate((Date) in.readValue(getClass().getClassLoader()));
+		this.setImage((Bitmap) in.readValue(getClass().getClassLoader()));
+		this.setImageThumb((Bitmap) in.readValue(getClass().getClassLoader()));
+		this.setLocation(new GeoLocation(in.readDouble(), in.readDouble()));
+		this.setUser((String) in.readValue(getClass().getClassLoader()));
+		this.setId(Long.parseLong((String) in.readValue(getClass()
+				.getClassLoader())));
+		this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
+	}
 
-    public void setImageThumb(Bitmap imageThumb) {
-        this.imageThumb = imageThumb;
-    }
+	/**
+	 * Creates Comments from Parcels.
+	 */
+	public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+		public Comment createFromParcel(Parcel in) {
+			return new Comment(in);
+		}
 
-    public String getHash() {
-        return hash;
-    }
+		public Comment[] newArray(int size) {
+			return new Comment[size];
+		}
+	};
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-    
-    public int getDepth() {
-        return depth;
-    }
+	/* Getters and setters below */
 
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-    
-    public String getTextPost() {
-        return textPost;
-    }
+	public Bitmap getImageThumb() {
+		return imageThumb;
+	}
 
-    public void setTextPost(String textPost) {
-        this.textPost = textPost;
-    }
+	public void setImageThumb(Bitmap imageThumb) {
+		this.imageThumb = imageThumb;
+	}
 
-    public Bitmap getImage() {
-        return image;
-    }
+	public String getHash() {
+		return hash;
+	}
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
-    public GeoLocation getLocation() {
-        return location;
-    }
+	public int getDepth() {
+		return depth;
+	}
 
-    public void setLocation(GeoLocation location) {
-        if (location.getLocation() == null) {
-            this.location = null;
-        } else {
-            this.location = location;
-        }
-    }
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
 
-    public Date getCommentDate() {
-        return commentDate;
-    }
+	public String getTextPost() {
+		return textPost;
+	}
 
-    public void setCommentDate(Date commentDate) {
-        this.commentDate = commentDate;
-    }
+	public void setTextPost(String textPost) {
+		this.textPost = textPost;
+	}
 
-    public Comment getParent() {
-        return parent;
-    }
+	public Bitmap getImage() {
+		return image;
+	}
 
-    public void setParent(Comment parent) {
-        this.parent = parent;
-    }
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
 
-    public ArrayList<Comment> getChildren() {
-        return children;
-    }
+	public GeoLocation getLocation() {
+		return location;
+	}
 
-    public Comment getChildAtIndex(int i) {
-        return children.get(i);
-    }
+	public void setLocation(GeoLocation location) {
+		if (location.getLocation() == null) {
+			this.location = null;
+		} else {
+			this.location = location;
+		}
+	}
 
-    public void setChildren(ArrayList<Comment> children) {
-        this.children = children;
-    }
+	public Date getCommentDate() {
+		return commentDate;
+	}
 
-    public String getUser() {
-        return user;
-    }
+	public void setCommentDate(Date commentDate) {
+		this.commentDate = commentDate;
+	}
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+	public Comment getParent() {
+		return parent;
+	}
 
-    public String getId() {
-        return Long.toString(id);
-    }
+	public void setParent(Comment parent) {
+		this.parent = parent;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public ArrayList<Comment> getChildren() {
+		return children;
+	}
 
-    public ArrayList<String> getCommentIds() {
-        return commentIds;
-    }
+	public Comment getChildAtIndex(int i) {
+		return children.get(i);
+	}
 
-    public void setCommentIds(ArrayList<String> commentIds) {
-        this.commentIds = commentIds;
-    }
+	public void setChildren(ArrayList<Comment> children) {
+		this.children = children;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getId() {
+		return Long.toString(id);
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public ArrayList<String> getCommentIds() {
+		return commentIds;
+	}
+
+	public void setCommentIds(ArrayList<String> commentIds) {
+		this.commentIds = commentIds;
+	}
 }
