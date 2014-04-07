@@ -528,6 +528,10 @@ public class ThreadManager {
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;
         case POST_GET_POI_COMPLETE:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+        	instance.postPool.execute(task.getPostRunnable());
+        case POST_GET_POI_FAILED:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
         	instance.postPool.execute(task.getPostRunnable());
         default:
             instance.handler.obtainMessage(state, task).sendToTarget();
