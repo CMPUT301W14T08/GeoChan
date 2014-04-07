@@ -344,10 +344,10 @@ public class EditFragment extends Fragment {
         if (isThread) {
         	String threadTitle = thread.getTitle();
         	thread.setBodyComment(editComment);
-            ThreadManager.startPost(editComment, threadTitle);
+            ThreadManager.startPost(editComment, threadTitle, editComment.getLocation());
             CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
         } else {
-            ThreadManager.startPost(editComment, null);
+            ThreadManager.startPost(editComment, null, editComment.getLocation());
         }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);

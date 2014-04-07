@@ -51,13 +51,17 @@ public class GeoLocationLog {
      * 
      * @return instance
      */
-    public static GeoLocationLog getInstance(Context context) {
+    public static GeoLocationLog generateInstance(Context context) {
         if (instance == null) {
             instance = new GeoLocationLog(context);
         }
         return instance;
     }
 
+    public static GeoLocationLog getInstance() {
+    	return instance;
+    }
+    
     /**
      * Adds a new LogEntry to the GeoLocationLog.
      * 
