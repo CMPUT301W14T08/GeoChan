@@ -284,6 +284,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
+        	Log.e("EDIT", "THE FRAGMENT IS NULL");
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
             fragment = (EditFragment) favFrag.getChildFragmentManager()

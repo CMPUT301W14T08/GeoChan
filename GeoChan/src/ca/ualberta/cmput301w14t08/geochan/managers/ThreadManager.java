@@ -36,6 +36,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
@@ -101,8 +102,7 @@ public class ThreadManager {
     public static final int POST_GET_POI_FAILED = 24;
     public static final int POST_GET_POI_RUNNING = 25;
     public static final int POST_GET_POI_COMPLETE = 26;
-
-    public static final int POST_TASK_COMPLETE = 9001;
+    public static final int POST_TASK_COMPLETE = 27;
 
     private static final int KEEP_ALIVE_TIME = 1;
     private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
@@ -349,6 +349,13 @@ public class ThreadManager {
 					}
 					break;
 					
+				case POST_RUNNING:
+					PostTask postTaskRun = (PostTask) inputMessage.obj;
+					if (postTaskRun.getDialog() != null && !postTaskRun.getDialog().isShowing()) {
+						postTaskRun.getDialog().show();
+                    }
+					break;
+					
 				case POST_IMAGE_FAILED:
 					PostTask postTaskImageFailed = (PostTask) inputMessage.obj;
 					if (postTaskImageFailed.getDialog() != null) {
@@ -451,6 +458,7 @@ public class ThreadManager {
         if (task == null) {
             task = new PostTask();
         }
+        Log.e("EEE", "INSIDE START POST");
         task.initPostTask(instance, comment, title, location, dialog);
         if (location.getLocationDescription() == null) {
             task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
@@ -613,6 +621,9 @@ public class ThreadManager {
             } else {
                 instance.handler.obtainMessage(POST_TASK_COMPLETE, task).sendToTarget();
             }
+            break;
+        case POST_RUNNING:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
             break;
         case POST_TASK_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();

@@ -47,6 +47,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateDialogListenerInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
@@ -64,7 +65,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * @author Henry Pabst
  * @author Artem Chikin
  */
-public class ThreadViewFragment extends Fragment {
+public class ThreadViewFragment extends Fragment implements UpdateDialogListenerInterface {
     private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
@@ -482,12 +483,13 @@ public class ThreadViewFragment extends Fragment {
         getFragmentManager().executePendingTransactions();
     }
     
+	@Override
     public void reload() {
         ThreadManager.startGetComments(this, threadIndex);
     }
     
     /**
-     * On finishnig pullToRefresh reload, notify the adapter.
+     * On finishing pullToRefresh reload, notify the adapter.
      */
     public void finishReload() {
         SortUtil.sortComments(prefManager.getCommentSort(), thread.getBodyComment().getChildren());

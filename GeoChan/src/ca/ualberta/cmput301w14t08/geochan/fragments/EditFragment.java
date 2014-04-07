@@ -95,7 +95,7 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        return inflater.inflate(R.layout.fragment_edit_comment, container, false);
+        return inflater.inflate(R.layout.fragment_edit, container, false);
     }
 
     @Override
@@ -117,7 +117,6 @@ public class EditFragment extends Fragment {
      * contained in fragment arguments as well as the ThreadComment containing said Comment.
      * After the Comment is found the appropriate UI elements and state variables are set.
      */
-
     @Override
     public void onStart() {
         super.onStart();
@@ -146,8 +145,6 @@ public class EditFragment extends Fragment {
         }
         if (EditFragment.oldThumbnail == null && editComment.getImageThumb() != null) {
             EditFragment.oldThumbnail = editComment.getImageThumb();
-            //oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
-            //oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
         }
         newTextPost = (EditText) getActivity().findViewById(R.id.editBody);
         newTextPost.setText(editComment.getTextPost());
@@ -170,10 +167,6 @@ public class EditFragment extends Fragment {
             TextView oldTextView = (TextView) getActivity().findViewById(R.id.old_comment_text);
             oldTextView.setText(EditFragment.oldText);
         }
-        if (EditFragment.oldThumbnail != null){
-            //oldThumbView = (ImageView) getActivity().findViewById(R.id.old_thumb);
-            //oldThumbView.setImageBitmap(EditFragment.oldThumbnail);
-        }
         if (args != null) {
             if (args.containsKey("LATITUDE") && args.containsKey("LONGITUDE")) {
                 Button locButton = (Button) getActivity().findViewById(R.id.edit_location_button);
@@ -184,15 +177,16 @@ public class EditFragment extends Fragment {
                     Double lat = args.getDouble("LATITUDE");
                     Double lon = args.getDouble("LONGITUDE");
                     geoLocation.setCoordinates(lat, lon);
+                    
+                    String locationDescription = args.getString("locationDescription");
+                    geoLocation.setLocationDescription(locationDescription);
 
                     DecimalFormat format = new DecimalFormat();
                     format.setRoundingMode(RoundingMode.HALF_EVEN);
                     format.setMinimumFractionDigits(0);
                     format.setMaximumFractionDigits(4);
 
-                    locButton.setText(format.format(lat) + ", " + format.format(lon));
-                    locButton
-                            .setHint("Lat: " + format.format(lat) + ", Lon: " + format.format(lon));
+                    locButton.setText("Location: Set");
                 }
             }
         }
@@ -343,15 +337,13 @@ public class EditFragment extends Fragment {
         EditFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
         ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setMessage("Getting Location Data");
+		dialog.setMessage("Posting to Server");
         if (isThread) {
-        	Log.e("WWW", "START EDITING THREAD");
         	String threadTitle = thread.getTitle();
         	thread.setBodyComment(editComment);
             ThreadManager.startPost(editComment, threadTitle, editComment.getLocation(), dialog);
             CacheManager.getInstance().serializeThreadList(ThreadList.getThreads());
         } else {
-        	Log.e("WWW", "START EDITING COMMENT");
             ThreadManager.startPost(editComment, null, editComment.getLocation(), dialog);
         }
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(
@@ -361,5 +353,4 @@ public class EditFragment extends Fragment {
         getFragmentManager().popBackStackImmediate();
 
     }
-
 }
