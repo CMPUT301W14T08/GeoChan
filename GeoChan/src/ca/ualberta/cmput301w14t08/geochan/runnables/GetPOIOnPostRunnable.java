@@ -45,7 +45,7 @@ public class GetPOIOnPostRunnable implements Runnable {
 	public void run() {
 		task.setGetPOIThread(Thread.currentThread());
 		android.os.Process
-				.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
+				.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 		task.handleGetPOIState(STATE_GET_POI_RUNNING);
 		GeoLocation location = task.getLocation();
 		try {

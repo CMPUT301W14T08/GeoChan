@@ -50,8 +50,8 @@ public class ThreadListAdapter extends BaseAdapter {
 
     /**
      * Constructs the adapter and initializes its context and list of ThreadComments.
-     * @param list  the list
-     * @param context  the context
+     * @param list  The ArrayList of ThreadComments.
+     * @param context  The Context the adapter is running in.
      */
     public ThreadListAdapter(Context context, ArrayList<ThreadComment> list) {
         this.context = context;
@@ -60,7 +60,7 @@ public class ThreadListAdapter extends BaseAdapter {
 
     /**
      * Returns the number of entries in the array.
-     * @return the number of entries
+     * @return The number of entries.
      */
     @Override
     public int getCount() {
@@ -68,9 +68,9 @@ public class ThreadListAdapter extends BaseAdapter {
     }
 
     /**
-     * Gets the entry at a specified position
-     * @param position  the position
-     * @return the ThreadComment
+     * Gets the entry at a specified position.
+     * @param position  The position.
+     * @return The ThreadComment.
      */
     @Override
     public ThreadComment getItem(int position) {
@@ -79,8 +79,8 @@ public class ThreadListAdapter extends BaseAdapter {
 
     /**
      * Returns the id of a specific entry.
-     * @param position  the position
-     * @return the id 
+     * @param position  The position.
+     * @return The id of the entry. 
      */
     @Override
     public long getItemId(int position) {
@@ -91,7 +91,7 @@ public class ThreadListAdapter extends BaseAdapter {
     /**
      * Sets the list of the adapter to a new list
      * and refreshes itself.
-     * @param list  the list
+     * @param list  The new ArrayList of ThreadComments for the adapter.
      */
     public void setList(ArrayList<ThreadComment> list) {
         displayList = list;
@@ -99,11 +99,11 @@ public class ThreadListAdapter extends BaseAdapter {
     }
 
     /**
-     * Inflate thread list item layout
-     * @param position the position
-     * @param convertView a previous recycled view
-     * @param parent parent view
-     * @return the view
+     * Inflate thread list item layout.
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent Parent view.
+     * @return The view.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -120,8 +120,8 @@ public class ThreadListAdapter extends BaseAdapter {
     /**
      * Sets the various fields (text, images, etc) of a specific view
      * based on the information from a specific ThreadComment.
-     * @param convertView  the view to work on
-     * @param thread  the ThreadComment
+     * @param convertView  The view to work on.
+     * @param thread  The ThreadComment.
      */
     private void setThreadFields(View convertView, ThreadComment thread) {
         // Thread title

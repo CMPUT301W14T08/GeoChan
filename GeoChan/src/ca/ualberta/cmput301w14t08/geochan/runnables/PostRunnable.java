@@ -23,6 +23,7 @@ package ca.ualberta.cmput301w14t08.geochan.runnables;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
+import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
@@ -77,19 +78,22 @@ public class PostRunnable implements Runnable {
 				throw new InterruptedException();
 			}
 			try {
+				Log.e("POST", "BEFORE INDEX BUILDER");
 				jestResult = client.execute(index);
+				Log.e("POST", "AFTER CLIENT EXECUTE");
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			task.handlePostState(STATE_POST_COMPLETE);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
 			if (jestResult == null || !jestResult.isSucceeded()) {
 				task.handlePostState(STATE_POST_FAILED);
+			} else {
+				task.handlePostState(STATE_POST_COMPLETE);
 			}
 			// task.setPostThread(null);
 			Thread.interrupted();

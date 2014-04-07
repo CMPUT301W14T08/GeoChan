@@ -194,7 +194,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
      * and its fragments.
      * @param fm the Fragment Manager
      * @return true if the back stack was returned from successfully,
-     * false if not
+     * false if not.
      */
     private boolean returnBackStackImmediate(FragmentManager fm) {
         // HACK: propagate back button press to child fragments.
@@ -278,12 +278,13 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
     /**
      * Method called when the Post Edit button is pressed in EditFragment.
      * Finds the appropriate fragment and calls makeEdit on it.
-     * @param view
+     * @param view The View passed to the activity to check which button was pressed.
      */
     public void makeEdit(View view) {
         EditFragment fragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentByTag("editFrag");
         if(fragment == null){
+        	Log.e("EDIT", "THE FRAGMENT IS NULL");
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
             fragment = (EditFragment) favFrag.getChildFragmentManager()

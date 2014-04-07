@@ -47,8 +47,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     /**
      * Constructs the adapter and initializes its context and list of ThreadComments.
-     * @param list  the list
-     * @param context  the context
+     * @param list  The ArrayList of ThreadComments.
+     * @param context  The Context in which the adapter is running.
      */
     public FavouriteCommentsAdapter(ArrayList<ThreadComment> list, Context context) {
         this.list = list;
@@ -57,7 +57,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     /**
      * Returns the number of entries in the array.
-     * @return the number of entries
+     * @return The number of entries.
      */
     @Override
     public int getCount() {
@@ -65,9 +65,9 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     }
 
     /**
-     * Gets the entry at a specified position
-     * @param position  the position
-     * @return the ThreadComment
+     * Gets the entry at a specified position.
+     * @param position  The position of the ThreadComment.
+     * @return The ThreadComment.
      */
     @Override
     public ThreadComment getItem(int position) {
@@ -76,8 +76,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     /** 
      * Returns the id of a specific entry.
-     * @param position  the position
-     * @return the id 
+     * @param position  The position.
+     * @return The id. 
      */
     @Override
     public long getItemId(int position) {
@@ -86,10 +86,10 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
 
     /**
      * Return a location log item view and set fields.
-     * @param position the position
-     * @param convertView a previous recycled view
-     * @param parent parent view
-     * @return the view
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent Parent view
+     * @return The View.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -127,8 +127,8 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     /**
      * Listens for the star button on a favorite comment and removes
      * it from the list when pressed.
-     * @param convertView  the View on which to check buttons
-     * @param comment  the ThreadComment
+     * @param convertView  The View on which to check buttons.
+     * @param comment  The ThreadComment.
      */
     public void listenForStarButton(View convertView, final ThreadComment comment) {
     	ImageButton starButton = (ImageButton) convertView

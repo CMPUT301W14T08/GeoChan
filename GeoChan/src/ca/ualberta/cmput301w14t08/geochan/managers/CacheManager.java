@@ -41,6 +41,14 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Class responsible for managing local saving of threadsList, threads, and comments.
+ * As well as managing and saving the queues of comments and threadComments which are
+ * to be posted when internet connection is acquired.
+ * 
+ * @author Artem Chikin
+ *
+ */
 public class CacheManager {
 	private static CacheManager instance = null;
 	private Context context;
@@ -335,7 +343,6 @@ public class CacheManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Log.e("Thread", "Serialized");
 	}
 
 	/**
