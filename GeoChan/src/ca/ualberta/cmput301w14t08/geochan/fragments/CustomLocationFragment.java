@@ -30,10 +30,10 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -57,8 +57,9 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 /**
  * This class is a fragment which allows the user to specify a custom location
- * for their post/comment via either a custom long/latt or selecting a
- * previously used location.
+ * for their post. It gives the user the ability to select a location on a map,
+ * pick from previously used locations, or simply use the user's current
+ * location.
  * 
  * @author Brad Simons
  * 
@@ -68,13 +69,11 @@ public class CustomLocationFragment extends Fragment {
 	private int postType;
 	private FragmentManager fm;
 	private LocationListenerService locationListenerService;
-	private Marker currentLocationMarker;
 	private GeoLocation newLocation;
 	private MapView openMapView;
 	private MapEventsOverlay mapEventsOverlay;
 	private ArrayList<Marker> markers;
-	private MarkerInfoWindow currentLocationInfoWindow;
-	private MarkerInfoWindow newLocationInfoWindow;
+	private Marker currentLocationMarker;
 
 	// flags for type of post that initiated this fragment
 	public static final int POST = 1;
@@ -107,8 +106,9 @@ public class CustomLocationFragment extends Fragment {
 	}
 
 	/**
-	 * Setups up the Location Log and creates connection to buttons and text
-	 * fields. Also setups an onItemClickListener for previous location items.
+	 * Setups up the Location Log to display previous locations, connects the UI
+	 * buttons, starts listening for location updates and finally calls setup
+	 * map.
 	 * 
 	 */
 	public void onStart() {
@@ -131,10 +131,7 @@ public class CustomLocationFragment extends Fragment {
 		locationListenerService = new LocationListenerService(getActivity());
 		locationListenerService.startListening();
 
-		currentLocationInfoWindow = new MarkerInfoWindow(
-				R.layout.bonuspack_bubble, openMapView);
-		newLocationInfoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-				openMapView);
+		markers = new ArrayList<Marker>();
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -148,6 +145,70 @@ public class CustomLocationFragment extends Fragment {
 			}
 		});
 
+		CustomLocationAdapter customLocationAdapter = new CustomLocationAdapter(
+				getActivity(), logArray);
+		lv.setAdapter(customLocationAdapter);
+
+		setupMap(getMapEventsReceiver());
+
+		openMapView.invalidate();
+	}
+
+	/**
+	 * Calls onStop in the super class and tells the locationListenerService to
+	 * stop listening for location updates
+	 */
+	@Override
+	public void onStop() {
+		super.onStop();
+		locationListenerService.stopListening();
+	}
+
+	/**
+	 * Sets up the map view, gets the current location and initiates a new
+	 * marker object from it, if valid. Then plots it on the map.
+	 */
+	private void setupMap(MapEventsReceiver mapEventsReceiver) {
+
+		mapEventsOverlay = new MapEventsOverlay(getActivity(),
+				mapEventsReceiver);
+		openMapView.getOverlays().add(mapEventsOverlay);
+
+		openMapView.setTileSource(TileSourceFactory.MAPNIK);
+		openMapView.setBuiltInZoomControls(true);
+		openMapView.setMultiTouchControls(true);
+
+		GeoLocation currentLocation = new GeoLocation(locationListenerService);
+
+		markers = new ArrayList<Marker>();
+
+		// if valid current location, put it on the map
+		if (currentLocation.getLocation() != null) {
+			Drawable icon = getResources().getDrawable(
+					R.drawable.current_location_pin);
+			currentLocationMarker = createMarker(currentLocation, icon,
+					"Current Location");
+
+			openMapView.getOverlays().add(currentLocationMarker);
+			openMapView.getController().setZoom(13);
+			openMapView.getController().animateTo(
+					currentLocation.makeGeoPoint());
+
+		} else {
+			ErrorDialog.show(getActivity(),
+					"Could not retrieve current location");
+			openMapView.getController().setZoom(3);
+		}
+	}
+
+	/**
+	 * Returns a MapEventsReceiver object which is used to handle click events
+	 * on the map. Only the long click is implemented here, for setting a custom
+	 * location pin
+	 * 
+	 * @return mapEventsReceiver
+	 */
+	private MapEventsReceiver getMapEventsReceiver() {
 		MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
 
 			/**
@@ -171,116 +232,45 @@ public class CustomLocationFragment extends Fragment {
 			}
 		};
 
-		CustomLocationAdapter customLocationAdapter = new CustomLocationAdapter(
-				getActivity(), logArray);
-		lv.setAdapter(customLocationAdapter);
-
-		setupMap(mapEventsReceiver);
-		openMapView.invalidate();
+		return mapEventsReceiver;
 	}
 
 	/**
-	 * Iterates through all markers on the map and hides their infoWindows
-	 */
-	private void hideInfoWindows() {
-		for (Marker marker : markers) {
-			marker.hideInfoWindow();
-		}
-	}
-
-	/**
-	 * Sets up the map. Implements a map button receiver so that the user can
-	 * click on the map to set their location. Then gets the users current
-	 * location and centers the map around their location
-	 */
-	private void setupMap(MapEventsReceiver mapEventsReceiver) {
-
-		mapEventsOverlay = new MapEventsOverlay(getActivity(),
-				mapEventsReceiver);
-		openMapView.getOverlays().add(mapEventsOverlay);
-
-		openMapView.setTileSource(TileSourceFactory.MAPNIK);
-		openMapView.setBuiltInZoomControls(true);
-		openMapView.setMultiTouchControls(true);
-
-		GeoLocation currentLocation = new GeoLocation(locationListenerService);
-
-		markers = new ArrayList<Marker>();
-
-		// if valid current location, put it on the map
-		if (currentLocation.getLocation() != null) {
-			currentLocationMarker = new Marker(openMapView);
-
-			currentLocationInfoWindow = new MarkerInfoWindow(
-					R.layout.bonuspack_bubble, openMapView);
-			currentLocationMarker.setInfoWindow(currentLocationInfoWindow);
-
-			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
-			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER,
-					Marker.ANCHOR_BOTTOM);
-			currentLocationMarker.setTitle("Current Location");
-			currentLocationMarker.setIcon(getResources().getDrawable(
-					R.drawable.current_location_pin));
-
-			setMarkerListeners(currentLocationMarker);
-
-			openMapView.getOverlays().add(currentLocationMarker);
-
-			openMapView.getController().setZoom(13);
-			openMapView.getController().animateTo(
-					currentLocation.makeGeoPoint());
-
-			markers.add(currentLocationMarker);
-		} else {
-			openMapView.getController().setZoom(3);
-		}
-	}
-
-	/**
-	 * Calls onStop in the super class and tells the locationListenerService to
-	 * stop listening for location updates
-	 */
-	@Override
-	public void onStop() {
-		super.onStop();
-		locationListenerService.stopListening();
-	}
-
-	/**
-	 * Called when a user clicks the current location button. Gets the user's
-	 * current location, puts it in a bundle and passes it back to the previous
-	 * fragment
+	 * Creates a map marker object based on a passed geoLocation, icon
+	 * image, and title string. A network request for the Point of Interest
+	 * of the location, and sets up the marker. Calls setMarkerListeners
+	 * to react to a click on a marker
 	 * 
-	 * @param v
-	 * 
+	 * @param geoLocation
 	 */
-	public void submitCurrentLocation(View v) {
-		GeoLocation currentGeoLocation = new GeoLocation(
-				locationListenerService);
-		if (currentGeoLocation.getLocation() == null) {
-			ErrorDialog.show(getActivity(), "Could not obtain location");
-		} else {
-			setBundleArguments(currentGeoLocation, "CURRENT_LOCATION");
-		}
-		fm.popBackStackImmediate();
-	}
+	public Marker createMarker(GeoLocation geoLocation, Drawable icon,
+			String title) {
+		Marker marker = new Marker(openMapView);
 
-	/**
-	 * Called when a user clicks the submit button. If the user has placed a
-	 * location marker on the map, that location is placed in a bundle and
-	 * passed back to the previous fragment
-	 * 
-	 * @param v
-	 * 
-	 */
-	public void submitNewLocationFromCoordinates(View v) {
-		if (newLocation == null) {
-			ErrorDialog.show(getActivity(),
-					"Please select a location on the map");
-		} else {
-			setBundleArguments(newLocation, "NEW_LOCATION");
-			fm.popBackStackImmediate();
+		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+				R.layout.bonuspack_bubble, openMapView);
+		marker.setInfoWindow(infoWindow);
+
+		marker.setPosition(geoLocation.makeGeoPoint());
+		marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+		marker.setTitle(title);
+		marker.setIcon(icon);
+
+		// get the POI
+		ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setMessage("Retrieving Location");
+		ThreadManager.startGetPOI(geoLocation, dialog, marker);
+
+		// all markers are draggable except current location
+		if (!(title.equals("Current Location"))) {
+			marker.setDraggable(true);
 		}
+
+		setMarkerListeners(marker);
+
+		markers.add(marker);
+
+		return marker;
 	}
 
 	/**
@@ -358,39 +348,74 @@ public class CustomLocationFragment extends Fragment {
 	private void handleNewLocationPressed(GeoLocation geoLocation) {
 		hideInfoWindows();
 
-		Marker locationMarker = new Marker(openMapView);
-		locationMarker.setInfoWindow(newLocationInfoWindow);
+		Drawable icon = getResources().getDrawable(R.drawable.red_map_pin);
+		Marker newLocationMarker = createMarker(geoLocation, icon,
+				"New Location");
 
-		locationMarker.setPosition(new GeoPoint(geoLocation.getLatitude(),
-				geoLocation.getLongitude()));
-		locationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-		locationMarker.setDraggable(true);
-		locationMarker.setTitle("New Location");
-		locationMarker.setIcon(getResources().getDrawable(
-				R.drawable.red_map_pin));
+		setMarkerListeners(newLocationMarker);
 
-		setMarkerListeners(locationMarker);
-
-		// get the POI
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setMessage("Retrieving Location");
-		ThreadManager.startGetPOI(newLocation, dialog, locationMarker);
+		ThreadManager.startGetPOI(newLocation, dialog, newLocationMarker);
 
 		markers.clear();
-		markers.add(locationMarker);
+		markers.add(newLocationMarker);
+
+		openMapView.getOverlays().clear();
+		openMapView.getOverlays().add(mapEventsOverlay);
+		openMapView.getOverlays().add(newLocationMarker);
 		if (currentLocationMarker != null) {
+			openMapView.getOverlays().add(currentLocationMarker);
 			markers.add(currentLocationMarker);
 		}
 
-		// clear map, then re-add events Overlay and add new location marker,
-		// then refresh the map
-		openMapView.getOverlays().clear();
-		openMapView.getOverlays().add(mapEventsOverlay);
-		openMapView.getOverlays().add(locationMarker);
-		if (currentLocationMarker != null) {
-			openMapView.getOverlays().add(currentLocationMarker);
-		}
 		openMapView.invalidate();
+	}
+
+	/**
+	 * Iterates through all markers on the map and hides their infoWindows
+	 */
+	private void hideInfoWindows() {
+		for (Marker marker : markers) {
+			marker.hideInfoWindow();
+		}
+	}
+
+	/**
+	 * Called when a user clicks the current location button. Gets the user's
+	 * current location, puts it in a bundle and passes it back to the previous
+	 * fragment
+	 * 
+	 * @param v
+	 * 
+	 */
+	public void submitCurrentLocation(View v) {
+		GeoLocation currentGeoLocation = new GeoLocation(
+				locationListenerService);
+		if (currentGeoLocation.getLocation() == null) {
+			ErrorDialog.show(getActivity(), "Could not obtain location");
+		} else {
+			setBundleArguments(currentGeoLocation, "CURRENT_LOCATION");
+		}
+		fm.popBackStackImmediate();
+	}
+
+	/**
+	 * Called when a user clicks the submit button. If the user has placed a
+	 * location marker on the map, that location is placed in a bundle and
+	 * passed back to the previous fragment
+	 * 
+	 * @param v
+	 * 
+	 */
+	public void submitNewLocationFromCoordinates(View v) {
+		if (newLocation == null) {
+			ErrorDialog.show(getActivity(),
+					"Please select a location on the map");
+		} else {
+			setBundleArguments(newLocation, "NEW_LOCATION");
+			fm.popBackStackImmediate();
+		}
 	}
 
 	/**
