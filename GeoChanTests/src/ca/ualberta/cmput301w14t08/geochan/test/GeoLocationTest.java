@@ -235,7 +235,6 @@ public class GeoLocationTest extends ActivityInstrumentationTestCase2<MainActivi
         // create a geoLocation, set its coordinates, and retrieve the POI
         // string. Coordinates correspond to Campus Tower Suite in Edmonton
         final GeoLocation geoLocation = new GeoLocation(53.5228, -113.5202);
-        geoLocation.retreivePOIString(getActivity());
 
         // create a runnable and handler to allow the network request to
         // complete then check for the appropriate POI string

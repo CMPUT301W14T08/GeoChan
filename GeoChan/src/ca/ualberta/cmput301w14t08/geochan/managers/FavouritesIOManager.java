@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
@@ -45,22 +44,6 @@ public class FavouritesIOManager {
         return instance;
     }
 
-    // Serialize ArrayList of comments to JSON
-    public void serializeComments() {
-        try {
-            String json = gson.toJson(FavouritesLog.getInstance(context).getComments());
-            FileOutputStream f = context.openFileOutput(FILENAME1, Context.MODE_PRIVATE);
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
-            w.write(json);
-            w.close();
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Serialize ArrayList of threads to JSON
     public void serializeThreads() {
         try {
@@ -76,10 +59,28 @@ public class FavouritesIOManager {
             e.printStackTrace();
         }
     }
-
-    // Deserialize ArrayList of comments from JSON
-    public ArrayList<Comment> deSerializeComments() {
-        ArrayList<Comment> list = new ArrayList<Comment>();
+    
+    /** 
+     * Serialize arrayList of threads to JSON. These threadComments are 
+     * favourited comments converted to ThreadComment to save their replies as well.
+     */
+    public void serializeFavComments() {
+    	try {
+            String json = gson.toJson(FavouritesLog.getInstance(context).getFavComments());
+            FileOutputStream f = context.openFileOutput(FILENAME1, Context.MODE_PRIVATE);
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+            w.write(json);
+            w.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ArrayList<ThreadComment> deSerializeFavComments() {
+    	ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {
             FileInputStream f = context.openFileInput(FILENAME1);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
@@ -92,7 +93,7 @@ public class FavouritesIOManager {
             }
             r.close();
             f.close();
-            Type type = new TypeToken<ArrayList<Comment>>() {
+            Type type = new TypeToken<ArrayList<ThreadComment>>() {
             }.getType();
             list = gson.fromJson(json, type);
         } catch (FileNotFoundException e) {
@@ -103,7 +104,10 @@ public class FavouritesIOManager {
         return list;
     }
 
-    // Deserialize ArrayList of threads from JSON
+    /**
+     * Deserialize ArrayList of threadComments from JSON
+     * @return list of threadComments
+     */
     public ArrayList<ThreadComment> deSerializeThreads() {
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {

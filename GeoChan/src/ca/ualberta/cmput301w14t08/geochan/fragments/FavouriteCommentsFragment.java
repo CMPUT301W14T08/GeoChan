@@ -7,43 +7,42 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.FavouriteCommentsAdapter;
-import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
  * COMMENT EXPLAINING THE CLASS HERE
  * 
- * @author AUTHOR HERE
+ * @author Artem Chikin
  * 
  */
 public class FavouriteCommentsFragment extends Fragment {
-    private static ArrayList<Comment> list;
+    private static ArrayList<ThreadComment> list;
     private FavouritesLog log;
     private ListView favouritesListView;
 
     /**
      * COMMENT HERE
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log = FavouritesLog.getInstance(getActivity());
-        list = log.getComments();
+        list = log.getFavComments();
     }
 
     /**
      * COMMENT HERE
      * 
-     * @author AUTHOR HERE
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         return inflater.inflate(R.layout.fragment_favourites_list, container, false);
     }
 
@@ -51,16 +50,31 @@ public class FavouriteCommentsFragment extends Fragment {
     /**
      * Displays a list view of favourites upon starting the fragment.
      * 
-     * @author AUTHOR HERE
      */
     public void onStart() {
         super.onStart();
         favouritesListView = (ListView) getView().findViewById(R.id.favourites_list);
-        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity(),
-                getFragmentManager());
+        FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity());
         // Assign custom adapter to the thread listView.
         favouritesListView.setAdapter(adapter);
+        favouritesListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            /*
+             * On click, launch the fragment responsible for thread viewing
+             */
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment fragment = new ThreadViewFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("thread", list.get((int) id));
+                bundle.putInt("favCom", -1);
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragment, "thread_view_fragment")
+                        .addToBackStack(null).commit();
+                // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                getFragmentManager().executePendingTransactions();
+            }
+        });
         adapter.notifyDataSetChanged();
     }
-
 }

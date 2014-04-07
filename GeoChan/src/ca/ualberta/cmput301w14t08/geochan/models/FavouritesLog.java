@@ -18,13 +18,13 @@ public class FavouritesLog {
     private Context context;
     private FavouritesIOManager manager;
     private ArrayList<ThreadComment> threads;
-    private ArrayList<Comment> comments;
+    private ArrayList<ThreadComment> favComments;
 
     private FavouritesLog(Context context) {
         this.context = context;
         manager = FavouritesIOManager.getInstance(context);
         threads = manager.deSerializeThreads();
-        comments = manager.deSerializeComments();
+        favComments = manager.deSerializeFavComments();
     }
 
     public static FavouritesLog getInstance(Context context) {
@@ -38,10 +38,10 @@ public class FavouritesLog {
         threads.add(thread);
         manager.serializeThreads();
     }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        manager.serializeComments();
+    
+    public void addFavComment(ThreadComment comment) {
+    	favComments.add(comment);
+    	manager.serializeFavComments();
     }
 
     public void removeThreadComment(ThreadComment threadComment) {
@@ -53,13 +53,13 @@ public class FavouritesLog {
         manager.serializeThreads();
     }
 
-    public void removeComment(Comment comment) {
-        for (Comment c : getComments()) {
-            if (c.getId().equals(comment.getId())) {
-                getComments().remove(c);
+    public void removeFavComment(String id) {
+        for (ThreadComment c : getFavComments()) {
+            if (c.getBodyComment().getId().equals(id)) {
+                getFavComments().remove(c);
             }
         }
-        manager.serializeComments();
+        manager.serializeFavComments();
     }
 
     /**
@@ -68,9 +68,9 @@ public class FavouritesLog {
      * @param id
      * @return
      */
-    public boolean hasComment(String id) {
-        for (Comment c : getComments()) {
-            if (c.getId().equals(id)) {
+    public boolean hasFavComment(String id) {
+        for (ThreadComment c : getFavComments()) {
+            if (c.getBodyComment().getId().equals(id)) {
                 return true;
             }
         }
@@ -98,15 +98,15 @@ public class FavouritesLog {
         return threads;
     }
 
-    public void setThreads(ArrayList<ThreadComment> threads) {
+    public ArrayList<ThreadComment> getFavComments() {
+		return favComments;
+	}
+
+	public void setFavComments(ArrayList<ThreadComment> favComments) {
+		this.favComments = favComments;
+	}
+
+	public void setThreads(ArrayList<ThreadComment> threads) {
         this.threads = threads;
-    }
-
-    public ArrayList<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
     }
 }

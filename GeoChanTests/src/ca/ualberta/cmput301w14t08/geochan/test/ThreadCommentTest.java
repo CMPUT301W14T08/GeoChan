@@ -42,7 +42,7 @@ public class ThreadCommentTest extends ActivityInstrumentationTestCase2<MainActi
         ThreadComment t1 = new ThreadComment();
         Comment c1 = new Comment();
         
-        t1.addComment(c1);
+        t1.getBodyComment().addChild(c1);
         
         assertTrue("Comment added successfuly.", t1.getBodyComment().getChildren().contains(c1));
     }
