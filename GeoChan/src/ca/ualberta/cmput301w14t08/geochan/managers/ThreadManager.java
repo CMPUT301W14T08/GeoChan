@@ -299,7 +299,7 @@ public class ThreadManager {
         return task;
     }
     
-    public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment, ProgressDialog dialog) {
+    public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment) {
         if (instance == null) {
             generateInstance();
         }
@@ -307,7 +307,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetThreadCommentsTask();
         }
-        task.initGetThreadCommentsTask(instance, fragment, dialog);
+        task.initGetThreadCommentsTask(instance, fragment);
         instance.getThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
         return task;
     }

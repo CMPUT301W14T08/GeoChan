@@ -94,9 +94,6 @@ public class ThreadViewFragment extends Fragment {
                 thread.getBodyComment().setChildren(comments);
             }
         } else if (isFavCom != -1) {
-            // Load comments with dialog
-            ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading comments.");
             ThreadManager.startGetComments(this, threadIndex);
         }
     }

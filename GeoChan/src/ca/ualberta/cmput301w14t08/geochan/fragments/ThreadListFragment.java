@@ -76,9 +76,7 @@ public class ThreadListFragment extends Fragment {
         // locationListener = new LocationListenerService(getActivity());
         adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
         setHasOptionsMenu(true);
-        ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Loading Threads.");
-        ThreadManager.startGetThreadComments(this, dialog);
+        ThreadManager.startGetThreadComments(this);
     }
 
     /**
@@ -240,7 +238,7 @@ public class ThreadListFragment extends Fragment {
     }
 
     public void reload() {
-        ThreadManager.startGetThreadComments(this, null);
+        ThreadManager.startGetThreadComments(this);
     }
     
     public void finishReload() {
