@@ -35,8 +35,9 @@ public class ImageHelper {
     public static File createImageFile() throws IOException {
         Locale locale = Locale.getDefault();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", locale).format(new Date());
-        String imageFileName = "geochan" + timeStamp + ".jpg";
-        File photo = new File(Environment.DIRECTORY_PICTURES, imageFileName);
+        String imageFileName = "geochan_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File photo = File.createTempFile(imageFileName, ".jpg", storageDir);
         return photo;
     }
 

@@ -24,18 +24,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.RoundingMode;
+import java.net.URI;
 import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -50,7 +52,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
-import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -78,6 +79,7 @@ public class PostFragment extends Fragment {
 	private GeoLocation geoLocation;
 	private Bitmap image = null;
 	private Bitmap imageThumb = null;
+	private File imageFile = null;
 	private ThreadComment thread = null;
 	private Comment commentToReplyTo = null;
 
@@ -261,24 +263,14 @@ public class PostFragment extends Fragment {
 					Intent intent = new Intent();
 					intent.setType("image/*");
 					intent.setAction(Intent.ACTION_GET_CONTENT);
-					try {
-						File file = ImageHelper.createImageFile();
-						intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-						// the
-						// image
-						// file
-						// name
-						if(fromFav == true){
-							arg0.dismiss();
-							getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
-									ImageHelper.REQUEST_GALLERY);
-						} else {
-							arg0.dismiss();
-							startActivityForResult(Intent.createChooser(intent, "Test"),
-									ImageHelper.REQUEST_GALLERY);
-						}
-					} catch (IOException e) {
-						// do something
+					if(fromFav == true){
+						arg0.dismiss();
+						getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
+								ImageHelper.REQUEST_GALLERY);
+					} else {
+						arg0.dismiss();
+						startActivityForResult(Intent.createChooser(intent, "Test"),
+								ImageHelper.REQUEST_GALLERY);
 					}
 				}
 			});
@@ -296,12 +288,8 @@ public class PostFragment extends Fragment {
 					Intent intent = new Intent();
 					intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 					try {
-						File file = ImageHelper.createImageFile();
-						intent.putExtra(MediaStore.EXTRA_OUTPUT, file); // set
-						// the
-						// image
-						// file
-						// name
+						imageFile = ImageHelper.createImageFile();
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
 						if(fromFav == true){
 							arg0.dismiss();
 							getParentFragment().startActivityForResult(Intent.createChooser(intent, "Test"),
@@ -322,24 +310,20 @@ public class PostFragment extends Fragment {
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.e("PICDEBUG","Value of resultCode:" + String.valueOf(resultCode));
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == ImageHelper.REQUEST_CAMERA) {
-				Bundle extras = data.getExtras();
-				Bitmap imageBitmap = (Bitmap) extras.get("data");
+				Bitmap imageBitmap = null;
+				try {
+					imageBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(Uri.fromFile(imageFile)));
+				} catch (FileNotFoundException e) {
+					Toaster.toastShort("Error. Could not load image.");
+				}
 				Bitmap squareBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 100, 100);
 				image = scaleImage(imageBitmap);
 				imageThumb = squareBitmap;
 				Bundle bundle = getArguments();
 				bundle.putParcelable("IMAGE_THUMB", imageThumb);
 				bundle.putParcelable("IMAGE_FULL", image);
-				// thumbnail.setImageBitmap(squareBitmap);
-				if(image == null){
-					Log.e("PICDEBUG","image variable is null.");
-				}
-				if(imageThumb == null){
-					Log.e("PICDEBUG","imagethumb variable is null.");
-				}
 			} else if (requestCode == ImageHelper.REQUEST_GALLERY) {
 				Bitmap imageBitmap = null;
 				try {
@@ -356,7 +340,6 @@ public class PostFragment extends Fragment {
 				Bundle bundle = getArguments();
 				bundle.putParcelable("IMAGE_THUMB", imageThumb);
 				bundle.putParcelable("IMAGE_FULL", image);
-				// thumbnail.setImageBitmap(squareBitmap);
 			}
 		}
 	}
