@@ -30,6 +30,8 @@ public class CacheManager {
     private static final String EXTENSION = ".sav";
     private static final String FILENAME = "threads.sav";
     private static final String IMAGE = "IMG";
+    private ArrayList<Comment> commentQueue;
+    private ArrayList<ThreadComment> threadCommentQueue;
 
     private CacheManager(Context context) {
         this.context = context;
@@ -46,6 +48,18 @@ public class CacheManager {
     	Log.e("CACHE TOTAL:", Long.toString(file.getTotalSpace()));
     	Log.e("CACHE USABLE:", Long.toString(file.getUsableSpace()));
     }
+    
+    public void addCommentToQueue(Comment comment) {
+    	commentQueue.add(comment);
+    }
+    
+    public void addThreadCommentToQueue(ThreadComment thread) {
+    	threadCommentQueue.add(thread);
+    }
+    
+    public void postAll() {
+    	
+    }
 
     public static CacheManager getInstance() {
         return instance;
@@ -55,7 +69,15 @@ public class CacheManager {
         instance = new CacheManager(context);
     }
     
-    public void serializeImage(Bitmap image, String id) {
+    public ArrayList<Comment> getCommentQueue() {
+		return commentQueue;
+	}
+
+	public void setCommentQueue(ArrayList<Comment> commentQueue) {
+		this.commentQueue = commentQueue;
+	}
+
+	public void serializeImage(Bitmap image, String id) {
         try {
             String json = onlineGson.toJson(image);
             FileOutputStream f = context.openFileOutput(IMAGE + id + EXTENSION, Context.MODE_PRIVATE);
