@@ -61,7 +61,8 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * Fragment which displays the contents of a ThreadComment and performs all
  * actions on the objects in that ThreadComment.
  * 
- * @author Henry Pabst, Artem Chikin
+ * @author Henry Pabst
+ * @author Artem Chikin
  */
 public class ThreadViewFragment extends Fragment {
     private PullToRefreshListView threadView;

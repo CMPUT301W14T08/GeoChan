@@ -27,6 +27,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
  * Fragment responsible for displaying an image full screen
  * Image is expanded upon clicking the comment thumbnail
  *
+ * @author Artem Chikn
  */
 public class ExpandImageFragment extends Fragment {
     private String id;
