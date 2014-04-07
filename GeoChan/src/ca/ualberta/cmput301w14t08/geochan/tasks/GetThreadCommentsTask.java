@@ -56,10 +56,8 @@ public class GetThreadCommentsTask implements TaskInterface, GetThreadCommentsRu
         this.fragment = fragment;
     }
 
-    /** 
-     * Handles the various possible states of the 
-     * Runnable the obtains the ThreadComments.
-     * @param state the state
+    /**
+     * {@inheritDoc} 
      */
     @Override
     public void handleGetThreadCommentsState(int state) {

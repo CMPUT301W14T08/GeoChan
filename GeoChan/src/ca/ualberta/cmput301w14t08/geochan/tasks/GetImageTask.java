@@ -1,3 +1,23 @@
+/*
+ * Copyright 2014 Artem Chikin
+ * Copyright 2014 Artem Herasymchuk
+ * Copyright 2014 Tom Krywitsky
+ * Copyright 2014 Henry Pabst
+ * Copyright 2014 Bradley Simons
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
 import java.lang.ref.WeakReference;
@@ -10,6 +30,13 @@ import ca.ualberta.cmput301w14t08.geochan.interfaces.TaskInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.runnables.GetImageRunnable;
 
+/**
+ * Responsible for the task of controlling the runnables
+ * that are responsible for downloading an image from
+ * ElasticSearch.
+ * @author Artem Chikin
+ *
+ */
 public class GetImageTask implements TaskInterface, GetImageRunnableInterface {
 
     /*
@@ -35,10 +62,20 @@ public class GetImageTask implements TaskInterface, GetImageRunnableInterface {
     private Thread thread;
     private Bitmap cache;
 
+    /**
+     * Constructs an instance of the task and its runnables.
+     */
     public GetImageTask() {
         this.getImageRunnable = new GetImageRunnable(this);
     }
 
+    /**
+     * Initializes the instance of the task with the information needed to run it.
+     * @param manager instance of the ThreadManager
+     * @param id the image ID
+     * @param imageView the ImageView inside the fragment
+     * @param dialog a ProgressDialog inside the fragment to display the task progress
+     */
     public void initGetImageTask(ThreadManager manager, String id, ImageView imageView, ProgressDialog dialog) {
         this.manager = manager;
         this.id = id;
@@ -48,9 +85,7 @@ public class GetImageTask implements TaskInterface, GetImageRunnableInterface {
     }
     
     /**
-     * Handles the various possible states of the
-     * Runnable that obtains the image.
-     * @param state the state
+     * {@inheritDoc} 
      */
     @Override
     public void handleGetImageState(int state) {

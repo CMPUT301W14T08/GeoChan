@@ -39,7 +39,8 @@ import ca.ualberta.cmput301w14t08.geochan.runnables.UpdateRunnable;
  * Responsible for the task of controlling the runnables
  * that are responsible for the various parts of posting
  * a ThreadComment or Comment to ElasticSearch.
- * @author Artem Herasymchuk, Artem Chikin
+ * @author Artem Herasymchuk
+ * @author Artem Chikin
  *
  */
 public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostImageRunnableInterface, PostRunnableInterface,
@@ -84,10 +85,8 @@ public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostIma
         this.threadComment = null;
     }
     
-    /** 
-     * Handles the various possible states of the
-     * Runnable that posts the image.
-     * @param state the state
+    /**
+     * {@inheritDoc} 
      */
     @Override
     public void handleImageState(int state) {
@@ -106,10 +105,8 @@ public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostIma
         handleState(outState);
     }
 
-    /** 
-     * Handles the various possible states of the
-     * Runnable that posts the ThreadComment or Comment.
-     * @param state the state
+    /**
+     * {@inheritDoc} 
      */
     @Override
     public void handlePostState(int state) {
@@ -128,10 +125,8 @@ public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostIma
         handleState(outState);
     }
 
-    /** 
-     * Handles the various possible states of the
-     * Runnable that update the comment list.
-     * @param state the state
+    /**
+     * {@inheritDoc} 
      */
     @Override
     public void handleUpdateState(int state) {
@@ -150,10 +145,8 @@ public class PostTask implements TaskInterface, GetPOIRunnableInterface, PostIma
         handleState(outState);
     }
     
-    /** 
-     * Handles the various possible states of the
-     * Runnable that obtains the POI.
-     * @param state the state
+    /**
+     * {@inheritDoc} 
      */
 	@Override
 	public void handleGetPOIState(int state) {

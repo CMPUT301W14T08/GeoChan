@@ -66,11 +66,9 @@ public class GetPOITask implements TaskInterface, GetPOIRunnableInterface {
 		this.marker = marker;
 	}
 
-	/**
-	 * Handles the various possible states of the
-	 * Runnable that gets the POI.
-	 * @param state the state
-	 */
+    /**
+     * {@inheritDoc} 
+     */
 	@Override
 	public void handleGetPOIState(int state) {
 		int outState;
