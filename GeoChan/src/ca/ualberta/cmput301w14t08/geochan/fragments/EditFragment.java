@@ -73,7 +73,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
  * 
  */
 public class EditFragment extends Fragment {
-    private static final int MAX_BITMAP_DIMENSIONS = 600;
+    private static final int MAX_BITMAP_DIMENSIONS = 900;
     private Comment editComment;
     private ThreadComment thread;
     private EditText newTextPost;
@@ -306,7 +306,7 @@ public class EditFragment extends Fragment {
             }
         }
         editComment.setImage(image);
-        Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 96, 96);
+        Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 100, 100);
         editComment.setImageThumb(imageThumb);
     }
     

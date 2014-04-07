@@ -1,9 +1,12 @@
 package ca.ualberta.cmput301w14t08.geochan.fragments;
 
+import java.io.FileOutputStream;
+
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
