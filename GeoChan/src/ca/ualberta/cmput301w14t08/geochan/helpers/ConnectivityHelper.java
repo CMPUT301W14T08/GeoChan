@@ -59,9 +59,7 @@ public class ConnectivityHelper {
     public boolean isConnected() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        if (isConnected) {
-        	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        } else {
+        if (isConnected == false) {
         	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         }
         return isConnected;

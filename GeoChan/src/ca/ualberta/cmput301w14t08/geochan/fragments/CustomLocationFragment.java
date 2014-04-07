@@ -113,7 +113,7 @@ public class CustomLocationFragment extends Fragment {
 	 */
 	public void onStart() {
 		super.onStart();
-		GeoLocationLog log = GeoLocationLog.getInstance(getActivity());
+		GeoLocationLog log = GeoLocationLog.generateInstance(getActivity());
 		ArrayList<GeoLocation> logArray = log.getLogEntries();
 
 		FavouritesFragment favFrag = (FavouritesFragment) getFragmentManager()

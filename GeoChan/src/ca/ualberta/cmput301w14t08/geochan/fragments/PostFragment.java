@@ -101,13 +101,6 @@ public class PostFragment extends Fragment {
 	        }
 		}
 		geoLocation = new GeoLocation(locationListenerService);
-		if (geoLocation.getLocation() != null) {
-			if (geoLocation.getLocationDescription() == null) {
-				// Retrieve POI
-				Log.e("POI", "CallFromOnStart");
-				ThreadManager.startGetPOI(geoLocation, null, null);
-			}
-		}
 	}
 
 	@Override
@@ -184,12 +177,6 @@ public class PostFragment extends Fragment {
     		return;
     	}
         if (view.getId() == R.id.post_button) {
-            if(geoLocation.getLocationDescription() == null) {
-                // Retrieve POI
-                ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Retrieving Location");
-                ThreadManager.startGetPOI(geoLocation, dialog, null);
-            }
             String title = null;
             EditText editTitle = null;
             EditText editComment = (EditText) this.getView().findViewById(R.id.commentBody);
@@ -217,11 +204,6 @@ public class PostFragment extends Fragment {
                     int tag = PreferencesManager.getInstance().getThreadSort();
                     SortUtil.sortThreads(tag, ThreadList.getThreads());
                 }
-                // log the thread and the geolocation
-                if (geoLocation.getLocation() != null) {
-                    GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
-                    geoLocationLog.addLogEntry(geoLocation);
-                }
             	if (!ConnectivityHelper.getInstance().isConnected()) {
             		CacheManager cacheManager = CacheManager.getInstance();
             		if (title == null) {
@@ -231,7 +213,7 @@ public class PostFragment extends Fragment {
             		}
             		Toaster.toastShort("No internet connection detected. Your post will automatically send on connection.");
             	} else {
-            		ThreadManager.startPost(newComment, title);
+            		ThreadManager.startPost(newComment, title, geoLocation);
             	}
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);

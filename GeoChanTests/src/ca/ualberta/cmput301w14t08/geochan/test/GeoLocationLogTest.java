@@ -21,7 +21,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
      * Verifies the constructor constructs object
      */
     public void testConstruction() {
-        GeoLocationLog geoLocationLog =  GeoLocationLog.getInstance(getActivity());
+        GeoLocationLog geoLocationLog =  GeoLocationLog.generateInstance(getActivity());
         assertNotNull(geoLocationLog.getLogEntries());
     }
     
@@ -35,7 +35,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         locationListenerService.startListening();
         GeoLocation geoLocation = new GeoLocation(locationListenerService);
         
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+        GeoLocationLog geoLocationLog = GeoLocationLog.generateInstance(getActivity());
         
         geoLocationLog.addLogEntry(geoLocation);
         geoLocationLog.addLogEntry(geoLocation);
@@ -51,7 +51,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
      * calling the method and verifying the log is empty
      */
     public void testClearLogAndCheckIsLogEmpty() {
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+        GeoLocationLog geoLocationLog = GeoLocationLog.generateInstance(getActivity());
         
         geoLocationLog.addLogEntry(new GeoLocation(1.0,2.0));
         assertEquals("Entries array should NOT be empty", false, geoLocationLog.isEmpty());
@@ -70,7 +70,7 @@ public class GeoLocationLogTest extends ActivityInstrumentationTestCase2<MainAct
         GeoLocation geoLocation2 = new GeoLocation(locationListenerService);
         GeoLocation geoLocation3 = new GeoLocation(locationListenerService);
         
-        GeoLocationLog geoLocationLog = GeoLocationLog.getInstance(getActivity());
+        GeoLocationLog geoLocationLog = GeoLocationLog.generateInstance(getActivity());
         
         geoLocationLog.addLogEntry(geoLocation1);
         geoLocationLog.addLogEntry(geoLocation2);

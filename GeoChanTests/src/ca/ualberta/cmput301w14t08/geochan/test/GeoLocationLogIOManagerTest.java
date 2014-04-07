@@ -29,7 +29,7 @@ public class GeoLocationLogIOManagerTest extends ActivityInstrumentationTestCase
      * log that was serialized.
      */
     public void testSerializeDeserialize() {
-        GeoLocationLog log1 = GeoLocationLog.getInstance(activity.getApplicationContext());
+        GeoLocationLog log1 = GeoLocationLog.generateInstance(activity.getApplicationContext());
         log1.addLogEntry(new GeoLocation(22,22));
         log1.addLogEntry(new GeoLocation(22,22));
         log1.addLogEntry(new GeoLocation(22,22));
