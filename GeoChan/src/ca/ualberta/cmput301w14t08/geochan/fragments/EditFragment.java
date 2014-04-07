@@ -33,7 +33,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -51,6 +53,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ImageHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.FavouritesLog;
@@ -85,6 +88,7 @@ public class EditFragment extends Fragment {
      */
     private static String oldText;
     private boolean isThread;
+    private File imageFile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -240,14 +244,8 @@ public class EditFragment extends Fragment {
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                    try {
-                        File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-                        startActivityForResult(Intent.createChooser(intent, "Test"),
-                                ImageHelper.REQUEST_GALLERY);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    startActivityForResult(Intent.createChooser(intent, "Test"),
+                            ImageHelper.REQUEST_GALLERY);
                 }
             });
             dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
@@ -255,8 +253,8 @@ public class EditFragment extends Fragment {
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
-                        File file = ImageHelper.createImageFile();
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+                        imageFile = ImageHelper.createImageFile();
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile));
                         startActivityForResult(Intent.createChooser(intent, "Test"),
                                 ImageHelper.REQUEST_CAMERA);
                     } catch (IOException e) {
@@ -285,8 +283,12 @@ public class EditFragment extends Fragment {
         Bitmap image = null;
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ImageHelper.REQUEST_CAMERA) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+				Bitmap imageBitmap = null;
+				try {
+					imageBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(Uri.fromFile(imageFile)));
+				} catch (FileNotFoundException e) {
+					Toaster.toastShort("Error. Could not load image.");
+				}
                 image = scaleImage(imageBitmap);
             } else if (requestCode == ImageHelper.REQUEST_GALLERY) {
                 Bitmap imageBitmap = null;
