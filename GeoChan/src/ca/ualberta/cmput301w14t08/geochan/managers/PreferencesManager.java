@@ -30,6 +30,7 @@ import android.provider.Settings.Secure;
 /**
  * Helps manage relevant preferences within the application
  * 
+ * @author Artem Herasymchuk
  */
 public class PreferencesManager {
     private static Context context;

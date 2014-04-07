@@ -55,6 +55,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
+import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
@@ -70,12 +71,12 @@ public class MapViewFragment extends Fragment {
 
 	private MapView openMapView;
 	private LocationListenerService locationListenerService;
-	private Marker originalPostMarker;
+	private CustomMarker originalPostMarker;
 	private Polyline roadOverlay;
-	private GridMarkerClusterer replyPostMarkers;
-	private GridMarkerClusterer directionsMarkers;
-	private GridMarkerClusterer startAndFinishMarkers;
-	private ArrayList<Marker> markers;
+	private GridMarkerClusterer replyPostClusterMarkers;
+	private GridMarkerClusterer directionsClusterMarkers;
+	private GridMarkerClusterer startAndFinishClusterMarkers;
+	private ArrayList<CustomMarker> markers;
 
 	/**
 	 * Gets the view when inflated
@@ -116,18 +117,19 @@ public class MapViewFragment extends Fragment {
 		Bundle args = getArguments();
 		Comment topComment = (Comment) args.getParcelable("thread_comment");
 
-		replyPostMarkers = new GridMarkerClusterer(getActivity());
-		directionsMarkers = new GridMarkerClusterer(getActivity());
-		startAndFinishMarkers = new GridMarkerClusterer(getActivity());
-		markers = new ArrayList<Marker>();
+		markers = new ArrayList<CustomMarker>();
+
+		replyPostClusterMarkers = new GridMarkerClusterer(getActivity());
+		directionsClusterMarkers = new GridMarkerClusterer(getActivity());
+		startAndFinishClusterMarkers = new GridMarkerClusterer(getActivity());
 
 		Drawable clusterIconD = getResources().getDrawable(
 				R.drawable.marker_cluster);
 		Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
 
-		directionsMarkers.setIcon(clusterIcon);
-		replyPostMarkers.setIcon(clusterIcon);
-		startAndFinishMarkers.setIcon(clusterIcon);
+		directionsClusterMarkers.setIcon(clusterIcon);
+		replyPostClusterMarkers.setIcon(clusterIcon);
+		startAndFinishClusterMarkers.setIcon(clusterIcon);
 
 		GeoLocation geoLocation = topComment.getLocation();
 		if (geoLocation.getLocation() == null) {
@@ -168,17 +170,10 @@ public class MapViewFragment extends Fragment {
 		if (commentLocationIsValid(topComment)) {
 			GeoLocation geoLocation = topComment.getLocation();
 
-			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-					R.layout.bonuspack_bubble, openMapView);
-			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-					openMapView);
-
 			originalPostMarker = createMarker(geoLocation, "OP");
-			originalPostMarker.setInfoWindow(infoWindow);
-			originalPostMarker.showInfoWindow();
 			originalPostMarker.setIcon(getResources().getDrawable(
 					R.drawable.red_map_pin));
-			startAndFinishMarkers.add(originalPostMarker);
+			startAndFinishClusterMarkers.add(originalPostMarker);
 
 			setMarkerListeners(originalPostMarker);
 
@@ -186,8 +181,8 @@ public class MapViewFragment extends Fragment {
 
 			handleChildComments(topComment);
 
-			openMapView.getOverlays().add(replyPostMarkers);
-			openMapView.getOverlays().add(directionsMarkers);
+			openMapView.getOverlays().add(replyPostClusterMarkers);
+			openMapView.getOverlays().add(directionsClusterMarkers);
 			openMapView.getOverlays().add(originalPostMarker);
 		}
 
@@ -292,8 +287,8 @@ public class MapViewFragment extends Fragment {
 							R.layout.bonuspack_bubble, openMapView);
 					replyMarker.setInfoWindow(infoWindow);
 					setMarkerListeners(replyMarker);
-					replyPostMarkers.add(replyMarker);
-					markers.add(replyMarker);
+					replyPostClusterMarkers.add(replyMarker);
+					//markers.add(replyMarker);
 					handleChildComments(childComment);
 				}
 			}
@@ -338,7 +333,7 @@ public class MapViewFragment extends Fragment {
 		int maxLong = opLong;
 
 		// get max min lat long for replies
-		for (Marker marker : replyPostMarkers.getItems()) {
+		for (Marker marker : replyPostClusterMarkers.getItems()) {
 			GeoPoint geoPoint = marker.getPosition();
 			int geoLat = geoPoint.getLatitudeE6();
 			int geoLong = geoPoint.getLongitudeE6();
@@ -362,7 +357,7 @@ public class MapViewFragment extends Fragment {
 	 * @param postType
 	 * @return
 	 */
-	public Marker createMarker(GeoLocation geoLocation, String postType) {
+	public CustomMarker createMarker(GeoLocation geoLocation, String postType) {
 
 		Marker marker = new Marker(openMapView);
 		marker.setTitle(postType);
@@ -378,7 +373,8 @@ public class MapViewFragment extends Fragment {
 
 		marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-		return marker;
+		//return marker;
+		return null;
 	}
 
 	/**
@@ -464,19 +460,19 @@ public class MapViewFragment extends Fragment {
 						node.mLength, node.mDuration));
 				nodeMarker.setImage(icon);
 
-				directionsMarkers.add(nodeMarker);
+				directionsClusterMarkers.add(nodeMarker);
 
 				setMarkerListeners(nodeMarker);
-				markers.add(nodeMarker);
+				//markers.add(nodeMarker);
 			}
 
 			return null;
 		}
 
 		/**
-		 * Task is now finished. Creates the current location marker and
-		 * sets it on the map. Clears the map and re-adds all the 
-		 * overlays to the map, then refreshes the map
+		 * Task is now finished. Creates the current location marker and sets it
+		 * on the map. Clears the map and re-adds all the overlays to the map,
+		 * then refreshes the map
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
@@ -511,14 +507,14 @@ public class MapViewFragment extends Fragment {
 
 			setMarkerListeners(currentLocationMarker);
 
-			startAndFinishMarkers.add(currentLocationMarker);
-			markers.add(currentLocationMarker);
+			startAndFinishClusterMarkers.add(currentLocationMarker);
+			//markers.add(currentLocationMarker);
 
 			openMapView.getOverlays().clear();
 			openMapView.getOverlays().add(roadOverlay);
-			openMapView.getOverlays().add(directionsMarkers);
-			openMapView.getOverlays().add(replyPostMarkers);
-			openMapView.getOverlays().add(startAndFinishMarkers);
+			openMapView.getOverlays().add(directionsClusterMarkers);
+			openMapView.getOverlays().add(replyPostClusterMarkers);
+			openMapView.getOverlays().add(startAndFinishClusterMarkers);
 
 			setZoomLevel(currentLocation);
 

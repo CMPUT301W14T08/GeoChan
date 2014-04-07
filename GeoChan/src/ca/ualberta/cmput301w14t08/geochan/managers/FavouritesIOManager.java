@@ -46,111 +46,116 @@ import com.google.gson.reflect.TypeToken;
  * @autor Artem Chikin
  */
 public class FavouritesIOManager {
-    private static FavouritesIOManager instance;
-    private Context context;
-    private Gson gson;
-    private static final String FILENAME1 = "favcom.sav";
-    private static final String FILENAME2 = "favthr.sav";
+	private static FavouritesIOManager instance;
+	private Context context;
+	private Gson gson;
+	private static final String FILENAME1 = "favcom.sav";
+	private static final String FILENAME2 = "favthr.sav";
 
-    private FavouritesIOManager(Context context) {
-        this.context = context;
-        this.gson = GsonHelper.getOfflineGson();
-    }
+	private FavouritesIOManager(Context context) {
+		this.context = context;
+		this.gson = GsonHelper.getOfflineGson();
+	}
 
-    public static FavouritesIOManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new FavouritesIOManager(context);
-        }
-        return instance;
-    }
+	public static FavouritesIOManager getInstance(Context context) {
+		if (instance == null) {
+			instance = new FavouritesIOManager(context);
+		}
+		return instance;
+	}
 
+	// Serialize ArrayList of threads to JSON
+	public void serializeThreads() {
+		try {
+			String json = gson.toJson(FavouritesLog.getInstance(context)
+					.getThreads());
+			FileOutputStream f = context.openFileOutput(FILENAME2,
+					Context.MODE_PRIVATE);
+			BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+			w.write(json);
+			w.close();
+			f.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    // Serialize ArrayList of threads to JSON
-    public void serializeThreads() {
-        try {
-            String json = gson.toJson(FavouritesLog.getInstance(context).getThreads());
-            FileOutputStream f = context.openFileOutput(FILENAME2, Context.MODE_PRIVATE);
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
-            w.write(json);
-            w.close();
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    /** 
-     * Serialize arrayList of threads to JSON. These threadComments are 
-     * favourited comments converted to ThreadComment to save their replies as well.
-     */
-    public void serializeFavComments() {
-    	try {
-            String json = gson.toJson(FavouritesLog.getInstance(context).getFavComments());
-            FileOutputStream f = context.openFileOutput(FILENAME1, Context.MODE_PRIVATE);
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
-            w.write(json);
-            w.close();
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public ArrayList<ThreadComment> deSerializeFavComments() {
-    	ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
-        try {
-            FileInputStream f = context.openFileInput(FILENAME1);
-            BufferedReader r = new BufferedReader(new InputStreamReader(f));
-            String json = "";
-            String temp = "";
-            temp = r.readLine();
-            while (temp != null) {
-                json = json + temp;
-                temp = r.readLine();
-            }
-            r.close();
-            f.close();
-            Type type = new TypeToken<ArrayList<ThreadComment>>() {
-            }.getType();
-            list = gson.fromJson(json, type);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+	/**
+	 * Serialize arrayList of threads to JSON. These threadComments are
+	 * favourited comments converted to ThreadComment to save their replies as
+	 * well.
+	 */
+	public void serializeFavComments() {
+		try {
+			String json = gson.toJson(FavouritesLog.getInstance(context)
+					.getFavComments());
+			FileOutputStream f = context.openFileOutput(FILENAME1,
+					Context.MODE_PRIVATE);
+			BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+			w.write(json);
+			w.close();
+			f.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * Deserialize ArrayList of threadComments from JSON
-     * @return list of threadComments
-     */
-    public ArrayList<ThreadComment> deSerializeThreads() {
-        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
-        try {
-            FileInputStream f = context.openFileInput(FILENAME2);
-            BufferedReader r = new BufferedReader(new InputStreamReader(f));
-            String json = "";
-            String temp = "";
-            temp = r.readLine();
-            while (temp != null) {
-                json = json + temp;
-                temp = r.readLine();
-            }
-            r.close();
-            f.close();
-            Type type = new TypeToken<ArrayList<ThreadComment>>() {
-            }.getType();
-            list = gson.fromJson(json, type);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+	public ArrayList<ThreadComment> deSerializeFavComments() {
+		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+		try {
+			FileInputStream f = context.openFileInput(FILENAME1);
+			BufferedReader r = new BufferedReader(new InputStreamReader(f));
+			String json = "";
+			String temp = "";
+			temp = r.readLine();
+			while (temp != null) {
+				json = json + temp;
+				temp = r.readLine();
+			}
+			r.close();
+			f.close();
+			Type type = new TypeToken<ArrayList<ThreadComment>>() {
+			}.getType();
+			list = gson.fromJson(json, type);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * Deserialize ArrayList of threadComments from JSON
+	 * 
+	 * @return list of threadComments
+	 */
+	public ArrayList<ThreadComment> deSerializeThreads() {
+		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+		try {
+			FileInputStream f = context.openFileInput(FILENAME2);
+			BufferedReader r = new BufferedReader(new InputStreamReader(f));
+			String json = "";
+			String temp = "";
+			temp = r.readLine();
+			while (temp != null) {
+				json = json + temp;
+				temp = r.readLine();
+			}
+			r.close();
+			f.close();
+			Type type = new TypeToken<ArrayList<ThreadComment>>() {
+			}.getType();
+			list = gson.fromJson(json, type);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * Represents a search response served by ElasticSearch
  * 
- * @author AUTHOR HERE
+ * @author Artem Herasymchuk
  * 
  */
 public class ElasticSearchSearchResponse<T> {
