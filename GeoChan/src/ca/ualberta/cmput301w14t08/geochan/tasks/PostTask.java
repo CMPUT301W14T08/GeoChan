@@ -34,11 +34,12 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
         getPOIRunnable = new GetPOIOnPostRunnable(this);
     }
 
-    public void initPostTask(ThreadManager manager, Comment comment, String title, GeoLocation location) {
+    public void initPostTask(ThreadManager manager, Comment comment, String title, GeoLocation location, ProgressDialog dialog) {
         this.manager = manager;
         this.comment = comment;
         this.title = title;
         this.location = location;
+        this.dialog = dialog;
     }
 
     public Thread getCurrentThread() {

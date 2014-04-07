@@ -65,12 +65,12 @@ public class CacheManager {
     
     public void postAll() {
     	for (Comment comment : commentQueue) {
-    		ThreadManager.startPost(comment, null, comment.getLocation());
+    		ThreadManager.startPost(comment, null, comment.getLocation(), null);
     		commentQueue.remove(comment);
     	}
     	for (ThreadComment threadComment : threadCommentQueue) {
     		Comment bodyComment = threadComment.getBodyComment();
-    		ThreadManager.startPost(bodyComment, threadComment.getTitle(), bodyComment.getLocation());
+    		ThreadManager.startPost(bodyComment, threadComment.getTitle(), bodyComment.getLocation(), null);
     		threadCommentQueue.remove(threadComment);
     	}
     	serializeCommentQueue();

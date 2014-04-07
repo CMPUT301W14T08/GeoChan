@@ -290,6 +290,26 @@ public class ThreadManager {
 						postPoiTaskFailed.getDialog().dismiss();
 					}
 					break;
+					
+				case UPDATE_FAILED:
+					PostTask postTaskUpdateFailed = (PostTask) inputMessage.obj;
+					if (postTaskUpdateFailed.getDialog() != null) {
+						postTaskUpdateFailed.getDialog().dismiss();
+					}
+					break;
+					
+				case POST_FAILED:
+					PostTask postTaskFailed = (PostTask) inputMessage.obj;
+					if (postTaskFailed.getDialog() != null) {
+						postTaskFailed.getDialog().dismiss();
+					}
+					break;
+				case POST_IMAGE_FAILED:
+					PostTask postTaskImageFailed = (PostTask) inputMessage.obj;
+					if (postTaskImageFailed.getDialog() != null) {
+						postTaskImageFailed.getDialog().dismiss();
+					}
+					break;
 
                 default:
                 	super.handleMessage(inputMessage);
@@ -373,7 +393,7 @@ public class ThreadManager {
      *            title of the threadComment, if it is a threadComment. if it is
      *            a Comment, not a threadComment, the title field is null
      */
-    public static PostTask startPost(Comment comment, String title, GeoLocation location) {
+    public static PostTask startPost(Comment comment, String title, GeoLocation location, ProgressDialog dialog) {
         if (instance == null) {
             generateInstance();
         }
@@ -381,7 +401,7 @@ public class ThreadManager {
         if (task == null) {
             task = new PostTask();
         }
-        task.initPostTask(instance, comment, title, location);
+        task.initPostTask(instance, comment, title, location, dialog);
         task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
@@ -522,12 +542,23 @@ public class ThreadManager {
         case POST_GET_POI_COMPLETE:
         	instance.handler.obtainMessage(state, task).sendToTarget();
         	instance.postPool.execute(task.getPostRunnable());
+        	break;
         case POST_GET_POI_FAILED:
         	instance.handler.obtainMessage(state, task).sendToTarget();
         	instance.postPool.execute(task.getPostRunnable());
+        	break;
+        case UPDATE_FAILED:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+        	break;
+        case POST_FAILED:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+        	break;
+        case POST_IMAGE_FAILED:
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+        	break;
         default:
-            instance.handler.obtainMessage(state, task).sendToTarget();
-            break;
+        	instance.handler.obtainMessage(state, task).sendToTarget();
+        	break;
         }
     }
 
