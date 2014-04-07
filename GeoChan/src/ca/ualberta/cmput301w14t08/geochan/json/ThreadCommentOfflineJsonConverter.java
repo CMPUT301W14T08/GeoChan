@@ -49,6 +49,7 @@ import com.google.gson.JsonSerializer;
  * Handles the serialization of a ThreadComment object into JSON format for
  * offline caching.
  * 
+ * @author Artem Chikin
  */
 public class ThreadCommentOfflineJsonConverter implements JsonSerializer<ThreadComment>,
         JsonDeserializer<ThreadComment> {

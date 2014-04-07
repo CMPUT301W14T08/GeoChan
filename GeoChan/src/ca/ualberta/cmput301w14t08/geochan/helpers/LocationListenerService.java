@@ -31,7 +31,7 @@ import android.os.Bundle;
  * Location Listener Service handles location updates from the Android framework
  * Used to update geoLocation objects and return the current location when asked
  * 
- * @author bradsimons
+ * @author Brad Simons
  */
 public class LocationListenerService {
 

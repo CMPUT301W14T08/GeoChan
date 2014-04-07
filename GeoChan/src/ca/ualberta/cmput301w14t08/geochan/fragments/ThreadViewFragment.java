@@ -58,9 +58,11 @@ import eu.erikw.PullToRefreshListView;
 import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
 /**
- * Fragment which displays the contents of a ThreadComment.
+ * Fragment which displays the contents of a ThreadComment and performs all
+ * actions on the objects in that ThreadComment.
  * 
- * @author Henry Pabst, Artem Chikin
+ * @author Henry Pabst
+ * @author Artem Chikin
  */
 public class ThreadViewFragment extends Fragment {
     private PullToRefreshListView threadView;
@@ -75,6 +77,11 @@ public class ThreadViewFragment extends Fragment {
     private int isFavCom;
     private static int locSortFlag = 0;
 
+    /**
+     * Gets the fragment arguments, retrieves correct
+     * ThreadComment object from either ThreadList or Cache or FavouritesLog,
+     * Starts the refresh from server.
+     */
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +105,7 @@ public class ThreadViewFragment extends Fragment {
     }
 
     /**
-     * Initializes several of the variables used in displaying the contents of a
+     * Initializes the variables used in displaying the contents of a
      * thread. If the user just returned from selecting a custom location to
      * sort by, it sorts the comments accordingly and resets locSortFlag.
      */
@@ -140,7 +147,7 @@ public class ThreadViewFragment extends Fragment {
     }
 
     /**
-     * Set up the ListView, adapter, listeners.
+     * Set up the ListView, adapter, listener for pullRoRefresh and OnItemClick listener.
      */
     @Override
     public void onStart() {
@@ -174,7 +181,8 @@ public class ThreadViewFragment extends Fragment {
 
     /**
      * When comment is selected, additional information is displayed in the form
-     * of location coordinates. This method sets that location field TextView in
+     * of location coordinates and action buttons.
+     * This method sets that location field TextView in
      * the view.
      * 
      * @param view
@@ -204,7 +212,7 @@ public class ThreadViewFragment extends Fragment {
     }
 
     /**
-     * Called when the star button is pressed in the selected comment. Save the
+     * Called when the star button is pressed on the selected comment. Save the
      * comment as favourite.
      * 
      * @param comment
@@ -233,8 +241,8 @@ public class ThreadViewFragment extends Fragment {
 
     /**
      * Set up and launch the postCommentFragment when the user wishes to reply
-     * to a comment. The fragment takes as input the index of the therad and the
-     * comment object.
+     * to a comment. The fragment takes as input the index of the thread and the
+     * comment object to reply to.
      * 
      * @param comment
      * @param threadIndex
@@ -257,6 +265,11 @@ public class ThreadViewFragment extends Fragment {
         getFragmentManager().executePendingTransactions();
     }
 
+    /**
+     * OnItemClickListener for comments in the list view. on click, inflates an additional relative layout
+     * that contains the comment's location information and action buttons:
+     * reply, favourite, edit (if user's comment). Contains listeners for the buttons.
+     */
     private OnItemClickListener commentButtonListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -346,6 +359,11 @@ public class ThreadViewFragment extends Fragment {
         }
     };
     
+    /**
+     * Set up and launch the EditFragment for a given comment.
+     * 
+     * @param comment
+     */
     private void editComment(Comment comment){
         Fragment fragment = new EditFragment();
         Bundle bundle = new Bundle();
@@ -365,6 +383,12 @@ public class ThreadViewFragment extends Fragment {
         getFragmentManager().executePendingTransactions();
     }
 
+    /**
+     * When a comment is clicked, this method deflates the additional 
+     * (location and button) layout of other comments in the list.
+     * 
+     * TODO: make it also deflate the layouts of comments off the screen.
+     */
     private void resetOtherCommentLayouts(int position) {
         for (int i = 2; i < threadView.getCount() + 1; ++i) {
 
@@ -458,6 +482,9 @@ public class ThreadViewFragment extends Fragment {
         ThreadManager.startGetComments(this, threadIndex);
     }
     
+    /**
+     * On finishnig pullToRefresh reload, notify the adapter.
+     */
     public void finishReload() {
         SortUtil.sortComments(prefManager.getCommentSort(), thread.getBodyComment().getChildren());
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);

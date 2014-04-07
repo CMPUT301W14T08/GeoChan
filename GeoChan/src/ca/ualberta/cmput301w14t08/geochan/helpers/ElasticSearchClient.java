@@ -28,7 +28,7 @@ import io.searchbox.client.config.ClientConfig;
  * This class is responsible for all ElasticSearch operations. NEED MORE
  * DETAILED COMMENT
  * 
- * @author AUTHOR HERE
+ * @author Artem Herasymchuk
  */
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
