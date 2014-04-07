@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301w14t08.geochan.helpers;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -14,6 +16,8 @@ public class ConnectivityHelper {
 
     private static ConnectivityHelper instance = null;
     private static ConnectivityManager connectivityManager;
+    private static ComponentName reciever;
+    private static PackageManager packageManager;
 
     /**
      * Constructor, sets up the connectivity manager. Private to avoid usage
@@ -24,6 +28,8 @@ public class ConnectivityHelper {
     private ConnectivityHelper(Context context) {
         connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+        reciever = new ComponentName(context, ConnectivityBroadcastReceiver.class);
+        packageManager = context.getPackageManager();
     }
 
     /**
@@ -52,7 +58,13 @@ public class ConnectivityHelper {
      */
     public boolean isConnected() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if (isConnected) {
+        	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        } else {
+        	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        }
+        return isConnected;
     }
 
     /**

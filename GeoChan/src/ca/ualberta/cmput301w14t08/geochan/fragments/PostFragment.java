@@ -219,11 +219,6 @@ public class PostFragment extends Fragment {
                     geoLocationLog.addLogEntry(geoLocation);
                 }
             	if (!ConnectivityHelper.getInstance().isConnected()) {
-            		ComponentName reciever = new ComponentName(getActivity(), ConnectivityBroadcastReceiver.class);
-                	
-                	PackageManager packageManager = getActivity().getPackageManager();
-                	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                	
             		CacheManager cacheManager = CacheManager.getInstance();
             		if (title == null) {
             			cacheManager.addCommentToQueue(newComment);
@@ -231,7 +226,6 @@ public class PostFragment extends Fragment {
             			cacheManager.addThreadCommentToQueue(threadComment);
             		}
             		Toaster.toastShort("No internet connection detected. Your post will automatically send on connection.");
-            		return;
             	} else {
             		ThreadManager.startPost(newComment, title);
             	}
