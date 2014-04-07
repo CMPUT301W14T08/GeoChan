@@ -71,6 +71,16 @@ public class GeoLocation {
         this.location = new Location(LocationManager.GPS_PROVIDER);
         this.setCoordinates(latitude, longitude);
     }
+    
+    /**
+     * Construct a new GeoLocation object with a supplied GeoPoint object
+     * 
+     * @param geoPoint
+     */
+    public GeoLocation(GeoPoint geoPoint) {
+    	this.location = new Location(LocationManager.GPS_PROVIDER);
+    	this.setCoordinates(geoPoint.getLatitude(), geoPoint.getLongitude());
+    }
 
     /**
      * Determines the distance in terms of coordinates between the GeoLocation

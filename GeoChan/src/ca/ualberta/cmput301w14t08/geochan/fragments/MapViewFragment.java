@@ -26,7 +26,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
-import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -53,7 +52,6 @@ import android.view.ViewGroup;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -119,17 +117,7 @@ public class MapViewFragment extends Fragment {
 
 		markers = new ArrayList<CustomMarker>();
 
-		replyPostClusterMarkers = new GridMarkerClusterer(getActivity());
-		directionsClusterMarkers = new GridMarkerClusterer(getActivity());
-		startAndFinishClusterMarkers = new GridMarkerClusterer(getActivity());
-
-		Drawable clusterIconD = getResources().getDrawable(
-				R.drawable.marker_cluster);
-		Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
-
-		directionsClusterMarkers.setIcon(clusterIcon);
-		replyPostClusterMarkers.setIcon(clusterIcon);
-		startAndFinishClusterMarkers.setIcon(clusterIcon);
+		setupClusterGroups();
 
 		GeoLocation geoLocation = topComment.getLocation();
 		if (geoLocation.getLocation() == null) {
@@ -153,6 +141,26 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
+	 * Sets up cluster groups so that when many Markers over lap each other in
+	 * the same cluster group, a cluster image is displayed instead of the
+	 * markers. This cluster image also displays the number of Markers that it
+	 * represents
+	 */
+	public void setupClusterGroups() {
+		replyPostClusterMarkers = new GridMarkerClusterer(getActivity());
+		directionsClusterMarkers = new GridMarkerClusterer(getActivity());
+		startAndFinishClusterMarkers = new GridMarkerClusterer(getActivity());
+
+		Drawable clusterIconD = getResources().getDrawable(
+				R.drawable.marker_cluster);
+		Bitmap clusterIcon = ((BitmapDrawable) clusterIconD).getBitmap();
+
+		directionsClusterMarkers.setIcon(clusterIcon);
+		replyPostClusterMarkers.setIcon(clusterIcon);
+		startAndFinishClusterMarkers.setIcon(clusterIcon);
+	}
+
+	/**
 	 * This sets up the comment location the map. The map is centered at the
 	 * location of the comment GeoLocation, and places a pin at this point. It
 	 * then calls handleChildComments to place pins for each child comment in
@@ -169,15 +177,16 @@ public class MapViewFragment extends Fragment {
 
 		if (commentLocationIsValid(topComment)) {
 			GeoLocation geoLocation = topComment.getLocation();
-
-			originalPostMarker = createMarker(geoLocation, "OP");
-			originalPostMarker.setIcon(getResources().getDrawable(
-					R.drawable.red_map_pin));
-			startAndFinishClusterMarkers.add(originalPostMarker);
+			Drawable icon = getResources().getDrawable(R.drawable.red_map_pin);
+			originalPostMarker = new CustomMarker(geoLocation, openMapView,
+					icon);
+			originalPostMarker.setUpInfoWindow("OP", getActivity());
+			originalPostMarker.showInfoWindow();
 
 			setMarkerListeners(originalPostMarker);
 
 			markers.add(originalPostMarker);
+			startAndFinishClusterMarkers.add(originalPostMarker);
 
 			handleChildComments(topComment);
 
@@ -217,6 +226,40 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
+	 * Calculates the minimum and maximum values for latitude and longitude
+	 * between an array of GeoPoints. This is used to
+	 */
+	private int calculateZoomSpan() {
+		int opLat = originalPostMarker.getPosition().getLatitudeE6();
+		int opLong = originalPostMarker.getPosition().getLongitudeE6();
+
+		// To calculate the max and min latitude and longitude of all
+		// the comments, we set the min's to max integer values and vice versa
+		// then have values of each comment modify these variables
+		int minLat = opLat;
+		int maxLat = opLat;
+		int minLong = opLong;
+		int maxLong = opLong;
+
+		// get max min lat long for replies
+		for (CustomMarker marker : markers) {
+			if (marker.getGeoLocation() != originalPostMarker.getGeoLocation()) {
+				GeoPoint geoPoint = marker.getGeoPoint();
+				int geoLat = geoPoint.getLatitudeE6();
+				int geoLong = geoPoint.getLongitudeE6();
+
+				maxLat = Math.max(geoLat, maxLat);
+				minLat = Math.min(geoLat, minLat);
+				maxLong = Math.max(geoLong, maxLong);
+				minLong = Math.min(geoLong, minLong);
+			}
+		}
+		int deltaLong = maxLong - minLong;
+		int deltaLat = maxLat - minLat;
+		return Math.max(deltaLong, deltaLat);
+	}
+
+	/**
 	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
 	 * in This is used to cl
 	 * 
@@ -239,15 +282,6 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
-	 * Hides infoWindows for every marker on the map
-	 */
-	private void hideInfoWindows() {
-		for (Marker marker : markers) {
-			marker.hideInfoWindow();
-		}
-	}
-
-	/**
 	 * Recursive method for handling all comments in the thread. First checks if
 	 * the comment has any children or not. If none, simply return. Otherwise,
 	 * call setGeoPointMarker for each child of the comment. Call
@@ -266,9 +300,11 @@ public class MapViewFragment extends Fragment {
 				GeoLocation commentLocation = childComment.getLocation();
 
 				if (commentLocationIsValid(childComment)) {
-					Marker replyMarker = new Marker(openMapView);
-					replyMarker.setTitle("Reply");
-					replyMarker.setPosition(commentLocation.makeGeoPoint());
+					Drawable icon = getResources().getDrawable(
+							R.drawable.blue_map_pin);
+
+					CustomMarker replyMarker = createMarker(commentLocation,
+							"Reply", icon);
 
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation
@@ -277,21 +313,21 @@ public class MapViewFragment extends Fragment {
 						replyMarker.setSubDescription("Unknown Location");
 					}
 
-					replyMarker.setAnchor(Marker.ANCHOR_CENTER,
-							Marker.ANCHOR_BOTTOM);
-					replyMarker.setIcon(getResources().getDrawable(
-							R.drawable.blue_map_pin));
-					MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-							R.layout.bonuspack_bubble, openMapView);
-					infoWindow = new MarkerInfoWindow(
-							R.layout.bonuspack_bubble, openMapView);
-					replyMarker.setInfoWindow(infoWindow);
 					setMarkerListeners(replyMarker);
 					replyPostClusterMarkers.add(replyMarker);
-					//markers.add(replyMarker);
+					markers.add(replyMarker);
 					handleChildComments(childComment);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Hides infoWindows for every marker on the map
+	 */
+	private void hideInfoWindows() {
+		for (Marker marker : markers) {
+			marker.hideInfoWindow();
 		}
 	}
 
@@ -316,40 +352,6 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
-	 * Calculates the minimum and maximum values for latitude and longitude
-	 * between an array of GeoPoints. This is used to
-	 */
-	private int calculateZoomSpan() {
-		// get op lat long
-		int opLat = originalPostMarker.getPosition().getLatitudeE6();
-		int opLong = originalPostMarker.getPosition().getLongitudeE6();
-
-		// To calculate the max and min latitude and longitude of all
-		// the comments, we set the min's to max integer values and vice versa
-		// then have values of each comment modify these variables
-		int minLat = opLat;
-		int maxLat = opLat;
-		int minLong = opLong;
-		int maxLong = opLong;
-
-		// get max min lat long for replies
-		for (Marker marker : replyPostClusterMarkers.getItems()) {
-			GeoPoint geoPoint = marker.getPosition();
-			int geoLat = geoPoint.getLatitudeE6();
-			int geoLong = geoPoint.getLongitudeE6();
-
-			maxLat = Math.max(geoLat, maxLat);
-			minLat = Math.min(geoLat, minLat);
-			maxLong = Math.max(geoLong, maxLong);
-			minLong = Math.min(geoLong, minLong);
-		}
-
-		int deltaLong = maxLong - minLong;
-		int deltaLat = maxLat - minLat;
-		return Math.max(deltaLong, deltaLat);
-	}
-
-	/**
 	 * Creates a new marker based on a geoLocation. Sets the title to the
 	 * postType string passed in
 	 * 
@@ -357,13 +359,11 @@ public class MapViewFragment extends Fragment {
 	 * @param postType
 	 * @return
 	 */
-	public CustomMarker createMarker(GeoLocation geoLocation, String postType) {
+	public CustomMarker createMarker(GeoLocation geoLocation, String postType,
+			Drawable icon) {
 
-		Marker marker = new Marker(openMapView);
-		marker.setTitle(postType);
-
-		GeoPoint geoPoint = geoLocation.makeGeoPoint();
-		marker.setPosition(geoPoint);
+		CustomMarker marker = new CustomMarker(geoLocation, openMapView, icon);
+		marker.setUpInfoWindow(postType, getActivity());
 
 		if (geoLocation.getLocationDescription() != null) {
 			marker.setSubDescription(geoLocation.getLocationDescription());
@@ -371,10 +371,7 @@ public class MapViewFragment extends Fragment {
 			marker.setSubDescription("Unknown Location");
 		}
 
-		marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-		//return marker;
-		return null;
+		return marker;
 	}
 
 	/**
@@ -441,29 +438,24 @@ public class MapViewFragment extends Fragment {
 
 			Drawable nodeIcon = getResources().getDrawable(
 					R.drawable.marker_node);
-			Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
+			Drawable nodeImage = getResources().getDrawable(
+					R.drawable.ic_continue);
 
 			for (int i = 0; i < road.mNodes.size(); i++) {
 				RoadNode node = road.mNodes.get(i);
-				Marker nodeMarker = new Marker(openMapView);
-				MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-						R.layout.bonuspack_bubble, openMapView);
-				infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-						openMapView);
-
-				nodeMarker.setInfoWindow(infoWindow);
-				nodeMarker.setPosition(node.mLocation);
-				nodeMarker.setIcon(nodeIcon);
+				GeoLocation geoLocation = new GeoLocation(node.mLocation);
+				CustomMarker nodeMarker = new CustomMarker(geoLocation,
+						openMapView, nodeIcon);
 				nodeMarker.setTitle("Step " + i);
 				nodeMarker.setSnippet(node.mInstructions);
 				nodeMarker.setSubDescription(Road.getLengthDurationText(
 						node.mLength, node.mDuration));
-				nodeMarker.setImage(icon);
-
-				directionsClusterMarkers.add(nodeMarker);
+				nodeMarker.setImage(nodeImage);
 
 				setMarkerListeners(nodeMarker);
-				//markers.add(nodeMarker);
+
+				directionsClusterMarkers.add(nodeMarker);
+				markers.add(nodeMarker);
 			}
 
 			return null;
@@ -484,31 +476,18 @@ public class MapViewFragment extends Fragment {
 			GeoLocation currentLocation = new GeoLocation(
 					locationListenerService);
 
-			Marker currentLocationMarker = new Marker(openMapView);
+			Drawable icon = getResources()
+					.getDrawable(R.drawable.green_map_pin);
 
-			currentLocationMarker.setTitle("Current Location");
-			currentLocationMarker.setPosition(currentLocation.makeGeoPoint());
-
-			ProgressDialog dialog = new ProgressDialog(getActivity());
-			dialog.setMessage("Retrieving Location");
-			ThreadManager.startGetPOI(currentLocation, dialog,
-					currentLocationMarker);
-
-			currentLocationMarker.setAnchor(Marker.ANCHOR_CENTER,
-					Marker.ANCHOR_BOTTOM);
-			currentLocationMarker.setIcon(getResources().getDrawable(
-					R.drawable.green_map_pin));
-
-			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-					R.layout.bonuspack_bubble, openMapView);
-			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-					openMapView);
-			currentLocationMarker.setInfoWindow(infoWindow);
+			CustomMarker currentLocationMarker = new CustomMarker(
+					currentLocation, openMapView, icon);
+			currentLocationMarker.setUpInfoWindow("Current Location",
+					getActivity());
 
 			setMarkerListeners(currentLocationMarker);
 
 			startAndFinishClusterMarkers.add(currentLocationMarker);
-			//markers.add(currentLocationMarker);
+			markers.add(currentLocationMarker);
 
 			openMapView.getOverlays().clear();
 			openMapView.getOverlays().add(roadOverlay);
