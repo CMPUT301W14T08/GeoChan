@@ -340,7 +340,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
             fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
                     .findFragmentByTag("customLocFrag");
         }
-        fragment.submitNewLocationFromCoordinates(view);
+        fragment.submitNewLocation(view);
      }
 
     /**
