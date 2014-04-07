@@ -323,7 +323,7 @@ public class ThreadManager {
      *            id of the commentList used on the server
      */
     public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
-            int threadIndex) {
+            int threadIndex, GeoLocation location) {
         if (instance == null) {
             generateInstance();
         }
@@ -331,8 +331,9 @@ public class ThreadManager {
         if (task == null) {
             task = new GetCommentsTask();
         }
-        task.initCommentsTask(instance, fragment, threadIndex);
+        task.initCommentsTask(instance, fragment, threadIndex, location);
         task.setCommentListCache(instance.commentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
+        task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
     }
