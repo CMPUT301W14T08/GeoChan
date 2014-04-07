@@ -78,9 +78,7 @@ public class PostRunnable implements Runnable {
 				throw new InterruptedException();
 			}
 			try {
-				Log.e("POST", "BEFORE INDEX BUILDER");
 				jestResult = client.execute(index);
-				Log.e("POST", "AFTER CLIENT EXECUTE");
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
 				}
@@ -88,6 +86,7 @@ public class PostRunnable implements Runnable {
 				e.printStackTrace();
 			}
 		} catch (InterruptedException e) {
+			Log.e("POST", "CATCH");
 			e.printStackTrace();
 		} finally {
 			if (jestResult == null || !jestResult.isSucceeded()) {

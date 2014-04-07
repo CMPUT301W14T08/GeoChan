@@ -58,7 +58,7 @@
     
     <ImageButton
         android:id="@+id/thread_list_thumbnail"
-		android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/threadTitle"
         android:layout_alignParentRight="true"

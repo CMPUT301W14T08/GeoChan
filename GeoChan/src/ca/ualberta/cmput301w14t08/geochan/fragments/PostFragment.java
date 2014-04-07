@@ -23,8 +23,6 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -157,18 +155,9 @@ public class PostFragment extends Fragment {
 					geoLocation = new GeoLocation(lat, lon);
 
 					String locationDescription = args.getString("locationDescription");
-                    geoLocation.setLocationDescription(locationDescription);
+					geoLocation.setLocationDescription(locationDescription);
 
-					DecimalFormat format = new DecimalFormat();
-					format.setRoundingMode(RoundingMode.HALF_EVEN);
-					format.setMinimumFractionDigits(0);
-					format.setMaximumFractionDigits(4);
-
-					if (locationDescription.equals("Unknown Location")) {
-						locButton.setText("Location: Set");
-					} else {
-						locButton.setText("Location: Set");
-					}
+					locButton.setText("Location: Set");
 				}
 			}
 			if (args.containsKey("IMAGE_THUMB") && args.containsKey("IMAGE_FULL")) {
@@ -280,7 +269,6 @@ public class PostFragment extends Fragment {
 			dialog.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface arg0, int arg1) {
 					FavouritesFragment favFrag = (FavouritesFragment) getParentFragment();
-					Log.e("PICDEBUG", "Value of favFragment." + String.valueOf(favFrag));
 					boolean fromFav;
 					if(favFrag != null){
 						fromFav = true;
