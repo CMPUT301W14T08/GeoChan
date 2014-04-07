@@ -418,6 +418,7 @@ public class ThreadViewFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	item.setChecked(true);
         switch (item.getItemId()) {
         case (R.id.comment_sort_date_new):
             // User wants to push newer comments to the top.

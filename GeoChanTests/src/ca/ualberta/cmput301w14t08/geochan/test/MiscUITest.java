@@ -46,6 +46,9 @@ public class MiscUITest extends ActivityInstrumentationTestCase2<MainActivity> {
         solo = new Solo(getInstrumentation(), getActivity());
     }
     
+    /**
+     * Tests our favourites spinners.
+     */
     public void testFavoritesSpinners() {
         assertTrue("Did not launch thread list", solo.waitForFragmentById(R.id.fragment_container));
         solo.clickOnActionBarItem(R.id.action_favourites);
@@ -57,7 +60,6 @@ public class MiscUITest extends ActivityInstrumentationTestCase2<MainActivity> {
     /**
      * Test orientation changes for each fragment
      * 
-     * @author Tom Krywitsky
      */
     public void testOrientationChange() {
         assertTrue("Did not launch thread list", solo.waitForFragmentById(R.id.fragment_container));
