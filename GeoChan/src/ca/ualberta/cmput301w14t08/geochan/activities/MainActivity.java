@@ -44,6 +44,7 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
+import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 
 /**
@@ -74,8 +75,9 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         PreferencesManager.generateInstance(this);
         CacheManager.generateInstance(this);
         GeoLocationLog.generateInstance(this);
+        ThreadManager.generateInstance(this);
         ThreadListFragment fragment = new ThreadListFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, "threadListFrag")
                 .commit();
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }

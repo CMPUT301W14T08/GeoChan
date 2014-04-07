@@ -44,6 +44,7 @@ public class PostRunnable implements Runnable {
                     thread = new ThreadComment(task.getComment(), task.getTitle());
                 }
                 thread.setBodyComment(task.getComment());
+                task.setThreadComment(thread);
                 id = thread.getId();
                 json = GsonHelper.getOnlineGson().toJson(thread);
             }

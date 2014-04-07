@@ -8,6 +8,7 @@ import ca.ualberta.cmput301w14t08.geochan.interfaces.UpdateRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.runnables.GetPOIOnPostRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.PostImageRunnable;
 import ca.ualberta.cmput301w14t08.geochan.runnables.PostRunnable;
@@ -22,6 +23,7 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
     private String cache;
     private ThreadManager manager;
     private Thread thread;
+    private ThreadComment threadComment;
     private Runnable imageRunnable;
     private Runnable postRunnable;
     private Runnable updateRunnable;
@@ -40,6 +42,7 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
         this.title = title;
         this.location = location;
         this.dialog = dialog;
+        this.threadComment = null;
     }
 
     public Thread getCurrentThread() {
@@ -194,5 +197,13 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
     
     public ProgressDialog getDialog() {
     	return dialog;
+    }
+    
+    public void setThreadComment(ThreadComment threadComment) {
+    	this.threadComment = threadComment;
+    }
+    
+    public ThreadComment getThreadComment() {
+    	return threadComment;
     }
 }

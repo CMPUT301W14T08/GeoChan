@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit;
 import org.osmdroid.bonuspack.overlays.Marker;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
@@ -20,6 +22,7 @@ import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
+import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
@@ -125,6 +128,7 @@ public class ThreadManager {
     private final ThreadPoolExecutor getThreadCommentsPool;
     private final ThreadPoolExecutor getPOIPool;
 
+    private Context context;
     private Handler handler;
     private static ThreadManager instance = null;
 
@@ -177,6 +181,15 @@ public class ThreadManager {
                 	PostTask postTaskComplete = (PostTask) inputMessage.obj;
 					if (postTaskComplete.getDialog() != null) {
 						postTaskComplete.getDialog().dismiss();
+					}
+					ThreadComment threadComment = postTaskComplete.getThreadComment();
+					if (threadComment != null) {
+						ThreadList.addThread(threadComment);
+						FragmentActivity activity = (FragmentActivity) context;
+						ThreadListFragment fragment = (ThreadListFragment) activity.getSupportFragmentManager().findFragmentByTag("threadListFrag");
+						if (fragment != null) {
+							fragment.finishReload();
+						}
 					}
                     break;
                     
@@ -322,8 +335,9 @@ public class ThreadManager {
         };
     }
 
-    public static void generateInstance() {
+    public static void generateInstance(Context context) {
         instance = new ThreadManager();
+        instance.context = context;
     }
 
     /**
@@ -335,9 +349,6 @@ public class ThreadManager {
      */
     public static GetImageTask startGetImage(String id, ImageView imageView,
             ProgressDialog dialog) {
-        if (instance == null) {
-            generateInstance();
-        }
         GetImageTask task = instance.getImageTaskQueue.poll();
         if (task == null) {
             task = new GetImageTask();
@@ -349,9 +360,6 @@ public class ThreadManager {
     }
     
     public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment) {
-        if (instance == null) {
-            generateInstance();
-        }
         GetThreadCommentsTask task = instance.getThreadCommentsTaskQueue.poll();
         if (task == null) {
             task = new GetThreadCommentsTask();
@@ -373,10 +381,7 @@ public class ThreadManager {
      */
     public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
             int threadIndex) {
-        if (instance == null) {
-            generateInstance();
-        }
-        GetCommentsTask task = instance.getCommentsTaskQueue.poll();
+    	GetCommentsTask task = instance.getCommentsTaskQueue.poll();
         if (task == null) {
             task = new GetCommentsTask();
         }
@@ -397,9 +402,6 @@ public class ThreadManager {
      *            a Comment, not a threadComment, the title field is null
      */
     public static PostTask startPost(Comment comment, String title, GeoLocation location, ProgressDialog dialog) {
-        if (instance == null) {
-            generateInstance();
-        }
         PostTask task = instance.postTaskQueue.poll();
         if (task == null) {
             task = new PostTask();
@@ -411,9 +413,6 @@ public class ThreadManager {
     }
 
     public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, Marker marker) {
-        if (instance == null) {
-            generateInstance();
-        }
         GetPOITask task = instance.getPOITaskQueue.poll();
         if (task == null) {
             task = new GetPOITask();

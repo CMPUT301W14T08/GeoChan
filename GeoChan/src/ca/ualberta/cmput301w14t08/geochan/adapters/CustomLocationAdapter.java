@@ -42,16 +42,29 @@ public class CustomLocationAdapter extends BaseAdapter {
     private ArrayList<GeoLocation> logArray;
     private Context context;
 
+    /** 
+     * Constructs the adapter and initializes its context and list of log entries.
+     * @param context the Context
+     * @param logEntries the ArrayList of GeoLocation entries
+     */
     public CustomLocationAdapter(Context context, ArrayList<GeoLocation> logEntries) {
         this.context = context;
         this.logArray = logEntries;
     }
 
+    /**
+     * Returns the number of entries in the log array.
+     * @return the number of entries
+     */
     @Override
     public int getCount() {
         return logArray.size();
     }
 
+    /**
+     * Returns a specific log entry.
+     * @param position the position of the entry
+     */
     @Override
     public GeoLocation getItem(int position) {
         return logArray.get(position);
