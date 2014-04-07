@@ -228,21 +228,30 @@ public class ThreadManager {
 
                 case GET_IMAGE_RUNNING:
                     GetImageTask imageTask = (GetImageTask) inputMessage.obj;
-                    imageTask.getDialog().show();
+                    if (imageTask.getDialog() != null) {
+                    	imageTask.getDialog().show();
+                    }
                     break;
                     
                 case GET_IMAGE_FAILED:
                     GetImageTask imageTaskFail = (GetImageTask) inputMessage.obj;
-                    imageTaskFail.getDialog().dismiss();
+                    if (imageTaskFail.getDialog() != null) {
+                    	imageTaskFail.getDialog().dismiss();
+                    }
                     recycleGetImageTask(imageTaskFail);
                     break;
                     
                 case GET_IMAGE_COMPLETE:
                     GetImageTask imageTaskComplete = (GetImageTask) inputMessage.obj;
-                    imageTaskComplete.getDialog().dismiss();
+                    if (imageTaskComplete.getDialog() != null) {
+                    	imageTaskComplete.getDialog().dismiss();
+                    }
                     Bitmap bitmap = imageTaskComplete.getImageCache();
                     String id = imageTaskComplete.getId();
-                    imageTaskComplete.getmImageWeakRef().get().setImageBitmap(bitmap);
+                    ImageView view = imageTaskComplete.getmImageWeakRef().get();
+                    if (view != null) {
+                        view.setImageBitmap(bitmap);
+                    }
                     CacheManager.getInstance().serializeImage(bitmap, id);
                     recycleGetImageTask(imageTaskComplete);
                     break;

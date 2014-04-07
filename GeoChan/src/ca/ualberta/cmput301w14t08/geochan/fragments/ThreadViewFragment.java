@@ -342,6 +342,9 @@ public class ThreadViewFragment extends Fragment {
                     if (!FavouritesLog.getInstance(getActivity()).hasFavComment(comment.getId())) {
                         starButton.setImageResource(R.drawable.ic_rating_marked);
                         favouriteAComment(comment);
+                        if (comment.hasImage()) {
+                            ThreadManager.startGetImage(comment.getId(), null, null);
+                        }
                     } else {
                         starButton.setImageResource(R.drawable.ic_rating_important);
                         unfavouriteAComment(comment.getId());

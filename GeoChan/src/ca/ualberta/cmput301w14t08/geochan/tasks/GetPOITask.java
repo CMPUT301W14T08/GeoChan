@@ -53,6 +53,7 @@ public class GetPOITask implements TaskInterface, GetPOIRunnableInterface {
 
 	/**
 	 * Initializes the instance of the task with the information needed to run it.
+	 * 
 	 * @param manager the ThreadManager
 	 * @param location the GeoLocation
 	 * @param dialog a ProgressDialog inside the fragment to display the task process

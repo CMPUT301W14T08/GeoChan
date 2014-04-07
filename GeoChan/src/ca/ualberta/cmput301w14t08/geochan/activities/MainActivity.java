@@ -65,7 +65,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
 	 */
 	
 	// TODO Fix logic in fragments
-	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
