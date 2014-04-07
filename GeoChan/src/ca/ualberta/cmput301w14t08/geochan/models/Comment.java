@@ -57,7 +57,8 @@ public class Comment implements Parcelable {
     private long id;
 
     /**
-     * a comment with an image, with a parent
+     * Initializes a Comment object with a post, parent comment, image
+     * and GeoLocation.
      */
     public Comment(String textPost, Bitmap image, GeoLocation location, Comment parent) {
         super();
@@ -81,7 +82,8 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * a comment without an image and with a parent
+     * Initializes a Comment object with a post, parent comment
+     * and GeoLocation.
      */
     public Comment(String textPost, GeoLocation location, Comment parent) {
         super();
@@ -105,12 +107,12 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * a comment initialized with no data. Only used for testing.
+     * Initializes a Comment object with no data.
      */
     public Comment() {
         super();
         this.manager = PreferencesManager.getInstance();
-        this.textPost = "This is a test comment.";
+        this.textPost = "No comment.";
         this.commentDate = new Date();
         this.image = null;
         this.location = new GeoLocation(0, 0);
@@ -125,96 +127,30 @@ public class Comment implements Parcelable {
         this.commentIds = new ArrayList<String>();
     }
 
-    public ArrayList<String> getCommentIds() {
-        return commentIds;
-    }
-
-    public void setCommentIds(ArrayList<String> commentIds) {
-        this.commentIds = commentIds;
-    }
-
+    /**
+     * Simple check that returns whether this Comment has an image associated with it.
+     * @return true if the Comment has an image, false if not
+     */
     public boolean hasImage() {
         return !(imageThumb == null);
     }
 
+    /**
+     * Adds a child Comment to this Comment.
+     * @param comment  the child Comment to add
+     */
     public void addChild(Comment comment) {
         comment.setParent(this);
         children.add(comment);
     }
-
-    // Getters and setters.
-    public String getTextPost() {
-        return textPost;
-    }
-
-    public void setTextPost(String textPost) {
-        this.textPost = textPost;
-    }
-
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
-
-    public GeoLocation getLocation() {
-        return location;
-    }
-
-    public void setLocation(GeoLocation location) {
-        if (location.getLocation() == null) {
-            this.location = null;
-        } else {
-            this.location = location;
-        }
-    }
-
-    public Date getCommentDate() {
-        return commentDate;
-    }
-
-    public void setCommentDate(Date commentDate) {
-        this.commentDate = commentDate;
-    }
-
-    public Comment getParent() {
-        return parent;
-    }
-
-    public void setParent(Comment parent) {
-        this.parent = parent;
-    }
-
-    public ArrayList<Comment> getChildren() {
-        return children;
-    }
-
-    public Comment getChildAtIndex(int i) {
-        return children.get(i);
-    }
-
-    public void setChildren(ArrayList<Comment> children) {
-        this.children = children;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getId() {
-        return Long.toString(id);
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    
+    /**
+     * Searches a parent Comment's children recursively for a Comment
+     * by its ElasticSearch id.
+     * @param parent  the parent Comment
+     * @param id  the id
+     * @return  the Comment if found, or null if not found
+     */
     public Comment findCommentById(Comment parent, String id) {
         Comment c = null;
         if (parent.getId().equals(id)) {
@@ -325,6 +261,11 @@ public class Comment implements Parcelable {
         }
     }
     
+    /** 
+     * Searches the ThreadList for the ThreadComment containing this
+     * Comment.
+     * @return the ThreadComment of the Comment if found, or null if not found
+     */
     public ThreadComment findThread() {
         ThreadComment t = null;
         for (ThreadComment thread : ThreadList.getThreads()) {
@@ -347,64 +288,18 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * @return the imageThumb
-     */
-    public Bitmap getImageThumb() {
-        return imageThumb;
-    }
-
-    /**
-     * @param imageThumb
-     *            the imageThumb to set
-     */
-    public void setImageThumb(Bitmap imageThumb) {
-        this.imageThumb = imageThumb;
-    }
-
-    /**
-     * @return the hash
-     */
-    public String getHash() {
-        return hash;
-    }
-
-    /**
-     * @param hash
-     *            the hash to set
-     */
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    /**
-     * @return the depth
-     */
-    public int getDepth() {
-        return depth;
-    }
-
-    /**
-     * @param depth
-     *            the depth to set
-     */
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.os.Parcelable#describeContents()
+     * Describes any special objects contained in the Parcelable representation.
+     * Not used in our implementation.
      */
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+    /**
+     * Writes a Comment object to a Parcel.
+     * @param dest  the Parcel
+     * @param flags  contextual flags
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -420,9 +315,9 @@ public class Comment implements Parcelable {
     }
 
     /**
-     * This is the Comment constructor to build the object from a parcel.
+     * Constructs a Comment object from a Parcel.
      * 
-     * @param in
+     * @param in  the parcel
      */
     public Comment(Parcel in) {
         super();
@@ -436,6 +331,9 @@ public class Comment implements Parcelable {
         this.setParent((Comment) in.readParcelable(getClass().getClassLoader()));
     }
 
+    /**
+     * Creates Comments from Parcels.
+     */
     public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
         public Comment createFromParcel(Parcel in) {
             return new Comment(in);
@@ -445,4 +343,110 @@ public class Comment implements Parcelable {
             return new Comment[size];
         }
     };
+    
+    /* Getters and setters below */
+    
+    public Bitmap getImageThumb() {
+        return imageThumb;
+    }
+
+    public void setImageThumb(Bitmap imageThumb) {
+        this.imageThumb = imageThumb;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+    
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+    
+    public String getTextPost() {
+        return textPost;
+    }
+
+    public void setTextPost(String textPost) {
+        this.textPost = textPost;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public GeoLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoLocation location) {
+        if (location.getLocation() == null) {
+            this.location = null;
+        } else {
+            this.location = location;
+        }
+    }
+
+    public Date getCommentDate() {
+        return commentDate;
+    }
+
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
+    }
+
+    public Comment getParent() {
+        return parent;
+    }
+
+    public void setParent(Comment parent) {
+        this.parent = parent;
+    }
+
+    public ArrayList<Comment> getChildren() {
+        return children;
+    }
+
+    public Comment getChildAtIndex(int i) {
+        return children.get(i);
+    }
+
+    public void setChildren(ArrayList<Comment> children) {
+        this.children = children;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getId() {
+        return Long.toString(id);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public ArrayList<String> getCommentIds() {
+        return commentIds;
+    }
+
+    public void setCommentIds(ArrayList<String> commentIds) {
+        this.commentIds = commentIds;
+    }
 }

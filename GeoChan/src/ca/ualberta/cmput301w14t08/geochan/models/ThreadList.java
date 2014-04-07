@@ -23,27 +23,15 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.ArrayList;
 
 /**
- * Utility class that stores and manages an arraylist of ThreadComment objects.
+ * Stores and manages an ArrayList of ThreadComment objects.
  * 
- * @author Henry Pabst, Artem Chikin
+ * @author Henry Pabst
+ * @author Artem Chikin
  * 
  */
 public class ThreadList {
+	
     private static ArrayList<ThreadComment> threads = null;
-
-    /**
-     * Getters and setters
-     */
-    public static ArrayList<ThreadComment> getThreads() {
-        if (threads == null) {
-            threads = new ArrayList<ThreadComment>();
-        }
-        return threads;
-    }
-
-    public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
-        threads = listOfThreads;
-    }
 
     /**
      * Creates a new ThreadComment and adds it to to the ThreadList.
@@ -72,9 +60,24 @@ public class ThreadList {
         }
         threads.add(thread);
     }
-
+    
+    /**
+     * Clears the ThreadList of all ThreadComment objects.
+     */
     public static void clearThreads() {
         threads.clear();
     }
 
+    /* Getters and setters below */
+    
+    public static ArrayList<ThreadComment> getThreads() {
+        if (threads == null) {
+            threads = new ArrayList<ThreadComment>();
+        }
+        return threads;
+    }
+
+    public static void setThreads(ArrayList<ThreadComment> listOfThreads) {
+        threads = listOfThreads;
+    }
 }
