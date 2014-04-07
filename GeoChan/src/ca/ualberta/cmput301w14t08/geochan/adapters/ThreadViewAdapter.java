@@ -79,10 +79,10 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * Constructs the adapter and initializes all of its components.
-     * @param context  the context
-     * @param thread  the ThreadComment to display
-     * @param manager  the FragmentManager with this adapter's fragment
-     * @param id  the index of the ThreadComment in the ThreadList
+     * @param context  The Context the adapter is running in.
+     * @param thread  The ThreadComment to display.
+     * @param manager  The FragmentManager with this adapter's fragment.
+     * @param id  The index of the ThreadComment in the ThreadList.
      */
     public ThreadViewAdapter(Context context, ThreadComment thread, FragmentManager manager, int id) {
         super();
@@ -99,7 +99,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * objects from the Comment's children tree.
      * This is the list we display in our listView.
      * 
-     * @param comment
+     * @param comment The Comment to recursively build a list
+     * from.
      * 
      */
     private void buildAList(Comment comment) {
@@ -118,7 +119,7 @@ public class ThreadViewAdapter extends BaseAdapter {
      * Sets the ThreadComment that the adapter is displaying
      * and refreshes the adapter.
      * 
-     * @param thread
+     * @param thread The new ThreadComment for the adapter to display.
      * 
      */
     public void setThread(ThreadComment thread) {
@@ -131,6 +132,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * Returns the number of items in this adapter,
      * includes all posts (including the bodyComment) and the separator
      * between the bodyComment and the other Comments.
+     * 
+     * @return The number of items in the adapter.
      */
     @Override
     public int getCount() {
@@ -142,8 +145,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * This method recursively counts the total amount of children a comment
      * object has.
      * 
-     * @param comment  the comment to be counted
-     * @return the number of children
+     * @param comment  The Comment to determine the number of children of.
+     * @return The number of children.
      * 
      */
     private int getCountChildren(Comment comment) {
@@ -161,8 +164,8 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * Gets an item at the specific position in the list.
-     * @param position  the position
-     * @return the item
+     * @param position  The position.
+     * @return The item.
      */
     @Override
     public Object getItem(int position) {
@@ -179,8 +182,8 @@ public class ThreadViewAdapter extends BaseAdapter {
     
     /**
      * Gets the id of an item at a specific position.
-     * @param position  the position
-     * @return the id
+     * @param position  The position.
+     * @return The id.
      */
     @Override
     public long getItemId(int position) {
@@ -189,7 +192,7 @@ public class ThreadViewAdapter extends BaseAdapter {
 
     /**
      * Returns the number of views that this adapter can create.
-     * @return the number of views
+     * @return The number of views the adapter can create.
      */
     @Override
     public int getViewTypeCount() {
@@ -200,8 +203,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * Return the layout type for a list element,
      * OP, SEPARATOR, 7 COMMENT depths and COMMENT_MAX types.
      * 
-     * @param position the position
-     * @return the layout type
+     * @param position The position.
+     * @return The layout type.
      */
     @Override
     public int getItemViewType(int position) {
@@ -221,15 +224,15 @@ public class ThreadViewAdapter extends BaseAdapter {
         return type;
     }
     
-    @Override
     /**
      * Depending on the list item type, inflate the correct
      * layout, start listening for its buttons.
-     * @param position the position
-     * @param convertView a previous recycled view
-     * @param parent parent view
-     * @return the view
+     * @param position The position.
+     * @param convertView A previous recycled View.
+     * @param parent The parent View.
+     * @return The View.
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
         final Comment comment = (Comment) getItem(position);
@@ -315,7 +318,7 @@ public class ThreadViewAdapter extends BaseAdapter {
      * ExpandImageFragment.
      * 
      * @param convertView The view that contains the thumbnail.
-     * @param comment The corresponding comment object.
+     * @param comment The corresponding Comment object.
      */
     private void listenForThumbnail(View convertView, final Comment comment) {
     	ImageButton thumbnail = (ImageButton) convertView
@@ -353,10 +356,10 @@ public class ThreadViewAdapter extends BaseAdapter {
      * Assign convertview to layout.
      * 
      * @param convertView
-     *            view to inflate
+     *            The View to inflate
      * @param layout
-     *            an R.Layout resource
-     * @return convertView Inflated view
+     *            An R.Layout resource.
+     * @return convertView The inflated View.
      */
     private View setConvertView(View convertView, int layout) {
     	if (convertView == null) {
@@ -373,8 +376,8 @@ public class ThreadViewAdapter extends BaseAdapter {
      * onItemClick, threadComment buttons have a listener in the adapter for
      * ease of access to the permanently displayed buttons.
      * 
-     * @param convertView view that contains op.
-     * @param thread threadComment object that contains op.
+     * @param convertView view that contains the ThreadComments OP.
+     * @param thread threadComment object that contains the ThreadComments OP.
      * 
      */
     private void listenForThreadButtons(View convertView, final ThreadComment thread) {
@@ -500,7 +503,7 @@ public class ThreadViewAdapter extends BaseAdapter {
      * Title, creator, comment, timestamp, location.
      * 
      * @param convertView
-     *            View container of a listView item
+     *            View container of a listView item.
      */
     private void setOPFields(View convertView) {
     	// Thread title
@@ -564,7 +567,7 @@ public class ThreadViewAdapter extends BaseAdapter {
      * creator, time.
      * 
      * @param convertView View that contains the comment.
-     * @param reply Comment object.
+     * @param reply the Comment object that we are setting fields for.
      * 
      */
     private void setCommentFields(View convertView, Comment reply) {

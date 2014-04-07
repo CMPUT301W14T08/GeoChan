@@ -83,10 +83,10 @@ public class CustomLocationAdapter extends BaseAdapter {
 
     /**
      * Returns the view for a specific entry.
-     * @param position the position
-     * @param convertView a previous recycled view
-     * @param parent parent view
-     * @return the view
+     * @param position The position.
+     * @param convertView A previous recycled view.
+     * @param parent The parent View.
+     * @return The View.
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

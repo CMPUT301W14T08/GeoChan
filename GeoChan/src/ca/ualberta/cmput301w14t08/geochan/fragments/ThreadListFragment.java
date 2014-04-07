@@ -123,18 +123,21 @@ public class ThreadListFragment extends Fragment {
         switch (item.getItemId()) {
         case R.id.thread_sort_date_new:
             // User wants to push new threads to the top.
+        	item.setChecked(true);
             prefManager.setThreadSort(SortUtil.SORT_DATE_NEWEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_NEWEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_date_old:
             // User wants to push old threads to the top.
+        	item.setChecked(true);
             prefManager.setThreadSort(SortUtil.SORT_DATE_OLDEST);
             SortUtil.sortThreads(SortUtil.SORT_DATE_OLDEST, ThreadList.getThreads());
             adapter.notifyDataSetChanged();
             return true;
         case R.id.thread_sort_score_high:
             // User wants threads with high relevance/score at the top.
+        	item.setChecked(true);
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_HIGHEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_HIGHEST, ThreadList.getThreads());
@@ -142,6 +145,7 @@ public class ThreadListFragment extends Fragment {
             return true;
         case R.id.thread_sort_score_low:
             // User wants threads with low relevance/score at the top.
+        	item.setChecked(true);
             prefManager.setThreadSort(SortUtil.SORT_USER_SCORE_LOWEST);
             SortUtil.setThreadSortGeo(new GeoLocation(locationListener));
             SortUtil.sortThreads(SortUtil.SORT_USER_SCORE_LOWEST, ThreadList.getThreads());
@@ -149,6 +153,7 @@ public class ThreadListFragment extends Fragment {
             return true;
         case R.id.thread_sort_location:
             // User wants threads close to a selected location at the top.
+        	item.setChecked(true);
             locSortFlag = 1;
             this.getSortingLoc();
             return true;

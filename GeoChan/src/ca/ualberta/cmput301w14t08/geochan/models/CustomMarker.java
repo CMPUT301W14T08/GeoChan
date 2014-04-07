@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.app.Activity;
@@ -19,8 +20,6 @@ import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
  */
 public class CustomMarker extends Marker {
 
-	private String title;
-	private Drawable icon;
 	private GeoLocation geoLocation;
 	private MapView openMapView;
 
@@ -33,7 +32,6 @@ public class CustomMarker extends Marker {
 	public CustomMarker(GeoLocation geoLocation, MapView mapView) {
 		super(mapView);
 		super.setPosition(geoLocation.makeGeoPoint());
-		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 		this.openMapView = mapView;
 		this.geoLocation = geoLocation;
 	}
@@ -48,11 +46,25 @@ public class CustomMarker extends Marker {
 	public CustomMarker(GeoLocation geoLocation, MapView mapView, Drawable icon) {
 		super(mapView);
 		super.setPosition(geoLocation.makeGeoPoint());
-		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 		super.setIcon(icon);
-		this.icon = icon;
 		this.openMapView = mapView;
 		this.geoLocation = geoLocation;
+	}
+
+	/**
+	 * Constructor for initializing the marker, setting its position and icon
+	 * 
+	 * @param mapView
+	 * @param geoLocation
+	 * @param icon
+	 */
+	public CustomMarker(GeoPoint geoPoint, MapView mapView, Drawable icon) {
+		super(mapView);
+		super.setPosition(geoPoint);
+		super.setIcon(icon);
+		this.openMapView = mapView;
+		this.geoLocation = new GeoLocation(geoPoint.getLatitude(),
+				geoPoint.getLongitude());
 	}
 
 	/**
@@ -67,8 +79,8 @@ public class CustomMarker extends Marker {
 				R.layout.bonuspack_bubble, openMapView);
 		super.setInfoWindow(infoWindow);
 		super.setTitle(title);
-		this.title = title;
-		
+		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
 		ProgressDialog dialog = new ProgressDialog(activity);
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(geoLocation, dialog, this);
@@ -84,26 +96,18 @@ public class CustomMarker extends Marker {
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(geoLocation, dialog, this);
 	}
-
+	
 	/**
-	 * Getters and setters
+	 * Constructs a geoPoint from the geoLocation and returns it
+	 * 
+	 * @return GeoPoint corresponding to the geoLocation
 	 */
-	public String getTitle() {
-		return title;
+	public GeoPoint getGeoPoint() {
+		return geoLocation.makeGeoPoint();
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Drawable getIcon() {
-		return icon;
-	}
-
-	public void setIcon(Drawable icon) {
-		this.icon = icon;
-	}
-
+	/* Getters and setters */
+	 
 	public GeoLocation getGeoLocation() {
 		return geoLocation;
 	}
