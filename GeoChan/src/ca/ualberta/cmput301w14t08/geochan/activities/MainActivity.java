@@ -52,9 +52,10 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
  * Initializes most of our singleton classes so attempting to fetch an instance of 
  * one does not return null.
  * 
- * @author Henry Pabst, Artem Chikin, Artem Herasymchuk
+ * @author Artem Chikin
+ * @author Henry Pabst
+ * @author Artem Herasymchuk
  */
-
 public class MainActivity extends FragmentActivity implements OnBackStackChangedListener {
 	
 	/**
