@@ -452,8 +452,12 @@ public class ThreadManager {
             task = new PostTask();
         }
         task.initPostTask(instance, comment, title, location, dialog);
-        task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
-        instance.getPOIPool.execute(task.getGetPOIRunnable());
+        if (location.getLocationDescription() == null) {
+            task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
+            instance.getPOIPool.execute(task.getGetPOIRunnable());
+        } else {
+        	instance.postPool.execute(task.getPostRunnable());
+        }
         return task;
     }
 
