@@ -288,11 +288,19 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
         getActivity().getApplicationContext().registerReceiver(updateReceiver, new IntentFilter(ConnectivityBroadcastReceiver.UPDATE_FROM_SERVER_INTENT));
     }
 
+    /**
+     * Starts a thread of execution to retrieve updated ThreadComments from ElasticSearch.
+     */
     @Override
     public void reload() {
         ThreadManager.startGetThreadComments(this);
     }
     
+    /**
+     * Stores the retrieved ThreadComments in cache in case connection dies, applies
+     * the current sorting method to the newly retrieved ThreadComments, and
+     * refreshes the adapter so that they display properly.
+     */
     public void finishReload() {
         cacheManager.serializeThreadList(ThreadList.getThreads());
         SortUtil.sortThreads(prefManager.getThreadSort(), ThreadList.getThreads());

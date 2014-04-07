@@ -318,8 +318,6 @@ public class EditFragment extends Fragment {
         }
         editComment.setImage(image);
         Bitmap imageThumb = ThumbnailUtils.extractThumbnail(image, 100, 100);
-        Log.e("DEBUG", "Thumb height:" + String.valueOf(imageThumb.getHeight()));
-        Log.e("DEBUG", "Thumb width:" + String.valueOf(imageThumb.getWidth()));
         editComment.setImageThumb(imageThumb);
     }
     
