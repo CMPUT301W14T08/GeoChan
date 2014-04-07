@@ -20,32 +20,27 @@
 
 package ca.ualberta.cmput301w14t08.geochan.test;
 
-import io.searchbox.client.JestClient;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 
-
-public class ElasticSearchClientTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    private ElasticSearchClient client;
+public class FavouritesIOManagerTest extends ActivityInstrumentationTestCase2<MainActivity>  {
     
-    public ElasticSearchClientTest() {
+    //private MainActivity activity;
+    //private FavouritesIOManager manager;
+    
+    
+    public FavouritesIOManagerTest(Class<MainActivity> activityClass) {
         super(MainActivity.class);
     }
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        //this.activity = getActivity();
+        //this.manager = FavouritesIOManager.getInstance(activity);
     }
     
-    public void testConstruction() {
-        client = ElasticSearchClient.getInstance();
-        assertNotNull(client);
+    public void testSerializeDeserialize() {
+
     }
-    
-    public void testGetJest() {
-        JestClient jest = client.getClient();
-        assertNotNull(jest);
-    }
-    
 }

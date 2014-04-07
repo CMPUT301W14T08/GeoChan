@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 /**
  * Shows a toast with a given message on screen.
+ * Stores the context so that this class can easily be called
+ * within any part of the application that runs on the UI thread.
+ * Is a singleton.
  * 
  * @author Artem Herasymchuk
  */
@@ -33,18 +36,34 @@ public class Toaster {
     private Context context;
     private static Toaster instance;
 
+    /** 
+     * Constructs the Toaster object.
+     * @param context  the context
+     */
     private Toaster(Context context) {
         this.context = context;
     }
 
+    /**
+     * Generates an instance of the Toaster singleton object.
+     * @param context  the context
+     */
     public static void generateInstance(Context context) {
         instance = new Toaster(context);
     }
 
+    /**
+     * Shows a short Toast message.
+     * @param message  the message
+     */
     public static void toastShort(String message) {
         Toast.makeText(instance.context, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Shows a long Toast message.
+     * @param message  the message
+     */
     public static void toastLong(String message) {
         Toast.makeText(instance.context, message, Toast.LENGTH_LONG).show();
     }

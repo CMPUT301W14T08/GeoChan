@@ -29,11 +29,13 @@ import android.os.Parcelable;
 import android.util.Log;
 
 /**
- * ThreadComment is a model class that handles all operations of threads in the
- * application. It aggregates a Comment object and adds thread specific fields:
- * title, id
+ * Handles all operations of threads in the application. 
+ * It aggregates a Comment object and stores the extra
+ * information that is needed to represent a ThreadComment
+ * (the title).
  * 
- * @author Henry Pabst, Artem Chikin
+ * @author Henry Pabst
+ * @author Artem Chikin
  * 
  */
 public class ThreadComment implements Parcelable {
@@ -41,55 +43,27 @@ public class ThreadComment implements Parcelable {
     private String title;
     private long id;
 
+    /**
+     * Constructs a ThreadComment object.
+     */
+    public ThreadComment() {
+        super();
+        this.title = "No title";
+        this.bodyComment = new Comment();
+        Long.parseLong(bodyComment.getId());
+    }
+    
+    /**
+     * Constructs the ThreadComment object and sets the title,
+     * body comment and id.
+     * @param bodyComment  the body comment
+     * @param title  the title
+     */
     public ThreadComment(Comment bodyComment, String title) {
         super();
         this.title = title;
         this.id = Long.parseLong(bodyComment.getId());
         this.bodyComment = bodyComment;
-    }
-
-    /* This constructor is only used for testing. */
-    public ThreadComment() {
-        super();
-        this.title = "This thread is being used to test!";
-        this.bodyComment = new Comment();
-        Long.parseLong(bodyComment.getId());
-    }
-
-    /**
-     * Getters and setters
-     */
-    public Date getThreadDate() {
-        return getBodyComment().getCommentDate();
-    }
-
-    public void setThreadDate(Date threadDate) {
-        getBodyComment().setCommentDate(threadDate);
-    }
-
-    public String getId() {
-        return Long.toString(id);
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Comment getBodyComment() {
-        return bodyComment;
-    }
-
-    public void setBodyComment(Comment bodyComment) {
-        this.bodyComment = bodyComment;
-        Long.parseLong(bodyComment.getId());
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     /**
@@ -131,7 +105,7 @@ public class ThreadComment implements Parcelable {
     }
 
     /**
-     * Determines the score of a thread relevant to
+     * Determines the score of a thread relevant to a GeoLocation.
      * 
      * @param geo
      *            The GeoLocation relevant to sorting. In sorting, the
@@ -162,6 +136,13 @@ public class ThreadComment implements Parcelable {
         }
     }
 
+    /**
+     * Searches a parent comment recursively for a child comment identified
+     * by its ElasticSearch id.
+     * @param parent  the parent comment
+     * @param id  the id of the comment to search for
+     * @return the found comment, or null if no such comment was found
+     */
     public Comment findCommentById(Comment parent, String id) {
         Comment c = null;
         Log.e("??", "Searching comment " + parent.getId() + " for " + id);
@@ -176,12 +157,21 @@ public class ThreadComment implements Parcelable {
         }
         return c;
     }
-
+    
+    /**
+     * Describes any special objects contained in the Parcelable representation.
+     * Not used in our implementation.
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /** 
+     * Builds a Parcel from a ThreadComment object.
+     * @param dest  the destination Parcel
+     * @param flags  contextual flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(getBodyComment(), flags);
@@ -189,6 +179,10 @@ public class ThreadComment implements Parcelable {
         dest.writeValue(id);
     }
 
+    /**
+     * Constructs a ThreadComment object from a Parcel.
+     * @param in  the Parcel
+     */
     public ThreadComment(Parcel in) {
         super();
         this.setBodyComment((Comment) in.readValue(getClass().getClassLoader()));
@@ -196,6 +190,9 @@ public class ThreadComment implements Parcelable {
         this.setId((long) in.readLong());
     }
 
+    /**
+     * Creates ThreadComments from Parcels
+     */
     public static final Parcelable.Creator<ThreadComment> CREATOR = new Parcelable.Creator<ThreadComment>() {
         public ThreadComment createFromParcel(Parcel in) {
             return new ThreadComment(in);
@@ -205,4 +202,39 @@ public class ThreadComment implements Parcelable {
             return new ThreadComment[size];
         }
     };
+    
+    /* Getters and setters below */
+    
+    public Date getThreadDate() {
+        return getBodyComment().getCommentDate();
+    }
+
+    public void setThreadDate(Date threadDate) {
+        getBodyComment().setCommentDate(threadDate);
+    }
+
+    public String getId() {
+        return Long.toString(id);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Comment getBodyComment() {
+        return bodyComment;
+    }
+
+    public void setBodyComment(Comment bodyComment) {
+        this.bodyComment = bodyComment;
+        Long.parseLong(bodyComment.getId());
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

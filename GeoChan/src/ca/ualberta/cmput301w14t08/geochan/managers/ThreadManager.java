@@ -1,3 +1,23 @@
+/*
+ * Copyright 2014 Artem Chikin
+ * Copyright 2014 Artem Herasymchuk
+ * Copyright 2014 Tom Krywitsky
+ * Copyright 2014 Henry Pabst
+ * Copyright 2014 Bradley Simons
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ca.ualberta.cmput301w14t08.geochan.managers;
 
 import java.util.Queue;
@@ -39,7 +59,8 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
  * Created using the tutorial at
  * http://developer.android.com/training/multiple-threads/create-threadpool.html
  * 
- * @author Artem Herasymchuk, Artem Chikin
+ * @author Artem Herasymchuk
+ * @author Artem Chikin
  * 
  */
 public class ThreadManager {
@@ -344,6 +365,10 @@ public class ThreadManager {
         };
     }
 
+    /**
+     * Generates an instance of the ThreadManager if it does not exist.
+     * @param context  the context
+     */
     public static void generateInstance(Context context) {
         instance = new ThreadManager();
         instance.context = context;
@@ -368,6 +393,13 @@ public class ThreadManager {
         return task;
     }
     
+    /**
+     * Start the get ThreadComments from elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * 
+     * @param fragment
+     *            the ThreadListFragment that will be displaying the list
+     */
     public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment) {
         GetThreadCommentsTask task = instance.getThreadCommentsTaskQueue.poll();
         if (task == null) {
@@ -379,14 +411,13 @@ public class ThreadManager {
     }
 
     /**
-     * Start the get commentList from elasticSearch task, initialize a task
-     * instance and add the appropriate runnable to the thread pool. After the list
-     * is obtained, gets the comments.
+     * Start the get comments from elasticSearch task, initialize a task
+     * instance and add the appropriate runnable to the thread pool.
      * 
-     * @param loader
-     *            commentLoader object required
-     * @param id
-     *            id of the commentList used on the server
+     * @param fragment
+     *            the ThreadViewFragment displaying the ThreadComment
+     * @param threadIndex
+     *            id of the ThreadComment for which to get Comments
      */
     public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
             int threadIndex) {
@@ -409,6 +440,11 @@ public class ThreadManager {
      * @param title
      *            title of the threadComment, if it is a threadComment. if it is
      *            a Comment, not a threadComment, the title field is null
+     * @param location
+     * 			  the GeoLocation of the post
+     * @param dialog
+     *   		  a ProgressDialog in the fragment to display task progress
+     *       
      */
     public static PostTask startPost(Comment comment, String title, GeoLocation location, ProgressDialog dialog) {
         PostTask task = instance.postTaskQueue.poll();
@@ -421,6 +457,17 @@ public class ThreadManager {
         return task;
     }
 
+    /**
+     * Start the get POI from elasticSearch task, initialize a task instance
+     * and add the appropriate runnable to the thread pool
+     * 
+     * @param location
+     *            the GeoLocation to find the POI from
+     * @param dialog
+     * 			  a ProgressDialog in a fragment to display task progress
+     * @param marker
+     * 			  an OSMDroid marker to display POI information 
+     */
     public static GetPOITask startGetPOI(GeoLocation location, ProgressDialog dialog, Marker marker) {
         GetPOITask task = instance.getPOITaskQueue.poll();
         if (task == null) {
@@ -432,6 +479,13 @@ public class ThreadManager {
         return task;
     }
 
+    /**
+     * Handles the possible states of the get POI task. Passes the state
+     * to the Handler that runs on the UI thread.
+     * 
+     * @param task  the get POI task
+     * @param state  the state
+     */
     public void handleGetPOIState(GetPOITask task, int state) {
         switch (state) {
         case GET_POI_COMPLETE:
@@ -450,11 +504,11 @@ public class ThreadManager {
     }
 
     /**
-     * Handle the possible states of the getComment task. As of now, just wait
-     * until task is complete.
+     * Handle the possible states of the get comment task. When complete,
+     * passes the state to the Handler that runs on the UI thread.
      * 
-     * @param task
-     * @param state
+     * @param task  the get comments task
+     * @param state  the state
      */
     public void handleGetCommentsState(GetCommentsTask task, int state) {
         switch (state) {
@@ -479,6 +533,13 @@ public class ThreadManager {
         }
     }
     
+    /**
+     * Handle the possible states of the get thread comments task.
+     * Passes the state to the Handler that runs on the UI thread.
+     *
+     * @param task  the get thread comments task
+     * @param state  the state
+     */
     public void handleGetThreadCommentsState(GetThreadCommentsTask task, int state) {
         switch(state) {
         case GET_THREADS_RUNNING:
@@ -497,11 +558,11 @@ public class ThreadManager {
     }
 
     /**
-     * Handle the possible states of the getImage task. As of now, just wait
-     * until task is complete.
+     * Handle the possible states of the getImage task.
+     * Passes the state to the Handler that runs on the UI thread.
      * 
-     * @param task
-     * @param state
+     * @param task  the get image task
+     * @param state  the state
      */
     public void handleGetImageState(GetImageTask task, int state) {
         switch (state) {
@@ -521,13 +582,15 @@ public class ThreadManager {
     }
 
     /**
-     * Handle the possible states of the Post task. Once post is complete, if
-     * there is an image, start the Image runnable, which posts the attached
+     * Handle the possible states of the Post task. Once post is complete,
+     * obtains the point of interest of the post. If the post contains
+     * an image, start the Image runnable, which posts the attached
      * image to elasticSearch. If not, or after the image is complete, start the
-     * update runnable, which updates the commentList on elasticSearch
+     * update runnable, which updates the commentList on elasticSearch.
+     * Passes needed task states to the handler running on the UI thread to do UI updates.
      * 
-     * @param task
-     * @param state
+     * @param task  the post task
+     * @param state  the state
      */
     public void handlePostState(PostTask task, int state) {
         switch (state) {
@@ -573,26 +636,46 @@ public class ThreadManager {
         }
     }
 
+    /**
+     * Recycles a get comments task for reuse.
+     * @param task  the task
+     */
     void recycleCommentsTask(GetCommentsTask task) {
         task.recycle();
         instance.getCommentsTaskQueue.offer(task);
     }
 
+    /**
+     * Recycles a get image task for reuse.
+     * @param task  the task
+     */ 
     void recycleGetImageTask(GetImageTask task) {
         task.recycle();
         instance.getImageTaskQueue.offer(task);
     }
 
+    /**
+     * Recycles a post task for reuse.
+     * @param task  the task
+     */
     void recyclePostTask(PostTask task) {
         task.recycle();
         instance.postTaskQueue.offer(task);
     }
 
+    /**
+     * Recycles a get POI task for reuse.
+     * @param task  the task
+     */
     void recycleGetPOITask(GetPOITask task) {
         task.recycle();
         instance.getPOITaskQueue.offer(task);
     }
     
+    /**
+     * Recycles a get thread comments task for reuse.
+     * @param task  the task
+     */
     void recycleGetThreadCommentsTask(GetThreadCommentsTask task) {
         task.recycle();
         instance.getThreadCommentsTaskQueue.offer(task);
