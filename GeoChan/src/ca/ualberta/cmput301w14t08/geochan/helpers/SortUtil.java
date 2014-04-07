@@ -91,10 +91,18 @@ public class SortUtil {
             Collections.sort(threads, sortThreadsByDateNewest());
             break;
         case (SORT_USER_SCORE_HIGHEST):
+        	try{
             Collections.sort(threads, sortThreadsByUserScoreHighest());
+        	} catch (NullPointerException e) {
+        		Collections.sort(threads, sortThreadsByDateNewest());
+        	}
             break;
         case (SORT_USER_SCORE_LOWEST):
+        	try{
             Collections.sort(threads, sortThreadsByUserScoreLowest());
+        	} catch (NullPointerException e){
+        		Collections.sort(threads, sortThreadsByDateOldest());
+        	}
             break;
         case (SORT_LOCATION):
             Collections.sort(threads, sortThreadsByLocation());
