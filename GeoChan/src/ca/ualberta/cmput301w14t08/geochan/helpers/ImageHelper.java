@@ -27,6 +27,11 @@ import java.util.Date;
 import java.util.Locale;
 import android.os.Environment;
 
+/**
+ * Creates a file to store an image and returns it.
+ * 
+ * @author Tom
+ */
 public class ImageHelper {
 
     public static final int REQUEST_GALLERY = 101;
