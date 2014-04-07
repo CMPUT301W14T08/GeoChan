@@ -15,7 +15,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * COMMENT HERE
+ * This is a custom adapter for the favorites fragment, used to display the
+ *  favorite threads and comment list
  * 
  * @author Artem Chikin
  * 
@@ -48,6 +49,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     /**
      * Return a location log item view and set fields.
      * 
+     * @return convertView View of a listview item
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ThreadComment comment = (ThreadComment) getItem(position);
@@ -80,7 +82,12 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
         listenForStarButton(convertView, comment);
         return convertView;
     }
-
+    
+    /**
+     * Listens for the star button on a favorite comment and removes
+     *  it from the list when pressed
+     * 
+     */
     public void listenForStarButton(View convertView, final ThreadComment comment) {
     	ImageButton starButton = (ImageButton) convertView
     			.findViewById(R.id.comment_star_button);
