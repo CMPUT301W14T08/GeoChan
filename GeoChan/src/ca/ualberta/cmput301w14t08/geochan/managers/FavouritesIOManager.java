@@ -44,6 +44,7 @@ public class FavouritesIOManager {
         return instance;
     }
 
+
     // Serialize ArrayList of threads to JSON
     public void serializeThreads() {
         try {

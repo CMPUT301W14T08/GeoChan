@@ -188,34 +188,21 @@ public class ThreadManager {
 
                 case GET_COMMENTS_COMPLETE:
                     GetCommentsTask task = (GetCommentsTask) inputMessage.obj;
-                    if (task.getDialog() != null) {
-                    	task.getDialog().dismiss();
-                	}
                     task.getFragment().finishReload();
                     recycleCommentsTask(task);
                     break;
                     
                 case GET_COMMENTS_FAILED:
                     GetCommentsTask taskFail = (GetCommentsTask) inputMessage.obj;
-                    if (taskFail.getDialog() != null) {
-                    	taskFail.getDialog().dismiss();
-                	}
                     taskFail.getFragment().finishReload();
                     recycleCommentsTask(taskFail);
                     break;    
 
                 case GET_COMMENT_LIST_RUNNING:
-                	GetCommentsTask getCommentsRunning = (GetCommentsTask) inputMessage.obj;
-                	if (getCommentsRunning.getDialog() != null) {
-                		getCommentsRunning.getDialog().show();
-                	}
                 	break;
                     
                 case GET_COMMENT_LIST_FAILED:
                     GetCommentsTask taskListFail = (GetCommentsTask) inputMessage.obj;
-                    if (taskListFail.getDialog() != null) {
-                    	taskListFail.getDialog().dismiss();
-                	}
                     taskListFail.getFragment().finishReload();
                     recycleCommentsTask(taskListFail);
                     break;
@@ -312,7 +299,7 @@ public class ThreadManager {
         return task;
     }
     
-    public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment, ProgressDialog dialog) {
+    public static GetThreadCommentsTask startGetThreadComments(ThreadListFragment fragment) {
         if (instance == null) {
             generateInstance();
         }
@@ -320,7 +307,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetThreadCommentsTask();
         }
-        task.initGetThreadCommentsTask(instance, fragment, dialog);
+        task.initGetThreadCommentsTask(instance, fragment);
         instance.getThreadCommentsPool.execute(task.getGetThreadCommentsRunnable());
         return task;
     }
@@ -336,7 +323,7 @@ public class ThreadManager {
      *            id of the commentList used on the server
      */
     public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
-            int threadIndex, ProgressDialog dialog) {
+            int threadIndex) {
         if (instance == null) {
             generateInstance();
         }
@@ -344,7 +331,7 @@ public class ThreadManager {
         if (task == null) {
             task = new GetCommentsTask();
         }
-        task.initCommentsTask(instance, fragment, threadIndex, dialog);
+        task.initCommentsTask(instance, fragment, threadIndex);
         task.setCommentListCache(instance.commentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
         instance.getCommentListPool.execute(task.getGetCommentListRunnable());
         return task;

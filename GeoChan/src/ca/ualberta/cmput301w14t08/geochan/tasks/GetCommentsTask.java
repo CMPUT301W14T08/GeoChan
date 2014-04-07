@@ -1,6 +1,5 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
-import android.app.ProgressDialog;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentListRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetCommentsRunnableInterface;
@@ -14,7 +13,6 @@ public class GetCommentsTask implements GetCommentListRunnableInterface, GetComm
     private int threadIndex;
     private CommentList cache;
     private ThreadViewFragment fragment;
-    private ProgressDialog dialog;
     private Runnable getCommentListRunnable;
     private Runnable getCommentsRunnable;
     private ThreadManager manager;
@@ -25,11 +23,10 @@ public class GetCommentsTask implements GetCommentListRunnableInterface, GetComm
         this.getCommentsRunnable = new GetCommentsRunnable(this);
     }
 
-    public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex, ProgressDialog dialog) {
+    public void initCommentsTask(ThreadManager manager, ThreadViewFragment fragment, int threadIndex) {
         this.manager = manager;
         this.fragment = fragment;
         this.threadIndex = threadIndex;
-        this.dialog = dialog;
     }
 
     public void handleState(int state) {
@@ -76,9 +73,6 @@ public class GetCommentsTask implements GetCommentListRunnableInterface, GetComm
         return fragment;
     }
 
-    public ProgressDialog getDialog() {
-        return dialog;
-    }
 
     public void setCurrentThread(Thread thread) {
         synchronized (manager) {
@@ -105,7 +99,6 @@ public class GetCommentsTask implements GetCommentListRunnableInterface, GetComm
         this.cache = null;
         this.manager = null;
         this.fragment = null;
-        this.dialog = null;
     }
 
     @Override

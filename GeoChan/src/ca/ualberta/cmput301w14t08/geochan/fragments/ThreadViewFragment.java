@@ -24,7 +24,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -94,10 +93,7 @@ public class ThreadViewFragment extends Fragment {
                 thread.getBodyComment().setChildren(comments);
             }
         } else if (isFavCom != -1) {
-            // Load comments with dialog
-            ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("Loading comments.");
-            ThreadManager.startGetComments(this, threadIndex, dialog);
+            ThreadManager.startGetComments(this, threadIndex);
         }
     }
 
@@ -459,7 +455,7 @@ public class ThreadViewFragment extends Fragment {
     }
     
     public void reload() {
-        ThreadManager.startGetComments(this, threadIndex, null);
+        ThreadManager.startGetComments(this, threadIndex);
     }
     
     public void finishReload() {
