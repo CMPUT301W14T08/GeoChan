@@ -37,7 +37,7 @@ import com.google.gson.JsonSerializer;
 
 /**
  * Handles the serialization and deserialization of Bitmap objects
- * into base64 JSON strings.
+ * to and from base64 JSON strings.
  * 
  * @author Artem Chikin
  * @author Artem Herasymchuk

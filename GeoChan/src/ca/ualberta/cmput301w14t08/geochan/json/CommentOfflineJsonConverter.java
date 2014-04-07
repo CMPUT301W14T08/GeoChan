@@ -40,8 +40,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Handles the offline serialization and deserialization of Comment objects into JSON
- * format.
+ * Handles the offline serialization and deserialization of Comment objects 
+ * to and from JSON format.
  * 
  * @author Artem Chikin
  * @author Artem Herasymchuk
