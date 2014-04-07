@@ -214,9 +214,12 @@ public class ThreadViewFragment extends Fragment {
      * @param comment
      */
     public void favouriteAComment(Comment comment) {
-        Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT)
+        		.show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
-        log.addFavComment(new ThreadComment(comment,""));
+        ThreadComment thread = new ThreadComment(comment,"");
+        thread.setId(Long.parseLong(comment.getId()));
+        log.addFavComment(thread);
     }
 
     /**

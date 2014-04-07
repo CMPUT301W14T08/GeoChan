@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polyline;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -59,8 +58,7 @@ public class MapViewFragment extends Fragment {
 	private ArrayList<Marker> markers;
 
 	/**
-	 * Gets the view when inflated, then calls setZoomLevel to display the
-	 * correct map area.
+	 * Gets the view when inflated
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -161,8 +159,10 @@ public class MapViewFragment extends Fragment {
 			originalPostMarker.setIcon(getResources().getDrawable(
 					R.drawable.red_map_pin));
 			startAndFinishMarkers.add(originalPostMarker);
-			markers.add(originalPostMarker);
+
 			setMarkerListeners(originalPostMarker);
+
+			markers.add(originalPostMarker);
 
 			handleChildComments(topComment);
 
@@ -201,6 +201,12 @@ public class MapViewFragment extends Fragment {
 		mapController.animateTo(geoLocation.makeGeoPoint());
 	}
 
+	/**
+	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
+	 * in This is used to cl
+	 * 
+	 * @param locationMarker
+	 */
 	private void setMarkerListeners(Marker locationMarker) {
 
 		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
@@ -214,44 +220,12 @@ public class MapViewFragment extends Fragment {
 				}
 				return false;
 			}
-
 		});
-
-		if (locationMarker.isDraggable()) {
-			locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
-				/**
-				 * Called as the marker is being dragged, no implementation
-				 */
-				@Override
-				public void onMarkerDrag(Marker marker) {
-				}
-
-				/**
-				 * Called when the onDragListen action is complete Updates the
-				 * location and POI when the drag is finished
-				 */
-				@Override
-				public void onMarkerDragEnd(Marker marker) {
-					GeoLocation geoLocation = new GeoLocation(marker
-							.getPosition().getLatitude(), marker.getPosition()
-							.getLongitude());
-					ProgressDialog dialog = new ProgressDialog(getActivity());
-					dialog.setMessage("Retrieving Location");
-					ThreadManager.startGetPOI(geoLocation, dialog, marker);
-				}
-
-				/**
-				 * Called when the drag operation begins. No implementation at
-				 * this time
-				 */
-				@Override
-				public void onMarkerDragStart(Marker marker) {
-					hideInfoWindows();
-				}
-			});
-		}
 	}
 
+	/**
+	 * Hides infoWindows for every marker on the map
+	 */
 	private void hideInfoWindows() {
 		for (Marker marker : markers) {
 			marker.hideInfoWindow();
@@ -294,8 +268,8 @@ public class MapViewFragment extends Fragment {
 							R.drawable.blue_map_pin));
 					MarkerInfoWindow infoWindow = new MarkerInfoWindow(
 							R.layout.bonuspack_bubble, openMapView);
-					infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
-							openMapView);
+					infoWindow = new MarkerInfoWindow(
+							R.layout.bonuspack_bubble, openMapView);
 					replyMarker.setInfoWindow(infoWindow);
 					setMarkerListeners(replyMarker);
 					replyPostMarkers.add(replyMarker);
@@ -361,6 +335,8 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
+	 * Creates a new marker based on a geoLocation. Sets the title to the
+	 * postType string passed in
 	 * 
 	 * @param geoLocation
 	 * @param postType
@@ -430,7 +406,7 @@ public class MapViewFragment extends Fragment {
 		/**
 		 * Calculating the directions from the current to the location of the
 		 * topComment. Builds a road overlay and adds it to the openMapView
-		 * objects overlays
+		 * objects overlays.
 		 */
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -458,6 +434,7 @@ public class MapViewFragment extends Fragment {
 						R.layout.bonuspack_bubble, openMapView);
 				infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
 						openMapView);
+
 				nodeMarker.setInfoWindow(infoWindow);
 				nodeMarker.setPosition(node.mLocation);
 				nodeMarker.setIcon(nodeIcon);
@@ -466,7 +443,9 @@ public class MapViewFragment extends Fragment {
 				nodeMarker.setSubDescription(Road.getLengthDurationText(
 						node.mLength, node.mDuration));
 				nodeMarker.setImage(icon);
+
 				directionsMarkers.add(nodeMarker);
+
 				setMarkerListeners(nodeMarker);
 				markers.add(nodeMarker);
 			}
@@ -475,12 +454,16 @@ public class MapViewFragment extends Fragment {
 		}
 
 		/**
-		 * Task is now finished, dismiss the ProgressDialog and refresh the map
+		 * Task is now finished. Creates the current location marker and
+		 * sets it on the map. Clears the map and re-adds all the 
+		 * overlays to the map, then refreshes the map
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			directionsLoadingDialog.dismiss();
+
+			hideInfoWindows();
 
 			GeoLocation currentLocation = new GeoLocation(
 					locationListenerService);
@@ -499,15 +482,15 @@ public class MapViewFragment extends Fragment {
 					Marker.ANCHOR_BOTTOM);
 			currentLocationMarker.setIcon(getResources().getDrawable(
 					R.drawable.green_map_pin));
-			
+
 			MarkerInfoWindow infoWindow = new MarkerInfoWindow(
 					R.layout.bonuspack_bubble, openMapView);
 			infoWindow = new MarkerInfoWindow(R.layout.bonuspack_bubble,
 					openMapView);
 			currentLocationMarker.setInfoWindow(infoWindow);
-			
+
 			setMarkerListeners(currentLocationMarker);
-			
+
 			startAndFinishMarkers.add(currentLocationMarker);
 			markers.add(currentLocationMarker);
 
