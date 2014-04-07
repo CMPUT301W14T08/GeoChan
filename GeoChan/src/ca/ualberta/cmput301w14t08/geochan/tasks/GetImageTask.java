@@ -6,10 +6,11 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetImageRunnableInterface;
+import ca.ualberta.cmput301w14t08.geochan.interfaces.TaskInterface;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.runnables.GetImageRunnable;
 
-public class GetImageTask implements GetImageRunnableInterface {
+public class GetImageTask implements TaskInterface, GetImageRunnableInterface {
 
     /*
      * Id of the image as stored on elasticSearch
@@ -45,16 +46,12 @@ public class GetImageTask implements GetImageRunnableInterface {
         // Instantiates the weak reference to the incoming view
         setmImageWeakRef(new WeakReference<ImageView>(imageView));
     }
-
-    public void handleState(int state) {
-        manager.handleGetImageState(this, state);
-    }
-
-    @Override
-    public void setGetImageThread(Thread thread) {
-        setCurrentThread(thread);
-    }
-
+    
+    /**
+     * Handles the various possible states of the
+     * Runnable that obtains the image.
+     * @param state the state
+     */
     @Override
     public void handleGetImageState(int state) {
         int outState;
@@ -72,6 +69,66 @@ public class GetImageTask implements GetImageRunnableInterface {
         handleState(outState);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public void handleState(int state) {
+        manager.handleGetImageState(this, state);
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public void setCurrentThread(Thread thread) {
+        synchronized (manager) {
+            this.thread = thread;
+        }
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public Thread getCurrentThread() {
+        synchronized (manager) {
+            return thread;
+        }
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    public void recycle() {
+        this.id = null;
+        this.manager = null;
+    }
+    
+    /* Getters/setters for the interfaces this task implements below */
+    
+    @Override
+    public void setImageCache(Bitmap cache) {
+        this.cache = cache;
+    }
+
+    @Override
+    public Bitmap getImageCache() {
+        return cache;
+    }
+    
+    @Override
+    public void setGetImageThread(Thread thread) {
+        setCurrentThread(thread);
+    }
+    
+    /* Basic getters/setters below */
+    
+    public Runnable getGetImageRunnable() {
+        return getImageRunnable;
+    }
+    
     public String getId() {
         return id;
     }
@@ -86,36 +143,5 @@ public class GetImageTask implements GetImageRunnableInterface {
 
     public void setmImageWeakRef(WeakReference<ImageView> mImageWeakRef) {
         this.mImageWeakRef = mImageWeakRef;
-    }
-
-    public void setCurrentThread(Thread thread) {
-        synchronized (manager) {
-            this.thread = thread;
-        }
-    }
-
-    public Thread getCurrentThread() {
-        synchronized (manager) {
-            return thread;
-        }
-    }
-
-    public Runnable getGetImageRunnable() {
-        return getImageRunnable;
-    }
-
-    @Override
-    public void setImageCache(Bitmap cache) {
-        this.cache = cache;
-    }
-
-    @Override
-    public Bitmap getImageCache() {
-        return cache;
-    }
-
-    public void recycle() {
-        this.id = null;
-        this.manager = null;
     }
 }
