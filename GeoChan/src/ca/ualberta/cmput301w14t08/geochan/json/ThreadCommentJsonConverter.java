@@ -44,6 +44,7 @@ import com.google.gson.JsonSerializer;
 /**
  * Handles the serialization of a ThreadComment object into JSON format.
  * 
+ * @author Artem Herasymchuk
  */
 public class ThreadCommentJsonConverter implements JsonSerializer<ThreadComment>,
         JsonDeserializer<ThreadComment> {

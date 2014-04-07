@@ -32,9 +32,9 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
- * This class is an adapter to display a list of locations the user specified in
- * the past. Each list item consists of a title of the associated thread and
- * geolocation represented by longitude and lattitude.
+ * Adapter to display a list of locations the user posted from in
+ * the past. Each list item consists of a point of interest that
+ * was obtain for the location on post.
  * 
  * @author Artem Chikin
  */

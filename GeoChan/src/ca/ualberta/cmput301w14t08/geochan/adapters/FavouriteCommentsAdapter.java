@@ -1,3 +1,23 @@
+/*
+ * Copyright 2014 Artem Chikin
+ * Copyright 2014 Artem Herasymchuk
+ * Copyright 2014 Tom Krywitsky
+ * Copyright 2014 Henry Pabst
+ * Copyright 2014 Bradley Simons
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ca.ualberta.cmput301w14t08.geochan.adapters;
 
 import java.util.ArrayList;
@@ -15,8 +35,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * This is a custom adapter for the favorites fragment, used to display the
- *  favorite threads and comment list
+ *  Adapter for the favorites fragment, used to display user's 
+ *  favourited comments.
  * 
  * @author Artem Chikin
  * 
@@ -85,7 +105,7 @@ public class FavouriteCommentsAdapter extends BaseAdapter {
     
     /**
      * Listens for the star button on a favorite comment and removes
-     *  it from the list when pressed
+     * it from the list when pressed.
      * 
      */
     public void listenForStarButton(View convertView, final ThreadComment comment) {

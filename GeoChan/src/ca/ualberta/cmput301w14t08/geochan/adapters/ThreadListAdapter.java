@@ -38,8 +38,8 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 
 /**
- * This is a custom adapter, used to display ThreadComment objects in a list. It
- * is used inside of our ThreadListFragment.
+ * Adapter used to display ThreadComment objects in a list. It
+ * is used inside of our ThreadListFragment, FavouriteThreadsFragment.
  * 
  * @author Artem Chikin
  */
@@ -109,7 +109,7 @@ public class ThreadListAdapter extends BaseAdapter {
             user.setTextColor(Color.WHITE);
             user.setText(" " + user.getText() + "  ");
         } else {
-            // Hacky, but required for now, unfortunately due to android
+            // Rquired due to android
             // recycling list views.
             user.setBackgroundResource(0);
             user.setTextColor(Color.RED);
@@ -144,6 +144,7 @@ public class ThreadListAdapter extends BaseAdapter {
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(thread.getBodyComment().getImageThumb());
         } else {
+        	// Disable thumbnail, this is required due to android recycling views.
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_list_thumbnail);
             thumbnail.setVisibility(View.GONE);

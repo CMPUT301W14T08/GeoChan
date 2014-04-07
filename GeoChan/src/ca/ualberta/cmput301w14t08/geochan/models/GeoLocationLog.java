@@ -26,8 +26,10 @@ import android.content.Context;
 import ca.ualberta.cmput301w14t08.geochan.managers.GeoLocationLogIOManager;
 
 /**
- * This model class handles all operations involved in logging used locations.
+ * Handles all operations involved in logging used locations.
  * Follows singleton design pattern.
+ * @author Artem Chikin
+ * 
  */
 public class GeoLocationLog {
 
@@ -37,7 +39,8 @@ public class GeoLocationLog {
 
     /**
      * Protected constructor. Is called only if singleton has not been
-     * constructed.
+     * constructed. Sets up context and deserializes the log.
+     * @param context  the context
      */
     protected GeoLocationLog(Context context) {
         this.context = context;
@@ -46,10 +49,11 @@ public class GeoLocationLog {
     }
 
     /**
-     * Singleton construction method. If instance already exists, return it Else
-     * construct a new one
+     * Singleton construction method. If instance already exists, return it.
+     * Else, construct a new one
      * 
-     * @return instance
+     * @param context  the context
+     * @return the instance
      */
     public static GeoLocationLog generateInstance(Context context) {
         if (instance == null) {
@@ -57,7 +61,11 @@ public class GeoLocationLog {
         }
         return instance;
     }
-
+    
+    /**
+     * Returns the Singleton instance of this object.
+     * @return  the instance
+     */
     public static GeoLocationLog getInstance() {
     	return instance;
     }
@@ -80,9 +88,9 @@ public class GeoLocationLog {
     }
 
     /**
-     * Return the log entries array, if null create one
+     * Return the log entries array, creates one if it does not exist.
      * 
-     * @return entries
+     * @return the Log entries array
      */
     public ArrayList<GeoLocation> getLogEntries() {
         GeoLocationLogIOManager manager = GeoLocationLogIOManager.getInstance(context);
@@ -91,9 +99,9 @@ public class GeoLocationLog {
     }
 
     /**
-     * Return true if log is empty, else false. If null create one
+     * Checks whether the log contains any entries.
      * 
-     * @return entries
+     * @return Return true if log is empty, else false. If null create one
      */
     public boolean isEmpty() {
         return entries.size() == 0;
