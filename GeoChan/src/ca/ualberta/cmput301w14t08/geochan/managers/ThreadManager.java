@@ -282,12 +282,6 @@ public class ThreadManager {
 					if (postPoiTaskComplete.getDialog() != null) {
 						postPoiTaskComplete.getDialog().dismiss();
 					}
-					GeoLocation location = postPoiTaskComplete.getLocation();
-					location.setLocationDescription(postPoiTaskComplete.getPOICache());
-					postPoiTaskComplete.getComment().setLocation(location);
-	                // log the thread and the geolocation
-	                GeoLocationLog geoLocationLog = GeoLocationLog.getInstance();
-	                geoLocationLog.addLogEntry(location);
 					break;
 
 				case POST_GET_POI_FAILED:
@@ -295,9 +289,6 @@ public class ThreadManager {
 					if (postPoiTaskFailed.getDialog() != null) {
 						postPoiTaskFailed.getDialog().dismiss();
 					}
-					GeoLocation failedLocation = postPoiTaskFailed.getLocation();
-					failedLocation.setLocationDescription(postPoiTaskFailed.getPOICache());
-					postPoiTaskFailed.getComment().setLocation(failedLocation);
 					break;
 
                 default:
@@ -391,6 +382,7 @@ public class ThreadManager {
             task = new PostTask();
         }
         task.initPostTask(instance, comment, title, location);
+        task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
         instance.getPOIPool.execute(task.getGetPOIRunnable());
         return task;
     }
