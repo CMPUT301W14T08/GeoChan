@@ -29,7 +29,7 @@ import java.util.Collection;
 /**
  * Represents a hit within a response served by ElasticSearch.
  * 
- * @author AUTHOR HERE
+ * @author Artem Herasymchuk
  * 
  */
 public class ElasticSearchHits<T> {

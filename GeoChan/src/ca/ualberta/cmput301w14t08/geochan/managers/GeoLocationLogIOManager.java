@@ -45,62 +45,63 @@ import com.google.gson.reflect.TypeToken;
  * @author Artem Chikin
  */
 public class GeoLocationLogIOManager {
-    private static GeoLocationLogIOManager instance;
-    private Context context;
-    private Gson gson;
-    private static final String FILENAME = "geolog.sav";
+	private static GeoLocationLogIOManager instance;
+	private Context context;
+	private Gson gson;
+	private static final String FILENAME = "geolog.sav";
 
-    private GeoLocationLogIOManager(Context context) {
-        this.context = context;
-        this.gson = GsonHelper.getOnlineGson();
-    }
+	private GeoLocationLogIOManager(Context context) {
+		this.context = context;
+		this.gson = GsonHelper.getOnlineGson();
+	}
 
-    public static GeoLocationLogIOManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new GeoLocationLogIOManager(context);
-        }
-        return instance;
-    }
+	public static GeoLocationLogIOManager getInstance(Context context) {
+		if (instance == null) {
+			instance = new GeoLocationLogIOManager(context);
+		}
+		return instance;
+	}
 
-    // Serialize ArrayList of log entries to JSON
-    public void serializeLog(ArrayList<GeoLocation> list) {
-        try {
-            String json = gson.toJson(list);
-            FileOutputStream f = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
-            w.write(json);
-            w.close();
-            f.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	// Serialize ArrayList of log entries to JSON
+	public void serializeLog(ArrayList<GeoLocation> list) {
+		try {
+			String json = gson.toJson(list);
+			FileOutputStream f = context.openFileOutput(FILENAME,
+					Context.MODE_PRIVATE);
+			BufferedWriter w = new BufferedWriter(new OutputStreamWriter(f));
+			w.write(json);
+			w.close();
+			f.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    // Deserialize ArrayList of log entries from JSON
-    public ArrayList<GeoLocation> deserializeLog() {
-        ArrayList<GeoLocation> list = new ArrayList<GeoLocation>();
-        try {
-            FileInputStream f = context.openFileInput(FILENAME);
-            BufferedReader r = new BufferedReader(new InputStreamReader(f));
-            String json = "";
-            String temp = "";
-            temp = r.readLine();
-            while (temp != null) {
-                json = json + temp;
-                temp = r.readLine();
-            }
-            r.close();
-            f.close();
-            Type type = new TypeToken<ArrayList<GeoLocation>>() {
-            }.getType();
-            list = gson.fromJson(json, type);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+	// Deserialize ArrayList of log entries from JSON
+	public ArrayList<GeoLocation> deserializeLog() {
+		ArrayList<GeoLocation> list = new ArrayList<GeoLocation>();
+		try {
+			FileInputStream f = context.openFileInput(FILENAME);
+			BufferedReader r = new BufferedReader(new InputStreamReader(f));
+			String json = "";
+			String temp = "";
+			temp = r.readLine();
+			while (temp != null) {
+				json = json + temp;
+				temp = r.readLine();
+			}
+			r.close();
+			f.close();
+			Type type = new TypeToken<ArrayList<GeoLocation>>() {
+			}.getType();
+			list = gson.fromJson(json, type);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

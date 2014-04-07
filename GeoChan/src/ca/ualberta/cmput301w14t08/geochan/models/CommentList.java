@@ -24,6 +24,16 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Container class that stores a comment object, its id, and 
+ * a list of children commentLists that match the Comment's child replies.
+ * Used for posting lists of comments to ElasticSearch
+ * and rebuilding a comment tree from ElasticSearch.
+ * 
+ * @author Artem Chikin
+ * @author Artem Herasymchuk
+ *
+ */
 public class CommentList {
     @Expose
     private ArrayList<CommentList> comments;

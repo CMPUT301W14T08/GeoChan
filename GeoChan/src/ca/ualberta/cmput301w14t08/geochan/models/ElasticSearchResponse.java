@@ -27,7 +27,7 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 /**
  * Represents a response served by ElasticSearch.
  * 
- * @author AUTHOR HERE
+ * @author Artem Herasymchuk
  * 
  */
 public class ElasticSearchResponse<T> {
