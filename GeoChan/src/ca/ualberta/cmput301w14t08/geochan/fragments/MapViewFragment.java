@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polyline;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -161,9 +160,11 @@ public class MapViewFragment extends Fragment {
 			originalPostMarker.setIcon(getResources().getDrawable(
 					R.drawable.red_map_pin));
 			startAndFinishMarkers.add(originalPostMarker);
-			markers.add(originalPostMarker);
-			setMarkerListeners(originalPostMarker);
 
+			setMarkerListeners(originalPostMarker);
+			
+			markers.add(originalPostMarker);
+			
 			handleChildComments(topComment);
 
 			openMapView.getOverlays().add(replyPostMarkers);
@@ -201,6 +202,12 @@ public class MapViewFragment extends Fragment {
 		mapController.animateTo(geoLocation.makeGeoPoint());
 	}
 
+	/**
+	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed in
+	 * This is used to cl
+	 * 
+	 * @param locationMarker
+	 */
 	private void setMarkerListeners(Marker locationMarker) {
 
 		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
@@ -214,42 +221,7 @@ public class MapViewFragment extends Fragment {
 				}
 				return false;
 			}
-
 		});
-
-		if (locationMarker.isDraggable()) {
-			locationMarker.setOnMarkerDragListener(new OnMarkerDragListener() {
-				/**
-				 * Called as the marker is being dragged, no implementation
-				 */
-				@Override
-				public void onMarkerDrag(Marker marker) {
-				}
-
-				/**
-				 * Called when the onDragListen action is complete Updates the
-				 * location and POI when the drag is finished
-				 */
-				@Override
-				public void onMarkerDragEnd(Marker marker) {
-					GeoLocation geoLocation = new GeoLocation(marker
-							.getPosition().getLatitude(), marker.getPosition()
-							.getLongitude());
-					ProgressDialog dialog = new ProgressDialog(getActivity());
-					dialog.setMessage("Retrieving Location");
-					ThreadManager.startGetPOI(geoLocation, dialog, marker);
-				}
-
-				/**
-				 * Called when the drag operation begins. No implementation at
-				 * this time
-				 */
-				@Override
-				public void onMarkerDragStart(Marker marker) {
-					hideInfoWindows();
-				}
-			});
-		}
 	}
 
 	private void hideInfoWindows() {
