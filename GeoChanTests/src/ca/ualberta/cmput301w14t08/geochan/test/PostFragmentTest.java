@@ -68,6 +68,9 @@ public class PostFragmentTest extends ActivityInstrumentationTestCase2<MainActiv
         //fragment = (PostCommentFragment) waitForFragment("comFrag", 5000);
     }
     
+   /**
+    * Test that the activity and fragment were created
+    */
     public void testPreconditions() {
         assertNotNull("activity is null", activity);
         assertNotNull("fragment is null", fragment);
