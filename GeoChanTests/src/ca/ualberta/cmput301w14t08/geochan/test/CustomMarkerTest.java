@@ -113,4 +113,32 @@ public class CustomMarkerTest extends ActivityInstrumentationTestCase2<MainActiv
         };
         handler.postDelayed(runnable, 2000);
     }
+    
+    /**
+     * Tests the getPOIString method. This can be used instead of the setUpInfoWindow 
+     * if only the POIString is required.
+     */
+    public void testGetPOIString() {
+        MapView map = new MapView(activity, null);
+        GeoLocation geoLocation = new GeoLocation(1.0, 1.0);
+        
+        final CustomMarker customMarker1 = new CustomMarker(geoLocation, map);
+        customMarker1.getPOIString(activity);
+        
+        final CustomMarker customMarker2 = new CustomMarker(geoLocation, map);
+        ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setMessage("Retrieving Location");
+        ThreadManager.startGetPOI(geoLocation, dialog, customMarker2);
+        
+        // check the POI
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                assertEquals("POI should be the same", customMarker1.getSubDescription(),
+                        customMarker2.getSubDescription());
+                Log.e("poi", customMarker1.getSubDescription());
+            }
+        };
+        handler.postDelayed(runnable, 2000);
+    }
 }

@@ -36,7 +36,7 @@ public class CustomMarker extends Marker {
 		this.mapView = mapView;
 		this.geoLocation = geoLocation;
 	}
-	
+
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
@@ -99,7 +99,7 @@ public class CustomMarker extends Marker {
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(geoLocation, dialog, this);
 	}
-	
+
 	/**
 	 * Constructs a geoPoint from the geoLocation and returns it
 	 * 
@@ -110,7 +110,7 @@ public class CustomMarker extends Marker {
 	}
 
 	/* Getters and setters */
-	 
+
 	public GeoLocation getGeoLocation() {
 		return geoLocation;
 	}
