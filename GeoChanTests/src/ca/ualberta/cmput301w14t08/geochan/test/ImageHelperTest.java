@@ -51,6 +51,9 @@ public class ImageHelperTest extends ActivityInstrumentationTestCase2<MainActivi
         }
     }
     
+    /**
+     * Tests that filenames are saved properly.
+     */
     public void testUniqueFileNames() {
         try {
             File file = ImageHelper.createImageFile();
