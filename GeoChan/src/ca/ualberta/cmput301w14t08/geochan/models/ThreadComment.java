@@ -47,7 +47,6 @@ public class ThreadComment implements Parcelable {
         this.title = title;
         this.id = HashHelper.getCommentIdHash();
         this.bodyComment = bodyComment;
-
     }
 
     /* This constructor is only used for testing. */

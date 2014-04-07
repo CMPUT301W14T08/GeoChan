@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/thread_view_comment_thumbnail"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/lorem_ipsum" />
@@ -34,33 +33,27 @@
         android:text="@string/placeholder_date"
         android:textColor="#00f" />
 
-    <RelativeLayout
-        android:id="@+id/relative_inflater"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/thread_view_comment_location"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_view_comment_commentDate" >
-
-        <TextView
-            android:id="@+id/thread_view_comment_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:paddingLeft="5dp"
-            android:text="@string/placeholder_location"
-            android:textColor="#2E8B57" />
-    </RelativeLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/thread_view_comment_commentDate"
+        android:paddingLeft="5dp"
+        android:text="@string/placeholder_location"
+        android:textColor="#2E8B57" />
 
     <ImageButton
-        android:id="@+id/thread_view_comment_thumbnail"
-        android:layout_width="60dp"
+        android:id="@+id/comment_star_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thread_view_comment_commentDate"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/thread_view_comment_commentBody"
+        android:layout_alignBottom="@+id/thread_view_comment_location"
+        android:layout_below="@+id/thread_view_comment_commentBy"
         android:background="@null"
-        android:contentDescription="@string/image_desc"
-        android:src="@null"
-        android:visibility="gone" />
+        android:contentDescription="@string/comment_star_button"
+        android:focusable="false"
+        android:paddingRight="5dp"
+        android:src="@drawable/ic_rating_marked" />
 
 </RelativeLayout>

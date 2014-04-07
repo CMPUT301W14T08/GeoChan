@@ -60,6 +60,10 @@ public class FavouritesIOManager {
         }
     }
     
+    /** 
+     * Serialize arrayList of threads to JSON. These threadComments are 
+     * favourited comments converted to ThreadComment to save their replies as well.
+     */
     public void serializeFavComments() {
     	try {
             String json = gson.toJson(FavouritesLog.getInstance(context).getFavComments());
@@ -76,7 +80,7 @@ public class FavouritesIOManager {
     }
     
     public ArrayList<ThreadComment> deSerializeFavComments() {
-        ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
+    	ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {
             FileInputStream f = context.openFileInput(FILENAME1);
             BufferedReader r = new BufferedReader(new InputStreamReader(f));
@@ -100,7 +104,10 @@ public class FavouritesIOManager {
         return list;
     }
 
-    // Deserialize ArrayList of threads from JSON
+    /**
+     * Deserialize ArrayList of threadComments from JSON
+     * @return list of threadComments
+     */
     public ArrayList<ThreadComment> deSerializeThreads() {
         ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
         try {

@@ -73,6 +73,7 @@ public class ThreadViewFragment extends Fragment {
     private LocationListenerService locationListener = null;
     private PreferencesManager prefManager = null;
     private int container;
+    private int isFavCom;
     private static int locSortFlag = 0;
 
     @Override
@@ -80,6 +81,7 @@ public class ThreadViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         threadIndex = (int) bundle.getLong("id");
+        int isFavCom = bundle.getInt("favCom");
         thread = bundle.getParcelable("thread");
         // Assign custom adapter to the thread listView.
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
@@ -91,7 +93,7 @@ public class ThreadViewFragment extends Fragment {
             if (comments != null) {
                 thread.getBodyComment().setChildren(comments);
             }
-        } else {
+        } else if (isFavCom != -1) {
             // Load comments with dialog
             ProgressDialog dialog = new ProgressDialog(getActivity());
             dialog.setMessage("Loading comments.");
@@ -159,6 +161,8 @@ public class ThreadViewFragment extends Fragment {
                     Toaster.toastShort("No network connection.");
                     threadView.onRefreshComplete();
                     //onLoadFinished(loader, ThreadList.getThreads());
+                } else if (isFavCom == -1) {
+                	threadView.onRefreshComplete();
                 } else {
                     reload();
                 }
@@ -221,11 +225,11 @@ public class ThreadViewFragment extends Fragment {
      * 
      * @param comment
      */
-    public void unfavouriteAComment(Comment comment) {
+    public void unfavouriteAComment(String id) {
         Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT)
                 .show();
         FavouritesLog log = FavouritesLog.getInstance(getActivity());
-        log.removeFavComment(comment);
+        log.removeFavComment(id);
     }
 
     /**
@@ -259,6 +263,9 @@ public class ThreadViewFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position < 2) {
                 return;
+            }
+            if (getArguments().getInt("favCom") == -1) {
+            	return;
             }
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
@@ -325,7 +332,7 @@ public class ThreadViewFragment extends Fragment {
                         favouriteAComment(comment);
                     } else {
                         starButton.setImageResource(R.drawable.ic_rating_important);
-                        unfavouriteAComment(comment);
+                        unfavouriteAComment(comment.getId());
                     }
                 }
             });

@@ -34,7 +34,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
@@ -272,27 +274,33 @@ public class ThreadViewAdapter extends BaseAdapter {
     }
 
     private void listenForThumbnail(View convertView, final Comment comment) {
-        ImageButton thumbnail = (ImageButton) convertView
-                .findViewById(R.id.thread_view_comment_thumbnail);
-        if (thumbnail != null) {
-            thumbnail.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-                    Fragment fragment = new ExpandImageFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("id", comment.getId());
-                    fragment.setArguments(bundle);
-                    Fragment fav = manager.findFragmentByTag("favThrFragment");
-                    if (fav != null) {
-                        manager.beginTransaction().add(R.id.container, fragment, "picFrag")
-                                .addToBackStack(null).commit();
-                    } else {
-                        manager.beginTransaction()
-                                .add(R.id.fragment_container, fragment, "picFrag")
-                                .addToBackStack(null).commit();
-                    }
-                    manager.executePendingTransactions();
-                }
+    	ImageButton thumbnail = (ImageButton) convertView
+    			.findViewById(R.id.thread_view_comment_thumbnail);
+    	if (thumbnail != null) {
+    		thumbnail.setOnClickListener(new View.OnClickListener() {
+    			public void onClick(View v) {
+    				// Perform action on click
+    				Fragment fragment = new ExpandImageFragment();
+    				Bundle bundle = new Bundle();
+    				bundle.putString("id", comment.getId());
+    				fragment.setArguments(bundle);
+    				Fragment fav = manager.findFragmentByTag("favThrFragment");
+    				Fragment favCom = manager.findFragmentByTag("favComFragment");
+    				if (fav != null) {
+    					manager.beginTransaction()
+    					.add(R.id.container, fragment, "picFrag")
+    					.addToBackStack(null).commit();
+    				} else if (favCom != null) {
+    					manager.beginTransaction()
+    					.add(R.id.container, fragment, "picFrag")
+    					.addToBackStack(null).commit();
+    				} else {
+    					manager.beginTransaction()
+    					.add(R.id.fragment_container, fragment, "picFrag")
+    					.addToBackStack(null).commit();
+    				}
+    				manager.executePendingTransactions();
+    			}
             });
         }
     }
@@ -451,7 +459,16 @@ public class ThreadViewAdapter extends BaseAdapter {
     private void setOPFields(View convertView) {
         // Thread title
         TextView title = (TextView) convertView.findViewById(R.id.thread_view_op_threadTitle);
-        title.setText(thread.getTitle());
+        // Special case of Viewing a Favourite Comment in ThreadView
+        if (thread.getTitle().equals("")) {
+        	title.setVisibility(View.GONE);
+        	LinearLayout buttons = (LinearLayout) convertView.findViewById(R.id.thread_view_op_buttons);
+        	buttons.setVisibility(View.GONE);
+        	//ImageButton button = (ImageButton) convertView.findViewById(R.id.comment_reply_button);
+        	//button.setVisibility(View.GONE);
+        } else {
+        	title.setText(thread.getTitle());
+        }
         // Thread creator
         TextView threadBy = (TextView) convertView.findViewById(R.id.thread_view_op_commentBy);
         threadBy.setText("Posted by " + thread.getBodyComment().getUser() + "#"

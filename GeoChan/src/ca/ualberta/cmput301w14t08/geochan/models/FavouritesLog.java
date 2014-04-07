@@ -53,9 +53,9 @@ public class FavouritesLog {
         manager.serializeThreads();
     }
 
-    public void removeFavComment(Comment comment) {
+    public void removeFavComment(String id) {
         for (ThreadComment c : getFavComments()) {
-            if (c.getId().equals(comment.getId())) {
+            if (c.getBodyComment().getId().equals(id)) {
                 getFavComments().remove(c);
             }
         }
@@ -70,7 +70,7 @@ public class FavouritesLog {
      */
     public boolean hasFavComment(String id) {
         for (ThreadComment c : getFavComments()) {
-            if (c.getId().equals(id)) {
+            if (c.getBodyComment().getId().equals(id)) {
                 return true;
             }
         }
