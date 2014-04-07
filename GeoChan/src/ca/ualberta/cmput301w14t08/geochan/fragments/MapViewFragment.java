@@ -76,9 +76,15 @@ public class MapViewFragment extends Fragment {
 	private GridMarkerClusterer startAndFinishClusterMarkers;
 	private ArrayList<CustomMarker> markers;
 
-	/**
-	 * Gets the view when inflated
-	 */
+    /**
+     * Set up the fragment's UI.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -88,7 +94,9 @@ public class MapViewFragment extends Fragment {
 	}
 
 	/**
-	 * inflates the menu and adds and add items to action bar if present
+	 * Inflates the menu and adds and add items to action bar if present.
+	 * @param menu The Menu object for the fragment.
+	 * @param inflater the MenuInflater for inflating the fragment's menu.
 	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -166,7 +174,7 @@ public class MapViewFragment extends Fragment {
 	 * then calls handleChildComments to place pins for each child comment in
 	 * the thread.
 	 * 
-	 * @param topComment object of the thread
+	 * @param topComment The OP of the ThreadComment.
 	 */
 	public void setupMap(Comment topComment) {
 		openMapView = (MapView) getActivity().findViewById(R.id.open_map_view);
@@ -205,7 +213,7 @@ public class MapViewFragment extends Fragment {
 	 * The values must be padded with a zoom_factor, which is a static class
 	 * variable
 	 * 
-	 * @param GeoLocation used to start the basis of the distance
+	 * @param geoLocation GeoLocation used to start the basis of the distance
 	 */
 	public void setZoomLevel(GeoLocation geoLocation) {
 		// get the mapController and set the zoom
@@ -229,7 +237,8 @@ public class MapViewFragment extends Fragment {
 
 	/**
 	 * Calculates the minimum and maximum values for latitude and longitude
-	 * between an array of GeoPoints. This is used to
+	 * between an array of GeoPoints. This is used to determine the zoom level.
+	 * @return The maximum distance between markers on the map.
 	 */
 	private int calculateZoomSpan() {
 		int opLat = originalPostMarker.getPosition().getLatitudeE6();
@@ -264,9 +273,9 @@ public class MapViewFragment extends Fragment {
 	/**
 	 * Sets an onMarkerClickListener and onMarkerDragListener the marker passed
 	 * in. This is used to handle click events for the maps, which will
-	 * cause infoWindows to show and hide
+	 * cause infoWindows to show and hide.
 	 * 
-	 * @param locationMarker that the listeners will be attached to
+	 * @param locationMarker Marker that the listeners will be attached to.
 	 */
 	private void setMarkerListeners(Marker locationMarker) {
 
@@ -292,7 +301,7 @@ public class MapViewFragment extends Fragment {
 	 * for the entire thread. Then finally make a recursive call to check if a
 	 * child comment has any children.
 	 * 
-	 * @param comment to be added to the map
+	 * @param comment Comment to be added to the map.
 	 */
 	private void handleChildComments(Comment comment) {
 		ArrayList<Comment> children = comment.getChildren();
