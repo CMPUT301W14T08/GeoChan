@@ -323,7 +323,7 @@ public class ThreadManager {
      *            id of the commentList used on the server
      */
     public static GetCommentsTask startGetComments(ThreadViewFragment fragment,
-            int threadIndex, GeoLocation location) {
+            int threadIndex) {
         if (instance == null) {
             generateInstance();
         }
@@ -331,11 +331,9 @@ public class ThreadManager {
         if (task == null) {
             task = new GetCommentsTask();
         }
-        task.initCommentsTask(instance, fragment, threadIndex, location);
+        task.initCommentsTask(instance, fragment, threadIndex);
         task.setCommentListCache(instance.commentListCache.get(ThreadList.getThreads().get(threadIndex).getId()));
-        task.setPOICache(instance.getPOICache.get(location.getLocation().toString()));
-        instance.getPOIPool.execute(task.getGetPOIOnPostRunnable());
-        //instance.getCommentListPool.execute(task.getGetCommentListRunnable());
+        instance.getCommentListPool.execute(task.getGetCommentListRunnable());
         return task;
     }
 
@@ -402,14 +400,6 @@ public class ThreadManager {
      */
     public void handleGetCommentsState(GetCommentsTask task, int state) {
         switch (state) {
-        case GET_POI_COMPLETE:
-        	instance.getCommentListPool.execute(task.getGetCommentListRunnable());
-        case GET_POI_RUNNING:
-        	instance.handler.obtainMessage(state, task).sendToTarget();
-            break;
-        case GET_POI_FAILED:
-        	instance.getCommentsPool.execute(task.getGetCommentsRunnable());
-            break;
         case GET_COMMENT_LIST_COMPLETE:
             instance.getCommentsPool.execute(task.getGetCommentsRunnable());
             break;
