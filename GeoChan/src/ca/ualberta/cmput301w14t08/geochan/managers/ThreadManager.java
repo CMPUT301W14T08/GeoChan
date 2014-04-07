@@ -17,11 +17,9 @@ import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
-import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
-import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadList;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
@@ -80,7 +78,7 @@ public class ThreadManager {
     public static final int POST_GET_POI_RUNNING = 25;
     public static final int POST_GET_POI_COMPLETE = 26;
 
-    public static final int TASK_COMPLETE = 9001;
+    public static final int POST_TASK_COMPLETE = 9001;
 
     private static final int KEEP_ALIVE_TIME = 1;
     private static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
@@ -175,8 +173,11 @@ public class ThreadManager {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.what) {
-                case TASK_COMPLETE:
-                    Toaster.toastShort("YAY!!! :D");
+                case POST_TASK_COMPLETE:
+                	PostTask postTaskComplete = (PostTask) inputMessage.obj;
+					if (postTaskComplete.getDialog() != null) {
+						postTaskComplete.getDialog().dismiss();
+					}
                     break;
                     
                 case GET_THREADS_COMPLETE:
@@ -280,7 +281,7 @@ public class ThreadManager {
                 case POST_GET_POI_COMPLETE:
                 	PostTask postPoiTaskComplete = (PostTask) inputMessage.obj;
 					if (postPoiTaskComplete.getDialog() != null) {
-						postPoiTaskComplete.getDialog().dismiss();
+						postPoiTaskComplete.getDialog().setMessage("Posting to Server");
 					}
 					break;
 
@@ -297,19 +298,21 @@ public class ThreadManager {
 						postTaskUpdateFailed.getDialog().dismiss();
 					}
 					break;
-					
+										
 				case POST_FAILED:
 					PostTask postTaskFailed = (PostTask) inputMessage.obj;
 					if (postTaskFailed.getDialog() != null) {
 						postTaskFailed.getDialog().dismiss();
 					}
 					break;
+					
 				case POST_IMAGE_FAILED:
 					PostTask postTaskImageFailed = (PostTask) inputMessage.obj;
 					if (postTaskImageFailed.getDialog() != null) {
 						postTaskImageFailed.getDialog().dismiss();
 					}
 					break;
+					
 
                 default:
                 	super.handleMessage(inputMessage);
@@ -526,17 +529,17 @@ public class ThreadManager {
             } else if (task.getTitle() == null) {
                 instance.updatePool.execute(task.getUpdateRunnable());
             } else {
-                instance.handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
+                instance.handler.obtainMessage(POST_TASK_COMPLETE, task).sendToTarget();
             }
             break;
         case POST_IMAGE_COMPLETE:
             if (task.getTitle() == null) {
                 instance.updatePool.execute(task.getUpdateRunnable());
             } else {
-                instance.handler.obtainMessage(TASK_COMPLETE, task).sendToTarget();
+                instance.handler.obtainMessage(POST_TASK_COMPLETE, task).sendToTarget();
             }
             break;
-        case TASK_COMPLETE:
+        case POST_TASK_COMPLETE:
             instance.handler.obtainMessage(state, task).sendToTarget();
             break;
         case POST_GET_POI_COMPLETE:

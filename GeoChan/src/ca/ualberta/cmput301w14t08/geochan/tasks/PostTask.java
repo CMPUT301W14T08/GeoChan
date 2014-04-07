@@ -124,7 +124,7 @@ public class PostTask implements GetPOIRunnableInterface, PostImageRunnableInter
         int outState;
         switch (state) {
         case UpdateRunnable.STATE_UPDATE_COMPLETE:
-            outState = ThreadManager.TASK_COMPLETE;
+            outState = ThreadManager.POST_TASK_COMPLETE;
             break;
         case UpdateRunnable.STATE_UPDATE_FAILED:
             outState = ThreadManager.UPDATE_FAILED;

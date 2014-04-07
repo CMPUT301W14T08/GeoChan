@@ -343,7 +343,7 @@ public class EditFragment extends Fragment {
         EditFragment.oldThumbnail = null;
         editComment.setTextPost(newTextPost.getText().toString());
         ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setTitle("Getting Location Data");
+		dialog.setMessage("Getting Location Data");
         if (isThread) {
         	String threadTitle = thread.getTitle();
         	thread.setBodyComment(editComment);

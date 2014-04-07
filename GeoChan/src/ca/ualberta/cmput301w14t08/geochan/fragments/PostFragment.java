@@ -211,7 +211,7 @@ public class PostFragment extends Fragment {
             		Toaster.toastShort("No internet connection detected. Your post will automatically send on connection.");
             	} else {
             		ProgressDialog dialog = new ProgressDialog(getActivity());
-            		dialog.setTitle("Getting Location Data");
+            		dialog.setMessage("Getting Location Data");
             		ThreadManager.startPost(newComment, title, geoLocation, dialog);
             	}
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
