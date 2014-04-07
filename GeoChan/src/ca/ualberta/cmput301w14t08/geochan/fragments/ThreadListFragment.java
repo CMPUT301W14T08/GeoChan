@@ -22,6 +22,10 @@ package ca.ualberta.cmput301w14t08.geochan.fragments;
 
 import java.util.ArrayList;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
@@ -57,6 +62,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * 
  */
 public class ThreadListFragment extends Fragment implements UpdateDialogListenerInterface {
+	private BroadcastReceiver updateReceiver;
     private PullToRefreshListView threadListView;
     private ThreadListAdapter adapter;
     private LocationListenerService locationListener = null;
@@ -265,6 +271,21 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
                 }
             }
         });
+        
+        updateReceiver = new BroadcastReceiver() {
+
+    		@Override
+    		public void onReceive(Context context, Intent intent) {
+    			if (isVisible() && connectHelper.getWasNotConnected() == true) {
+    				connectHelper.setWasNotConnected(false);
+    				UpdateDialogFragment fragment = new UpdateDialogFragment();
+    				fragment.show(getFragmentManager(), "updateDialogFrag");
+    			}
+    		}
+    		
+        };
+        
+        getActivity().getApplicationContext().registerReceiver(updateReceiver, new IntentFilter(ConnectivityBroadcastReceiver.UPDATE_FROM_SERVER_INTENT));
     }
 
     @Override
@@ -281,4 +302,5 @@ public class ThreadListFragment extends Fragment implements UpdateDialogListener
         adapter.notifyDataSetChanged();
         threadListView.onRefreshComplete();
     }
+
 }

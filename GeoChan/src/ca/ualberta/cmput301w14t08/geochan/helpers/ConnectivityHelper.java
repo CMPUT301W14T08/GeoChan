@@ -39,6 +39,7 @@ public class ConnectivityHelper {
     private static ConnectivityManager connectivityManager;
     private static ComponentName reciever;
     private static PackageManager packageManager;
+    private static boolean wasNotConnected = false;
 
     /**
      * Constructor, sets up the connectivity manager. Private to avoid usage
@@ -82,6 +83,7 @@ public class ConnectivityHelper {
         boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
         if (isConnected == false) {
         	packageManager.setComponentEnabledSetting(reciever, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        	wasNotConnected = true;
         }
         return isConnected;
     }
@@ -104,6 +106,16 @@ public class ConnectivityHelper {
     public boolean isMobile() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return (isConnected() && (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE));
+    }
+    
+    /* Getters and setters below */
+    
+    public void setWasNotConnected(boolean _wasNotConnected) {
+    	wasNotConnected = _wasNotConnected;
+    }
+    
+    public boolean getWasNotConnected() {
+    	return wasNotConnected;
     }
 
 }

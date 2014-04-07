@@ -21,7 +21,8 @@ import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 public class CustomMarker extends Marker {
 
 	private GeoLocation geoLocation;
-	private MapView openMapView;
+	private MapView mapView;
+	private Drawable icon;
 
 	/**
 	 * Constructor for initializing just the marker and setting its position
@@ -32,10 +33,10 @@ public class CustomMarker extends Marker {
 	public CustomMarker(GeoLocation geoLocation, MapView mapView) {
 		super(mapView);
 		super.setPosition(geoLocation.makeGeoPoint());
-		this.openMapView = mapView;
+		this.mapView = mapView;
 		this.geoLocation = geoLocation;
 	}
-	
+
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
@@ -47,8 +48,9 @@ public class CustomMarker extends Marker {
 		super(mapView);
 		super.setPosition(geoLocation.makeGeoPoint());
 		super.setIcon(icon);
-		this.openMapView = mapView;
+		this.mapView = mapView;
 		this.geoLocation = geoLocation;
+		this.icon = icon;
 	}
 
 	/**
@@ -62,9 +64,10 @@ public class CustomMarker extends Marker {
 		super(mapView);
 		super.setPosition(geoPoint);
 		super.setIcon(icon);
-		this.openMapView = mapView;
+		this.mapView = mapView;
 		this.geoLocation = new GeoLocation(geoPoint.getLatitude(),
 				geoPoint.getLongitude());
+		this.icon = icon;
 	}
 
 	/**
@@ -76,7 +79,7 @@ public class CustomMarker extends Marker {
 	 */
 	public void setUpInfoWindow(String title, Activity activity) {
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-				R.layout.bonuspack_bubble, openMapView);
+				R.layout.bonuspack_bubble, mapView);
 		super.setInfoWindow(infoWindow);
 		super.setTitle(title);
 		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -96,7 +99,7 @@ public class CustomMarker extends Marker {
 		dialog.setMessage("Retrieving Location");
 		ThreadManager.startGetPOI(geoLocation, dialog, this);
 	}
-	
+
 	/**
 	 * Constructs a geoPoint from the geoLocation and returns it
 	 * 
@@ -107,7 +110,7 @@ public class CustomMarker extends Marker {
 	}
 
 	/* Getters and setters */
-	 
+
 	public GeoLocation getGeoLocation() {
 		return geoLocation;
 	}
@@ -116,11 +119,19 @@ public class CustomMarker extends Marker {
 		this.geoLocation = geoLocation;
 	}
 
-	public MapView getOpenMapView() {
-		return openMapView;
+	public MapView getMapView() {
+		return mapView;
 	}
 
-	public void setOpenMapView(MapView openMapView) {
-		this.openMapView = openMapView;
+	public void setMapView(MapView openMapView) {
+		this.mapView = openMapView;
+	}
+
+	public Drawable getIcon() {
+		return icon;
+	}
+
+	public void setIcon(Drawable icon) {
+		this.icon = icon;
 	}
 }

@@ -24,7 +24,10 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -42,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadViewAdapter;
+import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
@@ -66,6 +70,7 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
  * @author Artem Chikin
  */
 public class ThreadViewFragment extends Fragment implements UpdateDialogListenerInterface {
+	private BroadcastReceiver updateReceiver;
     private PullToRefreshListView threadView;
     private ThreadViewAdapter adapter;
     private int threadIndex;
@@ -178,6 +183,21 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         } else {
             container = R.id.fragment_container;
         }
+        
+        updateReceiver = new BroadcastReceiver() {
+
+    		@Override
+    		public void onReceive(Context context, Intent intent) {
+    			if (isVisible() && connectHelper.getWasNotConnected() == true) {
+    				connectHelper.setWasNotConnected(false);
+    				UpdateDialogFragment fragment = new UpdateDialogFragment();
+    				fragment.show(getFragmentManager(), "updateDialogFrag");
+    			}
+    		}
+    		
+        };
+        
+        getActivity().getApplicationContext().registerReceiver(updateReceiver, new IntentFilter(ConnectivityBroadcastReceiver.UPDATE_FROM_SERVER_INTENT));
     }
 
     /**
@@ -499,4 +519,5 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         adapter.notifyDataSetChanged();
         threadView.onRefreshComplete();
     }
+    
 }

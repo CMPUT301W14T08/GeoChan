@@ -38,6 +38,8 @@ import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
  */
 public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 	
+	public static final String UPDATE_FROM_SERVER_INTENT = "ca.ualberta.cmput301w14t08.geochan.updatefromserverintent";
+	
     /**
      * called when BroacastReceiver receives an intent broadcast
      */
@@ -52,6 +54,10 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
         	
         	CacheManager cacheManager = CacheManager.getInstance();
         	cacheManager.postAll();
+        	
+        	Intent i = new Intent();
+        	i.setAction(UPDATE_FROM_SERVER_INTENT);
+        	context.sendBroadcast(i);
         } else {
             // Internet connection lost
         	// This listener is registered manually when we lose connection, and disabled

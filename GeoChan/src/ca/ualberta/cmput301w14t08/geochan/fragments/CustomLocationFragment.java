@@ -381,7 +381,11 @@ public class CustomLocationFragment extends Fragment {
 	 * current location, puts it in a bundle and passes it back to the previous
 	 * fragment
 	 * 
+<<<<<<< HEAD
+	 * @param view where the button was clicked from
+=======
 	 * @param view A View for the Button that was pressed.
+>>>>>>> 7fdf133c59ad8fbb902cacb68c5313321b6b0ee8
 	 * 
 	 */
 	public void submitCurrentLocation(View view) {
@@ -400,7 +404,11 @@ public class CustomLocationFragment extends Fragment {
 	 * location marker on the map, that location is placed in a bundle and
 	 * passed back to the previous fragment
 	 * 
+<<<<<<< HEAD
+	 * @param v where the button was clicked from
+=======
 	 * @param view A View for the Button that was pressed.
+>>>>>>> 7fdf133c59ad8fbb902cacb68c5313321b6b0ee8
 	 * 
 	 */
 	public void submitNewLocation(View view) {
