@@ -103,7 +103,6 @@ public class ThreadListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// locationListener = new LocationListenerService(getActivity());
 		adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
 		setHasOptionsMenu(true);
 	}
@@ -221,7 +220,6 @@ public class ThreadListFragment extends Fragment implements
 						.replace(R.id.fragment_container, fragment,
 								"thread_view_fragment")
 						.addToBackStack("thread_view_fragment").commit();
-				// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 				getFragmentManager().executePendingTransactions();
 			}
 		});
@@ -237,7 +235,6 @@ public class ThreadListFragment extends Fragment implements
 				if (!connectHelper.isConnected()) {
 					Toaster.toastShort("No network connection.");
 					threadListView.onRefreshComplete();
-					// onLoadFinished(loader, ThreadList.getThreads());
 				} else {
 					reload();
 				}
