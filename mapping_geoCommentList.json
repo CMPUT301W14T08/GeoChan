@@ -2,7 +2,7 @@
 	"geoCommentList" : {
 		"properties" : {
 			"comments" : {"type" : "string", "index" : "not_analyzed"},
-            "id" : {"type" : "string", "index" : "not_analyzed"}
+			"id" : {"type" : "string", "index" : "not_analyzed"}
 		}
 	}
 }
