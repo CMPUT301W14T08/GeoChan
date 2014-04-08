@@ -200,8 +200,7 @@ public class MapViewFragment extends Fragment {
 			originalPostMarker = new CustomMarker(geoLocation,
 					mapData.getMap(), icon);
 			originalPostMarker.setUpInfoWindow("OP", getActivity());
-			originalPostMarker.showInfoWindow();
-
+			
 			setMarkerListeners(originalPostMarker);
 
 			markers.add(originalPostMarker);
@@ -235,7 +234,7 @@ public class MapViewFragment extends Fragment {
 		int zoomSpan = calculateZoomSpan();
 
 		// calculates the appropriate zoom level
-		zoomFactor = 19 - (int) (Math.log10(zoomSpan) * 1.9);
+		zoomFactor = 19 - (int) (Math.log10(zoomSpan) * 2.2);
 		if (zoomFactor > 18 || zoomSpan < 1) {
 			zoomFactor = 18;
 		} else if (zoomFactor < 2) {
@@ -332,8 +331,9 @@ public class MapViewFragment extends Fragment {
 
 					CustomMarker replyMarker = new CustomMarker(
 							commentLocation, mapData.getMap(), icon);
-					replyMarker.setUpInfoWindow("Reply", getActivity());
-
+					replyMarker.createInfoWindow();
+					replyMarker.setTitle("Reply");
+					
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation
 								.getLocationDescription());
@@ -452,7 +452,10 @@ public class MapViewFragment extends Fragment {
 				GeoLocation geoLocation = new GeoLocation(node.mLocation);
 				CustomMarker nodeMarker = new CustomMarker(geoLocation,
 						mapData.getMap(), nodeIcon);
-				nodeMarker.setTitle("Step " + i);
+				
+				//MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+				//		R.drawable.bonuspack_bubble, mapData.getMap());
+				//nodeMarker.setUpInfoWindow("Step " + i, getActivity());
 				nodeMarker.setSnippet(node.mInstructions);
 				nodeMarker.setSubDescription(Road.getLengthDurationText(
 						node.mLength, node.mDuration));
@@ -501,7 +504,8 @@ public class MapViewFragment extends Fragment {
 			mapData.getOverlays().add(replyPostClusterMarkers);
 			mapData.getOverlays().add(startAndFinishClusterMarkers);
 
-			setZoomLevel(currentLocation);
+			mapData.setZoom(15);
+			mapData.setCenter(currentLocation.makeGeoPoint());
 
 			mapData.refreshMap();
 		}

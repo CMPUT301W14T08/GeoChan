@@ -47,8 +47,8 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing just the marker and setting its position
 	 * 
-	 * @param mapView
-	 * @param geoLocation
+	 * @param mapView The MapView the marker is being placed on.
+	 * @param geoLocation The GeoLocation the marker is being placed at.
 	 */
 	public CustomMarker(GeoLocation geoLocation, MapView mapView) {
 		super(mapView);
@@ -60,9 +60,9 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
-	 * @param mapView
-	 * @param geoLocation
-	 * @param icon
+	 * @param mapView The Mapview the marker is being placed on.
+	 * @param geoLocation The GeoLocation the marker is being placed at.
+	 * @param icon The Drawable icon for the marker.
 	 */
 	public CustomMarker(GeoLocation geoLocation, MapView mapView, Drawable icon) {
 		super(mapView);
@@ -76,9 +76,12 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
-	 * @param mapView which the marker will be displayed in
-	 * @param geoLocation where the marker is located
-	 * @param icon image of the marker
+	 * @param mapView
+	 *            which the marker will be displayed in
+	 * @param geoLocation
+	 *            where the marker is located
+	 * @param icon
+	 *            image of the marker
 	 */
 	public CustomMarker(GeoPoint geoPoint, MapView mapView, Drawable icon) {
 		super(mapView);
@@ -93,14 +96,15 @@ public class CustomMarker extends Marker {
 	/**
 	 * Sets up the infoWindow bubble for the Marker. Sets a title and icon image
 	 * 
-	 * @param icon of the marker
-	 * @param title string for the info window
-	 * @param activity which this object resides in
-	 */
+	 * @param icon
+	 *            of the marker
+	 * @param title
+	 *            string for the info window
+	 * @param activity
+	 *            which this object resides in
+     */
 	public void setUpInfoWindow(String title, Activity activity) {
-		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-				R.layout.bonuspack_bubble, mapView);
-		super.setInfoWindow(infoWindow);
+		this.createInfoWindow();
 		super.setTitle(title);
 		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
@@ -112,7 +116,8 @@ public class CustomMarker extends Marker {
 	/**
 	 * Retrieves the POI string for the marker
 	 * 
-	 * @param activity which this object resides in
+	 * @param activity
+	 *            which this object resides in
 	 */
 	public void getPOIString(Activity activity) {
 		ProgressDialog dialog = new ProgressDialog(activity);
@@ -121,9 +126,18 @@ public class CustomMarker extends Marker {
 	}
 
 	/**
+	 * Creates a new infoWindow bubble for the Marker object
+	 */
+	public void createInfoWindow() {
+		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+				R.drawable.bonuspack_bubble, mapView);
+		this.setInfoWindow(infoWindow);
+	}
+
+	/**
 	 * Constructs a geoPoint from the geoLocation and returns it
 	 * 
-	 * @return GeoPoint corresponding to the geoLocation
+	 * @return GeoPoint  GeoPoint corresponding to the CustomMarker's Geolocation.
 	 */
 	public GeoPoint getGeoPoint() {
 		return geoLocation.makeGeoPoint();

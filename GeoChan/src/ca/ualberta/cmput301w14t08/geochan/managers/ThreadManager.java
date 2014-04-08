@@ -111,7 +111,7 @@ public class ThreadManager {
 	private static final int CORE_POOL_SIZE = 8;
 	private static final int MAXIMUM_POOL_SIZE = 8;
 	private static final int MAXIMUM_CACHE_SIZE = 1024 * 1024 * 10; // Start at
-																	// 10MB??
+	// 10MB??
 
 	// Caches for download tasks
 	private final LruCache<String, CommentList> commentListCache;
@@ -310,6 +310,7 @@ public class ThreadManager {
 						poiTaskComplete.getMarker().setSubDescription(
 								(poiTaskComplete.getPOICache()));
 						poiTaskComplete.getMarker().showInfoWindow();
+
 					}
 					poiTaskComplete.getLocation().setLocationDescription(
 							poiTaskComplete.getPOICache());
@@ -322,8 +323,6 @@ public class ThreadManager {
 						poiTaskFailed.getDialog().dismiss();
 					}
 					if (poiTaskFailed.getMarker() != null) {
-						poiTaskFailed.getMarker().setSubDescription(
-								("Unknown Location"));
 						poiTaskFailed.getMarker().showInfoWindow();
 					}
 					poiTaskFailed.getLocation().setLocationDescription(
@@ -651,7 +650,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-						.sendToTarget();
+				.sendToTarget();
 			}
 			break;
 		case POST_IMAGE_COMPLETE:
@@ -659,7 +658,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-						.sendToTarget();
+				.sendToTarget();
 			}
 			break;
 		case POST_RUNNING:

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Represents a search response served by ElasticSearch
+ * Represents a search response served by ElasticSearch.
  * 
  * @author Artem Herasymchuk
  * 
@@ -46,7 +46,6 @@ public class ElasticSearchSearchResponse<T> {
 
     /**
      * COMMENT HERE
-     * 
      * @return
      */
     public Collection<T> getSources() {

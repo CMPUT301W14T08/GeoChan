@@ -41,7 +41,7 @@ public class GeoLocationLog {
     /**
      * Protected constructor. Is called only if singleton has not been
      * constructed. Sets up context and deserializes the log.
-     * @param context  the context
+     * @param context  The Context the GeoLocationLog is running in.
      */
     protected GeoLocationLog(Context context) {
         this.context = context;
@@ -53,8 +53,8 @@ public class GeoLocationLog {
      * Singleton construction method. If instance already exists, return it.
      * Else, construct a new one
      * 
-     * @param context  the context
-     * @return the instance
+     * @param context  The context the GeoLocationLog is running in.
+     * @return the instance of GeoLocationLog
      */
     public static GeoLocationLog generateInstance(Context context) {
         if (instance == null) {
@@ -65,7 +65,7 @@ public class GeoLocationLog {
     
     /**
      * Returns the Singleton instance of this object.
-     * @return  the instance
+     * @return  The instance of GeoLocationLog.
      */
     public static GeoLocationLog getInstance() {
     	return instance;
