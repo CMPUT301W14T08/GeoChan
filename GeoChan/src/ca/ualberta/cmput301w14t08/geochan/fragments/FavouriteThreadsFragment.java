@@ -94,7 +94,6 @@ public class FavouriteThreadsFragment extends Fragment {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, fragment, "thread_view_fragment")
                         .addToBackStack(null).commit();
-                // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                 getFragmentManager().executePendingTransactions();
             }
         });

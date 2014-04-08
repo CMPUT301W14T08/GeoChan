@@ -104,7 +104,8 @@ public class CustomMarker extends Marker {
 	 *            which this object resides in
      */
 	public void setUpInfoWindow(String title, Activity activity) {
-		this.createInfoWindow();
+		//this.createInfoWindow();
+		
 		super.setTitle(title);
 		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
@@ -130,7 +131,7 @@ public class CustomMarker extends Marker {
 	 */
 	public void createInfoWindow() {
 		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-				R.drawable.bonuspack_bubble, mapView);
+				R.layout.bonuspack_bubble, mapView);
 		this.setInfoWindow(infoWindow);
 	}
 

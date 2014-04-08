@@ -150,11 +150,7 @@ public class CommentOfflineJsonConverter implements JsonSerializer<Comment>,
         Bitmap thumbnail = null;
         boolean hasImage = object.get("hasImage").getAsBoolean();
         if (hasImage) {
-        	// TODO get full image??
 			/*
-			 * http://stackoverflow.com/questions/20594833/convert-byte-array-or-
-			 * bitmap-to-picture
-			 *
 			 * http://stackoverflow.com/a/5878773
 			 * Sando's workaround for running out of memory on decoding bitmaps.
 			 * 
