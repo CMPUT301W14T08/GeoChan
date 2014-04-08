@@ -51,7 +51,7 @@ import android.view.ViewGroup;
 import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.MapHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.MapDataHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -67,7 +67,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  */
 public class MapViewFragment extends Fragment {
 
-	private MapHelper mapData;
+	private MapDataHelper mapData;
 	private LocationListenerService locationListenerService;
 	private CustomMarker originalPostMarker;
 	private Polyline roadOverlay;
@@ -190,7 +190,7 @@ public class MapViewFragment extends Fragment {
 	 *            The OP of the ThreadComment.
 	 */
 	public void setupMap(Comment topComment) {
-		mapData = new MapHelper((MapView) getActivity().findViewById(
+		mapData = new MapDataHelper((MapView) getActivity().findViewById(
 				R.id.open_map_view));
 		mapData.setUpMap();
 

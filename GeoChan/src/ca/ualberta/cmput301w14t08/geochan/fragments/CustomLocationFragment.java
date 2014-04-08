@@ -48,7 +48,7 @@ import ca.ualberta.cmput301w14t08.geochan.R;
 import ca.ualberta.cmput301w14t08.geochan.adapters.CustomLocationAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ErrorDialog;
 import ca.ualberta.cmput301w14t08.geochan.helpers.LocationListenerService;
-import ca.ualberta.cmput301w14t08.geochan.helpers.MapHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.MapDataHelper;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.managers.ThreadManager;
 import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
@@ -70,7 +70,7 @@ public class CustomLocationFragment extends Fragment {
 	private FragmentManager fragManager;
 	private LocationListenerService locationListenerService;
 	private GeoLocation newLocation;
-	private MapHelper map;
+	private MapDataHelper map;
 	private MapEventsOverlay mapEventsOverlay;
 	private ArrayList<Marker> markers;
 	private CustomMarker currentLocationMarker;
@@ -169,7 +169,7 @@ public class CustomLocationFragment extends Fragment {
 	 *            The MapEventsReceiver for handling click events on the map.
 	 */
 	private void setupMap(MapEventsReceiver mapEventsReceiver) {
-		map = new MapHelper((MapView) getActivity().findViewById(R.id.map_view));
+		map = new MapDataHelper((MapView) getActivity().findViewById(R.id.map_view));
 		map.setUpMap();
 
 		mapEventsOverlay = new MapEventsOverlay(getActivity(), mapEventsReceiver);
