@@ -21,11 +21,11 @@
 package ca.ualberta.cmput301w14t08.geochan.runnables;
 
 import io.searchbox.client.JestClient;
-
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
@@ -92,6 +92,7 @@ public class PostRunnable implements Runnable {
 			}
 			try {
 				jestResult = client.execute(index);
+				
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
 				}
@@ -105,6 +106,7 @@ public class PostRunnable implements Runnable {
 				task.handlePostState(STATE_POST_FAILED);
 			} else {
 				task.handlePostState(STATE_POST_COMPLETE);
+				GeoLocationLog.getInstance().addLogEntry(task.getLocation());
 			}
 			// task.setPostThread(null);
 			Thread.interrupted();
