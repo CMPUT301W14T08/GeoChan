@@ -29,6 +29,14 @@ import org.osmdroid.util.GeoPoint;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.tasks.GetPOITask;
 
+/**
+ * Runnable for retrieving a POI String in a separate thread of execution from
+ * the Geo Names POI provider. Part of the GetPOITask. As opposed to
+ * GetPOIOnPostRunnable, this one is run when only the POI string is needed.
+ * 
+ * @author Artem Chikin
+ *
+ */
 public class GetPOIRunnable implements Runnable {
 
 	private GetPOITask task;
@@ -40,6 +48,10 @@ public class GetPOIRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Retrieves the POI string for a given location object 
+	 * and sends it to the task's cache.
+	 */
 	@Override
 	public void run() {
 		task.setGetPOIThread(Thread.currentThread());

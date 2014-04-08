@@ -32,9 +32,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
- * Runnable for retrieving a CommentList from a separate thread of execution from
- * ElasticSearch.
- * @author Artem Hersymchuk, Artem Chikin 
+ * Runnable for retrieving a CommentList in a separate thread of execution from
+ * ElasticSearch. 
+ * 
+ * @author Artem Hersymchuk 
  *
  */
 public class GetCommentListRunnable implements Runnable {
@@ -49,6 +50,10 @@ public class GetCommentListRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Forms a query and sends a Get request to ES, then processes
+	 * the retrieved data into a CommentList object and saves it into the task's cache.
+	 */
 	@Override
 	public void run() {
 		task.setGetCommentListThread(Thread.currentThread());
@@ -56,7 +61,9 @@ public class GetCommentListRunnable implements Runnable {
 				.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 		task.handleGetCommentListState(STATE_GET_LIST_RUNNING);
 		JestResult result = null;
+		
 		String id = ThreadList.getThreads().get(task.getThreadIndex()).getId();
+		
 		try {
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
@@ -64,14 +71,14 @@ public class GetCommentListRunnable implements Runnable {
 			Get get = new Get.Builder(ElasticSearchClient.URL_INDEX, id).type(
 					type).build();
 			result = ElasticSearchClient.getInstance().getClient().execute(get);
+			
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
+			
 			JsonObject object = result.getJsonObject().get("_source")
 					.getAsJsonObject();
-			if (Thread.interrupted()) {
-				throw new InterruptedException();
-			}
+			
 			Gson gson = GsonHelper.getExposeGson();
 			CommentList list = gson.fromJson(object, CommentList.class);
 			task.setCommentListCache(list);

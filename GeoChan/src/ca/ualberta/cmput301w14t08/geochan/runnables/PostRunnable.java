@@ -21,6 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.runnables;
 
 import io.searchbox.client.JestClient;
+
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Index;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
@@ -28,6 +29,14 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.ThreadComment;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
+/**
+ * Runnable for posting a Comment or ThreadComment 
+ * object in a separate thread of execution to
+ * ElasticSearch. 
+ * 
+ * @author Artem Herasymchuk
+ *
+ */
 public class PostRunnable implements Runnable {
 
 	private PostTask task;
@@ -41,6 +50,11 @@ public class PostRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Converts the object into a json
+	 * string, forms a query and sends it in  PUT request to
+	 * ElasticSearch.
+	 */
 	@Override
 	public void run() {
 		task.setPostThread(Thread.currentThread());

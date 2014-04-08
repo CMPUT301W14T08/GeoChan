@@ -34,6 +34,13 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.GetImageTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Runnable for retrieving a bitmap object in a separate thread of execution from
+ * ElasticSearch. 
+ * 
+ * @author Artem Chikin
+ *
+ */
 public class GetImageRunnable implements Runnable {
 
 	private GetImageTask task;
@@ -46,6 +53,11 @@ public class GetImageRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Forms a query and sends a get request to ES,
+	 * then processes retrieved data as a bitmap and
+	 * sends it to the task's cache.
+	 */
 	@Override
 	public void run() {
 		task.setGetImageThread(Thread.currentThread());
@@ -57,20 +69,21 @@ public class GetImageRunnable implements Runnable {
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
+			
 			Get get = new Get.Builder(ElasticSearchClient.URL_INDEX,
 					task.getId()).type(type).build();
 			result = ElasticSearchClient.getInstance().getClient().execute(get);
-			if (Thread.interrupted()) {
-				throw new InterruptedException();
-			}
+
 			Type type = new TypeToken<ElasticSearchResponse<Bitmap>>() {
 			}.getType();
 			Gson gson = GsonHelper.getOnlineGson();
 			ElasticSearchResponse<Bitmap> esResponse = gson.fromJson(
 					result.getJsonString(), type);
+			
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
+			
 			task.setImageCache(esResponse.getSource());
 			task.handleGetImageState(STATE_GET_IMAGE_COMPLETE);
 		} catch (Exception e) {
