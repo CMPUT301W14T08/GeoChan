@@ -43,7 +43,7 @@ public class GeoLocation {
      * Constructs a new GeoLocation object when supplied a
      * locationListenerService object
      * 
-     * @param locationListenerService
+     * @param locationListenerService The LocationListenerService to get a Location from.
      */
     public GeoLocation(LocationListenerService locationListenerService) {
         this.location = locationListenerService.getCurrentLocation();
@@ -55,7 +55,7 @@ public class GeoLocation {
     /**
      * Constructs a new GeoLocation object with a supplied location object
      * 
-     * @param location
+     * @param location The Location to base the GeoLocation off of.
      */
     public GeoLocation(Location location) {
         this.location = location;
@@ -64,8 +64,8 @@ public class GeoLocation {
     /**
      * Construct a new GeoLocation object with a supplied latitude and longitude
      * 
-     * @param latitude
-     * @param longitude
+     * @param latitude The latitude for the GeoLocation.
+     * @param longitude The longitude for the Geolocation.
      */
     public GeoLocation(double latitude, double longitude) {
         this.location = new Location(LocationManager.GPS_PROVIDER);
@@ -75,7 +75,7 @@ public class GeoLocation {
     /**
      * Construct a new GeoLocation object with a supplied GeoPoint object
      * 
-     * @param geoPoint
+     * @param geoPoint The GeoPoint to base the GeoLocation off of.
      */
     public GeoLocation(GeoPoint geoPoint) {
     	this.location = new Location(LocationManager.GPS_PROVIDER);
@@ -117,7 +117,7 @@ public class GeoLocation {
      * Sets new latitude value. A new location object is created so that the
      * LocationListnerService's lastKnownLocation attribute is not affected
      * 
-     * @param newLat
+     * @param newLat The new latitude for the GeoLocation.
      */
     public void setLatitude(double newLat) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
@@ -134,7 +134,7 @@ public class GeoLocation {
      * Sets new longitude value. A new location object is created so that the
      * LocationListenerService's lastKnownLocation attribute is not affected
      * 
-     * @param newLong
+     * @param newLong The new longitude for the GeoLocation.
      */
     public void setLongitude(double newLong) {
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
@@ -151,7 +151,7 @@ public class GeoLocation {
      * Helper method to construct and return a GeoPoint object corresponding to
      * the location of this object.
      * 
-     * @return geoPoint
+     * @return geoPoint Returns a new GeoPoint based on the GeoLocation's longitude and latitude.
      */
     public GeoPoint makeGeoPoint() {
         return new GeoPoint(getLatitude(), getLongitude());
