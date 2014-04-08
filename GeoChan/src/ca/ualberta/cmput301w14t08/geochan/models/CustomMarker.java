@@ -76,10 +76,10 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
-	 * @param mapView
-	 *            which the marker will be displayed in
-	 * @param geoLocation
+	 * @param geoPoint
 	 *            where the marker is located
+	 * @param mapView
+	 *            which will be displaying the marker
 	 * @param icon
 	 *            image of the marker
 	 */
@@ -96,8 +96,6 @@ public class CustomMarker extends Marker {
 	/**
 	 * Sets up the infoWindow bubble for the Marker. Sets a title and icon image
 	 * 
-	 * @param icon
-	 *            of the marker
 	 * @param title
 	 *            string for the info window
 	 * @param activity

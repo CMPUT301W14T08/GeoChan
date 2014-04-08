@@ -27,7 +27,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
  * Helper class. Generates hashes used in identifying Comments and users.
- * @autho Artem Chikin
+ * @author Artem Chikin
  * 
  */
 public class HashHelper {

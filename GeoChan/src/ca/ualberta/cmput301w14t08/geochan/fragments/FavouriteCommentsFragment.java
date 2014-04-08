@@ -63,7 +63,7 @@ public class FavouriteCommentsFragment extends Fragment {
      * Inflate the fragment view from the given layout.
      * 
      * @param inflater The LayoutInflater used to inflate the fragment's UI.
-     * @param contained The parent view that the fragment's UI is attached to.
+     * @param container The parent view that the fragment's UI is attached to.
      * @param savedInstanceState The previously saved state of the fragment.
      * 
      */

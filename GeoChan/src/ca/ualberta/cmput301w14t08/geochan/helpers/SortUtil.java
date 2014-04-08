@@ -120,7 +120,7 @@ public class SortUtil {
      * 
      * @param tag
      *            Tag specifying the type of sorting to be done.
-     * @param threads
+     * @param coms
      *            The ArrayList of Comments to be sorted.
      */
 

@@ -230,7 +230,7 @@ public class PostFragment extends Fragment {
 	/**
 	 * Displays dialog and either launches camera or gallery
 	 * 
-	 * @param View
+	 * @param view
 	 *            the AttachPhoto button in postThreadFragment.
 	 */
 	public void attachImage(View view) {

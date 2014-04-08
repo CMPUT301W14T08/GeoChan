@@ -45,8 +45,8 @@ public class ElasticSearchSearchResponse<T> {
     }
 
     /**
-     * COMMENT HERE
-     * @return
+     * Returns the sources.
+     * @return the sources
      */
     public Collection<T> getSources() {
         Collection<T> out = new ArrayList<T>();

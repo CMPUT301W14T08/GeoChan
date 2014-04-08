@@ -74,7 +74,7 @@ public class GeoLocationLog {
     /**
      * Adds a new LogEntry to the GeoLocationLog.
      * 
-     * @param geoLocation
+     * @param newGeoLocation
      *            GeoLocation to be stored in the new LogEntry.
      */
     public void addLogEntry(GeoLocation newGeoLocation) {

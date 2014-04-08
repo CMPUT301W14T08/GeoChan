@@ -43,7 +43,7 @@ import com.google.gson.reflect.TypeToken;
  * Responsible for persistency of favourite threads/comments. Contains methods
  * to Serialize/Deserialize both comments and threads. Is a singleton.
  * 
- * @autor Artem Chikin
+ * @author Artem Chikin
  */
 public class FavouritesIOManager {
 	private static FavouritesIOManager instance;

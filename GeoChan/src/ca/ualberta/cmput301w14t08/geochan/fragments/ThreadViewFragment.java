@@ -114,7 +114,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     /**
      * Sets the proper sort option in our options menu.
      * 
-     * @param The fragment's menu.
+     * @param menu The fragment's menu.
      */
 	@Override
 	public void onPrepareOptionsMenu(Menu menu){

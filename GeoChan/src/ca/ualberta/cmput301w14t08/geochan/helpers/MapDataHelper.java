@@ -68,9 +68,9 @@ public class MapDataHelper {
 	 * Adds a marker to the map, and zooms to that point with a passed in zoom
 	 * level argument.
 	 * 
-	 * @param Marker
+	 * @param marker
 	 *             The Marker to be put on the map.
-	 * @param int Zoom level for the map.
+	 * @param zoomLevel Zoom level for the map.
 	 */
 	public void addMarkerToOverlayAndCenter(CustomMarker marker, int zoomLevel) {
 		map.getOverlays().add(marker);
@@ -121,7 +121,7 @@ public class MapDataHelper {
 	/**
 	 * Adds an Overlay object to the maps overlay list.
 	 * 
-	 * @param Overlay
+	 * @param overlay
 	 *            The Overlay to be added to the map overlay list.
 	 */
 	public void addToOverlays(Overlay overlay) {
