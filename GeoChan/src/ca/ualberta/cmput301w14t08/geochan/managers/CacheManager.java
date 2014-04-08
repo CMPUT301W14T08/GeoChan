@@ -42,12 +42,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Class responsible for managing local saving of threadsList, threads, and comments.
- * As well as managing and saving the queues of comments and threadComments which are
- * to be posted when internet connection is acquired.
+ * Class responsible for managing local saving of threadsList, threads, and
+ * comments. As well as managing and saving the queues of comments and
+ * threadComments which are to be posted when internet connection is acquired.
  * 
  * @author Artem Chikin
- *
+ * 
  */
 public class CacheManager {
 	private static CacheManager instance = null;
@@ -108,13 +108,14 @@ public class CacheManager {
 	 */
 	public void postAll() {
 		for (Comment comment : commentQueue) {
-			ThreadManager.startPost(comment, null, comment.getLocation(), null);
+			ThreadManager.startPost(comment, null, comment.getLocation(), null,
+					false);
 			commentQueue.remove(comment);
 		}
 		for (ThreadComment threadComment : threadCommentQueue) {
 			Comment bodyComment = threadComment.getBodyComment();
 			ThreadManager.startPost(bodyComment, threadComment.getTitle(),
-					bodyComment.getLocation(), null);
+					bodyComment.getLocation(), null, false);
 			threadCommentQueue.remove(threadComment);
 		}
 		serializeCommentQueue();
