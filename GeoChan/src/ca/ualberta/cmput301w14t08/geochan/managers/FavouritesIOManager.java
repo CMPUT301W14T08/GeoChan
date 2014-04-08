@@ -64,7 +64,9 @@ public class FavouritesIOManager {
 		return instance;
 	}
 
-	// Serialize ArrayList of threads to JSON
+	/**
+	 * Serializes favourited ThreadComments and stores them in the cache.
+	 */
 	public void serializeThreads() {
 		try {
 			String json = gson.toJson(FavouritesLog.getInstance(context)
@@ -104,6 +106,10 @@ public class FavouritesIOManager {
 		}
 	}
 
+	/**
+	 * Deserializes the favourited Comments.
+	 * @return An ArrayList of the favourited comments as ThreadComments.
+	 */
 	public ArrayList<ThreadComment> deSerializeFavComments() {
 		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
 		try {
@@ -130,9 +136,9 @@ public class FavouritesIOManager {
 	}
 
 	/**
-	 * Deserialize ArrayList of threadComments from JSON
+	 * Deserialize ArrayList of favourited ThreadComments from JSON
 	 * 
-	 * @return list of threadComments
+	 * @return ArrayList of favourited ThreadComments.
 	 */
 	public ArrayList<ThreadComment> deSerializeThreads() {
 		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();

@@ -57,6 +57,12 @@ public class ThreadCommentJsonConverter implements JsonSerializer<ThreadComment>
      */
     /**
      * Serializes a ThreadComment object into JSON format.
+     * 
+     * @param thread the ThreadComment to serialize.
+     * @param type the Type
+     * @param context the JsonSerializationContext
+     * 
+     * @return A JsonElement representing the serialized ThreadComment.
      */
     @Override
     public JsonElement serialize(ThreadComment thread, Type type, JsonSerializationContext context) {
@@ -96,6 +102,14 @@ public class ThreadCommentJsonConverter implements JsonSerializer<ThreadComment>
 
     /**
      * Deserializes a ThreadComment object from JSON format.
+     * 
+     * @param json the JsonElement
+     * @param type the Type
+     * @param context the JsonDeserializationContext
+     * 
+     * @return The deserialized ThreadComment.
+     * 
+     * @throws JsonParseException
      */
     @Override
     public ThreadComment deserialize(JsonElement json, Type type, JsonDeserializationContext context)

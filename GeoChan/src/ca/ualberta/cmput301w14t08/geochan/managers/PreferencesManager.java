@@ -28,7 +28,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 
 /**
- * Helps manage relevant preferences within the application
+ * Helps manage relevant preferences within the application.
  * 
  * @author Artem Herasymchuk
  */

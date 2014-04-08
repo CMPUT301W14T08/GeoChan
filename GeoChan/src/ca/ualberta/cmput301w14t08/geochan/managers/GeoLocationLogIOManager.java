@@ -55,6 +55,11 @@ public class GeoLocationLogIOManager {
 		this.gson = GsonHelper.getOnlineGson();
 	}
 
+	/**
+	 * Returns the instance of the GeoLocationLogIOManager.
+	 * @param context The Context in which the GeoLocationLogIOManager is running.
+	 * @return The GeolocationLogIOManager instance.
+	 */
 	public static GeoLocationLogIOManager getInstance(Context context) {
 		if (instance == null) {
 			instance = new GeoLocationLogIOManager(context);
@@ -62,7 +67,10 @@ public class GeoLocationLogIOManager {
 		return instance;
 	}
 
-	// Serialize ArrayList of log entries to JSON
+	/**
+	 * Serializes an ArrayList of Geolocations and saves them.
+	 * @param list The ArrayList of GeoLocations to serialize.
+	 */
 	public void serializeLog(ArrayList<GeoLocation> list) {
 		try {
 			String json = gson.toJson(list);
@@ -79,7 +87,10 @@ public class GeoLocationLogIOManager {
 		}
 	}
 
-	// Deserialize ArrayList of log entries from JSON
+	/**
+	 * Deserializes and returns the GeoLocations stored in our app.
+	 * @return An ArrayList of the stored GeoLocations.
+	 */
 	public ArrayList<GeoLocation> deserializeLog() {
 		ArrayList<GeoLocation> list = new ArrayList<GeoLocation>();
 		try {
