@@ -73,7 +73,7 @@ public class GetCommentsRunnable implements Runnable {
 			}
 			String json = ElasticSearchQueries.commentsScript(idList);
 			URL url = new URL(
-					"http://cmput301.softwareprocess.es:8080/cmput301w14t08/geoCommentTest/_mget");
+					"http://cmput301.softwareprocess.es:8080/cmput301w14t08/geoComment/_mget");
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("GET");

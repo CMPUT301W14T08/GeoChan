@@ -21,7 +21,7 @@
 package ca.ualberta.cmput301w14t08.geochan.interfaces;
 
 /**
- * Provides an interface for a DialogListener that displays a dialog on receiving some message.
+ * Provides an interface for a DialogListener that performs some action on receiving some message.
  * @author Artem Herasymchuk
  *
  */
