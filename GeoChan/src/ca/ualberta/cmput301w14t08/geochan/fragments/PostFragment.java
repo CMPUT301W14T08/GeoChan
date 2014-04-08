@@ -196,7 +196,6 @@ public class PostFragment extends Fragment {
                 ErrorDialog.show(getActivity(), "Title can not be left blank.");
             } else {
                 Comment newComment = new Comment(comment, image, geoLocation, commentToReplyTo);
-                //ElasticSearchClient client = ElasticSearchClient.getInstance();
                 if (commentToReplyTo != null) {
                     Comment c = thread.findCommentById(thread.getBodyComment(),
                             commentToReplyTo.getId());
@@ -290,7 +289,7 @@ public class PostFragment extends Fragment {
 									ImageHelper.REQUEST_CAMERA);
 						}
 					} catch (IOException e) {
-						// do something
+						e.printStackTrace();
 					}
 				}
 			});

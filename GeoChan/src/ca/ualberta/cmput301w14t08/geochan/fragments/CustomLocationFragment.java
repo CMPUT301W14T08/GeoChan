@@ -98,8 +98,6 @@ public class CustomLocationFragment extends Fragment {
 	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		// inflater.inflate(R.menu.thread_list, menu);
 		MenuItem item = menu.findItem(R.id.action_settings);
 		item.setVisible(true);
 		super.onCreateOptionsMenu(menu, inflater);
