@@ -289,7 +289,7 @@ public class ThreadListFragment extends Fragment implements
 			}
 		});
 
-		if (!refresh) {
+		if (!refresh && connectHelper.isConnected()) {
 			threadListView.setRefreshing();
 			ThreadManager.startGetThreadComments(this);
 			refresh = true;

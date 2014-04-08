@@ -241,7 +241,8 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             }
         });
         
-        if (!refresh && isFavCom != -1) {
+		// Toggle PullToRefresh programatically on start
+        if (!refresh && isFavCom != -1 && connectHelper.isConnected()) {
         	threadView.setRefreshing();
             ThreadManager.startGetComments(this, threadIndex);
             refresh = true;

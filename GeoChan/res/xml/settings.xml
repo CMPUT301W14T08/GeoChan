@@ -9,7 +9,7 @@
         android:title="Settings" >
         
         <EditTextPreference
-            android:defaultValue="Anon"
+            android:defaultValue="User"
             android:dialogTitle="Username:"
             android:key="username"
             android:singleLine="true"
