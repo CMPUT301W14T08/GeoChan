@@ -20,6 +20,15 @@
 
 package ca.ualberta.cmput301w14t08.geochan.interfaces;
 
+/**
+ * Provides an interface for a DialogListener that displays a dialog on receiving some message.
+ * @author Artem Herasymchuk
+ *
+ */
 public interface UpdateDialogListenerInterface {
+	
+	/**
+	 * Some reloading action performed by classes that implement UpdateDialogListenerInterface.
+	 */
 	void reload();
 }

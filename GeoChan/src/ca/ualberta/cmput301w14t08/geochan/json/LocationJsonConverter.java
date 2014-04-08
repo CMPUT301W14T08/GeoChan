@@ -52,6 +52,8 @@ public class LocationJsonConverter implements JsonSerializer<Location>, JsonDese
 	 *            the Type
 	 * @param jsc
 	 *            the JSON serialization context
+	 *           
+	 * @return A JsonElement representing the serialized Location.
 	 *
      */
     @Override
@@ -76,9 +78,12 @@ public class LocationJsonConverter implements JsonSerializer<Location>, JsonDese
 	 *            the JSON element to deserialize
 	 * @param type
 	 *            the Type
-	 * @param jsc
-	 *            the JSON serialization context
+	 * @param jdc
+	 *            the JSON deserialization context
 	 *
+	 * @return The deserialized Location object.
+	 * 
+	 * @throws JsonParseException
      */
     @Override
     public Location deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)

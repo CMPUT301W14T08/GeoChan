@@ -58,6 +58,8 @@ public class CommentJsonConverter implements JsonSerializer<Comment>,
 	 *            the Type
 	 * @param context
 	 *            the JSON serialization context
+	 *            
+	 * @return A JsonElement representing the serialized Comment.
 	 */
 	@Override
 	public JsonElement serialize(Comment comment, Type type,
@@ -119,6 +121,10 @@ public class CommentJsonConverter implements JsonSerializer<Comment>,
 	 *            the Type
 	 * @param context
 	 *            the JSON deserialization context
+	 *            
+	 * @return The deserialized Comment.
+	 * 
+	 * @throws JsonParseException
 	 */
 	@Override
 	public Comment deserialize(JsonElement json, Type type,
