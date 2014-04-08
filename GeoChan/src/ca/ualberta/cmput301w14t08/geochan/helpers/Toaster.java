@@ -38,7 +38,7 @@ public class Toaster {
 
     /** 
      * Constructs the Toaster object.
-     * @param context  the context
+     * @param context  The context the Toaster is running in.
      */
     private Toaster(Context context) {
         this.context = context;
@@ -46,7 +46,7 @@ public class Toaster {
 
     /**
      * Generates an instance of the Toaster singleton object.
-     * @param context  the context
+     * @param context  The context the Toaster is running in.
      */
     public static void generateInstance(Context context) {
         instance = new Toaster(context);
@@ -54,7 +54,7 @@ public class Toaster {
 
     /**
      * Shows a short Toast message.
-     * @param message  the message
+     * @param message  The message to be displayed.
      */
     public static void toastShort(String message) {
         Toast.makeText(instance.context, message, Toast.LENGTH_SHORT).show();
@@ -62,7 +62,7 @@ public class Toaster {
 
     /**
      * Shows a long Toast message.
-     * @param message  the message
+     * @param message  The message to be displayed.
      */
     public static void toastLong(String message) {
         Toast.makeText(instance.context, message, Toast.LENGTH_LONG).show();

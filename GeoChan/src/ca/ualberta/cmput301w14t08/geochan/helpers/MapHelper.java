@@ -36,7 +36,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
  * This class holds all map data and encapsulates some common procedures
  * required to perform map operations
  * 
- * @author bradsimons
+ * @author Brad Simons
  * 
  */
 public class MapHelper {
@@ -46,8 +46,7 @@ public class MapHelper {
 	/**
 	 * Simple constructor that sets the map attribute to the map passed in
 	 * 
-	 * @param mapView
-	 *            to be set
+	 * @param mapView The MapView to be set.
 	 */
 	public MapHelper(MapView mapView) {
 		this.map = mapView;
@@ -65,11 +64,11 @@ public class MapHelper {
 
 	/**
 	 * Adds a marker to the map, and zooms to that point with a passed in zoom
-	 * level arg
+	 * level argument.
 	 * 
 	 * @param Marker
-	 *            to be put on map
-	 * @param int zoom level for the map
+	 *             The Marker to be put on the map.
+	 * @param int Zoom level for the map.
 	 */
 	public void addMarkerToOverlayAndCenter(CustomMarker marker, int zoomLevel) {
 		map.getOverlays().add(marker);
@@ -81,7 +80,7 @@ public class MapHelper {
 	 * Adds an array of clusterer objects to the map overlay list
 	 * 
 	 * @param clusterers
-	 *            to be added
+	 *            The GridMarkerClusterers to be added to the map overlay list.
 	 */
 	public void addClustererMarkersToOverlay(
 			ArrayList<GridMarkerClusterer> clusterers) {
@@ -91,10 +90,10 @@ public class MapHelper {
 	}
 
 	/**
-	 * Sets the zoom level for the map view
+	 * Sets the zoom level for the map view.
 	 * 
 	 * @param zoomLevel
-	 *            to be set
+	 *            The zoom level to be set.
 	 */
 	public void setZoom(int zoomLevel) {
 		map.getController().setZoom(zoomLevel);
@@ -103,31 +102,31 @@ public class MapHelper {
 	/**
 	 * Sets the center of the map to the position of the GeoPoint passed in
 	 * 
-	 * @param geoPoint
+	 * @param geoPoint The GeoPoint for the map to be centered around.
 	 */
 	public void setCenter(GeoPoint geoPoint) {
 		map.getController().setCenter(geoPoint);
 	}
 
 	/**
-	 * clears the maps overlay list
+	 * Clears the maps overlay list.
 	 */
 	public void clearOverlays() {
 		map.getOverlays().clear();
 	}
 
 	/**
-	 * Adds an Overlay object to the maps overlay list
+	 * Adds an Overlay object to the maps overlay list.
 	 * 
 	 * @param Overlay
-	 *            to be added to the map overlay list
+	 *            The Overlay to be added to the map overlay list.
 	 */
 	public void addToOverlays(Overlay overlay) {
 		map.getOverlays().add(overlay);
 	}
 
 	/**
-	 * refreshes the map view
+	 * Refreshes the map view.
 	 */
 	public void refreshMap() {
 		map.invalidate();

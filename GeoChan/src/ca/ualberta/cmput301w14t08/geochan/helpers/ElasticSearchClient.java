@@ -53,7 +53,7 @@ public class ElasticSearchClient {
      * ElasticSearchClient follows the singleton design pattern, so only one
      * instance of the class exists.
      * 
-     * @return the instance
+     * @return the instance of ElasticSearchClient.
      * 
      */
     public static ElasticSearchClient getInstance() {

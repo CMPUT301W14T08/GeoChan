@@ -46,7 +46,7 @@ public class LocationListenerService {
      * Constructs a new service object. Creates a locationListener object within
      * and implements its interface.
      * 
-     * @param activity
+     * @param activity The activity the LocationListenerService the app is running in.
      */
     public LocationListenerService(Activity activity) {
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
@@ -94,7 +94,7 @@ public class LocationListenerService {
      * Gets the current location. Checks if the latest location is better than
      * the location currently assigned
      * 
-     * @return location
+     * @return location The user's current best location.
      */
     public Location getCurrentLocation() {
         Location tempLocation = getLastKnownLocation();
@@ -107,11 +107,9 @@ public class LocationListenerService {
     /**
      * asks the location manager for the last known location on the GPS Provider
      * 
-     * @return location
+     * @return location The user's last known location
      */
     public Location getLastKnownLocation() {
-        // return
-        // locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (loc == null) {
             loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -124,9 +122,9 @@ public class LocationListenerService {
      * This code is from the Android Location Strategies guide, found here:
      * http://developer.android.com/guide/topics/location/strategies.html
      * 
-     * @param location
-     * @param currentBestLocation
-     * @return boolean
+     * @param location The new location to be compared.
+     * @param currentBestLocation The current best known position.
+     * @return boolean Whether or not the new location is better than the current best location.
      */
     public boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
@@ -178,9 +176,9 @@ public class LocationListenerService {
      * method This code is from the Android Location Strategies Guide found
      * here: http://developer.android.com/guide/topics/location/strategies.html
      * 
-     * @param provider1
-     * @param provider2
-     * @return boolean
+     * @param provider1 The first provider.
+     * @param provider2 The second provider.
+     * @return boolean Whether or not the providers are the same.
      */
     public boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
