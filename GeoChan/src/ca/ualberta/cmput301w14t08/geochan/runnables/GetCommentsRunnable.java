@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchQueries;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.managers.CacheManager;
@@ -44,11 +45,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Runnable for retrieving a comment objects in a separate thread of execution from
- * ElasticSearch. 
+ * Runnable for retrieving a comment objects in a separate thread of execution
+ * from ElasticSearch.
  * 
  * @author Artem Herasymchuk
- *
+ * 
  */
 public class GetCommentsRunnable implements Runnable {
 
@@ -62,10 +63,11 @@ public class GetCommentsRunnable implements Runnable {
 	}
 
 	/**
-	 * Forms a query and sends a multi-Get request to ES, then processes
-	 * the retrieved data into a CommentList object and saves it into an array.
-	 * Then, puts the comment object in the right place in the corresponding 
-	 * commentList to be later reconstructed into a correct hierarchy of comments.
+	 * Forms a query and sends a multi-Get request to ES, then processes the
+	 * retrieved data into a CommentList object and saves it into an array.
+	 * Then, puts the comment object in the right place in the corresponding
+	 * commentList to be later reconstructed into a correct hierarchy of
+	 * comments.
 	 */
 	@Override
 	public void run() {
@@ -85,23 +87,25 @@ public class GetCommentsRunnable implements Runnable {
 				throw new InterruptedException();
 			}
 			String json = ElasticSearchQueries.commentsScript(idList);
-			URL url = new URL(
-					"http://cmput301.softwareprocess.es:8080/cmput301w14t08/geoComment/_mget");
-			
+
+			String server = ElasticSearchClient.URL + "/"
+					+ ElasticSearchClient.URL_INDEX + "/"
+					+ ElasticSearchClient.TYPE_COMMENT + "/_mget";
+			URL url = new URL(server);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("GET");
-			
+
 			DataOutputStream writeStream = new DataOutputStream(
 					connection.getOutputStream());
 			writeStream.writeBytes(json);
 			writeStream.flush();
 			writeStream.close();
-			
+
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
-			
+
 			StringBuffer response = new StringBuffer();
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
@@ -111,30 +115,30 @@ public class GetCommentsRunnable implements Runnable {
 				response.append(inputLine);
 			}
 			in.close();
-			
+
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
-			
+
 			String responseJson = response.toString();
 			Gson gson = GsonHelper.getOnlineGson();
 			Type elasticSearchDocsType = new TypeToken<ElasticSearchDocs<Comment>>() {
 			}.getType();
-			
+
 			ElasticSearchDocs<Comment> esResponse = gson.fromJson(responseJson,
 					elasticSearchDocsType);
 			ArrayList<Comment> list = new ArrayList<Comment>();
-			
+
 			for (ElasticSearchResponse<Comment> r : esResponse.getDocs()) {
 				Comment object = r.getSource();
 				list.add(object);
 			}
-			
+
 			for (Comment comment : list) {
 				commentList.findCommentListById(commentList, comment.getId())
 						.setComment(comment);
 			}
-			
+
 			ThreadComment threadComment = ThreadList.getThreads().get(
 					task.getThreadIndex());
 			Comment bodyComment = threadComment.getBodyComment();
@@ -155,7 +159,6 @@ public class GetCommentsRunnable implements Runnable {
 				task.handleGetCommentsState(STATE_GET_COMMENTS_FAILED);
 			}
 			connection.disconnect();
-			// task.setGetCommentsThread(null);
 			Thread.interrupted();
 		}
 

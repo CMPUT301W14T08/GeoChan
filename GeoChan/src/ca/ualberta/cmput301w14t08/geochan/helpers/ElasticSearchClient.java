@@ -25,45 +25,46 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.ClientConfig;
 
 /**
- * This class is responsible for ElasticSearch operations. Contains server connection
- * data and methods to create a singleton
+ * This class is responsible for ElasticSearch operations. Contains server
+ * connection data and methods to create a singleton
  * 
  * @author Artem Herasymchuk
  */
 public class ElasticSearchClient {
-    private static ElasticSearchClient instance = null;
-    private static JestClient client;
+	private static ElasticSearchClient instance = null;
+	private static JestClient client;
 
-    public static final String TYPE_COMMENT = "geoComment";
-    public static final String TYPE_THREAD = "geoThread";
-    public static final String TYPE_INDEX = "geoCommentList";
-    public static final String TYPE_IMAGE = "geoImage";
-    public static final String URL = "http://cmput301.softwareprocess.es:8080";
-    public static final String URL_INDEX = "cmput301w14t08";
+	public static final String TYPE_COMMENT = "geoComment";
+	public static final String TYPE_THREAD = "geoThread";
+	public static final String TYPE_INDEX = "geoCommentList";
+	public static final String TYPE_IMAGE = "geoImage";
+	public static final String URL = "http://cmput301.softwareprocess.es:8080";
+	public static final String URL_INDEX = "cmput301w14t08";
 
-    private ElasticSearchClient() {
-        ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true).build();
-        JestClientFactory factory = new JestClientFactory();
-        factory.setClientConfig(config);
-        client = factory.getObject();
-    }
+	private ElasticSearchClient() {
+		ClientConfig config = new ClientConfig.Builder(URL).multiThreaded(true)
+				.build();
+		JestClientFactory factory = new JestClientFactory();
+		factory.setClientConfig(config);
+		client = factory.getObject();
+	}
 
-    /**
-     * Returns the single instance of the ElasticSearchClient.
-     * ElasticSearchClient follows the singleton design pattern, so only one
-     * instance of the class exists.
-     * 
-     * @return the instance of ElasticSearchClient.
-     * 
-     */
-    public static ElasticSearchClient getInstance() {
-        if (instance == null) {
-            instance = new ElasticSearchClient();
-        }
-        return instance;
-    }
+	/**
+	 * Returns the single instance of the ElasticSearchClient.
+	 * ElasticSearchClient follows the singleton design pattern, so only one
+	 * instance of the class exists.
+	 * 
+	 * @return the instance of ElasticSearchClient.
+	 * 
+	 */
+	public static ElasticSearchClient getInstance() {
+		if (instance == null) {
+			instance = new ElasticSearchClient();
+		}
+		return instance;
+	}
 
-    public JestClient getClient() {
-        return client;
-    }
+	public JestClient getClient() {
+		return client;
+	}
 }
