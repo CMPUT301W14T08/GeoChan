@@ -96,6 +96,12 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     	threadIndex = (int) bundle.getLong("id");
     	isFavCom = bundle.getInt("favCom");
     	thread = bundle.getParcelable("thread");
+        if (locationListener == null) {
+            locationListener = new LocationListenerService(getActivity());
+        }
+        if (prefManager == null) {
+            prefManager = PreferencesManager.getInstance();
+        }
     	// Assign custom adapter to the thread listView.
     	adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
     	if (isFavCom != -1) {
@@ -168,12 +174,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     @Override
     public void onResume() {
         setHasOptionsMenu(true);
-        if (locationListener == null) {
-            locationListener = new LocationListenerService(getActivity());
-        }
-        if (prefManager == null) {
-            prefManager = PreferencesManager.getInstance();
-        }
         if (locSortFlag == 1) {
             prefManager.setCommentSort(SortUtil.SORT_LOCATION);
             SortUtil.sortComments(SortUtil.SORT_LOCATION, thread.getBodyComment().getChildren());
