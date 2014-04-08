@@ -94,7 +94,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         threadIndex = (int) bundle.getLong("id");
-        int isFavCom = bundle.getInt("favCom");
+        isFavCom = bundle.getInt("favCom");
         thread = bundle.getParcelable("thread");
         // Assign custom adapter to the thread listView.
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
@@ -107,17 +107,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         if (!connectHelper.isConnected()) {
         	Toaster.toastShort("No network connection.");
         } 
-        /*
-        if (!connectHelper.isConnected()) {
-            Toaster.toastShort("No network connection.");
-            ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
-            if (comments != null) {
-                thread.getBodyComment().setChildren(comments);
-            }
-        } else if (isFavCom != -1) {
-            ThreadManager.startGetComments(this, threadIndex);
-        }
-        */
     }
 
     /**
@@ -201,7 +190,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             }
         });
         
-        if (!refresh) {
+        if (!refresh && isFavCom != -1) {
         	threadView.setRefreshing();
             ThreadManager.startGetComments(this, threadIndex);
             refresh = true;

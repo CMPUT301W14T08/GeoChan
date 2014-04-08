@@ -13,6 +13,7 @@
         <menu>
         <group android:checkableBehavior="single">
         <item android:id="@+id/thread_sort_score_high"
+              android:checked="true"
               android:title="@string/score_highest"/>
         
         <item android:id="@+id/thread_sort_score_low"

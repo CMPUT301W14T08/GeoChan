@@ -133,7 +133,7 @@ public class MapViewFragment extends Fragment {
 		markers = new ArrayList<CustomMarker>();
 
 		setupClusterGroups();
-
+		
 		GeoLocation geoLocation = topComment.getLocation();
 		if (geoLocation.getLocation() == null) {
 			ErrorDialog.show(getActivity(), "Thread has no location");
@@ -212,7 +212,6 @@ public class MapViewFragment extends Fragment {
 			mapData.getOverlays().add(directionsClusterMarkers);
 			mapData.getOverlays().add(originalPostMarker);
 		}
-
 		mapData.getMap().invalidate();
 	}
 
