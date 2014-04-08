@@ -91,23 +91,74 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      */
     @Override
     public void onCreate (Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        threadIndex = (int) bundle.getLong("id");
-        isFavCom = bundle.getInt("favCom");
-        thread = bundle.getParcelable("thread");
-        // Assign custom adapter to the thread listView.
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-        connectHelper = ConnectivityHelper.getInstance();
-        cache = CacheManager.getInstance();
-        ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
-        if (comments != null) {
-            thread.getBodyComment().setChildren(comments);
+    	super.onCreate(savedInstanceState);
+    	Bundle bundle = getArguments();
+    	threadIndex = (int) bundle.getLong("id");
+    	isFavCom = bundle.getInt("favCom");
+    	thread = bundle.getParcelable("thread");
+    	// Assign custom adapter to the thread listView.
+    	adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+    	if (isFavCom != -1) {
+    		connectHelper = ConnectivityHelper.getInstance();
+    		cache = CacheManager.getInstance();
+    		ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
+    		if (comments != null) {
+    			thread.getBodyComment().setChildren(comments);
+    		}
+    		if (!connectHelper.isConnected()) {
+    			Toaster.toastShort("No network connection.");
+    		}
         }
-        if (!connectHelper.isConnected()) {
-        	Toaster.toastShort("No network connection.");
-        } 
     }
+    
+    /**
+     * Sets the proper sort option in our options menu.
+     * 
+     * @param The fragment's menu.
+     */
+	@Override
+	public void onPrepareOptionsMenu(Menu menu){
+		int sortType = prefManager.getCommentSort();
+		setSortCheck(sortType, menu);
+		super.onPrepareOptionsMenu(menu);
+	}
+	
+	/**
+	 * Checks the proper sort option in our options menu.
+	 * @param sort Code for the sort type.
+	 * @param menu The fragment's menu.
+	 */
+	private void setSortCheck(int sort, Menu menu){
+		MenuItem item;
+		switch(sort){
+		case SortUtil.SORT_DATE_NEWEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_DATE_OLDEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_LOCATION:
+			item = menu.findItem(R.id.comment_sort_location);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_HIGHEST:
+			item = menu.findItem(R.id.comment_sort_score_high);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_LOWEST:
+			item = menu.findItem(R.id.comment_sort_score_low);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_IMAGE:
+			item = menu.findItem(R.id.comment_sort_image);
+			item.setChecked(true);
+			return;
+		default:
+			return;
+		}
+	}
 
     /**
      * Initializes the variables used in displaying the contents of a

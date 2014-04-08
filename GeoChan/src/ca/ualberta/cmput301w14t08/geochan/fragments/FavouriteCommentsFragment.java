@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,9 @@ public class FavouriteCommentsFragment extends Fragment {
      */
     public void onStart() {
         super.onStart();
+        for (ThreadComment tc : list) {
+        	Log.e("FAVS",tc.getBodyComment().getId());
+        }
         favouritesListView = (ListView) getView().findViewById(R.id.favourites_list);
         FavouriteCommentsAdapter adapter = new FavouriteCommentsAdapter(list, getActivity());
         // Assign custom adapter to the thread listView.
@@ -90,8 +94,9 @@ public class FavouriteCommentsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = new ThreadViewFragment();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("thread", list.get((int) id));
+                bundle.putParcelable("thread", list.get((int) position));
                 bundle.putInt("favCom", -1);
+                bundle.putLong("id", id);
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, fragment, "thread_view_fragment")
