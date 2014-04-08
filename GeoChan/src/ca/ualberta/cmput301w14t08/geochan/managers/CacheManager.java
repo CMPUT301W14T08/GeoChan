@@ -42,12 +42,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Class responsible for managing local saving of threadsList, threads, and comments.
- * As well as managing and saving the queues of comments and threadComments which are
- * to be posted when internet connection is acquired.
+ * Class responsible for managing local saving of threadsList, threads, and
+ * comments. As well as managing and saving the queues of comments and
+ * threadComments which are to be posted when internet connection is acquired.
  * 
  * @author Artem Chikin
- *
+ * 
  */
 public class CacheManager {
 	private static CacheManager instance = null;
@@ -69,7 +69,7 @@ public class CacheManager {
 	 * Initializes the CacheManager fields, private because of the Singleton
 	 * pattern.
 	 * 
-	 * @param context
+	 * @param context The Context the CacheManager is running in.
 	 */
 	private CacheManager(Context context) {
 		this.context = context;
@@ -84,7 +84,7 @@ public class CacheManager {
 	 * Adds a comment to the Queue of comments to post when Internet connection
 	 * is acquired. Serializes the queue.
 	 * 
-	 * @param comment
+	 * @param comment The Comment to be added to the queue.
 	 */
 	public void addCommentToQueue(Comment comment) {
 		commentQueue.add(comment);
@@ -95,7 +95,7 @@ public class CacheManager {
 	 * Adds a threadComment to the Queue of threadComments to post when Internet
 	 * connection is acquired. Serializes the queue.
 	 * 
-	 * @param comment
+	 * @param thread The ThreadComment to be added to the queue.
 	 */
 	public void addThreadCommentToQueue(ThreadComment thread) {
 		threadCommentQueue.add(thread);
@@ -108,13 +108,14 @@ public class CacheManager {
 	 */
 	public void postAll() {
 		for (Comment comment : commentQueue) {
-			ThreadManager.startPost(comment, null, comment.getLocation(), null);
+			ThreadManager.startPost(comment, null, comment.getLocation(), null,
+					false);
 			commentQueue.remove(comment);
 		}
 		for (ThreadComment threadComment : threadCommentQueue) {
 			Comment bodyComment = threadComment.getBodyComment();
 			ThreadManager.startPost(bodyComment, threadComment.getTitle(),
-					bodyComment.getLocation(), null);
+					bodyComment.getLocation(), null, false);
 			threadCommentQueue.remove(threadComment);
 		}
 		serializeCommentQueue();
@@ -146,7 +147,9 @@ public class CacheManager {
 		this.threadCommentQueue = threadCommentQueue;
 	}
 
-	// Serialize commentQueue to JSON
+	/**
+	 * Serializes the comment queue to JSON.
+	 */
 	public void serializeCommentQueue() {
 		try {
 			String json = offlineGson.toJson(getCommentQueue());
@@ -163,7 +166,10 @@ public class CacheManager {
 		}
 	}
 
-	// Deserialize comment Queue from JSON
+	/**
+	 * Deserializes the comment queue from JSON.
+	 * @return An ArrayList of the deserialized Comments.
+	 */
 	public ArrayList<Comment> deserializeCommentQueue() {
 		ArrayList<Comment> list = new ArrayList<Comment>();
 		try {
@@ -189,7 +195,9 @@ public class CacheManager {
 		return list;
 	}
 
-	// Serialize commentQueue to JSON
+	/**
+	 * Serializes the ThreadComment queue to JSON.
+	 */
 	public void serializeThreadCommentQueue() {
 		try {
 			String json = offlineGson.toJson(getThreadCommentQueue());
@@ -206,7 +214,10 @@ public class CacheManager {
 		}
 	}
 
-	// Deserialize threadComment Queue from JSON
+	/**
+	 * Deserializes the ThreadComment queue from JSON.
+	 * @return An ArrayList of the deserialized ThreadComments.
+	 */
 	public ArrayList<ThreadComment> deserializeThreadCommentQueue() {
 		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
 		try {
@@ -232,6 +243,11 @@ public class CacheManager {
 		return list;
 	}
 
+	/**
+	 * Serializes a Bitmap into JSON and stores it in the cache.
+	 * @param image The Bitmap to be serialized.
+	 * @param id The ID of the image being serialized.
+	 */
 	public void serializeImage(Bitmap image, String id) {
 		try {
 			String json = onlineGson.toJson(image);
@@ -248,6 +264,11 @@ public class CacheManager {
 		}
 	}
 
+	/**
+	 * Deserializes an image from the cache and returns it.
+	 * @param id The ID of the comment to retrieve.
+	 * @return The deserialized Bitmap.
+	 */
 	public Bitmap deserializeImage(String id) {
 		Bitmap image = null;
 		try {
@@ -275,7 +296,7 @@ public class CacheManager {
 	 * Serialize the list of threads with all the data with the exception of all
 	 * the comment children of the Thread body comment.
 	 * 
-	 * @param list
+	 * @param list The ArrayList of ThreadComments to serialize.
 	 */
 	public void serializeThreadList(ArrayList<ThreadComment> list) {
 		try {
@@ -294,9 +315,9 @@ public class CacheManager {
 	}
 
 	/**
-	 * Deserialise a list of ThreadComment objects without comments.
+	 * Deserialize a list of ThreadComment objects without comments.
 	 * 
-	 * @return
+	 * @return The ArrayList of ThreadComments.
 	 */
 	public ArrayList<ThreadComment> deserializeThreadList() {
 		ArrayList<ThreadComment> list = new ArrayList<ThreadComment>();
@@ -325,9 +346,9 @@ public class CacheManager {
 
 	/**
 	 * Serialize ThreadComment object into a file with the file's name being
-	 * ThreadComment's id;
+	 * ThreadComment's id.
 	 * 
-	 * @param thread
+	 * @param thread The ThreadComment to serialize.
 	 */
 	public void serializeThreadCommentById(ThreadComment thread) {
 		try {
@@ -348,12 +369,12 @@ public class CacheManager {
 	/**
 	 * Retrieve ThreadComment object by id and return the children of its body
 	 * comment. This is done because we already have ThreadComment object and
-	 * its BodyComment from the ThreadComment Deserializers, This deserializer
+	 * its BodyComment from the ThreadComment Deserializers. This deserializer
 	 * runs when a thread is opened and we need to retrieve comments only from
 	 * the cache.
 	 * 
-	 * @param id
-	 * @return
+	 * @param id The id of the ThreadComment to deserialize.
+	 * @return An ArrayList of the ThreadComment's body comment's children.
 	 */
 	public ArrayList<Comment> deserializeThreadCommentById(String id) {
 		ThreadComment thread = null;

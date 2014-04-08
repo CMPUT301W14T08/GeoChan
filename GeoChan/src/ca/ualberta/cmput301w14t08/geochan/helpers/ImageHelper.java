@@ -30,13 +30,18 @@ import android.os.Environment;
 /**
  * Creates a file to store an image and returns it.
  * 
- * @author Tom
+ * @author Tom Krywitsky
  */
 public class ImageHelper {
 
     public static final int REQUEST_GALLERY = 101;
     public static final int REQUEST_CAMERA = 102;
 
+    /**
+     * Creates an image file with the properly generated filename.
+     * @return The image file.
+     * @throws IOException
+     */
     public static File createImageFile() throws IOException {
         Locale locale = Locale.getDefault();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", locale).format(new Date());

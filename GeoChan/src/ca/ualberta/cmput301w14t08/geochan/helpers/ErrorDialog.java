@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 
 /**
  * Helper class. Used to display error messages to the user.
+ * @author Artem Chikin, Artem Herasymchuk, Henry Pabst, Brad Simons, Tom Krywitsky
  * 
  */
 public class ErrorDialog {

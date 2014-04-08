@@ -94,6 +94,8 @@ public class SortUtil {
         	try{
             Collections.sort(threads, sortThreadsByUserScoreHighest());
         	} catch (NullPointerException e) {
+        		//If the device has never gotten a location, we fall back on
+        		//sorting by newest date, and approximation to relevance.
         		Collections.sort(threads, sortThreadsByDateNewest());
         	}
             break;
@@ -101,6 +103,7 @@ public class SortUtil {
         	try{
             Collections.sort(threads, sortThreadsByUserScoreLowest());
         	} catch (NullPointerException e){
+        		//Fallback for if the device has never gotten a location.
         		Collections.sort(threads, sortThreadsByDateOldest());
         	}
             break;

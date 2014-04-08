@@ -55,6 +55,9 @@ public class BitmapJsonConverter implements JsonSerializer<Bitmap>,
 	 *            the Type
 	 * @param jsc
 	 *            the JSON deserialization context
+	 * @return The deserialized Bitmap.
+	 * 
+	 * @throws JsonParseException
 	 */
 	@Override
 	public Bitmap deserialize(JsonElement jsonElement, Type type,
@@ -88,6 +91,8 @@ public class BitmapJsonConverter implements JsonSerializer<Bitmap>,
 	 *            the type
 	 * @param jsc
 	 *            the JSON serialization context
+	 *            
+	 * @return a JsonElement representing the serialized Bitmap.
 	 */
 	@Override
 	public JsonElement serialize(Bitmap bitmap, Type type,

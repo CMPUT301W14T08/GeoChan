@@ -45,7 +45,7 @@ public class ConnectivityHelper {
      * Constructor, sets up the connectivity manager. Private to avoid usage
      * outside of as a singleton.
      * 
-     * @param context
+     * @param context The Context in which the ConnectivityHelper is running.
      */
     private ConnectivityHelper(Context context) {
         connectivityManager = (ConnectivityManager) context
@@ -58,7 +58,7 @@ public class ConnectivityHelper {
      * Generates a singleton instance of this helper.
      * 
      * @param context
-     *            the context
+     *            The Context in which the ConnectivityHelper is running.
      */
     public static void generateInstance(Context context) {
         instance = new ConnectivityHelper(context);
@@ -67,7 +67,7 @@ public class ConnectivityHelper {
     /**
      * Returns the singleton instance of this helper
      * 
-     * @return the instance
+     * @return The instance of ConnectivityHelper.
      */
     public static ConnectivityHelper getInstance() {
         return instance;
@@ -76,7 +76,7 @@ public class ConnectivityHelper {
     /**
      * Returns true if device is connected to internet
      * 
-     * @return the connection status
+     * @return The connection status.
      */
     public boolean isConnected() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -91,7 +91,7 @@ public class ConnectivityHelper {
     /**
      * Returns true if device is connected via WiFi
      * 
-     * @return the connection status
+     * @return The Wifi status.
      */
     public boolean isWifi() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -101,7 +101,7 @@ public class ConnectivityHelper {
     /**
      * Returns true if device is connected via Mobile
      * 
-     * @return the connection status
+     * @return The mobile status.
      */
     public boolean isMobile() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();

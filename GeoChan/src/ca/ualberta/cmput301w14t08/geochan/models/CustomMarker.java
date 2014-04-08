@@ -47,8 +47,8 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing just the marker and setting its position
 	 * 
-	 * @param mapView
-	 * @param geoLocation
+	 * @param mapView The MapView the marker is being placed on.
+	 * @param geoLocation The GeoLocation the marker is being placed at.
 	 */
 	public CustomMarker(GeoLocation geoLocation, MapView mapView) {
 		super(mapView);
@@ -60,9 +60,9 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructor for initializing the marker, setting its position and icon
 	 * 
-	 * @param mapView
-	 * @param geoLocation
-	 * @param icon
+	 * @param mapView The Mapview the marker is being placed on.
+	 * @param geoLocation The GeoLocation the marker is being placed at.
+	 * @param icon The Drawable icon for the marker.
 	 */
 	public CustomMarker(GeoLocation geoLocation, MapView mapView, Drawable icon) {
 		super(mapView);
@@ -102,11 +102,9 @@ public class CustomMarker extends Marker {
 	 *            string for the info window
 	 * @param activity
 	 *            which this object resides in
-	 */
+     */
 	public void setUpInfoWindow(String title, Activity activity) {
-		MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-				R.layout.bonuspack_bubble, mapView);
-		super.setInfoWindow(infoWindow);
+		this.createInfoWindow();
 		super.setTitle(title);
 		super.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
@@ -139,7 +137,7 @@ public class CustomMarker extends Marker {
 	/**
 	 * Constructs a geoPoint from the geoLocation and returns it
 	 * 
-	 * @return GeoPoint corresponding to the geoLocation
+	 * @return GeoPoint  GeoPoint corresponding to the CustomMarker's Geolocation.
 	 */
 	public GeoPoint getGeoPoint() {
 		return geoLocation.makeGeoPoint();

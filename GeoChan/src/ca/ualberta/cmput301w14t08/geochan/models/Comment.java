@@ -182,7 +182,8 @@ public class Comment implements Parcelable {
 	 *         terms of coordinates.
 	 */
 	public double getDistanceFrom(GeoLocation geo) {
-		return this.getLocation().distance(geo);
+		GeoLocation thisGeo = this.getLocation();
+		return thisGeo.distance(geo);
 	}
 
 	/**

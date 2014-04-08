@@ -82,13 +82,13 @@ public class CommentList {
 	}
 
 	/**
-	 * Recursively finds and returns the commentList with a given id
+	 * Recursively finds and returns the commentList with a given id.
 	 * 
 	 * @param commentList
 	 *            search starting node
 	 * @param id
 	 *            id to search by
-	 * @return
+	 * @return The found CommentList. Return value is null if the CommentList is not found.
 	 */
 	public CommentList findCommentListById(CommentList commentList, String id) {
 		CommentList c = null;
@@ -104,6 +104,12 @@ public class CommentList {
 		return c;
 	}
 
+	/**
+	 * Gets and stores all CommentList IDs in the passed ArrayList of Strings recursively
+	 * for the passed CommentList and all its children.
+	 * @param list The ArrayList to store the found IDs.
+	 * @param idList The CommentList to start getting IDs from.
+	 */
 	public void getIdsFromList(CommentList list, ArrayList<String> idList) {
 		idList.add(list.getId());
 		for (CommentList childList : list.getChildren()) {
@@ -114,6 +120,13 @@ public class CommentList {
 	// Should only be called on bodyComment, returns the bodyComment with the
 	// children all set.
 	// depth first traverasl
+	/**
+	 * Reconstructs the parent-child relationship between Comments given a CommentList
+	 * and the top Comment.
+	 * @param list The CommentList to construct the relationship from.
+	 * @param comment The top Comment to get children of.
+	 * @return The passed in Comment with the parent-child relationship constructed.
+	 */
 	public Comment reconsructFromCommentList(CommentList list, Comment comment) {
 		comment.setChildren(new ArrayList<Comment>());
 		if (list.getChildren().size() == 0) {

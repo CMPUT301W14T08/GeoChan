@@ -40,6 +40,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
@@ -212,7 +213,13 @@ public class ThreadManager {
 					ThreadComment threadComment = postTaskComplete
 							.getThreadComment();
 					if (threadComment != null) {
-						ThreadList.addThread(threadComment);
+						if (!postTaskComplete.isEdit()) {
+							// Update the model and sort accordingly
+							ThreadList.addThread(threadComment);
+							SortUtil.sortThreads(PreferencesManager
+									.getInstance().getThreadSort(), ThreadList
+									.getThreads());
+						}
 						FragmentActivity activity = (FragmentActivity) context;
 						ThreadListFragment fragment = (ThreadListFragment) activity
 								.getSupportFragmentManager().findFragmentByTag(
@@ -302,12 +309,8 @@ public class ThreadManager {
 					if (poiTaskComplete.getMarker() != null) {
 						poiTaskComplete.getMarker().setSubDescription(
 								(poiTaskComplete.getPOICache()));
-						if (poiTaskComplete.getMarker().getTitle()
-								.equals("Current Location")
-								|| poiTaskComplete.getMarker().getTitle()
-										.equals("OP")) {
-							poiTaskComplete.getMarker().showInfoWindow();
-						}
+						poiTaskComplete.getMarker().showInfoWindow();
+
 					}
 					poiTaskComplete.getLocation().setLocationDescription(
 							poiTaskComplete.getPOICache());
@@ -320,12 +323,7 @@ public class ThreadManager {
 						poiTaskFailed.getDialog().dismiss();
 					}
 					if (poiTaskFailed.getMarker() != null) {
-						poiTaskFailed.getMarker().setSubDescription(
-								("Unknown Location"));
-						if (poiTaskFailed.getMarker().getTitle()
-								.equals("Current Location")) {
-							poiTaskFailed.getMarker().showInfoWindow();
-						}
+						poiTaskFailed.getMarker().showInfoWindow();
 					}
 					poiTaskFailed.getLocation().setLocationDescription(
 							poiTaskFailed.getPOICache());
@@ -478,13 +476,13 @@ public class ThreadManager {
 	 * 
 	 */
 	public static PostTask startPost(Comment comment, String title,
-			GeoLocation location, ProgressDialog dialog) {
+			GeoLocation location, ProgressDialog dialog, boolean isEdit) {
 		PostTask task = instance.postTaskQueue.poll();
 		if (task == null) {
 			task = new PostTask();
 		}
 		Log.e("EEE", "INSIDE START POST");
-		task.initPostTask(instance, comment, title, location, dialog);
+		task.initPostTask(instance, comment, title, location, dialog, isEdit);
 		if (location.getLocationDescription() == null) {
 			task.setPOICache(instance.getPOICache.get(location.getLocation()
 					.toString()));
@@ -652,7 +650,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-						.sendToTarget();
+				.sendToTarget();
 			}
 			break;
 		case POST_IMAGE_COMPLETE:
@@ -660,7 +658,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-						.sendToTarget();
+				.sendToTarget();
 			}
 			break;
 		case POST_RUNNING:

@@ -41,7 +41,10 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 	public static final String UPDATE_FROM_SERVER_INTENT = "ca.ualberta.cmput301w14t08.geochan.updatefromserverintent";
 	
     /**
-     * called when BroacastReceiver receives an intent broadcast
+     * Called when BroacastReceiver receives an intent broadcast.
+     * 
+     * @param context The Context in which the ConnectivityBroadcastReceiver is running.
+     * @param intent The received broadcast.
      */
     @Override
     public void onReceive(Context context, Intent intent) {

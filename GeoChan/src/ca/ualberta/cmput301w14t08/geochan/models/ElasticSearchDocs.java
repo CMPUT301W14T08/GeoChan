@@ -22,6 +22,12 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 
 import java.util.Collection;
 
+/**
+ * A multi-document query on ElasticSearch.
+ * @author Artem Herasymchuk
+ *
+ * @param <T> The type of object returned by the query.
+ */
 public class ElasticSearchDocs<T> {
 	Collection<ElasticSearchResponse<T>> docs;
 

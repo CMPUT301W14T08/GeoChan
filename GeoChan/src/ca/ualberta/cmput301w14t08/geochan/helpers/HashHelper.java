@@ -27,6 +27,7 @@ import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
 /**
  * Helper class. Generates hashes used in identifying Comments and users.
+ * @autho Artem Chikin
  * 
  */
 public class HashHelper {
@@ -34,7 +35,7 @@ public class HashHelper {
      * Returns a hashcode calculated based on the user's Android ID and
      * username.
      * 
-     * @return the hashcode
+     * @return The hashcode as a String.
      */
     public static String getHash() {
         String user = PreferencesManager.getInstance().getUser();
@@ -47,7 +48,7 @@ public class HashHelper {
      * This method generates a hash hex string from the username and android_id
      * 
      * @param string
-     *            the username
+     *            The username.
      */
     public static String getHash(String string) {
         int id = PreferencesManager.getInstance().getId().hashCode();

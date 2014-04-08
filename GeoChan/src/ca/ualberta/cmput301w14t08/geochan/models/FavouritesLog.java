@@ -47,6 +47,11 @@ public class FavouritesLog {
         favComments = manager.deSerializeFavComments();
     }
 
+    /**
+     * Returns the instance of the FavouritesLog.
+     * @param context The Context in which the FavouritesLog is running.
+     * @return The instance of FavouritesLog.
+     */
     public static FavouritesLog getInstance(Context context) {
         if (instance == null) {
             instance = new FavouritesLog(context);
@@ -54,16 +59,28 @@ public class FavouritesLog {
         return instance;
     }
 
+    /**
+     * Adds a ThreadComment to favourites.
+     * @param thread The ThreadComment to be added.
+     */
     public void addThreadComment(ThreadComment thread) {
         threads.add(thread);
         manager.serializeThreads();
     }
     
+    /**
+     * Adds a Comment to favourites.
+     * @param comment The Comment to be added.
+     */
     public void addFavComment(ThreadComment comment) {
     	favComments.add(comment);
     	manager.serializeFavComments();
     }
 
+    /**
+     * Removes a ThreadComment from favourites.
+     * @param threadComment The ThreadComment to be removed.
+     */
     public void removeThreadComment(ThreadComment threadComment) {
         for (ThreadComment t : getThreads()) {
             if (t.getId().equals(threadComment.getId())) {
@@ -73,6 +90,10 @@ public class FavouritesLog {
         manager.serializeThreads();
     }
 
+    /**
+     * Removes a Comment from favourites.
+     * @param id The ID of the Comment to be removed.
+     */
     public void removeFavComment(String id) {
         for (ThreadComment c : getFavComments()) {
             if (c.getBodyComment().getId().equals(id)) {
@@ -85,8 +106,8 @@ public class FavouritesLog {
     /**
      * Iterate over the cached favourites and check for comment with given id
      * 
-     * @param id
-     * @return
+     * @param id The ID to be checked for.
+     * @return True if the Comment was found, false otherwise.
      */
     public boolean hasFavComment(String id) {
         for (ThreadComment c : getFavComments()) {
@@ -99,10 +120,10 @@ public class FavouritesLog {
 
     /**
      * Iterate over the cached favourites and check for threadComment with given
-     * id
+     * id.
      * 
-     * @param id
-     * @return
+     * @param id The ID to be checked for.
+     * @return True if the ThreadComment was found, false otherwise.
      */
     public boolean hasThreadComment(String id) {
         for (ThreadComment t : getThreads()) {

@@ -331,8 +331,8 @@ public class MapViewFragment extends Fragment {
 
 					CustomMarker replyMarker = new CustomMarker(
 							commentLocation, mapData.getMap(), icon);
-					replyMarker.setUpInfoWindow("Reply", getActivity());
-					replyMarker.hideInfoWindow();
+					replyMarker.createInfoWindow();
+					replyMarker.setTitle("Reply");
 					
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation

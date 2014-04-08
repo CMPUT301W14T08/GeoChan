@@ -87,6 +87,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * Gets the fragment arguments, retrieves correct
      * ThreadComment object from either ThreadList or Cache or FavouritesLog,
      * Starts the refresh from server.
+     * @param savedInstanceState The previously saved state of the Fragment.
      */
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -136,6 +137,15 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         super.onResume();
     }
 
+    /**
+     * Set up the fragment UI.
+     * 
+     * @param inflater The LayoutInflater used to inflate the fragment's UI.
+     * @param container The parent View that the  fragment's UI is attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The View for the fragment's UI.
+     * 
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +153,11 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         return inflater.inflate(R.layout.fragment_thread_view, container, false);
     }
 
+    /**
+     * Sets up the menu for the fragment.
+     * @param menu The Menu item for the fragment itself.
+     * @param inflater The inflater for inflating the fragment's menu.
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -206,11 +221,10 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * This method sets that location field TextView in
      * the view.
      * 
-     * @param view
-     * @param comment
+     * @param view The View of the Comment that was selected.
+     * @param comment The Comment itself that was selected by the user.
      */
     public void setLocationField(View view, Comment comment) {
-        // Comment location
         TextView replyLocationText = (TextView) view
                 .findViewById(R.id.thread_view_comment_location);
         GeoLocation repLocCom = comment.getLocation();
@@ -236,7 +250,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * Called when the star button is pressed on the selected comment. Save the
      * comment as favourite.
      * 
-     * @param comment
+     * @param comment The Comment to be added to favourites.
      */
     public void favouriteAComment(Comment comment) {
         Toast.makeText(getActivity(), "Comment saved to Favourites.", Toast.LENGTH_SHORT)
@@ -251,7 +265,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * Called when the star button is pressed in the selected comment when
      * comment is already starred. Remove the comment as favourite.
      * 
-     * @param comment
+     * @param id The ID of the Comment to be removed from favourites.
      */
     public void unfavouriteAComment(String id) {
         Toast.makeText(getActivity(), "Comment removed from Favourites.", Toast.LENGTH_SHORT)
@@ -265,8 +279,8 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * to a comment. The fragment takes as input the index of the thread and the
      * comment object to reply to.
      * 
-     * @param comment
-     * @param threadIndex
+     * @param comment The Comment being replied to.
+     * @param threadIndex The index of the ThreadComment where the reply is taking place.
      */
     public void replyToComment(Comment comment, int threadIndex) {
         Fragment fragment = new PostFragment();
@@ -386,7 +400,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     /**
      * Set up and launch the EditFragment for a given comment.
      * 
-     * @param comment
+     * @param comment The Comment that is being edited.
      */
     private void editComment(Comment comment){
         Fragment fragment = new EditFragment();
@@ -412,6 +426,8 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      * (location and button) layout of other comments in the list.
      * 
      * TODO: make it also deflate the layouts of comments off the screen.
+     * 
+     * @param position The position of the Comment that will not be deflated.
      */
     private void resetOtherCommentLayouts(int position) {
         for (int i = 2; i < threadView.getCount() + 1; ++i) {
@@ -435,6 +451,8 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     /**
      * Determines which sorting option the user selected and sorts the comments
      * accordingly.
+     * 
+     * @param item The MenuItem that was selected by the user.
      * 
      */
     @Override
@@ -503,6 +521,9 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         getFragmentManager().executePendingTransactions();
     }
     
+    /**
+     * Starts a new thread of execution for retrieving Comments from ElasticSearch.
+     */
 	@Override
     public void reload() {
         ThreadManager.startGetComments(this, threadIndex);
