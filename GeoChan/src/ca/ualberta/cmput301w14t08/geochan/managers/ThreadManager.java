@@ -36,7 +36,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
@@ -481,7 +480,6 @@ public class ThreadManager {
 		if (task == null) {
 			task = new PostTask();
 		}
-		Log.e("EEE", "INSIDE START POST");
 		task.initPostTask(instance, comment, title, location, dialog, isEdit);
 		if (location.getLocationDescription() == null) {
 			task.setPOICache(instance.getPOICache.get(location.getLocation()

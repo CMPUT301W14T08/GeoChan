@@ -28,7 +28,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -334,7 +333,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         if(fragment == null){
-            Log.e("DEBUG","submitLocation called for favourites fragment.");
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
             fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
@@ -353,7 +351,6 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         CustomLocationFragment fragment = (CustomLocationFragment) getSupportFragmentManager()
                 .findFragmentByTag("customLocFrag");
         if(fragment == null){
-            Log.e("DEBUG","submitCurrentLocation called for favourites fragment.");
             FavouritesFragment favFrag = (FavouritesFragment) getSupportFragmentManager()
                     .findFragmentByTag("favouritesFrag");
             fragment = (CustomLocationFragment) favFrag.getChildFragmentManager()
