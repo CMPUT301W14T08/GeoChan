@@ -28,7 +28,7 @@ import org.osmdroid.views.MapView;
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
-import ca.ualberta.cmput301w14t08.geochan.helpers.MapHelper;
+import ca.ualberta.cmput301w14t08.geochan.helpers.MapDataHelper;
 import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
@@ -38,7 +38,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  * @author Brad Simons
  * 
  */
-public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MapDataHelperTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     Activity activity;
 
@@ -46,7 +46,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      * Constructor
      * 
      */
-    public MapHelperTest() {
+    public MapDataHelperTest() {
         super(MainActivity.class);
     }
 
@@ -68,7 +68,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
     public void testConstruction() {
         MapView map = new MapView(activity, null);
 
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
         assertNotNull(mapHelper);
         assertEquals("Map objects should be the same", map, mapHelper.getMap());
     }
@@ -79,7 +79,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      */
     public void testSetupMap() {
         MapView map = new MapView(activity, null);
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
 
         mapHelper.setUpMap();
 
@@ -94,7 +94,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      */
     public void testAddMarkerAndCenter() {
         MapView map = new MapView(activity, null);
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
         mapHelper.setUpMap();
 
         GeoLocation location = new GeoLocation(1.0, 2.0);
@@ -116,7 +116,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      */
     public void testAddClustererToOverlay() {
         MapView map = new MapView(activity, null);
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
         mapHelper.setUpMap();
 
         GeoLocation location = new GeoLocation(1.0, 2.0);
@@ -139,7 +139,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      */
     public void testAddOverlay() {
         MapView map = new MapView(activity, null);
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
         mapHelper.setUpMap();
 
         GeoLocation location = new GeoLocation(1.0, 2.0);
@@ -157,7 +157,7 @@ public class MapHelperTest extends ActivityInstrumentationTestCase2<MainActivity
      */
     public void testClearOverlays() {
         MapView map = new MapView(activity, null);
-        MapHelper mapHelper = new MapHelper(map);
+        MapDataHelper mapHelper = new MapDataHelper(map);
         mapHelper.setUpMap();
 
         GeoLocation location = new GeoLocation(1.0, 2.0);

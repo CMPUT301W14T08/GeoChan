@@ -40,7 +40,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
  * @author Brad Simons
  * 
  */
-public class MapHelper {
+public class MapDataHelper {
 
 	private MapView map;
 	private GeoLocation mapCenter;
@@ -50,7 +50,7 @@ public class MapHelper {
 	 * 
 	 * @param mapView The MapView to be set.
 	 */
-	public MapHelper(MapView mapView) {
+	public MapDataHelper(MapView mapView) {
 		this.map = mapView;
 	}
 
