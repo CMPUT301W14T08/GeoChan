@@ -70,7 +70,7 @@ public class CustomLocationFragment extends Fragment {
 	private FragmentManager fragManager;
 	private LocationListenerService locationListenerService;
 	private GeoLocation newLocation;
-	private MapDataHelper map;
+	private MapDataHelper mapData;
 	private MapEventsOverlay mapEventsOverlay;
 	private ArrayList<Marker> markers;
 	private CustomMarker currentLocationMarker;
@@ -148,7 +148,7 @@ public class CustomLocationFragment extends Fragment {
 
 		setupMap(getMapEventsReceiver());
 
-		map.refreshMap();
+		mapData.refreshMap();
 	}
 
 	/**
@@ -169,11 +169,13 @@ public class CustomLocationFragment extends Fragment {
 	 *            The MapEventsReceiver for handling click events on the map.
 	 */
 	private void setupMap(MapEventsReceiver mapEventsReceiver) {
-		map = new MapDataHelper((MapView) getActivity().findViewById(R.id.map_view));
-		map.setUpMap();
+		mapData = new MapDataHelper((MapView) getActivity().findViewById(
+				R.id.map_view));
+		mapData.setUpMap();
 
-		mapEventsOverlay = new MapEventsOverlay(getActivity(), mapEventsReceiver);
-		map.addToOverlays(mapEventsOverlay);
+		mapEventsOverlay = new MapEventsOverlay(getActivity(),
+				mapEventsReceiver);
+		mapData.addToOverlays(mapEventsOverlay);
 
 		GeoLocation currentLocation = new GeoLocation(locationListenerService);
 
@@ -183,16 +185,22 @@ public class CustomLocationFragment extends Fragment {
 		if (currentLocation.getLocation() != null) {
 			Drawable icon = getResources().getDrawable(
 					R.drawable.current_location_pin);
-			currentLocationMarker = new CustomMarker(currentLocation, map.getMap(), icon);
-			currentLocationMarker.setUpInfoWindow("Current Location", getActivity());
+			currentLocationMarker = new CustomMarker(currentLocation,
+					mapData.getMap(), icon);
+
+			currentLocationMarker.setUpInfoWindow("Current Location",
+					getActivity());
+
 			markers.add(currentLocationMarker);
 
-			map.addMarkerToOverlayAndCenter(currentLocationMarker, 13);
+			setMarkerListeners(currentLocationMarker);
+
+			mapData.addMarkerToOverlayAndCenter(currentLocationMarker, 13);
 
 		} else {
 			ErrorDialog.show(getActivity(),
 					"Could not retrieve current location");
-			map.getController().setZoom(3);
+			mapData.getController().setZoom(3);
 		}
 	}
 
@@ -254,6 +262,7 @@ public class CustomLocationFragment extends Fragment {
 					marker.showInfoWindow();
 				} else {
 					hideInfoWindows();
+					
 				}
 				return false;
 			}
@@ -265,7 +274,8 @@ public class CustomLocationFragment extends Fragment {
 				/**
 				 * Called as the marker is being dragged, no implementation
 				 * 
-				 * @param marker that was dragged
+				 * @param marker
+				 *            that was dragged
 				 */
 				@Override
 				public void onMarkerDrag(Marker marker) {
@@ -275,7 +285,8 @@ public class CustomLocationFragment extends Fragment {
 				 * Called when the onDragListen action is complete Updates the
 				 * location and POI when the drag is finished
 				 * 
-				 * @param marker that was dragged
+				 * @param marker
+				 *            that was dragged
 				 */
 				@Override
 				public void onMarkerDragEnd(Marker marker) {
@@ -291,7 +302,8 @@ public class CustomLocationFragment extends Fragment {
 				 * Called when the drag operation begins. No implementation at
 				 * this time
 				 * 
-				 * @param marker that was dragged
+				 * @param marker
+				 *            that was dragged
 				 */
 				@Override
 				public void onMarkerDragStart(Marker marker) {
@@ -315,7 +327,7 @@ public class CustomLocationFragment extends Fragment {
 
 		Drawable icon = getResources().getDrawable(R.drawable.red_map_pin);
 		CustomMarker newLocationMarker = new CustomMarker(geoLocation,
-				map.getMap(), icon);
+				mapData.getMap(), icon);
 		newLocationMarker.setUpInfoWindow("New Location", getActivity());
 		newLocationMarker.setDraggable(true);
 
@@ -324,14 +336,15 @@ public class CustomLocationFragment extends Fragment {
 		markers.clear();
 		markers.add(newLocationMarker);
 
-		map.clearOverlays();
-		map.getOverlays().add(newLocationMarker);
+		mapData.clearOverlays();
+		mapData.addToOverlays(mapEventsOverlay);
+		mapData.addToOverlays(newLocationMarker);
 		if (currentLocationMarker != null) {
-			map.getOverlays().add(currentLocationMarker);
+			mapData.addToOverlays(currentLocationMarker);
 			markers.add(currentLocationMarker);
 		}
 
-		map.refreshMap();
+		mapData.refreshMap();
 	}
 
 	/**

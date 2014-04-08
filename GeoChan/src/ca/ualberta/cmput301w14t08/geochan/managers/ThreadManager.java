@@ -322,10 +322,12 @@ public class ThreadManager {
 						poiTaskFailed.getDialog().dismiss();
 					}
 					if (poiTaskFailed.getMarker() != null) {
+						poiTaskFailed.getMarker().setSubDescription(
+								("Unknown Location"));
 						poiTaskFailed.getMarker().showInfoWindow();
 					}
 					poiTaskFailed.getLocation().setLocationDescription(
-							poiTaskFailed.getPOICache());
+							"Unknown Location");
 					recycleGetPOITask(poiTaskFailed);
 					break;
 
@@ -648,7 +650,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-				.sendToTarget();
+						.sendToTarget();
 			}
 			break;
 		case POST_IMAGE_COMPLETE:
@@ -656,7 +658,7 @@ public class ThreadManager {
 				instance.updatePool.execute(task.getUpdateRunnable());
 			} else {
 				instance.handler.obtainMessage(POST_TASK_COMPLETE, task)
-				.sendToTarget();
+						.sendToTarget();
 			}
 			break;
 		case POST_RUNNING:
