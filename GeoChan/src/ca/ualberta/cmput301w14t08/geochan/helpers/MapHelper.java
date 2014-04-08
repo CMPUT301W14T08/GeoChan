@@ -31,6 +31,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
 
 import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
+import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 
 /**
  * This class holds all map data and encapsulates some common procedures
@@ -42,6 +43,7 @@ import ca.ualberta.cmput301w14t08.geochan.models.CustomMarker;
 public class MapHelper {
 
 	private MapView map;
+	private GeoLocation mapCenter;
 
 	/**
 	 * Simple constructor that sets the map attribute to the map passed in
@@ -74,6 +76,7 @@ public class MapHelper {
 		map.getOverlays().add(marker);
 		map.getController().setZoom(zoomLevel);
 		map.getController().animateTo(marker.getPosition());
+		this.mapCenter = marker.getGeoLocation();
 	}
 
 	/**
@@ -148,5 +151,14 @@ public class MapHelper {
 
 	public IMapController getController() {
 		return map.getController();
+	}
+	
+
+	public GeoLocation getMapCenter() {
+		return mapCenter;
+	}
+
+	public void setMapCenter(GeoLocation mapCenter) {
+		this.mapCenter = mapCenter;
 	}
 }

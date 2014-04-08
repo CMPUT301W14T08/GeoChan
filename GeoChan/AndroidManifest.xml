@@ -21,7 +21,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="16" ></uses-sdk>
 
     <application
         android:allowBackup="true"
