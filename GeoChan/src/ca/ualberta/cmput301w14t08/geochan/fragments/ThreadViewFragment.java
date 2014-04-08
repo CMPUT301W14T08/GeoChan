@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,9 +107,58 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     		}
     		if (!connectHelper.isConnected()) {
     			Toaster.toastShort("No network connection.");
-    		} 
-    	}
+    		}
+        }
     }
+    
+    /**
+     * Sets the proper sort option in our options menu.
+     * 
+     * @param The fragment's menu.
+     */
+	@Override
+	public void onPrepareOptionsMenu(Menu menu){
+		int sortType = prefManager.getCommentSort();
+		setSortCheck(sortType, menu);
+		super.onPrepareOptionsMenu(menu);
+	}
+	
+	/**
+	 * Checks the proper sort option in our options menu.
+	 * @param sort Code for the sort type.
+	 * @param menu The fragment's menu.
+	 */
+	private void setSortCheck(int sort, Menu menu){
+		MenuItem item;
+		switch(sort){
+		case SortUtil.SORT_DATE_NEWEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_DATE_OLDEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_LOCATION:
+			item = menu.findItem(R.id.comment_sort_location);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_HIGHEST:
+			item = menu.findItem(R.id.comment_sort_score_high);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_LOWEST:
+			item = menu.findItem(R.id.comment_sort_score_low);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_IMAGE:
+			item = menu.findItem(R.id.comment_sort_image);
+			item.setChecked(true);
+			return;
+		default:
+			return;
+		}
+	}
 
     /**
      * Initializes the variables used in displaying the contents of a
@@ -185,7 +233,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             	if (!connectHelper.isConnected()) {
                     Toaster.toastShort("No network connection.");
                     threadView.onRefreshComplete();
-                    //onLoadFinished(loader, ThreadList.getThreads());
                 } else if (isFavCom == -1) {
                 	threadView.onRefreshComplete();
                 } else {
@@ -422,7 +469,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             fromFavs = true;
         }
         bundle.putBoolean("fromFavs", fromFavs);
-        Log.e("EDIT:", "Id of comment being passed." + comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "editFrag").addToBackStack(null)

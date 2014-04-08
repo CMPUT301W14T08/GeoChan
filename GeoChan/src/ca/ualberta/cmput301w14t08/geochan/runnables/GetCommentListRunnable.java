@@ -31,6 +31,12 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/**
+ * Runnable for retrieving a CommentList from a separate thread of execution from
+ * ElasticSearch.
+ * @author Artem Hersymchuk, Artem Chikin 
+ *
+ */
 public class GetCommentListRunnable implements Runnable {
 
 	private GetCommentsTask task;

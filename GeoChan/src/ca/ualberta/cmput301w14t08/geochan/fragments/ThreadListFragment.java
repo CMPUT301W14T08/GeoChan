@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import ca.ualberta.cmput301w14t08.geochan.R;
+import ca.ualberta.cmput301w14t08.geochan.activities.MainActivity;
 import ca.ualberta.cmput301w14t08.geochan.adapters.ThreadListAdapter;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityBroadcastReceiver;
 import ca.ualberta.cmput301w14t08.geochan.helpers.ConnectivityHelper;
@@ -104,6 +105,9 @@ public class ThreadListFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		adapter = new ThreadListAdapter(getActivity(), ThreadList.getThreads());
+		if(prefManager == null){
+			prefManager = PreferencesManager.getInstance();
+		}
 		setHasOptionsMenu(true);
 	}
 
@@ -123,6 +127,17 @@ public class ThreadListFragment extends Fragment implements
 		}
 		adapter.notifyDataSetChanged();
 		super.onResume();
+	}
+	
+	/**
+	 *Checks the proper sort option in our options menu.
+	 *@param menu The fragment's menu.
+	 */
+	@Override
+	public void onPrepareOptionsMenu(Menu menu){
+		int sortType = prefManager.getThreadSort();
+		setSortCheck(sortType, menu);
+		super.onPrepareOptionsMenu(menu);
 	}
 
 	/**
@@ -172,6 +187,39 @@ public class ThreadListFragment extends Fragment implements
 				.replace(R.id.fragment_container, frag, "customLocFrag")
 				.addToBackStack(null).commit();
 		getFragmentManager().executePendingTransactions();
+	}
+	
+	/**
+	 * Sets the user selected sorting option in our options menu.
+	 * @param sort Code for the type of sort being used.
+	 * @param menu The fragment's menu.
+	 */
+	private void setSortCheck(int sort, Menu menu){
+		MenuItem item;
+		switch(sort){
+		case SortUtil.SORT_DATE_NEWEST:
+			item = menu.findItem(R.id.thread_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_DATE_OLDEST:
+			item = menu.findItem(R.id.thread_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_LOCATION:
+			item = menu.findItem(R.id.thread_sort_location);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_HIGHEST:
+			item = menu.findItem(R.id.thread_sort_score_high);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_LOWEST:
+			item = menu.findItem(R.id.thread_sort_score_low);
+			item.setChecked(true);
+			return;
+		default:
+			return;
+		}
 	}
 
 	/**
@@ -226,6 +274,7 @@ public class ThreadListFragment extends Fragment implements
 		
 		int sort = prefManager.getThreadSort();
 		SortUtil.sortThreads(sort, ThreadList.getThreads());
+		//setSortCheck(sort);
 		adapter.notifyDataSetChanged();
 
 		threadListView.setOnRefreshListener(new OnRefreshListener() {

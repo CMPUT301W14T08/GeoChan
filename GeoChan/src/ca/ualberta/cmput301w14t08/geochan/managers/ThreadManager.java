@@ -31,18 +31,15 @@ import org.osmdroid.bonuspack.overlays.Marker;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
 import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
-import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
@@ -481,7 +478,6 @@ public class ThreadManager {
 		if (task == null) {
 			task = new PostTask();
 		}
-		Log.e("EEE", "INSIDE START POST");
 		task.initPostTask(instance, comment, title, location, dialog, isEdit);
 		if (location.getLocationDescription() == null) {
 			task.setPOICache(instance.getPOICache.get(location.getLocation()

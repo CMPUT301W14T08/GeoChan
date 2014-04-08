@@ -38,7 +38,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,8 +149,6 @@ public class PostFragment extends Fragment {
 				} else {
 					Double lat = args.getDouble("LATITUDE");
 					Double lon = args.getDouble("LONGITUDE");
-					Log.e("LAT", Double.toString(lat));
-					Log.e("LON", Double.toString(lon));
 					geoLocation = new GeoLocation(lat, lon);
 
 					String locationDescription = args.getString("locationDescription");

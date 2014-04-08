@@ -29,7 +29,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -557,7 +556,6 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (thread.getBodyComment().hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_view_comment_thumbnail);
-            Log.e("OP THUMB", Integer.toString(thumbnail.getWidth()));
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(thread.getBodyComment().getImageThumb());
@@ -576,7 +574,6 @@ public class ThreadViewAdapter extends BaseAdapter {
         if (reply.hasImage()) {
             ImageButton thumbnail = (ImageButton) convertView
                     .findViewById(R.id.thread_view_comment_thumbnail);
-            Log.e("CMT THUMB", Integer.toString(thumbnail.getWidth()));
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(reply.getImageThumb());
