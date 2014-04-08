@@ -38,6 +38,14 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.GetThreadCommentsTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+
+/**
+ * Runnable for retrieving a ThreadComment objects in a separate thread of execution from
+ * ElasticSearch. 
+ * 
+ * @author Artem Herasymchuk
+ *
+ */
 public class GetThreadCommentsRunnable implements Runnable {
 	private GetThreadCommentsTask task;
 	private String type = ElasticSearchClient.TYPE_THREAD;
@@ -49,6 +57,10 @@ public class GetThreadCommentsRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Forms a query and sends a Get request to ES, then processes
+	 * retrieved data as an array of ThreadComment objects.
+	 */
 	@Override
 	public void run() {
 		task.setGetThreadCommentsThread(Thread.currentThread());

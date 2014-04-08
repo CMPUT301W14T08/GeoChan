@@ -43,6 +43,13 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.GetCommentsTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Runnable for retrieving a comment objects in a separate thread of execution from
+ * ElasticSearch. 
+ * 
+ * @author Artem Herasymchuk
+ *
+ */
 public class GetCommentsRunnable implements Runnable {
 
 	private GetCommentsTask task;
@@ -54,6 +61,12 @@ public class GetCommentsRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Forms a query and sends a multi-Get request to ES, then processes
+	 * the retrieved data into a CommentList object and saves it into an array.
+	 * Then, puts the comment object in the right place in the corresponding 
+	 * commentList to be later reconstructed into a correct hierarchy of comments.
+	 */
 	@Override
 	public void run() {
 		task.setGetCommentsThread(Thread.currentThread());
@@ -74,46 +87,54 @@ public class GetCommentsRunnable implements Runnable {
 			String json = ElasticSearchQueries.commentsScript(idList);
 			URL url = new URL(
 					"http://cmput301.softwareprocess.es:8080/cmput301w14t08/geoComment/_mget");
+			
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("GET");
+			
 			DataOutputStream writeStream = new DataOutputStream(
 					connection.getOutputStream());
 			writeStream.writeBytes(json);
 			writeStream.flush();
 			writeStream.close();
+			
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
+			
 			StringBuffer response = new StringBuffer();
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					connection.getInputStream()));
 			String inputLine;
-			if (Thread.interrupted()) {
-				throw new InterruptedException();
-			}
+
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
 			in.close();
+			
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
+			
 			String responseJson = response.toString();
 			Gson gson = GsonHelper.getOnlineGson();
 			Type elasticSearchDocsType = new TypeToken<ElasticSearchDocs<Comment>>() {
 			}.getType();
+			
 			ElasticSearchDocs<Comment> esResponse = gson.fromJson(responseJson,
 					elasticSearchDocsType);
 			ArrayList<Comment> list = new ArrayList<Comment>();
+			
 			for (ElasticSearchResponse<Comment> r : esResponse.getDocs()) {
 				Comment object = r.getSource();
 				list.add(object);
 			}
+			
 			for (Comment comment : list) {
 				commentList.findCommentListById(commentList, comment.getId())
 						.setComment(comment);
 			}
+			
 			ThreadComment threadComment = ThreadList.getThreads().get(
 					task.getThreadIndex());
 			Comment bodyComment = threadComment.getBodyComment();

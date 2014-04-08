@@ -31,6 +31,14 @@ import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
 import com.google.gson.Gson;
 
+/**
+ * Runnable for posting a CommentList object of a 
+ * corresponding Comment object in a separate thread of execution to
+ * ElasticSearch. 
+ * 
+ * @author Artem Herasymchuk
+ *
+ */
 public class UpdateRunnable implements Runnable {
 
 	private PostTask task;
@@ -44,6 +52,11 @@ public class UpdateRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Constructs a CommentList object from the PostTask's Comment
+	 * object, forms a query and sends it to ElasticSearch in a PUT
+	 * request.
+	 */
 	@Override
 	public void run() {
 		task.setUpdateThread(Thread.currentThread());

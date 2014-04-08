@@ -30,6 +30,13 @@ import ca.ualberta.cmput301w14t08.geochan.models.GeoLocation;
 import ca.ualberta.cmput301w14t08.geochan.models.GeoLocationLog;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
+/**
+ * Runnable for retrieving a POI String in a separate thread of execution from
+ * the Geo Names POI provider. Part of the PostTask.
+ * 
+ * @author Artem Chikin
+ *
+ */
 public class GetPOIOnPostRunnable implements Runnable {
 
 	private PostTask task;
@@ -41,6 +48,10 @@ public class GetPOIOnPostRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Retrieves the POI string for a given location object 
+	 * and sends it to the task's cache.
+	 */
 	@Override
 	public void run() {
 		task.setGetPOIThread(Thread.currentThread());
@@ -54,6 +65,7 @@ public class GetPOIOnPostRunnable implements Runnable {
 			}
 			// get the Geonames provider
 			POI poi;
+			// "bradleyjsimons" is the username on the service
 			GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider(
 					"bradleyjsimons");
 			GeoPoint geoPoint = new GeoPoint(location.getLatitude(),

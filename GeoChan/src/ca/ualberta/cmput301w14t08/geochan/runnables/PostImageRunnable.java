@@ -27,6 +27,14 @@ import ca.ualberta.cmput301w14t08.geochan.helpers.ElasticSearchClient;
 import ca.ualberta.cmput301w14t08.geochan.helpers.GsonHelper;
 import ca.ualberta.cmput301w14t08.geochan.tasks.PostTask;
 
+
+/**
+ * Runnable for posting a bitmap object in a separate thread of execution to
+ * ElasticSearch. 
+ * 
+ * @author Artem Herasymchuk
+ *
+ */
 public class PostImageRunnable implements Runnable {
 
 	private PostTask task;
@@ -40,6 +48,11 @@ public class PostImageRunnable implements Runnable {
 		this.task = task;
 	}
 
+	/**
+	 * Converts the task's bitmap object into a json
+	 * string, forms a query and sends it in  PUT request to
+	 * ElasticSearch.
+	 */
 	@Override
 	public void run() {
 		task.setImageThread(Thread.currentThread());
