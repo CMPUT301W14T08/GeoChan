@@ -34,10 +34,10 @@ public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static JestClient client;
     // TODO CHANGE THESE BACK!!!
-    public static final String TYPE_COMMENT = "geoCommentTest";
-    public static final String TYPE_THREAD = "geoThreadTest";
-    public static final String TYPE_INDEX = "geoCommentListTest";
-    public static final String TYPE_IMAGE = "geoImageTest";
+    public static final String TYPE_COMMENT = "geoComment";
+    public static final String TYPE_THREAD = "geoThread";
+    public static final String TYPE_INDEX = "geoCommentList";
+    public static final String TYPE_IMAGE = "geoImage";
     public static final String URL = "http://cmput301.softwareprocess.es:8080";
     public static final String URL_INDEX = "cmput301w14t08";
 
