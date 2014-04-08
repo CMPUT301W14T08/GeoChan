@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity implements OnBackStackChanged
         if (savedInstanceState != null) {
             return;
         }
-        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL EXPLODE, THESE SINGLETON
+        // DO NOT DELETE THE LINES BELOW OR THIS APP WILL CRASH, THESE SINGLETON
         // CLASSES HAVE TO BE INITIALIZED BEFORE ANYTHING ELSE.
         ConnectivityHelper.generateInstance(this);
         Toaster.generateInstance(this);

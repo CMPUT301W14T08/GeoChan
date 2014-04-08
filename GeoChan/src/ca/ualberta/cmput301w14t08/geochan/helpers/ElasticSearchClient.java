@@ -33,7 +33,6 @@ import io.searchbox.client.config.ClientConfig;
 public class ElasticSearchClient {
     private static ElasticSearchClient instance = null;
     private static JestClient client;
-    // TODO CHANGE THESE BACK!!!
     public static final String TYPE_COMMENT = "geoComment";
     public static final String TYPE_THREAD = "geoThread";
     public static final String TYPE_INDEX = "geoCommentList";

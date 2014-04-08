@@ -81,6 +81,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     private PreferencesManager prefManager = null;
     private int container;
     private int isFavCom;
+	private boolean refresh = false;
     private static int locSortFlag = 0;
 
     /**
@@ -100,6 +101,14 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
         connectHelper = ConnectivityHelper.getInstance();
         cache = CacheManager.getInstance();
+        ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
+        if (comments != null) {
+            thread.getBodyComment().setChildren(comments);
+        }
+        if (!connectHelper.isConnected()) {
+        	Toaster.toastShort("No network connection.");
+        } 
+        /*
         if (!connectHelper.isConnected()) {
             Toaster.toastShort("No network connection.");
             ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
@@ -109,6 +118,7 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         } else if (isFavCom != -1) {
             ThreadManager.startGetComments(this, threadIndex);
         }
+        */
     }
 
     /**
@@ -192,6 +202,14 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
                 }
             }
         });
+        
+        if (!refresh) {
+        	threadView.setRefreshing();
+            ThreadManager.startGetComments(this, threadIndex);
+            refresh = true;
+        }
+        
+        //threadView.setRefreshing();
         Fragment fav = getFragmentManager().findFragmentByTag("favThrFragment");
         if (fav != null) {
             container = R.id.container;
