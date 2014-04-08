@@ -113,7 +113,9 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
     }
     
     /**
-     * Sets the propersort option in our options menu.
+     * Sets the proper sort option in our options menu.
+     * 
+     * @param The fragment's menu.
      */
 	@Override
 	public void onPrepareOptionsMenu(Menu menu){
@@ -122,6 +124,11 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
 		super.onPrepareOptionsMenu(menu);
 	}
 	
+	/**
+	 * Checks the proper sort option in our options menu.
+	 * @param sort Code for the sort type.
+	 * @param menu The fragment's menu.
+	 */
 	private void setSortCheck(int sort, Menu menu){
 		MenuItem item;
 		switch(sort){
