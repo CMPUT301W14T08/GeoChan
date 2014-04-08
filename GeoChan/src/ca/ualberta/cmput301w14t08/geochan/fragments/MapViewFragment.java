@@ -26,6 +26,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.GridMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
+import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -42,6 +43,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,6 +78,7 @@ public class MapViewFragment extends Fragment {
 	private GridMarkerClusterer startAndFinishClusterMarkers;
 	private ArrayList<GridMarkerClusterer> clusterers;
 	private ArrayList<CustomMarker> markers;
+	private ArrayList<CustomMarker> replyMarkers;
 
 	/**
 	 * Set up the fragment's UI.
@@ -131,9 +134,10 @@ public class MapViewFragment extends Fragment {
 		Comment topComment = (Comment) args.getParcelable("thread_comment");
 
 		markers = new ArrayList<CustomMarker>();
+		replyMarkers = new ArrayList<CustomMarker>();
 
 		setupClusterGroups();
-		
+
 		GeoLocation geoLocation = topComment.getLocation();
 		if (geoLocation.getLocation() == null) {
 			ErrorDialog.show(getActivity(), "Thread has no location");
@@ -173,7 +177,7 @@ public class MapViewFragment extends Fragment {
 		directionsClusterMarkers.setIcon(clusterIcon);
 		replyPostClusterMarkers.setIcon(clusterIcon);
 		startAndFinishClusterMarkers.setIcon(clusterIcon);
-		
+
 		clusterers = new ArrayList<GridMarkerClusterer>();
 		clusterers.add(directionsClusterMarkers);
 		clusterers.add(replyPostClusterMarkers);
@@ -200,7 +204,7 @@ public class MapViewFragment extends Fragment {
 			originalPostMarker = new CustomMarker(geoLocation,
 					mapData.getMap(), icon);
 			originalPostMarker.setUpInfoWindow("OP", getActivity());
-			
+
 			setMarkerListeners(originalPostMarker);
 
 			markers.add(originalPostMarker);
@@ -294,11 +298,12 @@ public class MapViewFragment extends Fragment {
 		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker, MapView map) {
+				Log.e("clicked", "marker");
 				if (marker.isInfoWindowShown() != true) {
 					hideInfoWindows();
-					marker.showInfoWindow();
 				} else {
 					hideInfoWindows();
+					marker.showInfoWindow();
 				}
 				return false;
 			}
@@ -332,7 +337,7 @@ public class MapViewFragment extends Fragment {
 							commentLocation, mapData.getMap(), icon);
 					replyMarker.createInfoWindow();
 					replyMarker.setTitle("Reply");
-					
+
 					if (commentLocation.getLocationDescription() != null) {
 						replyMarker.setSubDescription(commentLocation
 								.getLocationDescription());
@@ -342,7 +347,10 @@ public class MapViewFragment extends Fragment {
 
 					setMarkerListeners(replyMarker);
 					replyPostClusterMarkers.add(replyMarker);
+					
 					markers.add(replyMarker);
+					replyMarkers.add(replyMarker);
+					
 					handleChildComments(childComment);
 				}
 			}
@@ -353,6 +361,7 @@ public class MapViewFragment extends Fragment {
 	 * Hides infoWindows for every marker on the map
 	 */
 	private void hideInfoWindows() {
+		Log.e("size of markers", Integer.toString(markers.size()));
 		for (Marker marker : markers) {
 			marker.hideInfoWindow();
 		}
@@ -376,6 +385,16 @@ public class MapViewFragment extends Fragment {
 					|| location.getLatitude() <= 90.0
 					|| location.getLongitude() >= -180.0 || location
 					.getLongitude() <= 180.0);
+		}
+	}
+	
+	/**
+	 * Simply re-adds all the reply markers to the markers array. This
+	 * is used to refresh the map
+	 */
+	private void addRepliesToMarkerArray() {
+		for (CustomMarker marker : replyMarkers) {
+			markers.add(marker);
 		}
 	}
 
@@ -446,15 +465,20 @@ public class MapViewFragment extends Fragment {
 			Drawable nodeImage = getResources().getDrawable(
 					R.drawable.ic_continue);
 
+			//directionsClusterMarkers.getItems().clear();
+			//markers.clear();
+			
 			for (int i = 0; i < road.mNodes.size(); i++) {
 				RoadNode node = road.mNodes.get(i);
 				GeoLocation geoLocation = new GeoLocation(node.mLocation);
 				CustomMarker nodeMarker = new CustomMarker(geoLocation,
 						mapData.getMap(), nodeIcon);
+
+				MarkerInfoWindow infoWindow = new MarkerInfoWindow(
+						R.layout.bonuspack_bubble, mapData.getMap());
+				nodeMarker.setInfoWindow(infoWindow);
 				
-				//MarkerInfoWindow infoWindow = new MarkerInfoWindow(
-				//		R.drawable.bonuspack_bubble, mapData.getMap());
-				//nodeMarker.setUpInfoWindow("Step " + i, getActivity());
+				nodeMarker.setTitle("Step " + i);
 				nodeMarker.setSnippet(node.mInstructions);
 				nodeMarker.setSubDescription(Road.getLengthDurationText(
 						node.mLength, node.mDuration));
@@ -495,7 +519,10 @@ public class MapViewFragment extends Fragment {
 			setMarkerListeners(currentLocationMarker);
 
 			startAndFinishClusterMarkers.add(currentLocationMarker);
+			
 			markers.add(currentLocationMarker);
+			//markers.add(originalPostMarker);
+			//addRepliesToMarkerArray();
 
 			mapData.getOverlays().clear();
 			mapData.getOverlays().add(roadOverlay);
