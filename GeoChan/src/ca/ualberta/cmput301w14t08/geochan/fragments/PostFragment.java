@@ -220,7 +220,7 @@ public class PostFragment extends Fragment {
             	} else {
             		ProgressDialog dialog = new ProgressDialog(getActivity());
             		dialog.setMessage("Getting Location Data");
-            		ThreadManager.startPost(newComment, title, geoLocation, dialog);
+            		ThreadManager.startPost(newComment, title, geoLocation, dialog, false);
             	}
                 InputMethodManager inputManager = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
