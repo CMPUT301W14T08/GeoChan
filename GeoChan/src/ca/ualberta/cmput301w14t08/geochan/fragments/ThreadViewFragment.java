@@ -106,8 +106,53 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
         }
         if (!connectHelper.isConnected()) {
         	Toaster.toastShort("No network connection.");
-        } 
+        }
+        if(prefManager == null){
+        	prefManager = PreferencesManager.getInstance();
+        }
     }
+    
+    /**
+     * Sets the propersort option in our options menu.
+     */
+	@Override
+	public void onPrepareOptionsMenu(Menu menu){
+		int sortType = prefManager.getCommentSort();
+		setSortCheck(sortType, menu);
+		super.onPrepareOptionsMenu(menu);
+	}
+	
+	private void setSortCheck(int sort, Menu menu){
+		MenuItem item;
+		switch(sort){
+		case SortUtil.SORT_DATE_NEWEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_DATE_OLDEST:
+			item = menu.findItem(R.id.comment_sort_date_new);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_LOCATION:
+			item = menu.findItem(R.id.comment_sort_location);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_HIGHEST:
+			item = menu.findItem(R.id.comment_sort_score_high);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_USER_SCORE_LOWEST:
+			item = menu.findItem(R.id.comment_sort_score_low);
+			item.setChecked(true);
+			return;
+		case SortUtil.SORT_IMAGE:
+			item = menu.findItem(R.id.comment_sort_image);
+			item.setChecked(true);
+			return;
+		default:
+			return;
+		}
+	}
 
     /**
      * Initializes the variables used in displaying the contents of a
