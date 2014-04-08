@@ -82,10 +82,15 @@ public class FavouritesLog {
      * @param threadComment The ThreadComment to be removed.
      */
     public void removeThreadComment(ThreadComment threadComment) {
+    	ThreadComment toRemove = null;
         for (ThreadComment t : getThreads()) {
             if (t.getId().equals(threadComment.getId())) {
-                getThreads().remove(t);
+            	toRemove = t;
+            	break;
             }
+        }
+        if (toRemove != null) {
+            getThreads().remove(toRemove);
         }
         manager.serializeThreads();
     }
@@ -95,10 +100,15 @@ public class FavouritesLog {
      * @param id The ID of the Comment to be removed.
      */
     public void removeFavComment(String id) {
+    	ThreadComment toRemove = null;
         for (ThreadComment c : getFavComments()) {
             if (c.getBodyComment().getId().equals(id)) {
-                getFavComments().remove(c);
+            	toRemove = c;
+            	break;
             }
+        }
+        if (toRemove != null) {
+	        getFavComments().remove(toRemove);
         }
         manager.serializeFavComments();
     }

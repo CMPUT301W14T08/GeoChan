@@ -92,22 +92,24 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
      */
     @Override
     public void onCreate (Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        threadIndex = (int) bundle.getLong("id");
-        isFavCom = bundle.getInt("favCom");
-        thread = bundle.getParcelable("thread");
-        // Assign custom adapter to the thread listView.
-        adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
-        connectHelper = ConnectivityHelper.getInstance();
-        cache = CacheManager.getInstance();
-        ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
-        if (comments != null) {
-            thread.getBodyComment().setChildren(comments);
-        }
-        if (!connectHelper.isConnected()) {
-        	Toaster.toastShort("No network connection.");
-        } 
+    	super.onCreate(savedInstanceState);
+    	Bundle bundle = getArguments();
+    	threadIndex = (int) bundle.getLong("id");
+    	isFavCom = bundle.getInt("favCom");
+    	thread = bundle.getParcelable("thread");
+    	// Assign custom adapter to the thread listView.
+    	adapter = new ThreadViewAdapter(getActivity(), thread, getFragmentManager(), threadIndex);
+    	if (isFavCom != -1) {
+    		connectHelper = ConnectivityHelper.getInstance();
+    		cache = CacheManager.getInstance();
+    		ArrayList<Comment> comments = cache.deserializeThreadCommentById(thread.getId());
+    		if (comments != null) {
+    			thread.getBodyComment().setChildren(comments);
+    		}
+    		if (!connectHelper.isConnected()) {
+    			Toaster.toastShort("No network connection.");
+    		} 
+    	}
     }
 
     /**

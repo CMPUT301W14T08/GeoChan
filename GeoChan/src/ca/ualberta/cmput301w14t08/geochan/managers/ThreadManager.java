@@ -31,6 +31,7 @@ import org.osmdroid.bonuspack.overlays.Marker;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -287,7 +288,6 @@ public class ThreadManager {
 					String id = imageTaskComplete.getId();
 					ImageView view = imageTaskComplete.getmImageWeakRef().get();
 					if (view != null) {
-						Toaster.toastShort("Image updated");
 						view.setImageBitmap(bitmap);
 					}
 					CacheManager.getInstance().serializeImage(bitmap, id);
