@@ -43,7 +43,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -298,12 +297,11 @@ public class MapViewFragment extends Fragment {
 		locationMarker.setOnMarkerClickListener(new OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker, MapView map) {
-				Log.e("clicked", "marker");
 				if (marker.isInfoWindowShown() != true) {
 					hideInfoWindows();
+					marker.showInfoWindow();
 				} else {
 					hideInfoWindows();
-					marker.showInfoWindow();
 				}
 				return false;
 			}
@@ -361,7 +359,6 @@ public class MapViewFragment extends Fragment {
 	 * Hides infoWindows for every marker on the map
 	 */
 	private void hideInfoWindows() {
-		Log.e("size of markers", Integer.toString(markers.size()));
 		for (Marker marker : markers) {
 			marker.hideInfoWindow();
 		}
@@ -411,6 +408,20 @@ public class MapViewFragment extends Fragment {
 		if (currentLocation.getLocation() == null) {
 			ErrorDialog.show(getActivity(), "Could not retrieve your location");
 		} else {
+			hideInfoWindows();
+			
+			directionsClusterMarkers.getItems().clear();
+			startAndFinishClusterMarkers.getItems().clear();
+			
+			for (Marker marker : directionsClusterMarkers.getItems()) {
+				if (markers.contains(marker)) {
+					markers.remove(marker);
+				}
+			}
+			
+			mapData.clearOverlays();
+			mapData.refreshMap();
+			
 			new GetDirectionsAsyncTask().execute();
 		}
 
@@ -464,9 +475,6 @@ public class MapViewFragment extends Fragment {
 					R.drawable.marker_node);
 			Drawable nodeImage = getResources().getDrawable(
 					R.drawable.ic_continue);
-
-			//directionsClusterMarkers.getItems().clear();
-			//markers.clear();
 			
 			for (int i = 0; i < road.mNodes.size(); i++) {
 				RoadNode node = road.mNodes.get(i);
@@ -503,8 +511,6 @@ public class MapViewFragment extends Fragment {
 			super.onPostExecute(result);
 			directionsLoadingDialog.dismiss();
 
-			hideInfoWindows();
-
 			GeoLocation currentLocation = new GeoLocation(
 					locationListenerService);
 
@@ -519,10 +525,11 @@ public class MapViewFragment extends Fragment {
 			setMarkerListeners(currentLocationMarker);
 
 			startAndFinishClusterMarkers.add(currentLocationMarker);
+			startAndFinishClusterMarkers.add(originalPostMarker);
 			
 			markers.add(currentLocationMarker);
-			//markers.add(originalPostMarker);
-			//addRepliesToMarkerArray();
+			markers.add(originalPostMarker);
+			addRepliesToMarkerArray();
 
 			mapData.getOverlays().clear();
 			mapData.getOverlays().add(roadOverlay);
