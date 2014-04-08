@@ -41,6 +41,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadListFragment;
 import ca.ualberta.cmput301w14t08.geochan.fragments.ThreadViewFragment;
+import ca.ualberta.cmput301w14t08.geochan.helpers.SortUtil;
 import ca.ualberta.cmput301w14t08.geochan.helpers.Toaster;
 import ca.ualberta.cmput301w14t08.geochan.models.Comment;
 import ca.ualberta.cmput301w14t08.geochan.models.CommentList;
@@ -214,7 +215,11 @@ public class ThreadManager {
 							.getThreadComment();
 					if (threadComment != null) {
 						if (!postTaskComplete.isEdit()) {
+							// Update the model and sort accordingly
 							ThreadList.addThread(threadComment);
+							SortUtil.sortThreads(PreferencesManager
+									.getInstance().getThreadSort(), ThreadList
+									.getThreads());
 						}
 						FragmentActivity activity = (FragmentActivity) context;
 						ThreadListFragment fragment = (ThreadListFragment) activity
