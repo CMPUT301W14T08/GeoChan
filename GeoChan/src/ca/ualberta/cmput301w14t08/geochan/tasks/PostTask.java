@@ -21,7 +21,6 @@
 package ca.ualberta.cmput301w14t08.geochan.tasks;
 
 import android.app.ProgressDialog;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.GetPOIRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostImageRunnableInterface;
 import ca.ualberta.cmput301w14t08.geochan.interfaces.PostRunnableInterface;

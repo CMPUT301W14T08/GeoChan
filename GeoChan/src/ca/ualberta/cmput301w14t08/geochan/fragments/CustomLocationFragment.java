@@ -267,7 +267,7 @@ public class CustomLocationFragment extends Fragment {
 				/**
 				 * Called as the marker is being dragged, no implementation
 				 * 
-				 * @param marker
+				 * @param marker that was dragged
 				 */
 				@Override
 				public void onMarkerDrag(Marker marker) {
@@ -277,7 +277,7 @@ public class CustomLocationFragment extends Fragment {
 				 * Called when the onDragListen action is complete Updates the
 				 * location and POI when the drag is finished
 				 * 
-				 * @param marker
+				 * @param marker that was dragged
 				 */
 				@Override
 				public void onMarkerDragEnd(Marker marker) {
@@ -293,7 +293,7 @@ public class CustomLocationFragment extends Fragment {
 				 * Called when the drag operation begins. No implementation at
 				 * this time
 				 * 
-				 * @param marker
+				 * @param marker that was dragged
 				 */
 				@Override
 				public void onMarkerDragStart(Marker marker) {
