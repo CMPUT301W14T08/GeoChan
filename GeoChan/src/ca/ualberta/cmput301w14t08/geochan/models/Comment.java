@@ -31,7 +31,6 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import ca.ualberta.cmput301w14t08.geochan.helpers.HashHelper;
 import ca.ualberta.cmput301w14t08.geochan.managers.PreferencesManager;
 
@@ -226,8 +225,6 @@ public class Comment implements Parcelable {
 		 * time for comment scoring.
 		 */
 		if (this.parent == null) {
-			Log.e("Comment:",
-					"getScoreFromParent() was incorrectly called on a top comment.");
 			return 0;
 		}
 		double distScore = distConst
@@ -260,8 +257,6 @@ public class Comment implements Parcelable {
 		int maxScore = 10000;
 
 		if (geo == null) {
-			Log.e("Comment:",
-					"getScoreFromUser() was incorrectly called with a null location.");
 			return 0;
 		}
 		double distScore = distConst

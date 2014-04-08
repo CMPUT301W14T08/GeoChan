@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -194,7 +193,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             	if (!connectHelper.isConnected()) {
                     Toaster.toastShort("No network connection.");
                     threadView.onRefreshComplete();
-                    //onLoadFinished(loader, ThreadList.getThreads());
                 } else if (isFavCom == -1) {
                 	threadView.onRefreshComplete();
                 } else {
@@ -431,7 +429,6 @@ public class ThreadViewFragment extends Fragment implements UpdateDialogListener
             fromFavs = true;
         }
         bundle.putBoolean("fromFavs", fromFavs);
-        Log.e("EDIT:", "Id of comment being passed." + comment.getId());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(container, fragment, "editFrag").addToBackStack(null)

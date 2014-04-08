@@ -23,10 +23,8 @@ package ca.ualberta.cmput301w14t08.geochan.models;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 /**
  * Handles all operations of threads in the application. 
@@ -121,8 +119,6 @@ public class ThreadComment implements Parcelable {
         double minScore = 0.0001;
 
         if (geo == null) {
-            Log.e("Thread:" + this.getTitle(),
-                    "getScoreFromUser() was incorrectly called with a null location.");
             return 0;
         }
         double distScore = distConst * (1 / Math.sqrt(this.getDistanceFrom(geo)));
@@ -145,7 +141,6 @@ public class ThreadComment implements Parcelable {
      */
     public Comment findCommentById(Comment parent, String id) {
         Comment c = null;
-        Log.e("??", "Searching comment " + parent.getId() + " for " + id);
         if (parent.getId().equals(id)) {
             c = parent;
         }
