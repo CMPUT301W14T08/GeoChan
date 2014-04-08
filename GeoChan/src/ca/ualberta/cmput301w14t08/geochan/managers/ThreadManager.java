@@ -20,7 +20,6 @@
 
 package ca.ualberta.cmput301w14t08.geochan.managers;
 
-import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
