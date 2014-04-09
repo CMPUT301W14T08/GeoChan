@@ -577,6 +577,11 @@ public class ThreadViewAdapter extends BaseAdapter {
             thumbnail.setVisibility(View.VISIBLE);
             thumbnail.setFocusable(false);
             thumbnail.setImageBitmap(reply.getImageThumb());
+        } else {
+        	ImageButton thumbnail = (ImageButton) convertView
+                    .findViewById(R.id.thread_view_comment_thumbnail);
+        	thumbnail.setVisibility(View.GONE);
+            thumbnail.setFocusable(false);
         }
         // Comment body
         TextView replyBody = (TextView) convertView
