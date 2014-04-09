@@ -586,7 +586,8 @@ public class ThreadViewAdapter extends BaseAdapter {
         TextView replyBy = (TextView) convertView.findViewById(R.id.thread_view_comment_commentBy);
         replyBy.setText(reply.getUser() + "#" + reply.getHash() + "  ");
         String username = PreferencesManager.getInstance().getUser();
-        if (HashHelper.getHash(username).equals(reply.getHash())) {
+        
+        if (HashHelper.getHash(reply.getUser()).equals(reply.getHash())) {
             replyBy.setBackgroundResource(R.drawable.username_background_rect);
             replyBy.setTextColor(Color.WHITE);
         }
