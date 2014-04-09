@@ -397,8 +397,8 @@ public class ThreadViewAdapter extends BaseAdapter {
 
         final ImageButton editButton = (ImageButton) convertView
                 .findViewById(R.id.thread_edit_button);
-
-        if (HashHelper.getHash(PreferencesManager.getInstance().getUser()).equals(
+        
+        if (HashHelper.getHash(thread.getBodyComment().getUser()).equals(
                 thread.getBodyComment().getHash())) {
             editButton.setVisibility(View.VISIBLE);
         }
